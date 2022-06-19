@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${PROJECT_NAME} 
 "source/main.cpp"
+"source/main.h"
 )
 
 add_subdirectory(external/glfw)
