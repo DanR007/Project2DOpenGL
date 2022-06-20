@@ -7,8 +7,14 @@ project(${PROJECT_NAME})
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${PROJECT_NAME} 
-"source/main.cpp"
 "source/main.h"
+"source/main.cpp"
+"source/renderer/ShaderRender.h"
+"source/renderer/ShaderRender.cpp"
+"source/renderer/TextureRender.h"
+"source/renderer/TextureRender.cpp"
+"source/managers/ResourcesManager.h"
+"source/managers/ResourcesManager.cpp"
 )
 
 add_subdirectory(external/glfw)
