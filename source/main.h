@@ -19,3 +19,10 @@ GLfloat color_coord[] =
 	0.f, 0.8, 0.f,
 	-0.8f, 0.f,0.f
 };
+
+GLfloat texture_coordinates[] =
+{
+	0.f, 0.f,
+	0.f, 0.5f,
+	1.f, 1.f
+};

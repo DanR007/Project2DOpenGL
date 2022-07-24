@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(${PROJECT_NAME} 
 "source/main.h"
 "source/main.cpp"
+"source/renderer/stb_image.h"
 "source/renderer/ShaderRender.h"
 "source/renderer/ShaderRender.cpp"
 "source/renderer/TextureRender.h"
