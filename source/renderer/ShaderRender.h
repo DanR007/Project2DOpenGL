@@ -11,6 +11,27 @@ namespace Renderer
 {
 	class ShaderProgram
 	{
-		ShaderProgram(const std::string& verteShader, const std::string& fragmentShader);
+	public:
+		ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader);
+		~ShaderProgram();
+
+		ShaderProgram() = delete;
+		ShaderProgram(ShaderProgram&) = delete;
+		ShaderProgram& operator= (const ShaderProgram&) = delete;
+
+		ShaderProgram& operator=(ShaderProgram&& shaderProgram) noexcept;
+		ShaderProgram(ShaderProgram&& shaderProgram) noexcept;
+
+		bool IsCompiled() const { return is_compiled; }
+		void Use();
+		void SetIn(const std::string& name, const GLint value);
+
+		GLuint GetID() const { return ID; }
+	private:
+
+		GLuint ID;
+		bool is_compiled;
+
+		bool CreateShaderProgram(const GLenum& shaderType, const std::string& source_shader, GLuint& shaderID);
 	};
 }
