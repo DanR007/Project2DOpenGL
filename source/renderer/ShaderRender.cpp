@@ -79,10 +79,6 @@ namespace Renderer
         glUseProgram(ID);
     }
 
-    void ShaderProgram::SetIn(const std::string& name, const GLint value)
-    {
-    }
-
     bool ShaderProgram::CreateShaderProgram(const GLenum& shaderType, const std::string& source_shader, GLuint& shaderID)
     {
         shaderID = glCreateShader(shaderType);
@@ -102,5 +98,15 @@ namespace Renderer
         }
 
         return success;
+    }
+
+    void ShaderProgram::SetIn(const std::string& name, const GLint value)
+    {
+        glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
+    }
+
+    void ShaderProgram::SetMatrix4(const std::string& name, const glm::mat4& value)
+    {
+        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
     }
 }

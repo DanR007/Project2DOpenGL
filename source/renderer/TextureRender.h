@@ -1,7 +1,7 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/vec2.hpp>
 
 #include <vector>
@@ -15,25 +15,25 @@ namespace Renderer
 	public:
 		struct SubTexture
 		{
-			glm::vec2 left_bottom_uv, right_upper_UV;
+			glm::vec2 left_bottom_UV, right_upper_UV;
 
 			SubTexture()
 			{
-				left_bottom_uv = glm::vec2(0.f, 0.f);
+				left_bottom_UV = glm::vec2(0.f, 0.f);
 				right_upper_UV = glm::vec2(1.f, 1.f);
 			}
 
 			SubTexture(const glm::vec2& leftBottomUV, const glm::vec2& rightUpperUV)
 			{
-				left_bottom_uv = leftBottomUV;
+				left_bottom_UV = leftBottomUV;
 				right_upper_UV = rightUpperUV;
 			}
 		};
 
 
 		Texture2D(const unsigned char* imageData, const GLuint width, 
-			const GLuint height, const GLuint channel = 4, 
-			GLenum wMode = GL_CLAMP, const GLenum filter = GL_NEAREST);
+			const GLuint height, const GLuint channel = 4,
+			GLenum wMode = GL_CLAMP_TO_EDGE, const GLenum filter = GL_NEAREST);
 
 		Texture2D() = delete;
 		Texture2D& operator=(Texture2D&) = delete;

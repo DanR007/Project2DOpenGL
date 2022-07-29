@@ -16,7 +16,7 @@ GLfloat triangle_coord[] =
 GLfloat color_coord[] =
 {
 	-0.8f, 0.8f, 0.f,
-	0.f, 0.8, 0.f,
+	0.f, 0.8f, 0.f,
 	-0.8f, 0.f,0.f
 };
 
