@@ -3,9 +3,8 @@
 #include "TextureRender.h"
 #include "ShaderRender.h"
 
-#include <glm/mat4x4.hpp>
-#include <glm/gtc/matrix_transform.hpp>
 
+#include <glm/matrix.hpp>
 namespace Renderer
 {
 	Sprite::Sprite(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader, 
@@ -89,7 +88,7 @@ namespace Renderer
 		spr_shader->Use();
 
 		glm::mat4 model(1.f);//create a model matrix
-
+		
 		model = glm::translate(model, glm::vec3(spr_pos, 0.f));
 		model = glm::translate(model, glm::vec3(0.5f * spr_size.x, 0.5f * spr_size.y, 0.f));
 		model = glm::rotate(model, glm::radians(spr_rot), glm::vec3(0.f, 0.f, 1.f));

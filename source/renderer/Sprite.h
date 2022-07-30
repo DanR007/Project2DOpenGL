@@ -5,7 +5,8 @@
 #include <vector>
 
 #include <glm/vec2.hpp>
-#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+
 
 namespace Renderer
 {
