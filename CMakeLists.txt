@@ -16,6 +16,8 @@ add_executable(${PROJECT_NAME}
 "source/renderer/TextureRender.cpp"
 "source/renderer/Sprite.h"
 "source/renderer/Sprite.cpp"
+"source/renderer/AnimSprite.h"
+"source/renderer/AnimSprite.cpp"
 "source/managers/ResourcesManager.h"
 "source/managers/ResourcesManager.cpp"
 )

@@ -82,7 +82,7 @@ namespace Renderer
 		spr_rot = newRotation;
 	}
 
-	void Sprite::Render()
+	void Sprite::Render() const
 	{
 		spr_shader->Use();
 

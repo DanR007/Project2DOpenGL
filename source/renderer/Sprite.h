@@ -28,7 +28,7 @@ namespace Renderer
 		void SetSize(const glm::vec2& newSize);
 		void SetRotation(const float newRotation);
 
-		void Render();
+		virtual void Render() const;
 	protected:
 		std::shared_ptr<Texture2D> spr_texture;
 		std::shared_ptr<ShaderProgram> spr_shader;
