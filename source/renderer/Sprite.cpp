@@ -3,13 +3,12 @@
 #include "TextureRender.h"
 #include "ShaderRender.h"
 
-
 #include <glm/matrix.hpp>
 namespace Renderer
 {
 	Sprite::Sprite(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader, 
 		const std::string& initialSubtextureName, const glm::vec2& position, 
-		const glm::vec2& size, const glm::vec2& rotation)
+		const glm::vec2& size, const float rotation)
 		: spr_texture(texture), spr_shader(shader), spr_pos(position),
 		spr_rot(rotation), spr_size(size), spr_subtexture_name(initialSubtextureName)
 	{
@@ -78,7 +77,7 @@ namespace Renderer
 	{
 		spr_size = newSize;
 	}
-	void Sprite::SetRotation(const glm::vec2& newRotation)
+	void Sprite::SetRotation(const float newRotation)
 	{
 		spr_rot = newRotation;
 	}
