@@ -8,8 +8,13 @@ namespace Renderer
 		: tex_width(width), tex_height(height), wrap_mode(wMode), tex_filter(filter)
 	{
 		glGenTextures(1, &tex_id);
+		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, tex_id);
-
+		GLbyte pix[] = { 255,0,0,255,
+												  0,255,0,255,
+												  0,0,255,255,
+												  0,0,0,255
+		};
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_mode);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_mode);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, tex_filter);
@@ -31,7 +36,7 @@ namespace Renderer
 		}
 
 		glTexImage2D(GL_TEXTURE_2D, 0, format, tex_width, tex_height, 0, format, GL_UNSIGNED_BYTE, imageData);
-		
+		//glTexImage2D(GL_TEXTURE_2D, 0, 4, (GLsizei)2, GLsizei(2), 0, GL_RGBA, GL_UNSIGNED_BYTE, pix);
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}

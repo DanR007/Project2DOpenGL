@@ -5,6 +5,8 @@
 #include "../renderer/stb_image.h"
 #include "../renderer/ShaderRender.h"
 #include "../renderer/TextureRender.h"
+#include "../renderer/Sprite.h"
+#include "../renderer/AnimSprite.h"
 
 #include <fstream>
 #include <iostream>
@@ -61,17 +63,21 @@ std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::GetShaderProgram(cons
 
 std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::string& textureName, const std::string& texturePath)
 {
-	int height = 0, width = 0, channels = 0;
+	int height, width, channels = 0;
 
 	stbi_set_flip_vertically_on_load(true);
 
-	unsigned char* imageData = stbi_load(std::string(exe_path + "/" + texturePath).c_str(), &width, &height, &channels, 0);
+	std::string path = exe_path + "/" + texturePath;
 
+	unsigned char* imageData = stbi_load(path.c_str(), &width, &height, &channels, 0);
+	
 	std::shared_ptr<Renderer::Texture2D> texture = 
 		textures_map.emplace(textureName, std::make_shared<Renderer::Texture2D>(Renderer::Texture2D(imageData,
 																									width,
 																									height,
-																									channels))).first->second;
+																									channels,
+																									GL_REPEAT,
+																									GL_NEAREST))).first->second;
 
 	if (!texture)
 	{
@@ -84,7 +90,7 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::st
 	return texture;
 }
 
-std::shared_ptr<Renderer::Texture2D> ResourcesManager::GetTexture(const std::string& textureName)
+std::shared_ptr<Renderer::Texture2D> ResourcesManager::GetTexture(const std::string& textureName) const
 {
 	TexturesMap::const_iterator it = textures_map.find(textureName);
 
@@ -120,3 +126,113 @@ std::string ResourcesManager::ReadShaderProgramFile(const std::string& path)
 	return shaderSource;
 }
 
+std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTextureAtlas(const std::string& textureName, const std::string& texturePath,
+	const std::vector<std::string>& subTextureNamesArr,
+	const unsigned int width, const unsigned int height)
+{
+
+	auto texture = LoadTexture(textureName, texturePath);
+
+	if (texture)
+	{
+		const unsigned int textureWidth = texture->GetWidth();
+		const unsigned int textureHeight = texture->GetHeight();
+		unsigned int offsetX = 0;
+		unsigned int offsetY = textureHeight;
+		for (auto& currentSubTextureName : subTextureNamesArr)
+		{
+			glm::vec2 leftBottomUV(static_cast<float>((float)offsetX / (float)textureWidth), static_cast<float>((float)(offsetY - height) / (float)textureHeight));
+			glm::vec2 rightTopUV(static_cast<float>((float)(offsetX + width) / (float)textureWidth), static_cast<float>((float)offsetY / (float)textureHeight));
+
+			texture->AddSubTexture(currentSubTextureName, leftBottomUV, rightTopUV);
+
+			offsetX += width;
+			if (offsetX >= textureWidth)
+			{
+				offsetX = 0;
+				offsetY -= height;
+			}
+
+		}
+	}
+	return texture;
+}
+
+
+std::shared_ptr<Renderer::Sprite> ResourcesManager::LoadSprite(const std::string& spriteName,
+	const std::string& textureName,
+	const std::string& shaderName,
+	const unsigned int spriteWidth,
+	const unsigned int spriteHeight,
+	std::string& subTextureName)
+{
+	auto l_texture = GetTexture(textureName);
+	if (!l_texture)
+	{
+		std::cerr << "Cant find texture (" + textureName + ")  for the sprite " + spriteName << std::endl;
+	}
+
+	auto l_shader = GetShaderProgram(shaderName);
+	if (!l_shader)
+	{
+		std::cerr << "Cant find shader (" + shaderName + ")  for the sprite " + spriteName << std::endl;
+	}
+
+	std::shared_ptr<Renderer::Sprite> newSprite = sprites_map.emplace(textureName, std::make_shared<Renderer::Sprite>(l_texture, l_shader, subTextureName,
+		glm::vec2(0.f, 0.f),
+		glm::vec2(spriteWidth, spriteHeight))).first->second;
+
+	return newSprite;
+}
+
+std::shared_ptr<Renderer::Sprite> ResourcesManager::GetSprite(const std::string& spriteName) const
+{
+	SpritesMap::const_iterator it = sprites_map.find(spriteName);
+
+	if (it == sprites_map.end())
+	{
+		std::cerr << "Cant find the sprite: " + spriteName << std::endl;
+		return nullptr;
+	}
+	
+	return it->second;
+}
+
+std::shared_ptr<Renderer::AnimSprite> ResourcesManager::LoadAnimSprite(const std::string& spriteName,
+	const std::string& textureName,
+	const std::string& shaderName,
+	const unsigned int spriteWidth,
+	const unsigned int spriteHeight,
+	std::string& subTextureName)
+{
+	auto l_texture = GetTexture(textureName);
+	if (!l_texture)
+	{
+		std::cerr << "Cant find texture (" + textureName + ")  for the sprite " + spriteName << std::endl;
+	}
+
+	auto l_shader = GetShaderProgram(shaderName);
+	if (!l_shader)
+	{
+		std::cerr << "Cant find shader (" + shaderName + ")  for the sprite " + spriteName << std::endl;
+	}
+
+	std::shared_ptr<Renderer::AnimSprite> newSprite = anim_sprites_map.emplace(textureName, std::make_shared<Renderer::AnimSprite>(l_texture, l_shader, subTextureName,
+		glm::vec2(0.f, 0.f),
+		glm::vec2(spriteWidth, spriteHeight))).first->second;
+
+	return newSprite;
+}
+
+std::shared_ptr<Renderer::AnimSprite> ResourcesManager::GetAnimSprite(const std::string& animSpriteName) const
+{
+	AnimSpritesMap::const_iterator it = anim_sprites_map.find(animSpriteName);
+
+	if (it == anim_sprites_map.end())
+	{
+		std::cerr << "Cant find the anim sprite: " + animSpriteName << std::endl;
+		return nullptr;
+	}
+
+	return it->second;
+}

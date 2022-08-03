@@ -9,8 +9,12 @@ glm::ivec2 window_size(1280, 720);
 GLfloat triangle_coord[] =
 {
 	-0.5f, -0.5f, 0.f,
-	0.f, 0.5f, 0.f,
-	0.5f, -0.5f, 0.f
+	-0.5f, 0.5f, 0.f,
+	0.5f, 0.5f, 0.f,
+
+	-0.5f, -0.5f, 0.f,
+	0.5f, -0.5f, 0.f,
+	0.5f, 0.5f, 0.f
 };
 
 GLfloat color_coord[] =
@@ -23,6 +27,10 @@ GLfloat color_coord[] =
 GLfloat texture_coordinates[] =
 {
 	0.f, 0.f,
-	0.f, 0.5f,
+	0.f, 1.f,
+	1.f, 1.f,
+
+	0.f, 0.f,
+	1.f, 0.f,
 	1.f, 1.f
 };
