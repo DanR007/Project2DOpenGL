@@ -65,6 +65,7 @@ namespace Renderer
 	{
 		glDeleteBuffers(1, &vertex_coord_buffer);
 		glDeleteBuffers(1, &texture_coord_buffer);
+		glDeleteBuffers(1, &vertex_element_buffer);
 		glDeleteVertexArrays(1, &spr_vertex_array_objects);
 	}
 
