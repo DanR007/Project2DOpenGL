@@ -14,37 +14,25 @@ namespace Renderer
 	{
 		GLfloat vertexCoord[] =
 		{
-			//first triangle
 			0.f, 0.f,//left bottom
 			0.f, 1.f,//left top
-			//1.f, 0.f,//right bottom
+			1.f, 0.f,//right bottom
 			1.f, 1.f,//right top
-
-			//second triangle
-			0.f, 0.f,
-			1.f, 0.f,
-			1.f, 1.f
 		};
 
 		GLuint element_array[] =
 		{
 			0, 1, 3,
 			0, 2, 3
-
 		};
 
 		auto subTexture = texture->GetSubTexture(initialSubtextureName);
 		GLfloat texCoord[] =
 		{
-			//first triangle
 			subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
 			subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
-			subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
-
-			//second triangle
-			subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
 			subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
-			subTexture.right_upper_UV.x, subTexture.right_upper_UV.y
+			subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
 		};
 
 		glGenVertexArrays(1, &spr_vertex_array_objects);
@@ -110,8 +98,8 @@ namespace Renderer
 
 		glActiveTexture(GL_TEXTURE0);
 		spr_texture->Bind();
-
-		glDrawArrays(GL_TRIANGLES, 0, 6);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		//glDrawArrays(GL_TRIANGLES, 0, 6);
 		glBindVertexArray(0);
 	}
 

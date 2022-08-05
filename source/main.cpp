@@ -120,7 +120,7 @@ int main(int argc, char** argv)
 			glUniform1f(uniformPos, f);
 			*/
 
-			
+			actor->Draw();
 			/*glUniform1i(glGetUniformLocation(textureShader->GetID(), "textureS"), 0);
 			glBindVertexArray(vertexArrayObjects);
 
