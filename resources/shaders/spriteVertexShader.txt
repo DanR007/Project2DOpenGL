@@ -1,0 +1,16 @@
+#version 460
+
+layout(location = 0) in vec2 vertex_pos;
+layout(location = 1) in vec2 texture_pos;
+
+out vec2 texPos;
+
+uniform mat4 modelMat;
+uniform mat4 projectionMat;
+
+void main()
+{
+	gl_Position = projectionMat * modelMat * vec4(vertex_pos, 0.0, 1.0);
+
+	texPos = texture_pos;
+}

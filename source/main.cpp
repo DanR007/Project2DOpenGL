@@ -1,15 +1,18 @@
 #include "main.h"
-#include "managers/ResourcesManager.h"
+#include "engine/managers/ResourcesManager.h"
 
-#include "renderer/ShaderRender.h"
-#include "renderer/TextureRender.h"
+#include "engine/renderer/ShaderRender.h"
+#include "engine/renderer/TextureRender.h"
+
+#include "game/Actor.h"
 
 #include <iostream>
+#include <time.h>
+#include <chrono>
 
-#define DEFAULT_VERTEX__SHADER_PATH "resources/shaders/defVertexShader.txt"
-#define DEFAULT_FRAGMENT_SHADER_PATH "resources/shaders/defFragmentShader.txt"
-#define TEXTURE_VERTEX_SHADER_PATH "resources/shaders/textureVertexShader.txt"
-#define TEXTURE_FRAGMENT_SHADER_PATH "resources/shaders/textureFragmentShader.txt"
+
+
+
 
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
@@ -36,7 +39,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	{
-		ResourcesManager manager(*argv);
+		ResourcesManager manager = ResourcesManager(*argv);
 
 		window = glfwCreateWindow(window_size.x, window_size.y, "Platformer2D", NULL, NULL);
 
@@ -64,8 +67,8 @@ int main(int argc, char** argv)
 
 		//std::shared_ptr<Renderer::ShaderProgram> defShader = manager.LoadShaderPrograms("default", DEFAULT_FRAGMENT_SHADER_PATH, DEFAULT_VERTEX__SHADER_PATH);
 		std::shared_ptr<Renderer::ShaderProgram> textureShader = manager.LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
-
-		std::shared_ptr<Renderer::Texture2D> texture = manager.LoadTexture("mushroom", "resources/textures/mushroom.png");
+		manager.LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
+		//std::shared_ptr<Renderer::Texture2D> texture = manager.LoadTexture("mushroom", "resources/textures/mushroom.png");
 
 		GLuint coordinateVertexBufferObjects, textureVertexBufferObjects, vertexArrayObjects;
 		glGenVertexArrays(1, &vertexArrayObjects);
@@ -92,27 +95,41 @@ int main(int argc, char** argv)
 
 		glClearColor(1.f, 1.f, 1.f, 0.f);
 
+		std::string s = "m4";
+		std::vector<std::string> names = { "m1", "m2", "m3", s };
+		
+		manager.LoadTextureAtlas("mushroom", "resources/textures/mushroom.png", names, 16, 16);
+		Game::Actor* actor = new Game::Actor(manager.GetTexture("mushroom"), manager.GetShaderProgram("spriteShader"),
+			std::string("m1"), glm::vec2(0.f, 0.f), glm::vec2(200, 100));
+
+		glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
+		manager.GetShaderProgram("spriteShader")->Use();
+		manager.GetShaderProgram("spriteShader")->SetIn("tex", 0);
+		manager.GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
+
 		while (!glfwWindowShouldClose(window))
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
+			
 
-			textureShader->Use();
-			texture->Bind();
+			//texture->Bind();
 			/*GLint uniform = glGetUniformLocation(shaderProgram->GetID(), "vertexColor");
 			glUniform4f(uniform, 1.f, -0.5f, 0.5f, 1.f);
 			GLint uniformPos = glGetUniformLocation(shaderProgram->GetID(), "pos");
 			f = sin(glfwGetTime()) / 2 + 0.5f;
 			glUniform1f(uniformPos, f);
 			*/
-			glUniform1i(glGetUniformLocation(textureShader->GetID(), "textureS"), 0);
+
+			
+			/*glUniform1i(glGetUniformLocation(textureShader->GetID(), "textureS"), 0);
 			glBindVertexArray(vertexArrayObjects);
 
 			glDrawArrays(GL_TRIANGLES, 0, 6);
 
-
+			
 
 			glBindVertexArray(0);
-
+			*/
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}

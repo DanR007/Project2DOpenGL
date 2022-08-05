@@ -37,6 +37,6 @@ namespace Renderer
 		float spr_rot;
 		std::string spr_subtexture_name;
 
-		GLuint spr_vertex_array_objects, texture_coord_buffer, vertex_coord_buffer;
+		GLuint spr_vertex_array_objects, texture_coord_buffer, vertex_coord_buffer, vertex_element_buffer;
 	};
 }

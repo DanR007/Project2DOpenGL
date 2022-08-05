@@ -15,14 +15,22 @@ namespace Renderer
 		GLfloat vertexCoord[] =
 		{
 			//first triangle
-			0.f, 0.f,
-			0.f, 1.f,
-			1.f, 1.f,
+			0.f, 0.f,//left bottom
+			0.f, 1.f,//left top
+			//1.f, 0.f,//right bottom
+			1.f, 1.f,//right top
 
 			//second triangle
 			0.f, 0.f,
 			1.f, 0.f,
 			1.f, 1.f
+		};
+
+		GLuint element_array[] =
+		{
+			0, 1, 3,
+			0, 2, 3
+
 		};
 
 		auto subTexture = texture->GetSubTexture(initialSubtextureName);
@@ -43,14 +51,17 @@ namespace Renderer
 
 		glGenBuffers(1, &texture_coord_buffer);
 		glGenBuffers(1, &vertex_coord_buffer);
+		glGenBuffers(1, &vertex_element_buffer);
 
 		glBindVertexArray(spr_vertex_array_objects);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_coord_buffer);
 		glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_element_buffer);
 
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexCoord), vertexCoord, GL_STATIC_DRAW);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(element_array), element_array, GL_STATIC_DRAW);
 
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(0);
