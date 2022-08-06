@@ -15,20 +15,20 @@ namespace Renderer
 			const glm::vec2& size = glm::vec2(1.f), const float rotation = 0.f);
 		~AnimSprite();
 
-		void Render() const override;
+		virtual void Render() const override;
 
 
-		void InsertState(const std::string& state, std::vector<std::pair<std::string, uint64_t>> subTextureDuration);
+		void InsertState(const std::string& state, std::vector<std::pair<std::string, float>> subTextureDuration);
 		void SetState(const std::string& state);
-		void Update(const uint64_t deltaTime);
+		void Update(const float deltaTime);
 
 	private:
-		std::map<std::string, std::vector<std::pair<std::string, uint64_t>>> states_map;
+		std::map<std::string, std::vector<std::pair<std::string, float>>> states_map;
 
-		size_t current_frame = 0;
-		uint64_t current_anim_time = 0;
+		float current_frame = 0;
+		float current_anim_time = 0;
 
-		std::map<std::string, std::vector<std::pair<std::string, uint64_t>>>::const_iterator current_anim_duration;
+		std::map<std::string, std::vector<std::pair<std::string, float>>>::const_iterator current_anim_duration;
 		mutable bool is_dirty = false;
 	};
 

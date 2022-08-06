@@ -3,8 +3,10 @@
 
 #include "engine/renderer/ShaderRender.h"
 #include "engine/renderer/TextureRender.h"
+#include "engine/renderer/AnimSprite.h"
 
 #include "game/Actor.h"
+#include "game/Pawn.h"
 
 #include <iostream>
 #include <time.h>
@@ -99,19 +101,37 @@ int main(int argc, char** argv)
 		std::vector<std::string> names = { "m1", "m2", "m3", s };
 		
 		manager.LoadTextureAtlas("mushroom", "resources/textures/mushroom.png", names, 16, 16);
-		Game::Actor* actor = new Game::Actor(manager.GetTexture("mushroom"), manager.GetShaderProgram("spriteShader"),
-			std::string("m1"), glm::vec2(0.f, 0.f), glm::vec2(200, 100));
+		Game::Pawn* pawn = new Game::Pawn(manager.GetTexture("mushroom"), manager.GetShaderProgram("spriteShader"),
+			std::string("m1"), 10.f, glm::vec2(0.f, 0.f), glm::vec2(300, 300));
 
 		glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
 		manager.GetShaderProgram("spriteShader")->Use();
 		manager.GetShaderProgram("spriteShader")->SetIn("tex", 0);
 		manager.GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
 
+		std::vector<std::pair<std::string, float>> stateDuration = 
+		{ 
+			std::make_pair(std::string("m1"), 1.f),
+			std::make_pair(std::string("m2"), 1.f),
+			std::make_pair(std::string("m3"), 1.f) 
+		};
+
+		pawn->GetAnimSprite()->InsertState("walk", stateDuration);
+
+		auto lastTime = std::chrono::high_resolution_clock::now();
+
+		pawn->GetAnimSprite()->SetState("walk");
+
 		while (!glfwWindowShouldClose(window))
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
-			
 
+			auto currentTime = std::chrono::high_resolution_clock::now();
+
+			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e10);
+
+			pawn->Update(duration);
+			
 			//texture->Bind();
 			/*GLint uniform = glGetUniformLocation(shaderProgram->GetID(), "vertexColor");
 			glUniform4f(uniform, 1.f, -0.5f, 0.5f, 1.f);
@@ -120,7 +140,6 @@ int main(int argc, char** argv)
 			glUniform1f(uniformPos, f);
 			*/
 
-			actor->Draw();
 			/*glUniform1i(glGetUniformLocation(textureShader->GetID(), "textureS"), 0);
 			glBindVertexArray(vertexArrayObjects);
 

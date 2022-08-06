@@ -22,6 +22,8 @@ add_executable(${PROJECT_NAME}
 "source/engine/managers/ResourcesManager.cpp"
 "source/game/Actor.h"
 "source/game/Actor.cpp"
+"source/game/Pawn.h"
+"source/game/Pawn.cpp"
 )
 
 add_subdirectory(external/glfw)

@@ -33,11 +33,8 @@ namespace Renderer
 				//U								V
 				subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
 				subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
-				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
-
-				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
 				subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
-				subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y
+				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
 			};
 
 			glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
@@ -48,7 +45,7 @@ namespace Renderer
 		}
 		Sprite::Render();
 	}
-	void AnimSprite::InsertState(const std::string& state, std::vector<std::pair<std::string, uint64_t>> subTextureDuration)
+	void AnimSprite::InsertState(const std::string& state, std::vector<std::pair<std::string, float>> subTextureDuration)
 	{
 		states_map.emplace(state, subTextureDuration);
 	}
@@ -69,7 +66,7 @@ namespace Renderer
 		}
 	}
 
-	void AnimSprite::Update(const uint64_t deltaTime)
+	void AnimSprite::Update(const float deltaTime)
 	{
 		if (current_anim_duration != states_map.end())
 		{
