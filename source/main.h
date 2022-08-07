@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <glm/vec2.hpp>
 
+#include "game/MainCharacter.h"
+
 #define DEFAULT_VERTEX__SHADER_PATH "resources/shaders/defVertexShader.txt"
 #define DEFAULT_FRAGMENT_SHADER_PATH "resources/shaders/defFragmentShader.txt"
 #define TEXTURE_VERTEX_SHADER_PATH "resources/shaders/textureVertexShader.txt"

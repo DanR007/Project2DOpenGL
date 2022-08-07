@@ -12,9 +12,7 @@
 #include <time.h>
 #include <chrono>
 
-
-
-
+std::vector<Game::MainCharacter*> pawns;
 
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
@@ -25,9 +23,31 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
+	if (action == GLFW_PRESS)
 	{
-		glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
+		switch (key)
+		{
+		case GLFW_KEY_ESCAPE:
+			glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
+			break;
+		case GLFW_KEY_W:
+			std::cout << "Press W" << std::endl;
+			pawns[0]->Move(glm::vec2(0.f, 1.f));
+			break;
+		case GLFW_KEY_S:
+			std::cout << "Press s" << std::endl;
+			pawns[0]->Move(glm::vec2(0.f, -1.f));
+			break;
+		case GLFW_KEY_D:
+			std::cout << "Press d" << std::endl;
+			pawns[0]->Move(glm::vec2(1.f, 0.f));
+			break;
+		case GLFW_KEY_A:
+			std::cout << "Press a" << std::endl;
+			pawns[0]->Move(glm::vec2(-1.f, 0.f));
+			break;
+		}
+		
 	}
 }
 
@@ -104,7 +124,7 @@ int main(int argc, char** argv)
 		
 		//mushroom - texture name
 		//names - vector of names subtextures
-		Game::Pawn* pawn = new Game::Pawn(std::move(manager.LoadAnimSprite("animSprite", "mushroom", "spriteShader", 261, 261, std::string("m1"))), 10.f, glm::vec2(0.f, 0.f), glm::vec2(261, 261));
+		pawns.push_back(new Game::MainCharacter(std::move(manager.LoadAnimSprite("animSprite", "mushroom", "spriteShader", 261, 261, std::string("m1"))), 100.f, glm::vec2(0.f, 0.f), glm::vec2(261, 261)));
 
 		glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
 		manager.GetShaderProgram("spriteShader")->Use();
@@ -120,11 +140,11 @@ int main(int argc, char** argv)
 
 
 
-		pawn->GetAnimSprite()->InsertState("walk", stateDuration);
+		pawns[0]->GetAnimSprite()->InsertState("walk", stateDuration);
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 
-		pawn->GetAnimSprite()->SetState("walk");
+		pawns[0]->GetAnimSprite()->SetState("walk");
 
 
 		while (!glfwWindowShouldClose(window))
@@ -135,8 +155,9 @@ int main(int argc, char** argv)
 			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
 			lastTime = currentTime;
 
-			pawn->Update(duration);
+			pawns[0]->Update(duration);
 
+			//pawn->GetAnimSprite()->SetPosition(pawn->GetAnimSprite()->GetPosition() + glm::vec2(duration, 0));
 			//texture->Bind();
 			/*GLint uniform = glGetUniformLocation(shaderProgram->GetID(), "vertexColor");
 			glUniform4f(uniform, 1.f, -0.5f, 0.5f, 1.f);
