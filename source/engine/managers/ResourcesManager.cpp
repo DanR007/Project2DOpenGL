@@ -75,9 +75,7 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::st
 		textures_map.emplace(textureName, std::make_shared<Renderer::Texture2D>(Renderer::Texture2D(imageData,
 																									width,
 																									height,
-																									channels,
-																									GL_REPEAT,
-																									GL_NEAREST))).first->second;
+																									channels))).first->second;
 
 	if (!texture)
 	{
@@ -164,7 +162,7 @@ std::shared_ptr<Renderer::Sprite> ResourcesManager::LoadSprite(const std::string
 	const std::string& shaderName,
 	const unsigned int spriteWidth,
 	const unsigned int spriteHeight,
-	std::string& subTextureName)
+	const std::string& subTextureName)
 {
 	auto l_texture = GetTexture(textureName);
 	if (!l_texture)
@@ -203,7 +201,7 @@ std::shared_ptr<Renderer::AnimSprite> ResourcesManager::LoadAnimSprite(const std
 	const std::string& shaderName,
 	const unsigned int spriteWidth,
 	const unsigned int spriteHeight,
-	std::string& subTextureName)
+	const std::string& subTextureName)
 {
 	auto l_texture = GetTexture(textureName);
 	if (!l_texture)
@@ -217,7 +215,7 @@ std::shared_ptr<Renderer::AnimSprite> ResourcesManager::LoadAnimSprite(const std
 		std::cerr << "Cant find shader (" + shaderName + ")  for the sprite " + spriteName << std::endl;
 	}
 
-	std::shared_ptr<Renderer::AnimSprite> newSprite = anim_sprites_map.emplace(textureName, std::make_shared<Renderer::AnimSprite>(l_texture, l_shader, subTextureName,
+	std::shared_ptr<Renderer::AnimSprite> newSprite = anim_sprites_map.emplace(spriteName, std::make_shared<Renderer::AnimSprite>(l_texture, l_shader, subTextureName,
 		glm::vec2(0.f, 0.f),
 		glm::vec2(spriteWidth, spriteHeight))).first->second;
 

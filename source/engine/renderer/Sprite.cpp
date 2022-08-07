@@ -18,9 +18,17 @@ namespace Renderer
 			0.f, 1.f,//left top
 			1.f, 0.f,//right bottom
 			1.f, 1.f,//right top
+
+			/*0.f, 0.f,
+			0.f, 1.f,
+			1.f, 1.f,
+
+			1.f, 1.f,
+			1.f, 0.f,
+			0.f, 0.f*/
 		};
 
-		GLuint element_array[] =
+		GLuint elementArray[] =
 		{
 			0, 1, 3,
 			0, 2, 3
@@ -29,10 +37,17 @@ namespace Renderer
 		auto subTexture = texture->GetSubTexture(initialSubtextureName);
 		GLfloat texCoord[] =
 		{
-			subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
-			subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
-			subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
-			subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
+			/*subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
+				subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
+				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
+
+				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
+				subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
+				subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y*/
+				subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
+				subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
+				subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
+				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y
 		};
 
 		glGenVertexArrays(1, &spr_vertex_array_objects);
@@ -44,18 +59,17 @@ namespace Renderer
 		glBindVertexArray(spr_vertex_array_objects);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_coord_buffer);
-		glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_element_buffer);
-
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexCoord), vertexCoord, GL_STATIC_DRAW);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(element_array), element_array, GL_STATIC_DRAW);
-
-		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+		glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
 		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_element_buffer);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elementArray), elementArray, GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		glBindVertexArray(0);

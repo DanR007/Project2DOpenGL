@@ -6,11 +6,10 @@
 
 namespace Game
 {
-	Actor::Actor(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& subtextureName,
+	Actor::Actor(std::shared_ptr<Renderer::AnimSprite> animSprite,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
-		anim_sprite = new Renderer::AnimSprite(texture, shader, subtextureName,
-			startPosition, startSize, startRotation);
+		anim_sprite = animSprite;
 
 		position = startPosition;
 		rotation = startRotation;
@@ -19,8 +18,7 @@ namespace Game
 
 	Actor::~Actor()
 	{
-		delete anim_sprite;
-		anim_sprite = nullptr;
+
 	}
 
 	void Actor::Draw() { anim_sprite->Render(); }
@@ -31,7 +29,7 @@ namespace Game
 		anim_sprite->Render();
 	}
 
-	Renderer::AnimSprite* Actor::GetAnimSprite()
+	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite()
 	{
 		return anim_sprite;
 	}

@@ -69,10 +69,10 @@ int main(int argc, char** argv)
 
 		//std::shared_ptr<Renderer::ShaderProgram> defShader = manager.LoadShaderPrograms("default", DEFAULT_FRAGMENT_SHADER_PATH, DEFAULT_VERTEX__SHADER_PATH);
 		std::shared_ptr<Renderer::ShaderProgram> textureShader = manager.LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
-		manager.LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
+		auto sh = manager.LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
 		//std::shared_ptr<Renderer::Texture2D> texture = manager.LoadTexture("mushroom", "resources/textures/mushroom.png");
-
-		GLuint coordinateVertexBufferObjects, textureVertexBufferObjects, vertexArrayObjects;
+		
+		/*GLuint coordinateVertexBufferObjects, textureVertexBufferObjects, vertexArrayObjects;
 		glGenVertexArrays(1, &vertexArrayObjects);
 		glGenBuffers(1, &coordinateVertexBufferObjects);
 		glGenBuffers(1, &textureVertexBufferObjects);
@@ -93,28 +93,32 @@ int main(int argc, char** argv)
 		//glEnableVertexAttribArray(1);
 		//glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), nullptr);
 
-		glBindVertexArray(0);
+		glBindVertexArray(0);*/
 
-		glClearColor(1.f, 1.f, 1.f, 0.f);
+		glClearColor(0.f, 0.f, 0.f, 1.f);
 
 		std::string s = "m4";
-		std::vector<std::string> names = { "m1", "m2", "m3", s };
+		std::vector<std::string> names = { "m1", "m2", "m3", s};
 		
 		manager.LoadTextureAtlas("mushroom", "resources/textures/mushroom.png", names, 16, 16);
-		Game::Pawn* pawn = new Game::Pawn(manager.GetTexture("mushroom"), manager.GetShaderProgram("spriteShader"),
-			std::string("m1"), 10.f, glm::vec2(0.f, 0.f), glm::vec2(300, 300));
+		
+		//mushroom - texture name
+		//names - vector of names subtextures
+		Game::Pawn* pawn = new Game::Pawn(std::move(manager.LoadAnimSprite("animSprite", "mushroom", "spriteShader", 261, 261, std::string("m1"))), 10.f, glm::vec2(0.f, 0.f), glm::vec2(261, 261));
 
 		glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
 		manager.GetShaderProgram("spriteShader")->Use();
 		manager.GetShaderProgram("spriteShader")->SetIn("tex", 0);
 		manager.GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
 
-		std::vector<std::pair<std::string, float>> stateDuration = 
-		{ 
+		std::vector<std::pair<std::string, float>> stateDuration =
+		{
 			std::make_pair(std::string("m1"), 1.f),
 			std::make_pair(std::string("m2"), 1.f),
-			std::make_pair(std::string("m3"), 1.f) 
+			std::make_pair(std::string("m3"), 1.f)
 		};
+
+
 
 		pawn->GetAnimSprite()->InsertState("walk", stateDuration);
 
@@ -122,16 +126,17 @@ int main(int argc, char** argv)
 
 		pawn->GetAnimSprite()->SetState("walk");
 
+
 		while (!glfwWindowShouldClose(window))
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			auto currentTime = std::chrono::high_resolution_clock::now();
-
-			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e10);
+			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
+			lastTime = currentTime;
 
 			pawn->Update(duration);
-			
+
 			//texture->Bind();
 			/*GLint uniform = glGetUniformLocation(shaderProgram->GetID(), "vertexColor");
 			glUniform4f(uniform, 1.f, -0.5f, 0.5f, 1.f);

@@ -32,7 +32,7 @@ public:
 		const std::string& shaderName,
 		const unsigned int spriteWidth,
 		const unsigned int spriteHeight,
-		std::string& subTextureName);
+		const std::string& subTextureName);
 	std::shared_ptr<Renderer::Sprite> GetSprite(const std::string& spriteName) const;
 
 	std::shared_ptr<Renderer::AnimSprite> ResourcesManager::LoadAnimSprite(const std::string& spriteName,
@@ -40,7 +40,7 @@ public:
 		const std::string& shaderName,
 		const unsigned int spriteWidth,
 		const unsigned int spriteHeight,
-		std::string& subTextureName);
+		const std::string& subTextureName);
 	std::shared_ptr<Renderer::AnimSprite> GetAnimSprite(const std::string& animSpriteName) const;
 	
 private:

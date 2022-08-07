@@ -25,7 +25,7 @@ namespace Renderer
 	private:
 		std::map<std::string, std::vector<std::pair<std::string, float>>> states_map;
 
-		float current_frame = 0;
+		size_t current_frame = 0;
 		float current_anim_time = 0;
 
 		std::map<std::string, std::vector<std::pair<std::string, float>>>::const_iterator current_anim_duration;

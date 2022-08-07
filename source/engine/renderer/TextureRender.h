@@ -18,15 +18,15 @@ namespace Renderer
 			glm::vec2 left_bottom_UV, right_upper_UV;
 
 			SubTexture()
+				: left_bottom_UV(0.f), right_upper_UV(1.f)
 			{
-				left_bottom_UV = glm::vec2(0.f, 0.f);
-				right_upper_UV = glm::vec2(1.f, 1.f);
+
 			}
 
 			SubTexture(const glm::vec2& leftBottomUV, const glm::vec2& rightUpperUV)
+				:left_bottom_UV(leftBottomUV), right_upper_UV(rightUpperUV)
 			{
-				left_bottom_UV = leftBottomUV;
-				right_upper_UV = rightUpperUV;
+
 			}
 		};
 
