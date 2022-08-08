@@ -23,31 +23,59 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	if (action == GLFW_PRESS)
+	std::cout << action << std::endl;
+	switch(action)
 	{
-		switch (key)
-		{
-		case GLFW_KEY_ESCAPE:
-			glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
+		case GLFW_PRESS:
+			switch (key)
+			{
+			case GLFW_KEY_ESCAPE:
+					glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
+					break;
+			case GLFW_KEY_W:
+				pawns[0]->ChangeMoveVector(up_vector);
+				break;
+			case GLFW_KEY_S:
+				pawns[0]->ChangeMoveVector(up_vector * -1.f);
+				break;
+			case GLFW_KEY_D:
+				pawns[0]->ChangeMoveVector(right_vector);
+				break;
+			case GLFW_KEY_A:
+				pawns[0]->ChangeMoveVector(right_vector * -1.f);
+				break;
+			}
+		break;
+		case GLFW_RELEASE:
+			switch (key)
+			{
+			case GLFW_KEY_W:
+				pawns[0]->ChangeMoveVector(up_vector * -1.f);
+				break;
+			case GLFW_KEY_S:
+				pawns[0]->ChangeMoveVector(up_vector);
+				break;
+			case GLFW_KEY_D:
+				pawns[0]->ChangeMoveVector(right_vector * -1.f);
+				break;
+			case GLFW_KEY_A:
+				pawns[0]->ChangeMoveVector(right_vector);
+				break;
+			}
 			break;
-		case GLFW_KEY_W:
-			std::cout << "Press W" << std::endl;
-			pawns[0]->Move(glm::vec2(0.f, 1.f));
+		case GLFW_REPEAT:
+				/*if (key == GLFW_KEY_W)
+					pawns[0]->Move(up_vector);
+
+				if (key == GLFW_KEY_S)
+					pawns[0]->Move(up_vector * -1.f);
+
+				if (key == GLFW_KEY_D)
+					pawns[0]->Move(right_vector);
+
+				if (key == GLFW_KEY_A)
+					pawns[0]->Move(right_vector * -1.f);*/
 			break;
-		case GLFW_KEY_S:
-			std::cout << "Press s" << std::endl;
-			pawns[0]->Move(glm::vec2(0.f, -1.f));
-			break;
-		case GLFW_KEY_D:
-			std::cout << "Press d" << std::endl;
-			pawns[0]->Move(glm::vec2(1.f, 0.f));
-			break;
-		case GLFW_KEY_A:
-			std::cout << "Press a" << std::endl;
-			pawns[0]->Move(glm::vec2(-1.f, 0.f));
-			break;
-		}
-		
 	}
 }
 

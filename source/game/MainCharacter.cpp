@@ -8,8 +8,9 @@ namespace Game
 		:Pawn(animSprite, startMoveSpeed, startPosition, startSize, startRotation)
 	{
 	}
-	void MainCharacter::Move(const glm::vec2& moveValue)
+	
+	/*void MainCharacter::Move(const glm::vec2& moveVector)
 	{
-		anim_sprite->SetPosition(anim_sprite->GetPosition() + moveValue * move_speed);
-	}
+		anim_sprite->SetPosition(anim_sprite->GetPosition() + moveVector);
+	}*/
 }
