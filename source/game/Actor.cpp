@@ -33,4 +33,19 @@ namespace Game
 	{
 		return anim_sprite;
 	}
+	void Actor::SetPosition(const glm::vec2& newPosition)
+	{
+		position = newPosition;
+		anim_sprite->SetPosition(newPosition);
+	}
+	void Actor::SetSize(const glm::vec2& newSize)
+	{
+		size = newSize;
+		anim_sprite->SetSize(newSize);
+	}
+	void Actor::SetRotation(const float newRotation)
+	{
+		rotation = newRotation;
+		anim_sprite->SetRotation(newRotation);
+	}
 }

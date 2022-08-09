@@ -1,8 +1,11 @@
 #include "Pawn.h"
 
 #include "../engine/managers/ResourcesManager.h"
+#include "../engine/managers/PhysicsManager.h"
 
 #include "../engine/renderer/AnimSprite.h"
+
+#include "../main.h"
 
 namespace Game
 {
@@ -15,8 +18,8 @@ namespace Game
 
 	void Pawn::Move()
 	{
-		if(move_vector != glm::vec2(0.f, 0.f))
-			anim_sprite->SetPosition(anim_sprite->GetPosition() + move_vector);
+		if(move_vector != glm::vec2(0.f, 0.f) && PhysicsManager::CanMove(all_actors, position + move_vector, size))
+			SetPosition(position + move_vector);
 	}
 
 	void Pawn::ChangeMoveVector(const glm::vec2& value)

@@ -26,6 +26,13 @@ namespace Game
 		virtual void Update(float deltaTime);
 
 		std::shared_ptr<Renderer::AnimSprite> GetAnimSprite();
+
+		glm::vec2 GetPosition() { return position; }
+		glm::vec2 GetSize() { return size; }
+
+		void SetPosition(const glm::vec2& newPosition);
+		void SetSize(const glm::vec2& newSize);
+		void SetRotation(const float newRotation);
 	protected:
 		glm::vec2 position, size;
 		float rotation;

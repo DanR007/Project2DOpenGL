@@ -20,6 +20,8 @@ add_executable(${PROJECT_NAME}
 "source/engine/renderer/AnimSprite.cpp"
 "source/engine/managers/ResourcesManager.h"
 "source/engine/managers/ResourcesManager.cpp"
+"source/engine/managers/PhysicsManager.cpp"
+"source/engine/managers/PhysicsManager.h"
 "source/game/Actor.h"
 "source/game/Actor.cpp"
 "source/game/Pawn.h"
