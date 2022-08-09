@@ -16,7 +16,7 @@ namespace Game
 			const float moveSpeed, const glm::vec2& startPosition, const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f);
 		Pawn() = delete;
 
-		virtual void Move();
+		virtual void Move(float deltaTime);
 		virtual void ChangeMoveVector(const glm::vec2& value);
 		virtual void Update(float deltaTime) override;
 

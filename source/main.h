@@ -14,14 +14,19 @@
 #define SPRITE_VERTEX_SHADER_PATH "resources/shaders/spriteVertexShader.txt"
 #define SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/spriteFragmentShader.txt"
 
-glm::ivec2 window_size(1280, 720);
+namespace Game
+{
+	class Actor;
+}
+
+static glm::ivec2 window_size(1280, 720);
 
 const glm::vec2 right_vector = glm::vec2(1.f, 0.f);
 const glm::vec2 up_vector = glm::vec2(0.f, 1.f);
 
-std::vector<std::shared_ptr<Game::Actor>> all_actors = { std::make_shared(Game::Actor()) };
+extern std::vector<std::shared_ptr<Game::Actor>> all_actors;
 
-GLfloat triangle_coord[] =
+/*GLfloat triangle_coord[] =
 {
 	-0.5f, -0.5f, 0.f,
 	-0.5f, 0.5f, 0.f,
@@ -48,4 +53,4 @@ GLfloat texture_coordinates[] =
 	0.f, 0.f,
 	1.f, 0.f,
 	1.f, 1.f
-};
+};*/

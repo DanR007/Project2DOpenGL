@@ -7,12 +7,14 @@
 
 #include "game/Actor.h"
 #include "game/Pawn.h"
+#include "game/MainCharacter.h"
 
 #include <iostream>
 #include <time.h>
 #include <chrono>
 
-std::vector<Game::MainCharacter*> pawns;
+std::vector<Game::Pawn*> pawns;
+std::vector<std::shared_ptr<Game::Actor>> all_actors;
 
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
@@ -166,14 +168,12 @@ int main(int argc, char** argv)
 			std::make_pair(std::string("m3"), 1.f)
 		};
 
-
-
 		pawns[0]->GetAnimSprite()->InsertState("walk", stateDuration);
-
-		auto lastTime = std::chrono::high_resolution_clock::now();
-
 		pawns[0]->GetAnimSprite()->SetState("walk");
 
+		all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
+
+		auto lastTime = std::chrono::high_resolution_clock::now();
 
 		while (!glfwWindowShouldClose(window))
 		{

@@ -11,7 +11,8 @@ bool PhysicsManager::CanMove(std::vector<std::shared_ptr<Game::Actor>>& actorNee
 			|| (nextPosition.x + sizeActor.x < posCurrentActor.x && nextPosition.x > posCurrentActor.x))
 			return false;
 		if ((nextPosition.y + sizeActor.y > posCurrentActor.y && nextPosition.y < posCurrentActor.y)
-			|| (nextPosition.y + sizeActor.y < posCurrentActor.y && nextPosition.y > posCurrentActor.y))
+			|| (nextPosition.y + sizeActor.y < posCurrentActor.y && nextPosition.y > posCurrentActor.y)
+			)
 			return false;
 	}
 	return true;
