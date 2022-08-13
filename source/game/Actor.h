@@ -22,7 +22,7 @@ namespace Game
 		Actor() = delete;
 		~Actor();
 
-		virtual void Draw();
+
 		virtual void Update(float deltaTime);
 
 		std::shared_ptr<Renderer::AnimSprite> GetAnimSprite();

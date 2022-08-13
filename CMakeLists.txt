@@ -28,6 +28,8 @@ add_executable(${PROJECT_NAME}
 "source/game/Pawn.cpp"
 "source/game/MainCharacter.h"
 "source/game/MainCharacter.cpp"
+"source/game/gameobjects/WallActor.h"
+"source/game/gameobjects/WallActor.cpp"
 )
 
 add_subdirectory(external/glfw)

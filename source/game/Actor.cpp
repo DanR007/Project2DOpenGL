@@ -11,6 +11,10 @@ namespace Game
 	{
 		anim_sprite = animSprite;
 
+		anim_sprite->SetPosition(startPosition);
+		anim_sprite->SetSize(startSize);
+		anim_sprite->SetRotation(startRotation);
+
 		position = startPosition;
 		rotation = startRotation;
 		size = startSize;
@@ -21,7 +25,6 @@ namespace Game
 
 	}
 
-	void Actor::Draw() { anim_sprite->Render(); }
 
 	void Actor::Update(float deltaTime)
 	{
@@ -37,19 +40,16 @@ namespace Game
 	void Actor::SetPosition(const glm::vec2& newPosition)
 	{
 		position = newPosition;
-		if (anim_sprite)
-			anim_sprite->SetPosition(newPosition);
+		anim_sprite->SetPosition(newPosition);
 	}
 	void Actor::SetSize(const glm::vec2& newSize)
 	{
 		size = newSize;
-		if (anim_sprite)
-			anim_sprite->SetSize(newSize);
+		anim_sprite->SetSize(newSize);
 	}
 	void Actor::SetRotation(const float newRotation)
 	{
 		rotation = newRotation;
-		if (anim_sprite)
-			anim_sprite->SetRotation(newRotation);
+		anim_sprite->SetRotation(newRotation);
 	}
 }

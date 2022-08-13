@@ -30,29 +30,15 @@ namespace Renderer
 
 			const GLfloat textureCoords[] =
 			{
-				//U								V
-				/*subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
-				subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
-				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
-
-				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y,
-				subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
-				subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y*/
 				subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
 				subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
 				subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
 				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y
-				/*0.f, 0.f,
-				0.f, 1.f,
-				1.f, 0.f,
-				1.f, 1.f*/
 			};
 
 
 			glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
-			//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_element_buffer);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), &textureCoords);
-			//glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sizeof(element_array), &element_array);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 			is_dirty = false;

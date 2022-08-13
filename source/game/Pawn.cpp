@@ -16,9 +16,9 @@ namespace Game
 		move_speed = moveSpeed;
 	}
 
-	void Pawn::Move(float deltaTime)
+	void Pawn::Move(const float deltaTime)
 	{
-		if(move_vector != glm::vec2(0.f, 0.f) && PhysicsManager::CanMove(all_actors, position + move_vector, size))
+		if(move_vector != glm::vec2(0.f, 0.f) && PhysicsManager::CanMove(all_actors, position + move_vector * deltaTime * move_speed, size))
 			SetPosition(position + move_vector * deltaTime * move_speed);
 	}
 

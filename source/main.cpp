@@ -1,5 +1,6 @@
 #include "main.h"
 #include "engine/managers/ResourcesManager.h"
+#include "engine/managers/PhysicsManager.h"
 
 #include "engine/renderer/ShaderRender.h"
 #include "engine/renderer/TextureRender.h"
@@ -9,11 +10,14 @@
 #include "game/Pawn.h"
 #include "game/MainCharacter.h"
 
+#include "game/gameobjects/WallActor.h"
+
 #include <iostream>
 #include <time.h>
 #include <chrono>
 
 std::vector<Game::Pawn*> pawns;
+std::shared_ptr<Game::MainCharacter> main_character;
 std::vector<std::shared_ptr<Game::Actor>> all_actors;
 
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
@@ -25,7 +29,6 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	std::cout << action << std::endl;
 	switch(action)
 	{
 		case GLFW_PRESS:
@@ -35,16 +38,16 @@ void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int actio
 					glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
 					break;
 			case GLFW_KEY_W:
-				pawns[0]->ChangeMoveVector(up_vector);
+				main_character->ChangeMoveVector(up_vector);
 				break;
 			case GLFW_KEY_S:
-				pawns[0]->ChangeMoveVector(up_vector * -1.f);
+				main_character->ChangeMoveVector(up_vector * -1.f);
 				break;
 			case GLFW_KEY_D:
-				pawns[0]->ChangeMoveVector(right_vector);
+				main_character->ChangeMoveVector(right_vector);
 				break;
 			case GLFW_KEY_A:
-				pawns[0]->ChangeMoveVector(right_vector * -1.f);
+				main_character->ChangeMoveVector(right_vector * -1.f);
 				break;
 			}
 		break;
@@ -52,16 +55,16 @@ void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int actio
 			switch (key)
 			{
 			case GLFW_KEY_W:
-				pawns[0]->ChangeMoveVector(up_vector * -1.f);
+				main_character->ChangeMoveVector(up_vector * -1.f);
 				break;
 			case GLFW_KEY_S:
-				pawns[0]->ChangeMoveVector(up_vector);
+				main_character->ChangeMoveVector(up_vector);
 				break;
 			case GLFW_KEY_D:
-				pawns[0]->ChangeMoveVector(right_vector * -1.f);
+				main_character->ChangeMoveVector(right_vector * -1.f);
 				break;
 			case GLFW_KEY_A:
-				pawns[0]->ChangeMoveVector(right_vector);
+				main_character->ChangeMoveVector(right_vector);
 				break;
 			}
 			break;
@@ -145,16 +148,17 @@ int main(int argc, char** argv)
 
 		glBindVertexArray(0);*/
 
-		glClearColor(0.f, 0.f, 0.f, 1.f);
+		glClearColor(1.f, 1.f, 1.f, 1.f);
 
-		std::string s = "m4";
-		std::vector<std::string> names = { "m1", "m2", "m3", s};
+		std::vector<std::string> names = { "mush1", "mush2", "mush3", "wall"};
 		
-		manager.LoadTextureAtlas("mushroom", "resources/textures/mushroom.png", names, 16, 16);
+		manager.LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
 		
 		//mushroom - texture name
 		//names - vector of names subtextures
-		pawns.push_back(new Game::MainCharacter(std::move(manager.LoadAnimSprite("animSprite", "mushroom", "spriteShader", 261, 261, std::string("m1"))), 100.f, glm::vec2(0.f, 0.f), glm::vec2(261, 261)));
+		glm::vec2 mainCharacterSize = glm::ivec2(100, 100);
+		main_character = std::make_shared<Game::MainCharacter>(std::move(manager.LoadAnimSprite("animSprite", "textureAtlas", "spriteShader", mainCharacterSize.x, mainCharacterSize.y, std::string("mush1"))), 100.f,
+			glm::vec2(window_size.x / 2 - mainCharacterSize.x / 2, window_size.y / 2 - mainCharacterSize.y / 2), mainCharacterSize);
 
 		glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
 		manager.GetShaderProgram("spriteShader")->Use();
@@ -163,15 +167,16 @@ int main(int argc, char** argv)
 
 		std::vector<std::pair<std::string, float>> stateDuration =
 		{
-			std::make_pair(std::string("m1"), 1.f),
-			std::make_pair(std::string("m2"), 1.f),
-			std::make_pair(std::string("m3"), 1.f)
+			std::make_pair(std::string("mush1"), 1.f),
+			std::make_pair(std::string("mush2"), 1.f),
+			std::make_pair(std::string("mush3"), 1.f)
 		};
 
-		pawns[0]->GetAnimSprite()->InsertState("walk", stateDuration);
-		pawns[0]->GetAnimSprite()->SetState("walk");
+		main_character->GetAnimSprite()->InsertState("walk", stateDuration);
+		main_character->GetAnimSprite()->SetState("walk");
 
-		all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
+		//all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
+		all_actors.push_back(std::make_shared<Game::Actor>(std::move(manager.LoadAnimSprite("wallSprite", "textureAtlas", "spriteShader", 240, 240, std::string("wall"))), glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 
@@ -183,8 +188,12 @@ int main(int argc, char** argv)
 			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
 			lastTime = currentTime;
 
-			pawns[0]->Update(duration);
-
+			main_character->Update(duration);
+			for (std::shared_ptr<Game::Actor> actor : all_actors)
+			{
+				actor->Update(duration);
+				//glBindTexture(GL_TEXTURE_2D, 0);
+			}
 			//pawn->GetAnimSprite()->SetPosition(pawn->GetAnimSprite()->GetPosition() + glm::vec2(duration, 0));
 			//texture->Bind();
 			/*GLint uniform = glGetUniformLocation(shaderProgram->GetID(), "vertexColor");
