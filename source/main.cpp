@@ -176,8 +176,9 @@ int main(int argc, char** argv)
 		main_character->GetAnimSprite()->SetState("walk");
 
 		//all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
-		all_actors.push_back(std::make_shared<Game::Actor>(std::move(manager.LoadAnimSprite("wallSprite", "textureAtlas", "spriteShader", 240, 240, std::string("wall"))), glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
-
+		all_actors.push_back(std::make_shared<Game::Actor>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
+		all_actors.push_back(std::make_shared<Game::Actor>(manager.LoadAnimSprite("wallSprite", "textureAtlas", "spriteShader", 40, 40, std::string("wall")), glm::vec2(500.f, 360.f), glm::vec2(40, 40)));
+		all_actors.push_back(std::make_shared<Game::Actor>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240)));
 		auto lastTime = std::chrono::high_resolution_clock::now();
 
 		while (!glfwWindowShouldClose(window))
