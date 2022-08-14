@@ -9,23 +9,10 @@
 namespace Game
 {
 	Actor::Actor(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
-		const std::string& initSubtexture,
+		const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
-		anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(texture), std::move(shader), initSubtexture, startPosition, startSize, startRotation);
-
-		anim_sprite->SetPosition(startPosition);
-		anim_sprite->SetSize(startSize);
-		anim_sprite->SetRotation(startRotation);
-
-		position = startPosition;
-		rotation = startRotation;
-		size = startSize;
-	}
-
-	Actor::Actor(std::shared_ptr<Renderer::AnimSprite> animSprite, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
-	{
-		anim_sprite = std::make_unique<Renderer::AnimSprite>(animSprite.get());
+		anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation);
 
 		anim_sprite->SetPosition(startPosition);
 		anim_sprite->SetSize(startSize);
@@ -67,5 +54,13 @@ namespace Game
 	{
 		rotation = newRotation;
 		anim_sprite->SetRotation(newRotation);
+	}
+	void Actor::AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration)
+	{
+		anim_sprite->InsertState(stateName, subTextureDuration);
+	}
+	void Actor::PlayAnim(const std::string& stateName)
+	{
+		anim_sprite->SetState(stateName);
 	}
 }

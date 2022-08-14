@@ -4,7 +4,7 @@
 
 namespace Renderer
 {
-	AnimSprite::AnimSprite(std::shared_ptr<Texture2D> texture, std::shared_ptr <ShaderProgram> shader,
+	AnimSprite::AnimSprite(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader,
 		const std::string& initialSubtextureName, const glm::vec2& position,
 		const glm::vec2& size, const float rotation)
 		:Sprite(texture,
@@ -16,6 +16,7 @@ namespace Renderer
 	{
 		current_anim_duration = states_map.end();
 	}
+
 	AnimSprite::~AnimSprite()
 	{
 

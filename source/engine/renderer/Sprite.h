@@ -32,6 +32,8 @@ namespace Renderer
 		glm::vec2 GetSize() { return spr_size; }
 		float GetRotation() { return spr_rot; }
 
+		std::shared_ptr<Renderer::ShaderProgram> GetShaderProgram() { return spr_shader; }
+		std::shared_ptr<Renderer::Texture2D> GetTexture() { return spr_texture; }
 
 		virtual void Render() const;
 	protected:

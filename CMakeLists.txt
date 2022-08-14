@@ -24,6 +24,8 @@ add_executable(${PROJECT_NAME}
 "source/engine/managers/PhysicsManager.cpp"
 "source/engine/controllers/Controller.h"
 "source/engine/controllers/Controller.cpp"
+"source/engine/controllers/PlayerController.h"
+"source/engine/controllers/PlayerController.cpp"
 "source/game/Actor.h"
 "source/game/Actor.cpp"
 "source/game/Pawn.h"
