@@ -34,6 +34,10 @@ add_executable(${PROJECT_NAME}
 "source/game/MainCharacter.cpp"
 "source/game/gameobjects/WallActor.h"
 "source/game/gameobjects/WallActor.cpp"
+"source/game/enemies/MeleeEnemy.h"
+"source/game/enemies/MeleeEnemy.cpp"
+"source/game/weapons/PistolBullet.h"
+"source/game/weapons/PistolBullet.cpp"
 )
 
 add_subdirectory(external/glfw)

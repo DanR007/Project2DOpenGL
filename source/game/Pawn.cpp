@@ -16,12 +16,12 @@ namespace Game
 		const float moveSpeed, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation):
 		Actor(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation)
 	{
-		controller = std::make_shared<Controller>(this, moveSpeed);
+		move_speed = moveSpeed;
 	}
 
 	void Pawn::Update(float deltaTime)
 	{
-		controller->Move(deltaTime);
+		Move(deltaTime);
 		Actor::Update(deltaTime);
 	}
 
@@ -30,4 +30,15 @@ namespace Game
 
 	}
 
+	void Pawn::Move(float deltaTime)
+	{
+		if (move_vector != glm::vec2(0.f, 0.f) && 
+			PhysicsManager::CanMove(all_actors, position + move_vector * deltaTime * move_speed, size))
+			SetPosition(position + move_vector * deltaTime * move_speed);
+	}
+
+	void Pawn::ChangeMoveVector(const glm::vec2& inputVector)
+	{
+		move_vector += inputVector;
+	}
 }

@@ -12,6 +12,8 @@
 #include "game/Pawn.h"
 #include "game/MainCharacter.h"
 
+#include "game/enemies/MeleeEnemy.h"
+
 #include "game/gameobjects/WallActor.h"
 
 #include <iostream>
@@ -31,7 +33,7 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	main_character->GetPlayerController()->Input(currentWindow, key, scancode, action, mode);
+	main_character->Input(currentWindow, key, scancode, action, mode);
 }
 
 int main(int argc, char** argv)
@@ -100,11 +102,16 @@ int main(int argc, char** argv)
 
 		main_character->AddAnimState("walk", stateDuration);
 		main_character->PlayAnim("walk");
-
+		main_character->BeginPlay();
 		//all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
-		all_actors.push_back(std::make_shared<Game::Actor>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
-		all_actors.push_back(std::make_shared<Game::Actor>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240)));
-		all_actors.push_back(std::make_shared<Game::Actor>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240)));
+		all_actors.push_back(std::make_shared<Game::Objects::Wall>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
+		all_actors.push_back(std::make_shared<Game::Objects::Wall>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240)));
+		all_actors.push_back(std::make_shared<Game::Objects::Wall>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240)));
+
+		std::vector<glm::vec2> patrolPos = {glm::vec2(100.f, 100.f),glm::vec2(150.f, 120.f),glm::vec2(120.f, 180.f) };
+
+		auto pawn = std::make_shared<Game::MeleeEnemy>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "mush1", 20.f, patrolPos, glm::vec2(0.f), glm::vec2(100, 100));
+
 		auto lastTime = std::chrono::high_resolution_clock::now();
 
 		while (!glfwWindowShouldClose(window))
@@ -121,6 +128,8 @@ int main(int argc, char** argv)
 				actor->Update(duration);
 			}
 			
+			pawn->Update(duration);
+
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}

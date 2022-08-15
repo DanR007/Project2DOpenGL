@@ -12,15 +12,19 @@ namespace Game
 class PlayerController : public Controller
 {
 public:
-	PlayerController(Game::MainCharacter* controlledCharacter, const float moveSpeed);
 
-	~PlayerController();
+	using Controller::Controller;
+	//PlayerController(const float moveSpeed);
+
+	~PlayerController() = default;
 
 	virtual void Move(float deltaTime) override;
 	virtual void ChangeMoveVector(glm::vec2 inputVector) override;
 
 	void Input(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
 
+	void SetCharacter(Game::MainCharacter* controlledCharacter);
+
 protected:
-	Game::MainCharacter* controlled_character;
+	std::shared_ptr<Game::MainCharacter> controlled_character;
 };

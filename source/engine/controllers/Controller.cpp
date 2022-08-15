@@ -6,11 +6,11 @@
 
 #include "../../main.h"
 
-Controller::Controller(Game::Pawn* controlledPawn, const float moveSpeed)
+/*Controller::Controller(std::shared_ptr<Game::Pawn> controlledPawn, const float moveSpeed)
 {
 	controlled_pawn = controlledPawn;
 	move_speed = moveSpeed;
-}
+}*/
 
 Controller::Controller(const float moveSpeed)
 {
@@ -19,21 +19,14 @@ Controller::Controller(const float moveSpeed)
 
 Controller::Controller()
 {
-
-}
-
-Controller::~Controller()
-{
-	if(controlled_pawn)
-		delete controlled_pawn;
-	controlled_pawn = nullptr;
+	move_speed = 0.f;
 }
 
 void Controller::Move(float deltaTime)
 {
-	if (move_vector != glm::vec2(0.f, 0.f) && 
-		PhysicsManager::CanMove(all_actors, controlled_pawn->position + move_vector * deltaTime * move_speed, controlled_pawn->size))
-		controlled_pawn->SetPosition(controlled_pawn->position + move_vector * deltaTime * move_speed);
+	//if (move_vector != glm::vec2(0.f, 0.f) && 
+		//PhysicsManager::CanMove(all_actors, controlled_pawn->position + move_vector * deltaTime * move_speed, controlled_pawn->size))
+		//controlled_pawn->SetPosition(controlled_pawn->position + move_vector * deltaTime * move_speed);
 }
 
 void Controller::SetIgnoreMoveInput(bool isIgnore)

@@ -2,8 +2,6 @@
 
 #include "Actor.h"
 
-class Controller;
-
 namespace Game
 {
 	class Pawn : public Actor
@@ -14,11 +12,19 @@ namespace Game
 		Pawn() = delete;
 
 		virtual void Update(float deltaTime) override;
+		virtual void Move(const float deltaTime);
+		virtual void ChangeMoveVector(const glm::vec2& value);
+
+
 
 		~Pawn();
 	protected:
-		std::shared_ptr<Controller> controller;
 
-		friend class Controller;
+		float move_speed;
+
+		glm::vec2 move_vector = glm::vec2(0.f);
+
+	private:
+
 	};
 }
