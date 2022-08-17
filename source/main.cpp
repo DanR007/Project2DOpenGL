@@ -19,10 +19,12 @@
 #include <iostream>
 #include <time.h>
 #include <chrono>
+#include <thread>
 
 std::vector<Game::Pawn*> pawns;
 std::shared_ptr<Game::MainCharacter> main_character;
 std::vector<std::shared_ptr<Game::Actor>> all_actors;
+std::vector<std::shared_ptr<Game::Pawn>> all_pawns;
 
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
@@ -110,7 +112,7 @@ int main(int argc, char** argv)
 
 		std::vector<glm::vec2> patrolPos = {glm::vec2(100.f, 100.f),glm::vec2(150.f, 120.f),glm::vec2(120.f, 180.f) };
 
-		auto pawn = std::make_shared<Game::MeleeEnemy>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "mush1", 20.f, patrolPos, glm::vec2(0.f), glm::vec2(100, 100));
+		all_pawns.push_back(std::make_shared<Game::MeleeEnemy>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "mush1", 20.f, patrolPos, glm::vec2(0.f), glm::vec2(100, 100)));
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 
@@ -127,8 +129,11 @@ int main(int argc, char** argv)
 			{
 				actor->Update(duration);
 			}
+			for (std::shared_ptr<Game::Pawn> pawn : all_pawns)
+			{
+				pawn->Update(duration);
+			}
 			
-			pawn->Update(duration);
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();

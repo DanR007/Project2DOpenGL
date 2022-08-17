@@ -53,5 +53,15 @@ namespace Game
 		}
 		index += patrol_direction;
 	}
+
+	void MeleeEnemy::ChangePatrolPointsCoordinate(const glm::vec2& value)
+	{
+		for (glm::vec2& point : patrol_points)
+		{
+			point += value;
+		}
+
+		current_patrol_point += value;
+	}
 	
 }

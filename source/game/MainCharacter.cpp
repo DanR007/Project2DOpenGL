@@ -1,5 +1,7 @@
 #include "MainCharacter.h"
 
+#include "enemies/MeleeEnemy.h"
+
 #include "../engine/renderer/AnimSprite.h"
 #include "../engine/renderer/ShaderRender.h"
 #include "../engine/renderer/TextureRender.h"
@@ -44,6 +46,14 @@ namespace Game
 			for (std::shared_ptr<Game::Actor> actor : all_actors)
 			{
 				actor->SetPosition(actor->GetPosition() - move_vector * deltaTime * move_speed);
+			}
+
+			for (std::shared_ptr<Game::Pawn> pawn : all_pawns)
+			{
+				pawn->SetPosition(pawn->GetPosition() + move_vector * -1.f);
+
+				std::dynamic_pointer_cast<MeleeEnemy>(pawn)->ChangePatrolPointsCoordinate(move_vector * -1.f);
+				//std::static_pointer_cast<MeleeEnemy>(pawn)->ChangePatrolPointsCoordinate(move_vector * -1.f);
 			}
 		}
 	}

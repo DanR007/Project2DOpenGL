@@ -15,6 +15,8 @@ namespace Game
 		virtual void Move(const float deltaTime) override;
 
 		virtual void PointReached();
+
+		void ChangePatrolPointsCoordinate(const glm::vec2& value);
 	protected:
 
 		std::vector<glm::vec2> patrol_points;
