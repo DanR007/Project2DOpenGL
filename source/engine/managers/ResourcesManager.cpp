@@ -48,7 +48,7 @@ std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::LoadShaderPrograms(co
 	return nullptr;
 }
 
-std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::GetShaderProgram(const std::string& shaderName) const
+std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::GetShaderProgram(const std::string& shaderName)
 {
 	ShaderProgramMap::const_iterator it = shader_program_map.find(shaderName);
 
@@ -88,7 +88,7 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::st
 	return texture;
 }
 
-std::shared_ptr<Renderer::Texture2D> ResourcesManager::GetTexture(const std::string& textureName) const
+std::shared_ptr<Renderer::Texture2D> ResourcesManager::GetTexture(const std::string& textureName)
 {
 	TexturesMap::const_iterator it = textures_map.find(textureName);
 
@@ -183,7 +183,7 @@ std::shared_ptr<Renderer::Sprite> ResourcesManager::LoadSprite(const std::string
 	return newSprite;
 }
 
-std::shared_ptr<Renderer::Sprite> ResourcesManager::GetSprite(const std::string& spriteName) const
+std::shared_ptr<Renderer::Sprite> ResourcesManager::GetSprite(const std::string& spriteName)
 {
 	SpritesMap::const_iterator it = sprites_map.find(spriteName);
 
@@ -222,7 +222,7 @@ std::shared_ptr<Renderer::AnimSprite> ResourcesManager::LoadAnimSprite(const std
 	return newSprite;
 }
 
-std::shared_ptr<Renderer::AnimSprite> ResourcesManager::GetAnimSprite(const std::string& animSpriteName) const
+std::shared_ptr<Renderer::AnimSprite> ResourcesManager::GetAnimSprite(const std::string& animSpriteName)
 {
 	AnimSpritesMap::const_iterator it = anim_sprites_map.find(animSpriteName);
 

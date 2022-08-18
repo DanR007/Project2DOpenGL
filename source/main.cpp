@@ -1,6 +1,8 @@
 #include "main.h"
+
 #include "engine/managers/ResourcesManager.h"
 #include "engine/managers/PhysicsManager.h"
+#include "engine/managers/GameManager.h"
 
 #include "engine/renderer/ShaderRender.h"
 #include "engine/renderer/TextureRender.h"
@@ -26,6 +28,13 @@ std::shared_ptr<Game::MainCharacter> main_character;
 std::vector<std::shared_ptr<Game::Actor>> all_actors;
 std::vector<std::shared_ptr<Game::Pawn>> all_pawns;
 
+std::string ResourcesManager::exe_path;
+
+ShaderProgramMap ResourcesManager::shader_program_map;
+TexturesMap ResourcesManager::textures_map;
+SpritesMap ResourcesManager::sprites_map;
+AnimSpritesMap ResourcesManager::anim_sprites_map;
+
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
 	window_size.x = size_x;
@@ -48,7 +57,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	{
-		ResourcesManager manager = ResourcesManager(*argv);
+		ResourcesManager::ResourcesManager(*argv);
 
 		window = glfwCreateWindow(window_size.x, window_size.y, "Platformer2D", NULL, NULL);
 
@@ -75,25 +84,25 @@ int main(int argc, char** argv)
 		}
 
 		//std::shared_ptr<Renderer::ShaderProgram> defShader = manager.LoadShaderPrograms("default", DEFAULT_FRAGMENT_SHADER_PATH, DEFAULT_VERTEX__SHADER_PATH);
-		auto textureShader = manager.LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
-		auto spriteShader = manager.LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
+		auto textureShader = ResourcesManager::LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
+		auto spriteShader = ResourcesManager::LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
 
 		glClearColor(1.f, 1.f, 1.f, 1.f);
 
 		std::vector<std::string> names = { "mush1", "mush2", "mush3", "wall"};
 		
-		manager.LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
+		ResourcesManager::LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
 		//textureAtlas - texture name
 		//names - vector of names subtextures
 
 		glm::vec2 mainCharacterSize = glm::ivec2(100, 100);
-		main_character = std::make_shared<Game::MainCharacter>(std::move(manager.GetTexture("textureAtlas")), std::move(manager.GetShaderProgram("spriteShader")), "mush1", 100.f,
+		main_character = std::make_shared<Game::MainCharacter>(std::move(ResourcesManager::GetTexture("textureAtlas")), std::move(ResourcesManager::GetShaderProgram("spriteShader")), "mush1", 100.f,
 			glm::vec2(window_size.x / 2 - mainCharacterSize.x / 2, window_size.y / 2 - mainCharacterSize.y / 2), mainCharacterSize);
 
 		glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
-		manager.GetShaderProgram("spriteShader")->Use();
-		manager.GetShaderProgram("spriteShader")->SetIn("tex", 0);
-		manager.GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
+		ResourcesManager::GetShaderProgram("spriteShader")->Use();
+		ResourcesManager::GetShaderProgram("spriteShader")->SetIn("tex", 0);
+		ResourcesManager::GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
 
 		std::vector<std::pair<std::string, float>> stateDuration =
 		{
@@ -106,13 +115,15 @@ int main(int argc, char** argv)
 		main_character->PlayAnim("walk");
 		main_character->BeginPlay();
 		//all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
-		all_actors.push_back(std::make_shared<Game::Objects::Wall>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
-		all_actors.push_back(std::make_shared<Game::Objects::Wall>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240)));
-		all_actors.push_back(std::make_shared<Game::Objects::Wall>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240)));
+		all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
+		//all_actors.push_back(std::make_shared<Game::Objects::Wall>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240)));
+		//all_actors.push_back(std::make_shared<Game::Objects::Wall>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240)));
+		all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240), 0.f));
+		all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240), 0.f));
 
 		std::vector<glm::vec2> patrolPos = {glm::vec2(100.f, 100.f),glm::vec2(150.f, 120.f),glm::vec2(120.f, 180.f) };
 
-		all_pawns.push_back(std::make_shared<Game::MeleeEnemy>(manager.GetTexture("textureAtlas"), manager.GetShaderProgram("spriteShader"), "mush1", 20.f, patrolPos, glm::vec2(0.f), glm::vec2(100, 100)));
+		//all_pawns.push_back(std::make_shared<Game::MeleeEnemy>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "mush1", 20.f, patrolPos, glm::vec2(0.f), glm::vec2(100, 100)));
 
 		auto lastTime = std::chrono::high_resolution_clock::now();
 
