@@ -22,6 +22,8 @@ add_executable(${PROJECT_NAME}
 "source/engine/managers/ResourcesManager.cpp"
 "source/engine/managers/PhysicsManager.h"
 "source/engine/managers/PhysicsManager.cpp"
+"source/engine/managers/GameManager.h"
+"source/engine/managers/GameManager.cpp"
 "source/engine/controllers/Controller.h"
 "source/engine/controllers/Controller.cpp"
 "source/engine/controllers/PlayerController.h"
@@ -38,6 +40,9 @@ add_executable(${PROJECT_NAME}
 "source/game/enemies/MeleeEnemy.cpp"
 "source/game/weapons/PistolBullet.h"
 "source/game/weapons/PistolBullet.cpp"
+"source/game/weapons/WeaponComponent.h"
+"source/game/weapons/WeaponComponent.cpp"
+"source/game/weapons/EWeaponTypes.h"
 )
 
 add_subdirectory(external/glfw)
