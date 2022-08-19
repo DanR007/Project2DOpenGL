@@ -1,6 +1,7 @@
 #include "Pawn.h"
 
 #include "../engine/managers/PhysicsManager.h"
+#include "../engine/managers/GameManager.h"
 
 #include "../engine/renderer/AnimSprite.h"
 #include "../engine/renderer/ShaderRender.h"
@@ -13,7 +14,7 @@
 namespace Game
 {
 	Pawn::Pawn(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSubtextureName,
-		const float moveSpeed, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation):
+		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float moveSpeed):
 		Actor(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation)
 	{
 		move_speed = moveSpeed;
@@ -33,7 +34,7 @@ namespace Game
 	void Pawn::Move(float deltaTime)
 	{
 		if (move_vector != glm::vec2(0.f, 0.f) && 
-			PhysicsManager::CanMove(all_actors, position + move_vector * deltaTime * move_speed, size))
+			PhysicsManager::CanMove(this, position + move_vector * deltaTime * move_speed, size))
 			SetPosition(position + move_vector * deltaTime * move_speed);
 	}
 

@@ -10,8 +10,9 @@ namespace Game
 	{
 	public:
 		MainCharacter(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
-			const std::string& initSubtextureName,
-			const float startMoveSpeed, const glm::vec2& startPosition = glm::vec2(0.f), const glm::vec2& startSize = glm::vec2(100.f, 100.f), const float startRotation = 0.f);
+			const std::string& initSubtextureName, const glm::vec2& startPosition = glm::vec2(0.f), 
+			const glm::vec2& startSize = glm::vec2(100.f, 100.f), const float startRotation = 0.f,
+			const float startMoveSpeed = 0.f);
 
 		~MainCharacter();
 		virtual void BeginPlay();

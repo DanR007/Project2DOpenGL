@@ -7,6 +7,7 @@
 #include "../engine/renderer/TextureRender.h"
 
 #include "../engine/managers/PhysicsManager.h"
+#include "../engine/managers/GameManager.h"
 
 #include "../main.h"
 
@@ -15,8 +16,8 @@
 namespace Game
 {
 	MainCharacter::MainCharacter(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
-		const std::string& initSubtextureName, const float startMoveSpeed, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
-		:Pawn(std::move(texture), std::move(shader), initSubtextureName, startMoveSpeed, startPosition, startSize, startRotation)
+		const std::string& initSubtextureName, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float startMoveSpeed)
+		:Pawn(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation, startMoveSpeed)
 	{
 
 	}
@@ -41,16 +42,13 @@ namespace Game
 	void MainCharacter::Move(float deltaTime)
 	{
 		if (!is_ignore_move_input && move_vector != glm::vec2(0.f, 0.f) &&
-			PhysicsManager::CanMove(std::move(all_actors), position + move_vector * deltaTime * move_speed, size))
+			PhysicsManager::CanMove(this, position + move_vector * deltaTime * move_speed, size))
 		{
-			for (std::shared_ptr<Game::Actor> actor : all_actors)
-			{
-				actor->SetPosition(actor->GetPosition() - move_vector * deltaTime * move_speed);
-			}
+			GameManager::MoveAllActors(move_vector * deltaTime * move_speed);
 
 			for (std::shared_ptr<Game::Pawn> pawn : all_pawns)
 			{
-				pawn->SetPosition(pawn->GetPosition() + move_vector * -1.f);
+				//pawn->SetPosition(pawn->GetPosition() + move_vector * -1.f);
 
 				std::dynamic_pointer_cast<MeleeEnemy>(pawn)->ChangePatrolPointsCoordinate(move_vector * -1.f);
 				//std::static_pointer_cast<MeleeEnemy>(pawn)->ChangePatrolPointsCoordinate(move_vector * -1.f);

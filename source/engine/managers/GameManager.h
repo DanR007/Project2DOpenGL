@@ -6,7 +6,7 @@
 
 #include "ResourcesManager.h"
 
-//#include "../../main.h"
+#include "../../game/Pawn.h"
 
 namespace Renderer
 {
@@ -20,7 +20,7 @@ namespace Game
 	class Pawn;
 }
 
-static class GameManager
+class GameManager
 {
 public:
 	template<typename T>
@@ -28,11 +28,16 @@ public:
 		std::shared_ptr<Renderer::Texture2D> texture = ResourcesManager::GetTexture("textureAtlas"),
 		std::shared_ptr<Renderer::ShaderProgram> shader = ResourcesManager::GetShaderProgram("spriteShader"))
 	{
-		return std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation);
+		std::shared_ptr<T> newActor = std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation); all_actors.push_back(std::static_pointer_cast<Game::Actor>(newActor));
+		return newActor;
 	}
 
-private:
-	//std::vector<std::shared_ptr<Game::Actor>> all_actors;
+	static void MoveAllActors(const glm::vec2& valuePosition);
 
+	static void Update(const float deltaTime);
+private:
+	static std::vector<std::shared_ptr<Game::Actor>> all_actors;
+
+	friend class PhysicsManager;
 };
 

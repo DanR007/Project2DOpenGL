@@ -13,6 +13,6 @@ namespace Game
 static class PhysicsManager
 {
 public:
-	static bool CanMove(std::vector<std::shared_ptr<Game::Actor>>& actorNeedToCheck, const glm::vec2& nextPosition, const glm::vec2& sizeActor);
+	static bool CanMove(Game::Actor* movingActor, const glm::vec2& nextPosition, const glm::vec2& sizeActor);
 
 };

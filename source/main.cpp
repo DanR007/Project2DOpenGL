@@ -25,7 +25,7 @@
 
 std::vector<Game::Pawn*> pawns;
 std::shared_ptr<Game::MainCharacter> main_character;
-std::vector<std::shared_ptr<Game::Actor>> all_actors;
+std::vector<std::shared_ptr<Game::Actor>> GameManager::all_actors;
 std::vector<std::shared_ptr<Game::Pawn>> all_pawns;
 
 std::string ResourcesManager::exe_path;
@@ -96,7 +96,7 @@ int main(int argc, char** argv)
 		//names - vector of names subtextures
 
 		glm::vec2 mainCharacterSize = glm::ivec2(100, 100);
-		main_character = std::make_shared<Game::MainCharacter>(std::move(ResourcesManager::GetTexture("textureAtlas")), std::move(ResourcesManager::GetShaderProgram("spriteShader")), "mush1", 100.f,
+		main_character = GameManager::SpawnActor<Game::MainCharacter>("mush1",
 			glm::vec2(window_size.x / 2 - mainCharacterSize.x / 2, window_size.y / 2 - mainCharacterSize.y / 2), mainCharacterSize);
 
 		glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
@@ -114,13 +114,15 @@ int main(int argc, char** argv)
 		main_character->AddAnimState("walk", stateDuration);
 		main_character->PlayAnim("walk");
 		main_character->BeginPlay();
+
+		main_character->SetMoveSpeed(100.f);
 		//all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
-		all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
+		//all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240)));
 		//all_actors.push_back(std::make_shared<Game::Objects::Wall>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240)));
 		//all_actors.push_back(std::make_shared<Game::Objects::Wall>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240)));
-		all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240), 0.f));
-		all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240), 0.f));
-
+		//all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240), 0.f));
+		//all_actors.push_back(GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240), 0.f));
+		GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240), 0.f);
 		std::vector<glm::vec2> patrolPos = {glm::vec2(100.f, 100.f),glm::vec2(150.f, 120.f),glm::vec2(120.f, 180.f) };
 
 		//all_pawns.push_back(std::make_shared<Game::MeleeEnemy>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "mush1", 20.f, patrolPos, glm::vec2(0.f), glm::vec2(100, 100)));
@@ -136,10 +138,9 @@ int main(int argc, char** argv)
 			lastTime = currentTime;
 
 			main_character->Update(duration);
-			for (std::shared_ptr<Game::Actor> actor : all_actors)
-			{
-				actor->Update(duration);
-			}
+
+			GameManager::Update(duration);
+
 			for (std::shared_ptr<Game::Pawn> pawn : all_pawns)
 			{
 				pawn->Update(duration);

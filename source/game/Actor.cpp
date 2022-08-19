@@ -5,6 +5,7 @@
 #include "../engine/renderer/ShaderRender.h"
 
 #include "../engine/managers/ResourcesManager.h"
+#include "../engine/managers/GameManager.h"
 
 namespace Game
 {

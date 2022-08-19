@@ -10,7 +10,8 @@ namespace Game
 	{
 	public:
 		MeleeEnemy(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSubtextureName,
-			const float moveSpeed, const std::vector<glm::vec2>& patrolPoints, const glm::vec2& startPosition = glm::vec2(0.f), const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f);
+			const std::vector<glm::vec2>& patrolPoints, const glm::vec2& startPosition = glm::vec2(0.f), const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f,
+			const float moveSpeed = 0.f);
 
 		virtual void Move(const float deltaTime) override;
 
