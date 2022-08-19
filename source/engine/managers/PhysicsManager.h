@@ -10,9 +10,9 @@ namespace Game
 	class Actor;
 }
 
-static class PhysicsManager
+class PhysicsManager
 {
 public:
-	static bool CanMove(Game::Actor* movingActor, const glm::vec2& nextPosition, const glm::vec2& sizeActor);
+	static bool CanMove(const glm::vec2& nextPosition, const glm::vec2& sizeActor);
 
 };

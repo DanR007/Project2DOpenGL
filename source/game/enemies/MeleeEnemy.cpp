@@ -10,13 +10,12 @@
 namespace Game
 {
 	MeleeEnemy::MeleeEnemy(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, 
-		const std::string& initSubtextureName, const std::vector<glm::vec2>& patrolPoints,
+		const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float moveSpeed)
 		: Pawn(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation, moveSpeed)
 	{
-		patrol_points = patrolPoints;
-		if(!patrolPoints.empty())
-			current_patrol_point = patrolPoints[index];
+		current_patrol_point = startPosition;
+
 	}
 
 	void MeleeEnemy::Move(const float deltaTime)
@@ -34,7 +33,7 @@ namespace Game
 				glm::vec2(current_patrol_point - position).y / length);
 
 			if (move_vector != glm::vec2(0.f, 0.f) &&
-				PhysicsManager::CanMove(this, position + move_vector * deltaTime * move_speed, size))
+				PhysicsManager::CanMove(position + move_vector * deltaTime * move_speed, size))
 				SetPosition(position + move_vector * deltaTime * move_speed);
 		}
 	}
@@ -65,4 +64,10 @@ namespace Game
 		current_patrol_point += value;
 	}
 	
+	void MeleeEnemy::SetPatrolPoints(const std::vector<glm::vec2>& patrolPoints)
+	{
+		patrol_points = patrolPoints;
+		if (!patrolPoints.empty())
+			current_patrol_point = patrolPoints[index];
+	}
 }

@@ -42,17 +42,9 @@ namespace Game
 	void MainCharacter::Move(float deltaTime)
 	{
 		if (!is_ignore_move_input && move_vector != glm::vec2(0.f, 0.f) &&
-			PhysicsManager::CanMove(this, position + move_vector * deltaTime * move_speed, size))
+			PhysicsManager::CanMove(position + move_vector * deltaTime * move_speed, size))
 		{
 			GameManager::MoveAllActors(move_vector * deltaTime * move_speed);
-
-			for (std::shared_ptr<Game::Pawn> pawn : all_pawns)
-			{
-				//pawn->SetPosition(pawn->GetPosition() + move_vector * -1.f);
-
-				std::dynamic_pointer_cast<MeleeEnemy>(pawn)->ChangePatrolPointsCoordinate(move_vector * -1.f);
-				//std::static_pointer_cast<MeleeEnemy>(pawn)->ChangePatrolPointsCoordinate(move_vector * -1.f);
-			}
 		}
 	}
 

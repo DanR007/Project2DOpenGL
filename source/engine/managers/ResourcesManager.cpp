@@ -11,13 +11,6 @@
 #include <fstream>
 #include <iostream>
 
-ResourcesManager::ResourcesManager(const std::string& executablePath)
-{
-	std::size_t find = executablePath.find_last_of("/\\");
-
-	exe_path = executablePath.substr(0, find);
-}
-
 std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::LoadShaderPrograms(const std::string& shaderName, const std::string& fragmentPath, const std::string& vertexPath)
 {
 	std::string vertexSource = ReadShaderProgramFile(vertexPath);
@@ -233,4 +226,23 @@ std::shared_ptr<Renderer::AnimSprite> ResourcesManager::GetAnimSprite(const std:
 	}
 
 	return it->second;
+}
+
+void ResourcesManager::LoadAll(const std::string& executablePath)
+{
+	std::size_t find = executablePath.find_last_of("/\\");
+
+	exe_path = executablePath.substr(0, find);
+
+	LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
+	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
+
+	std::vector<std::string> names = { "mush1", "mush2", "mush3", "wall" };
+
+	ResourcesManager::LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
+
+	glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
+	ResourcesManager::GetShaderProgram("spriteShader")->Use();
+	ResourcesManager::GetShaderProgram("spriteShader")->SetIn("tex", 0);
+	ResourcesManager::GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
 }

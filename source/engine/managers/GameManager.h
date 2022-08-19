@@ -6,18 +6,12 @@
 
 #include "ResourcesManager.h"
 
-#include "../../game/Pawn.h"
+#include "../../game/AllObjects.h"
 
 namespace Renderer
 {
 	class Texture2D;
 	class ShaderProgram;
-}
-
-namespace Game
-{
-	class Actor;
-	class Pawn;
 }
 
 class GameManager
@@ -28,15 +22,30 @@ public:
 		std::shared_ptr<Renderer::Texture2D> texture = ResourcesManager::GetTexture("textureAtlas"),
 		std::shared_ptr<Renderer::ShaderProgram> shader = ResourcesManager::GetShaderProgram("spriteShader"))
 	{
-		std::shared_ptr<T> newActor = std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation); all_actors.push_back(std::static_pointer_cast<Game::Actor>(newActor));
+		std::shared_ptr<T> newActor = std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation); 
+
+		if (std::static_pointer_cast<Game::MainCharacter>(newActor))
+		{
+			return newActor;
+		}
+
+		if (std::static_pointer_cast<Game::Pawn>(newActor))
+		{
+			all_pawns.push_back(newActor);
+		}
+
+		if(std::static_pointer_cast<Game::Actor>(newActor))
+			all_actors.push_back(newActor);
+
 		return newActor;
 	}
 
 	static void MoveAllActors(const glm::vec2& valuePosition);
 
 	static void Update(const float deltaTime);
+
+	static void BeginPlay();
 private:
-	static std::vector<std::shared_ptr<Game::Actor>> all_actors;
 
 	friend class PhysicsManager;
 };

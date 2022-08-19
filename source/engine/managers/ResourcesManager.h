@@ -1,9 +1,18 @@
 #pragma once
 
+#include "../../main.h"
+
 #include <string>
 #include <memory>
 #include <map>
 #include <vector>
+
+#define DEFAULT_VERTEX__SHADER_PATH "resources/shaders/defVertexShader.txt"
+#define DEFAULT_FRAGMENT_SHADER_PATH "resources/shaders/defFragmentShader.txt"
+#define TEXTURE_VERTEX_SHADER_PATH "resources/shaders/textureVertexShader.txt"
+#define TEXTURE_FRAGMENT_SHADER_PATH "resources/shaders/textureFragmentShader.txt"
+#define SPRITE_VERTEX_SHADER_PATH "resources/shaders/spriteVertexShader.txt"
+#define SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/spriteFragmentShader.txt"
 
 namespace Renderer
 {
@@ -18,11 +27,9 @@ typedef std::map <std::string, std::shared_ptr<Renderer::Texture2D>> TexturesMap
 typedef std::map <std::string, std::shared_ptr<Renderer::Sprite>> SpritesMap;
 typedef std::map <std::string, std::shared_ptr<Renderer::AnimSprite>> AnimSpritesMap;
 
-static class ResourcesManager
+class ResourcesManager
 {
 public:
-	ResourcesManager(const std::string& executablePath);
-
 	static std::shared_ptr<Renderer::ShaderProgram> LoadShaderPrograms(const std::string& shaderName, const std::string& fragmentPath, const std::string& vertexPath);
 	static std::shared_ptr<Renderer::ShaderProgram> GetShaderProgram(const std::string& shaderName);
 
@@ -48,11 +55,11 @@ public:
 		const std::string& subTextureName);
 	static std::shared_ptr<Renderer::AnimSprite> GetAnimSprite(const std::string& animSpriteName);
 	
-
+	static void LoadAll(const std::string& executablePath);
+private:
 	static std::string ReadShaderProgramFile(const std::string& path);
 	static std::string exe_path;
 
-	
 	static ShaderProgramMap shader_program_map;
 	static TexturesMap textures_map;
 	static SpritesMap sprites_map;
