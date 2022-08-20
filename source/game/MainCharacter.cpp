@@ -9,6 +9,8 @@
 #include "../engine/managers/PhysicsManager.h"
 #include "../engine/managers/GameManager.h"
 
+#include "../engine/physics/Collider.h"
+
 #include "../main.h"
 
 #include <iostream>
@@ -19,7 +21,10 @@ namespace Game
 		const std::string& initSubtextureName, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float startMoveSpeed)
 		:Pawn(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation, startMoveSpeed)
 	{
+		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, startSize);
 
+		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Overlap);
+		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Overlap);
 	}
 
 	MainCharacter::~MainCharacter()
@@ -42,7 +47,7 @@ namespace Game
 	void MainCharacter::Move(float deltaTime)
 	{
 		if (!is_ignore_move_input && move_vector != glm::vec2(0.f, 0.f) &&
-			PhysicsManager::CanMove(position + move_vector * deltaTime * move_speed, size))
+			PhysicsManager::CanMove(this, _position + move_vector * deltaTime * move_speed))
 		{
 			GameManager::MoveAllActors(move_vector * deltaTime * move_speed);
 		}

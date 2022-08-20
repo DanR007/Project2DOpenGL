@@ -17,12 +17,9 @@ void GameManager::MoveAllActors(const glm::vec2& valuePosition)
 	for (std::shared_ptr<Game::Actor> actor : all_actors)
 	{
 		actor->SetPosition(actor->GetPosition() - valuePosition);
-	}
 
-	for (std::shared_ptr<Game::Pawn> pawn : all_pawns)
-	{
-		if(std::static_pointer_cast<Game::MeleeEnemy>(pawn))
-		std::static_pointer_cast<Game::MeleeEnemy>(pawn)->ChangePatrolPointsCoordinate(main_character->GetMoveVector() * -1.f);
+		if(std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
+			std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->ChangePatrolPointsCoordinate(main_character->GetMoveVector() * -1.f);
 	}
 }
 
@@ -30,12 +27,20 @@ void GameManager::Update(const float deltaTime)
 {
 	main_character->Update(deltaTime);
 	size_t size = all_actors.size();
-	for (size_t i = 0; i < size; i++)
+	/*for (size_t i = 0; i < size; i++)
 	{
-		/*if (std::dynamic_pointer_cast<Game::Pawn>(all_actors[i]))
-			std::dynamic_pointer_cast<Game::Pawn>(all_actors[i])->Update(deltaTime);
-		else*/
+		if (std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i])))
+			std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i]))->Update(deltaTime);
+		else
 			all_actors[i]->Update(deltaTime);
+	}*/
+
+	for (std::shared_ptr<Game::Actor> actor : all_actors)
+	{
+		if (std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
+			std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->Update(deltaTime);
+		else
+			actor->Update(deltaTime);
 	}
 }
 
@@ -59,7 +64,7 @@ void GameManager::BeginPlay()
 	main_character->BeginPlay();
 
 	main_character->SetMoveSpeed(100.f);
-	//all_actors.push_back(std::make_shared<Game::Actor>(nullptr, glm::vec2(0.f, 0.f), window_size, 0.f));
+
 	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240));
 	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240));
 	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240));
@@ -67,4 +72,6 @@ void GameManager::BeginPlay()
 
 	std::shared_ptr<Game::MeleeEnemy> enemy = SpawnActor<Game::MeleeEnemy>("mush1", glm::vec2(0.f), glm::vec2(100, 100));
 	enemy->SetPatrolPoints(patrolPos);
+
+	enemy->SetMoveSpeed(50.f);
 }

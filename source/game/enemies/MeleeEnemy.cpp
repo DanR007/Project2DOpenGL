@@ -3,7 +3,7 @@
 #include "../../engine/managers/PhysicsManager.h"
 #include "../../engine/managers/GameManager.h"
 
-#include "../../main.h"
+#include "../../engine/physics/Collider.h"
 
 #include <cmath>
 #include <iostream>
@@ -15,12 +15,15 @@ namespace Game
 		: Pawn(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation, moveSpeed)
 	{
 		current_patrol_point = startPosition;
+		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Enemy, startSize);
 
+		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Overlap);
+		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Overlap);
 	}
 
 	void MeleeEnemy::Move(const float deltaTime)
 	{
-		double length = std::sqrt(std::pow((current_patrol_point - position).x, 2) + std::pow((current_patrol_point - position).y, 2));
+		double length = std::sqrt(std::pow((current_patrol_point - _position).x, 2) + std::pow((current_patrol_point - _position).y, 2));
 		//std::cout << (current_patrol_point - position).length() << std::endl;
 		if (length < 0.2f)
 		{
@@ -29,12 +32,12 @@ namespace Game
 		}
 		else
 		{
-			move_vector = glm::vec2(glm::vec2(current_patrol_point - position).x / length,
-				glm::vec2(current_patrol_point - position).y / length);
+			move_vector = glm::vec2(glm::vec2(current_patrol_point - _position).x / length,
+				glm::vec2(current_patrol_point - _position).y / length);
 
 			if (move_vector != glm::vec2(0.f, 0.f) &&
-				PhysicsManager::CanMove(position + move_vector * deltaTime * move_speed, size))
-				SetPosition(position + move_vector * deltaTime * move_speed);
+				PhysicsManager::CanMove(this, _position + move_vector * deltaTime * move_speed))
+				SetPosition(_position + move_vector * deltaTime * move_speed);
 		}
 	}
 

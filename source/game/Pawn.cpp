@@ -34,8 +34,8 @@ namespace Game
 	void Pawn::Move(float deltaTime)
 	{
 		if (move_vector != glm::vec2(0.f, 0.f) && 
-			PhysicsManager::CanMove(position + move_vector * deltaTime * move_speed, size))
-			SetPosition(position + move_vector * deltaTime * move_speed);
+			PhysicsManager::CanMove(this, _position + move_vector * deltaTime * move_speed))
+			SetPosition(_position + move_vector * deltaTime * move_speed);
 	}
 
 	void Pawn::ChangeMoveVector(const glm::vec2& inputVector)

@@ -24,17 +24,17 @@ public:
 	{
 		std::shared_ptr<T> newActor = std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation); 
 
-		if (std::static_pointer_cast<Game::MainCharacter>(newActor))
+		if (std::dynamic_pointer_cast<Game::MainCharacter>(newActor))
 		{
 			return newActor;
 		}
 
-		if (std::static_pointer_cast<Game::Pawn>(newActor))
+		/*if (std::reinterpret_pointer_cast<Game::Pawn>(newActor))
 		{
 			all_pawns.push_back(newActor);
-		}
+		}*/
 
-		if(std::static_pointer_cast<Game::Actor>(newActor))
+		if(std::dynamic_pointer_cast<Game::Actor>(newActor))
 			all_actors.push_back(newActor);
 
 		return newActor;

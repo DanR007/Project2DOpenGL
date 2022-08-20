@@ -6,15 +6,16 @@
 
 #include <glm/vec2.hpp>
 
-
-
 namespace Renderer
 {
 	class AnimSprite;
 	class Texture2D;
 	class ShaderProgram;
 }
-
+namespace Physics
+{
+	class Collider;
+}
 
 namespace Game
 {
@@ -28,13 +29,12 @@ namespace Game
 		Actor() = delete;
 		~Actor();
 
-
 		virtual void Update(float deltaTime);
 
 		std::shared_ptr<Renderer::AnimSprite> GetAnimSprite();
+		std::shared_ptr<Physics::Collider> GetCollider() { return _collider; }
 
-		glm::vec2 GetPosition() { return position; }
-		glm::vec2 GetSize() { return size; }
+		glm::vec2 GetPosition() { return _position; }
 
 		void SetPosition(const glm::vec2& newPosition);
 		void SetSize(const glm::vec2& newSize);
@@ -43,10 +43,12 @@ namespace Game
 		void AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration);
 		void PlayAnim(const std::string& stateName);
 
+		virtual void Overlapping() {};
 	protected:
-		glm::vec2 position, size;
-		float rotation;
+		glm::vec2 _position;
+		float _rotation;
 
-		std::unique_ptr<Renderer::AnimSprite> anim_sprite;
+		std::unique_ptr<Renderer::AnimSprite> _anim_sprite;
+		std::shared_ptr<Physics::Collider> _collider;
 	};
 }
