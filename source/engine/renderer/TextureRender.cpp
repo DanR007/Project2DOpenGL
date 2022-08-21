@@ -32,6 +32,9 @@ namespace Renderer
 
 		glTexImage2D(GL_TEXTURE_2D, 0, format, tex_width, tex_height, 0, format, GL_UNSIGNED_BYTE, imageData);
 
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 		glBindTexture(GL_TEXTURE_2D, 0);
 	}
 
