@@ -26,7 +26,12 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	main_character->Input(currentWindow, key, scancode, action, mode);
+	main_character->InputKeyboard(currentWindow, key, scancode, action, mode);
+}
+
+void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode)
+{
+	main_character->InputMouse(currentWindow, button, action, mode);
 }
 
 int main(int argc, char** argv)
@@ -54,6 +59,7 @@ int main(int argc, char** argv)
 
 		glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 		glfwSetKeyCallback(window, glfwKeyCallback);
+		glfwSetMouseButtonCallback(window, glfwMouseButtonCallback);
 
 		glfwMakeContextCurrent(window);
 

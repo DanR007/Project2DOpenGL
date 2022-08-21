@@ -25,7 +25,7 @@ namespace Game
 
 	Actor::~Actor()
 	{
-
+		
 	}
 
 
@@ -64,5 +64,9 @@ namespace Game
 	void Actor::PlayAnim(const std::string& stateName)
 	{
 		_anim_sprite->SetState(stateName);
+	}
+	void Actor::DestroyActor()
+	{
+		delete this;
 	}
 }

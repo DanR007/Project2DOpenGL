@@ -44,6 +44,8 @@ namespace Game
 		void PlayAnim(const std::string& stateName);
 
 		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) {};
+
+		virtual void DestroyActor();
 	protected:
 		glm::vec2 _position;
 		float _rotation;

@@ -2,6 +2,8 @@
 
 #include "HealthComponent.h"
 
+#include "weapons/WeaponComponent.h"
+
 #include "enemies/MeleeEnemy.h"
 
 #include "../engine/renderer/AnimSprite.h"
@@ -21,14 +23,17 @@ namespace Game
 {
 	MainCharacter::MainCharacter(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
 		const std::string& initSubtextureName, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float startMoveSpeed)
-		:Pawn(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation, startMoveSpeed)
+		:Pawn(texture, shader, initSubtextureName, startPosition, startSize, startRotation, startMoveSpeed)
 	{
 		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, startSize);
 
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Overlap);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Overlap);
+		_collider->SetCollisionResponse(EObjectTypes::EOT_Projectile, EResponseType::ERT_Ignore);
 
 		_health_component = std::make_shared<HealthComponent>(10);
+
+		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "mush1", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
 	}
 
 	MainCharacter::~MainCharacter()
@@ -51,6 +56,8 @@ namespace Game
 		{
 			_health_component->UpdateInviolability(deltaTime);
 		}
+
+		_weapon_component->Update(deltaTime);
 	}
 
 	void MainCharacter::Move(float deltaTime)
@@ -59,6 +66,7 @@ namespace Game
 			PhysicsManager::CanMove(this, _position + move_vector * deltaTime * move_speed))
 		{
 			GameManager::MoveAllActors(move_vector * deltaTime * move_speed);
+			//_weapon_component->FollowOwner(move_vector * deltaTime * move_speed);
 		}
 	}
 
@@ -67,7 +75,7 @@ namespace Game
 		move_vector += inputVector;
 	}
 
-	void MainCharacter::Input(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
+	void MainCharacter::InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 	{
 		switch (action)
 		{
@@ -93,6 +101,14 @@ namespace Game
 				if (!is_ignore_move_input)
 					ChangeMoveVector(right_vector * -1.f);
 				break;
+			case GLFW_MOUSE_BUTTON_1:
+			{
+				std::cout << key << std::endl;
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
+			}
+				break;
 			}
 			break;
 		case GLFW_RELEASE:
@@ -110,18 +126,77 @@ namespace Game
 			case GLFW_KEY_A:
 				ChangeMoveVector(right_vector);
 				break;
+			case GLFW_MOUSE_BUTTON_1:
+			{
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
+			}
+				break;
 			}
 			break;
-		/*case GLFW_REPEAT:
-
-			break;*/
+		case GLFW_REPEAT:
+			switch (key)
+			{
+			case GLFW_MOUSE_BUTTON_1:
+			{
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
+			}
+				break;
+			}
+			break;
+		}
+	}
+	void MainCharacter::InputMouse(GLFWwindow* currentWindow, int button, int action, int mode)
+	{
+		switch (action)
+		{
+		case GLFW_PRESS:
+			switch (button)
+			{
+			case GLFW_MOUSE_BUTTON_1:
+			{
+				std::cout << button << std::endl;
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
+			}
+			break;
+			}
+			break;
+		case GLFW_RELEASE:
+			switch (button)
+			{
+			case GLFW_MOUSE_BUTTON_1:
+			{
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
+			}
+			break;
+			}
+			break;
+		case GLFW_REPEAT:
+			switch (button)
+			{
+			case GLFW_MOUSE_BUTTON_1:
+			{
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
+			}
+			break;
+			}
+			break;
 		}
 	}
 	void MainCharacter::Overlap(std::shared_ptr<Actor> overlappingActor)
 	{
 		std::shared_ptr<Enemy> enemy = std::dynamic_pointer_cast<Enemy>(overlappingActor);
 		if (_health_component->GetInviolabilityTime() <= 0.f)
-			if (std::dynamic_pointer_cast<Enemy>(overlappingActor))
+			if (enemy)
 				_health_component->Hurt(enemy->GetOverlapDamage());
 			else
 			{

@@ -8,6 +8,8 @@
 
 #include "../../game/AllObjects.h"
 
+#include "../../game/MainCharacter.h"
+
 namespace Renderer
 {
 	class Texture2D;
@@ -24,7 +26,7 @@ public:
 	{
 		std::shared_ptr<T> newActor = std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation); 
 
-		if (std::dynamic_pointer_cast<Game::MainCharacter>(newActor))
+		if (/*typeid(*newActor) == typeid(Game::MainCharacter&)*/std::dynamic_pointer_cast<Game::MainCharacter>(newActor))
 		{
 			return newActor;
 		}

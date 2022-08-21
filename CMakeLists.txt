@@ -46,11 +46,14 @@ add_executable(${PROJECT_NAME}
 "source/game/enemies/Enemy.cpp"
 "source/game/enemies/MeleeEnemy.h"
 "source/game/enemies/MeleeEnemy.cpp"
+"source/game/weapons/Bullet.h"
+"source/game/weapons/Bullet.cpp"
 "source/game/weapons/PistolBullet.h"
 "source/game/weapons/PistolBullet.cpp"
 "source/game/weapons/WeaponComponent.h"
 "source/game/weapons/WeaponComponent.cpp"
 "source/game/weapons/EWeaponTypes.h"
+
 )
 
 add_subdirectory(external/glfw)

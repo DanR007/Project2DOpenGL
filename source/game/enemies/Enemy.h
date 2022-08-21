@@ -21,7 +21,11 @@ namespace Game
 		virtual void SetPatrolPoints(const std::vector<glm::vec2>& patrolPoints) {}
 
 		int GetOverlapDamage() { return overlap_damage; }
+		void Hurt(int damage);
+
+		virtual void DestroyActor() override { delete this; }
 	protected:
+		int _health;
 
 		std::vector<glm::vec2> patrol_points;
 
@@ -29,8 +33,6 @@ namespace Game
 
 		int patrol_direction = 1;
 		size_t index = 0;
-
-		std::shared_ptr<HealthComponent> _health_component;
 
 		int overlap_damage = 1;
 	private:

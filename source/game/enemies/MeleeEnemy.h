@@ -20,6 +20,7 @@ namespace Game
 		virtual void ChangePatrolPointsCoordinate(const glm::vec2& value) override;
 
 		virtual void SetPatrolPoints(const std::vector<glm::vec2>& patrolPoints) override;
+		virtual void DestroyActor() override;
 	protected:
 
 		std::vector<glm::vec2> patrol_points;

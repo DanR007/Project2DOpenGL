@@ -5,6 +5,8 @@
 
 #include "../../engine/physics/Collider.h"
 
+#include "../HealthComponent.h"
+
 #include <cmath>
 #include <iostream>
 namespace Game
@@ -16,9 +18,10 @@ namespace Game
 	{
 		current_patrol_point = startPosition;
 		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Enemy, startSize);
-
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Overlap);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Overlap);
+
+		_health = 105;
 	}
 
 	void MeleeEnemy::Move(const float deltaTime)
@@ -72,5 +75,20 @@ namespace Game
 		patrol_points = patrolPoints;
 		if (!patrolPoints.empty())
 			current_patrol_point = patrolPoints[index];
+	}
+	void MeleeEnemy::DestroyActor()
+	{
+		std::vector<std::shared_ptr<Game::Actor>>::iterator it = all_actors.begin();
+		for (; it != all_actors.end(); it++)
+		{
+			if (it->get() == this)
+			{
+				all_actors.erase(it);
+				break;
+			}
+		}
+		int i = 0;
+		delete this;
+		int j = 0;
 	}
 }

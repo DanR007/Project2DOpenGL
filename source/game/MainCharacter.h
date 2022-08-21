@@ -4,6 +4,7 @@
 
 #include "../main.h"
 
+class WeaponComponent;
 
 namespace Game
 {
@@ -25,14 +26,17 @@ namespace Game
 
 		bool GetIsIgnoreMoveInput() { return is_ignore_move_input; }
 
-		void Input(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
+		void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
+		void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
 
 		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) override;
+		virtual void DestroyActor() override { delete this; }
 	protected:
 
 		bool is_pause = false;
 		bool is_ignore_move_input = false;
 
 		std::shared_ptr<HealthComponent> _health_component;
+		std::shared_ptr<WeaponComponent> _weapon_component;
 	};
 }

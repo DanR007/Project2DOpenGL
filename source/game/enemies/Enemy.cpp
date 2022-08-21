@@ -2,5 +2,15 @@
 
 namespace Game
 {
-	
+    void Enemy::Hurt(int damage)
+    {
+        if (_health - damage <= 0)
+        {
+            DestroyActor();
+        }
+        else
+        {
+            _health -= damage;
+        }
+    }
 }
