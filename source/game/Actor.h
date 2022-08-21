@@ -43,7 +43,7 @@ namespace Game
 		void AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration);
 		void PlayAnim(const std::string& stateName);
 
-		virtual void Overlapping() {};
+		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) {};
 	protected:
 		glm::vec2 _position;
 		float _rotation;

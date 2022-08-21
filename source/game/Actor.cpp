@@ -6,6 +6,7 @@
 
 #include "../engine/managers/ResourcesManager.h"
 #include "../engine/managers/GameManager.h"
+#include "../engine/managers/PhysicsManager.h"
 
 #include "../engine/physics/Collider.h"
 
@@ -32,6 +33,8 @@ namespace Game
 	{
 		_anim_sprite->Update(deltaTime);
 		_anim_sprite->Render();
+
+		PhysicsManager::IsOverlap(this);
 	}
 
 	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite()

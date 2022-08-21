@@ -1,5 +1,7 @@
 #include "MainCharacter.h"
 
+#include "HealthComponent.h"
+
 #include "enemies/MeleeEnemy.h"
 
 #include "../engine/renderer/AnimSprite.h"
@@ -25,6 +27,8 @@ namespace Game
 
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Overlap);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Overlap);
+
+		_health_component = std::make_shared<HealthComponent>(10);
 	}
 
 	MainCharacter::~MainCharacter()
@@ -42,6 +46,11 @@ namespace Game
 	{
 		Move(deltaTime);
 		Actor::Update(deltaTime);
+
+		if (_health_component->GetInviolabilityTime() > 0.f)
+		{
+			_health_component->UpdateInviolability(deltaTime);
+		}
 	}
 
 	void MainCharacter::Move(float deltaTime)
@@ -107,5 +116,18 @@ namespace Game
 
 			break;*/
 		}
+	}
+	void MainCharacter::Overlap(std::shared_ptr<Actor> overlappingActor)
+	{
+		std::shared_ptr<Enemy> enemy = std::dynamic_pointer_cast<Enemy>(overlappingActor);
+		if (_health_component->GetInviolabilityTime() <= 0.f)
+			if (std::dynamic_pointer_cast<Enemy>(overlappingActor))
+				_health_component->Hurt(enemy->GetOverlapDamage());
+			else
+			{
+				std::shared_ptr<Enemy> bullet = std::dynamic_pointer_cast<Enemy>(overlappingActor);
+				//here add a damage of bullet and make cast to a bullet class
+			}
+
 	}
 }

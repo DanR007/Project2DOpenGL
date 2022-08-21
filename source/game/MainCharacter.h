@@ -4,6 +4,7 @@
 
 #include "../main.h"
 
+
 namespace Game
 {
 	class MainCharacter: public Pawn
@@ -25,9 +26,13 @@ namespace Game
 		bool GetIsIgnoreMoveInput() { return is_ignore_move_input; }
 
 		void Input(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
+
+		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) override;
 	protected:
 
 		bool is_pause = false;
 		bool is_ignore_move_input = false;
+
+		std::shared_ptr<HealthComponent> _health_component;
 	};
 }

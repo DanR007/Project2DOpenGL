@@ -2,6 +2,9 @@
 
 #include "Actor.h"
 
+class HealthComponent;
+
+
 namespace Game
 {
 	class Pawn : public Actor
@@ -26,6 +29,7 @@ namespace Game
 
 		glm::vec2 move_vector = glm::vec2(0.f);
 
+		
 	private:
 
 	};

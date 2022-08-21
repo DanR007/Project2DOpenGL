@@ -1,5 +1,4 @@
 #include "GameManager.h"
-#include "ResourcesManager.h"
 
 #include "../../game/MainCharacter.h"
 #include "../../game/enemies/MeleeEnemy.h"
@@ -11,6 +10,8 @@
 std::vector<std::shared_ptr<Game::Actor>> all_actors;
 std::vector<std::shared_ptr<Game::Pawn>> all_pawns;
 std::shared_ptr<Game::MainCharacter> main_character;
+
+bool GameManager::_is_game_over;
 
 void GameManager::MoveAllActors(const glm::vec2& valuePosition)
 {
@@ -25,27 +26,36 @@ void GameManager::MoveAllActors(const glm::vec2& valuePosition)
 
 void GameManager::Update(const float deltaTime)
 {
-	main_character->Update(deltaTime);
-	size_t size = all_actors.size();
-	/*for (size_t i = 0; i < size; i++)
+	if (_is_game_over == false)
 	{
-		if (std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i])))
-			std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i]))->Update(deltaTime);
-		else
-			all_actors[i]->Update(deltaTime);
-	}*/
+		main_character->Update(deltaTime);
+		size_t size = all_actors.size();
+		/*for (size_t i = 0; i < size; i++)
+		{
+			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i])))
+				std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i]))->Update(deltaTime);
+			else
+				all_actors[i]->Update(deltaTime);
+		}*/
 
-	for (std::shared_ptr<Game::Actor> actor : all_actors)
+		for (std::shared_ptr<Game::Actor> actor : all_actors)
+		{
+			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
+				std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->Update(deltaTime);
+			else
+				actor->Update(deltaTime);
+		}
+	}
+	else
 	{
-		if (std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
-			std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->Update(deltaTime);
-		else
-			actor->Update(deltaTime);
+		//here add game over menu
 	}
 }
 
 void GameManager::BeginPlay()
 {
+	SetGameOver(false);
+
 	glm::vec2 mainCharacterSize = glm::ivec2(100, 100);
 	main_character = SpawnActor<Game::MainCharacter>("mush1",
 		glm::vec2(window_size.x / 2 - mainCharacterSize.x / 2, window_size.y / 2 - mainCharacterSize.y / 2), mainCharacterSize);

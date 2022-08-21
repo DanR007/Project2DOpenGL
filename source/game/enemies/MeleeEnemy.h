@@ -1,12 +1,12 @@
 #pragma once
 
-#include "../Pawn.h"
+#include "Enemy.h"
 
 namespace Game
 {
 	class MainCharacter;
 
-	class MeleeEnemy : public Pawn
+	class MeleeEnemy : public Enemy
 	{
 	public:
 		MeleeEnemy(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSubtextureName,
@@ -15,11 +15,11 @@ namespace Game
 
 		virtual void Move(const float deltaTime) override;
 
-		virtual void PointReached();
+		virtual void PointReached() override;
 
-		void ChangePatrolPointsCoordinate(const glm::vec2& value);
+		virtual void ChangePatrolPointsCoordinate(const glm::vec2& value) override;
 
-		void SetPatrolPoints(const std::vector<glm::vec2>& patrolPoints);
+		virtual void SetPatrolPoints(const std::vector<glm::vec2>& patrolPoints) override;
 	protected:
 
 		std::vector<glm::vec2> patrol_points;

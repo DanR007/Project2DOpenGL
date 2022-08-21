@@ -12,7 +12,7 @@ namespace Game
 	MeleeEnemy::MeleeEnemy(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, 
 		const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float moveSpeed)
-		: Pawn(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation, moveSpeed)
+		: Enemy(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation, moveSpeed)
 	{
 		current_patrol_point = startPosition;
 		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Enemy, startSize);

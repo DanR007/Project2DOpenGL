@@ -43,10 +43,12 @@ public:
 	static void MoveAllActors(const glm::vec2& valuePosition);
 
 	static void Update(const float deltaTime);
-
 	static void BeginPlay();
+
+	static void SetGameOver(bool isGameOver) { _is_game_over = isGameOver; }
 private:
 
+	static bool _is_game_over;
 	friend class PhysicsManager;
 };
 
