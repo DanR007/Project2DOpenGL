@@ -26,18 +26,18 @@ public:
 	{
 		std::shared_ptr<T> newActor = std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation); 
 
-		if (/*typeid(*newActor) == typeid(Game::MainCharacter&)*/std::dynamic_pointer_cast<Game::MainCharacter>(newActor))
-		{
-			return newActor;
-		}
+		//if (/*typeid(*newActor) == typeid(Game::MainCharacter&)*/std::dynamic_pointer_cast<Game::MainCharacter>(newActor))
+		//{
+		//	return newActor;
+		//}
 
 		/*if (std::reinterpret_pointer_cast<Game::Pawn>(newActor))
 		{
 			all_pawns.push_back(newActor);
 		}*/
-
+		
 		if(std::dynamic_pointer_cast<Game::Actor>(newActor))
-			all_actors.push_back(newActor);
+			std::dynamic_pointer_cast<Game::Actor>(newActor)->SetIterator(all_actors.emplace(all_actors.end(), newActor));
 
 		return newActor;
 	}
@@ -48,7 +48,10 @@ public:
 	static void BeginPlay();
 
 	static void SetGameOver(bool isGameOver) { _is_game_over = isGameOver; }
+	static void SetIterator(std::vector<std::shared_ptr<Game::Actor>>::iterator it) { _it = it; }
 private:
+
+	static std::vector<std::shared_ptr<Game::Actor>>::iterator _it;
 
 	static bool _is_game_over;
 	friend class PhysicsManager;

@@ -12,15 +12,19 @@ std::vector<std::shared_ptr<Game::Pawn>> all_pawns;
 std::shared_ptr<Game::MainCharacter> main_character;
 
 bool GameManager::_is_game_over;
+std::vector<std::shared_ptr<Game::Actor>>::iterator GameManager::_it;
 
 void GameManager::MoveAllActors(const glm::vec2& valuePosition)
 {
 	for (std::shared_ptr<Game::Actor> actor : all_actors)
 	{
-		actor->SetPosition(actor->GetPosition() - valuePosition);
+		if (main_character != actor)
+		{
+			actor->SetPosition(actor->GetPosition() - valuePosition);
 
-		if(std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
-			std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->ChangePatrolPointsCoordinate(main_character->GetMoveVector() * -1.f);
+			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
+				std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->ChangePatrolPointsCoordinate(main_character->GetMoveVector() * -1.f);
+		}
 	}
 }
 
@@ -37,13 +41,19 @@ void GameManager::Update(const float deltaTime)
 			else
 				all_actors[i]->Update(deltaTime);
 		}*/
-
-		for (std::shared_ptr<Game::Actor> actor : all_actors)
+		_it = all_actors.begin();
+		
+		for (; _it != all_actors.end(); _it++)
 		{
-			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
-				std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->Update(deltaTime);
-			else
-				actor->Update(deltaTime);
+			if (_it->get())
+				if (std::dynamic_pointer_cast<Game::MeleeEnemy>(*_it))
+					std::dynamic_pointer_cast<Game::MeleeEnemy>(*_it)->Update(deltaTime);
+				else
+				{
+					_it->get()->Update(deltaTime);
+					if (_it == all_actors.end())
+						break;
+				}
 		}
 	}
 	else

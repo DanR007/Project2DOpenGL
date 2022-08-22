@@ -22,8 +22,6 @@ namespace Game
 
 		glm::vec2 GetMoveVector() { return move_vector; }
 
-		virtual void DestroyActor() override { delete this; }
-
 		~Pawn();
 	protected:
 

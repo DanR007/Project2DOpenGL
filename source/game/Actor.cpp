@@ -34,7 +34,7 @@ namespace Game
 		_anim_sprite->Update(deltaTime);
 		_anim_sprite->Render();
 
-		PhysicsManager::IsOverlap(this);
+		PhysicsManager::IsOverlap(_collider);
 	}
 
 	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite()
@@ -46,6 +46,7 @@ namespace Game
 	{
 		_position = newPosition;
 		_anim_sprite->SetPosition(newPosition);
+		_collider->SetPosition(newPosition);
 	}
 	void Actor::SetSize(const glm::vec2& newSize)
 	{
@@ -67,6 +68,15 @@ namespace Game
 	}
 	void Actor::DestroyActor()
 	{
-		delete this;
+		std::vector<std::shared_ptr<Game::Actor>>::iterator it = all_actors.begin();
+		for (; it != all_actors.end(); it++)
+		{
+			if (it->get() == this)
+			{
+
+				GameManager::SetIterator(all_actors.erase(it));
+				break;
+			}
+		}
 	}
 }

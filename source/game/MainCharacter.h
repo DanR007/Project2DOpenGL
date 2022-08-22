@@ -30,7 +30,6 @@ namespace Game
 		void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
 
 		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) override;
-		virtual void DestroyActor() override { delete this; }
 	protected:
 
 		bool is_pause = false;

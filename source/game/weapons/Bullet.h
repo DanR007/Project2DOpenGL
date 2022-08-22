@@ -29,7 +29,7 @@ namespace Game
 
 		virtual void Update(float deltaTime) override;
 
-		virtual void DestroyActor() override { delete this; }
+		//virtual void DestroyActor() override { delete this; }
 	protected:
 		glm::vec2 _move_vector;
 		float _speed;

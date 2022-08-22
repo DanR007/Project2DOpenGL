@@ -23,7 +23,6 @@ namespace Game
 		int GetOverlapDamage() { return overlap_damage; }
 		void Hurt(int damage);
 
-		virtual void DestroyActor() override { delete this; }
 	protected:
 		int _health;
 

@@ -39,16 +39,20 @@ namespace Game
 		void SetPosition(const glm::vec2& newPosition);
 		void SetSize(const glm::vec2& newSize);
 		void SetRotation(const float newRotation);
+		void SetIterator(std::vector<std::shared_ptr<Game::Actor>>::iterator iterator) { _iterator = iterator; }
 
 		void AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration);
 		void PlayAnim(const std::string& stateName);
 
 		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) {};
 
-		virtual void DestroyActor();
+		void DestroyActor();
+
 	protected:
 		glm::vec2 _position;
 		float _rotation;
+
+		std::vector<std::shared_ptr<Game::Actor>>::iterator _iterator;
 
 		std::unique_ptr<Renderer::AnimSprite> _anim_sprite;
 		std::shared_ptr<Physics::Collider> _collider;

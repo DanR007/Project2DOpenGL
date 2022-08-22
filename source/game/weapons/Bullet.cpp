@@ -17,8 +17,6 @@ namespace Game
 		{
 			SetPosition(GetPosition() + _move_vector * _speed * deltaTime);
 			Actor::Update(deltaTime);
-
-			PhysicsManager::IsOverlap(this);
 		}
 	}
 }

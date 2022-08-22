@@ -15,7 +15,7 @@ namespace Game
 		~PistolBullet() {}
 
 		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) override;
-		virtual void DestroyActor() override;
+		//virtual void DestroyActor() override;
 	protected:
 	};
 }
