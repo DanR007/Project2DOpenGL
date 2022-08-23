@@ -30,6 +30,7 @@ namespace Game
 		~Actor();
 
 		virtual void Update(float deltaTime);
+		virtual void BeginPlay();
 
 		std::shared_ptr<Renderer::AnimSprite> GetAnimSprite();
 		std::shared_ptr<Physics::Collider> GetCollider() { return _collider; }

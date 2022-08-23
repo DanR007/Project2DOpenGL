@@ -6,6 +6,8 @@
 
 #include "enemies/MeleeEnemy.h"
 
+#include "gameobjects/HealActor.h"
+
 #include "../engine/renderer/AnimSprite.h"
 #include "../engine/renderer/ShaderRender.h"
 #include "../engine/renderer/TextureRender.h"
@@ -30,10 +32,11 @@ namespace Game
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Overlap);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Ignore);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Projectile, EResponseType::ERT_Ignore);
+		_collider->SetCollisionResponse(EObjectTypes::EOT_InteractiveObject, EResponseType::ERT_Overlap);
 
 		_health_component = std::make_shared<HealthComponent>(10);
 
-		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "mush1", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
+		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
 	}
 
 	MainCharacter::~MainCharacter()
@@ -195,14 +198,30 @@ namespace Game
 	void MainCharacter::Overlap(std::shared_ptr<Actor> overlappingActor)
 	{
 		std::shared_ptr<Enemy> enemy = std::dynamic_pointer_cast<Enemy>(overlappingActor);
+		std::shared_ptr<HealActor> heal = std::dynamic_pointer_cast<HealActor>(overlappingActor);
 		if (_health_component->GetInviolabilityTime() <= 0.f)
+		{
 			if (enemy)
+			{
 				_health_component->Hurt(enemy->GetOverlapDamage());
+				return;
+			}
 			else
 			{
 				std::shared_ptr<Enemy> bullet = std::dynamic_pointer_cast<Enemy>(overlappingActor);
 				//here add a damage of bullet and make cast to a bullet class
 			}
+		}
+		else
+		{
+
+		}
+
+		if (heal)
+		{
+			_health_component->Heal(heal->GetHealValue());
+			heal->DestroyActor();
+		}
 
 	}
 }

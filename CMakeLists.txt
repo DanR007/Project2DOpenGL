@@ -42,6 +42,8 @@ add_executable(${PROJECT_NAME}
 "source/game/HealthComponent.cpp"
 "source/game/gameobjects/WallActor.h"
 "source/game/gameobjects/WallActor.cpp"
+"source/game/gameobjects/HealActor.h"
+"source/game/gameobjects/HealActor.cpp"
 "source/game/enemies/Enemy.h"
 "source/game/enemies/Enemy.cpp"
 "source/game/enemies/MeleeEnemy.h"

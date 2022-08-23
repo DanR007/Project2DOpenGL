@@ -37,6 +37,10 @@ namespace Game
 		PhysicsManager::IsOverlap(_collider);
 	}
 
+	void Actor::BeginPlay()
+	{
+	}
+
 	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite()
 	{
 		return std::move(_anim_sprite);

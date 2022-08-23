@@ -6,6 +6,7 @@
 #include "../../game/enemies/MeleeEnemy.h"
 
 #include "../../game/gameobjects/WallActor.h"
+#include "../../game/gameobjects/HealActor.h"
 
 std::vector<std::shared_ptr<Game::Actor>> all_actors;
 std::vector<std::shared_ptr<Game::Pawn>> all_pawns;
@@ -94,4 +95,6 @@ void GameManager::BeginPlay()
 	enemy->SetPatrolPoints(patrolPos);
 
 	enemy->SetMoveSpeed(50.f);
+
+	SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
 }

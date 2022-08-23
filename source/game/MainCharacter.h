@@ -17,7 +17,7 @@ namespace Game
 			const float startMoveSpeed = 0.f);
 
 		~MainCharacter();
-		virtual void BeginPlay();
+		virtual void BeginPlay() override;
 		virtual void Move(const float deltaTime) override;
 		virtual void Update(float deltaTime) override;
 		virtual void ChangeMoveVector(const glm::vec2& value) override;

@@ -7,5 +7,5 @@ enum class EResponseType
 
 enum class EObjectTypes
 {
-	EOT_Character, EOT_Enemy, EOT_StaticObject, EOT_Projectile
+	EOT_Character, EOT_Enemy, EOT_StaticObject, EOT_Projectile, EOT_DynamicObject, EOT_InteractiveObject
 };

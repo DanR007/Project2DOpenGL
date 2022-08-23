@@ -20,6 +20,8 @@ namespace Game
 		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Enemy, startPosition, startSize);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Overlap);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Ignore);
+		
+
 
 		_health = 1;
 	}

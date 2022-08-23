@@ -36,7 +36,9 @@ namespace Physics
 			{EObjectTypes::EOT_Enemy, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_Character, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_StaticObject, EResponseType::ERT_Block},
-			{EObjectTypes::EOT_Projectile, EResponseType::ERT_Overlap}
+			{EObjectTypes::EOT_Projectile, EResponseType::ERT_Overlap},
+			{EObjectTypes::EOT_DynamicObject, EResponseType::ERT_Block},
+			{EObjectTypes::EOT_InteractiveObject, EResponseType::ERT_Ignore}
 		};
 
 		EObjectTypes _object_type;
