@@ -67,10 +67,21 @@ void GameManager::BeginPlay()
 {
 	SetGameOver(false);
 
+	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240));
+	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240));
+	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240));
+	std::vector<glm::vec2> patrolPos = { glm::vec2(100.f, 100.f),glm::vec2(150.f, 120.f),glm::vec2(120.f, 180.f) };
+
+	std::shared_ptr<Game::MeleeEnemy> enemy = SpawnActor<Game::MeleeEnemy>("mush1", glm::vec2(0.f), glm::vec2(100, 100));
+	enemy->SetPatrolPoints(patrolPos);
+
+	enemy->SetMoveSpeed(50.f);
+
+	SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
+
 	glm::vec2 mainCharacterSize = glm::ivec2(100, 100);
 	main_character = SpawnActor<Game::MainCharacter>("mush1",
 		glm::vec2(window_size.x / 2 - mainCharacterSize.x / 2, window_size.y / 2 - mainCharacterSize.y / 2), mainCharacterSize);
-
 
 
 	std::vector<std::pair<std::string, float>> stateDuration =
@@ -85,16 +96,4 @@ void GameManager::BeginPlay()
 	main_character->BeginPlay();
 
 	main_character->SetMoveSpeed(100.f);
-
-	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240));
-	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240));
-	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240));
-	std::vector<glm::vec2> patrolPos = { glm::vec2(100.f, 100.f),glm::vec2(150.f, 120.f),glm::vec2(120.f, 180.f) };
-
-	std::shared_ptr<Game::MeleeEnemy> enemy = SpawnActor<Game::MeleeEnemy>("mush1", glm::vec2(0.f), glm::vec2(100, 100));
-	enemy->SetPatrolPoints(patrolPos);
-
-	enemy->SetMoveSpeed(50.f);
-
-	SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
 }

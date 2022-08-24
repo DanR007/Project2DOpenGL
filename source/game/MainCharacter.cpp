@@ -59,6 +59,7 @@ namespace Game
 		{
 			_health_component->UpdateInviolability(deltaTime);
 		}
+		_health_component->RenderHealth();
 
 		_weapon_component->Update(deltaTime);
 	}

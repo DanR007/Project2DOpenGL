@@ -27,6 +27,7 @@ namespace Renderer
 		void SetPosition(const glm::vec2& newPosition);
 		void SetSize(const glm::vec2& newSize);
 		void SetRotation(const float newRotation);
+		void SetNewSprite(const std::string& newSubtextureName);
 
 		glm::vec2 GetPosition() const { return spr_pos; }
 		glm::vec2 GetSize() const { return spr_size; }

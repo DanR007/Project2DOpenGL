@@ -81,6 +81,23 @@ namespace Renderer
 		spr_rot = newRotation;
 	}
 
+	void Sprite::SetNewSprite(const std::string& newSubtextureName)
+	{
+		auto subTexture = spr_texture->GetSubTexture(newSubtextureName);
+
+		const GLfloat textureCoords[] =
+		{
+			subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,
+			subTexture.left_bottom_UV.x, subTexture.right_upper_UV.y,
+			subTexture.right_upper_UV.x, subTexture.left_bottom_UV.y,
+			subTexture.right_upper_UV.x, subTexture.right_upper_UV.y
+		};
+
+		glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), &textureCoords);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
 	void Sprite::Render() const
 	{
 		spr_shader->Use();
