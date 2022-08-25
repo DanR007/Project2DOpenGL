@@ -1,4 +1,5 @@
 #include "main.h"
+#include "AllTestCases.h"
 
 #include "engine/managers/ResourcesManager.h"
 #include "engine/managers/GameManager.h"
@@ -9,6 +10,9 @@
 #include <time.h>
 #include <chrono>
 #include <thread>
+
+#define TEST_CASES
+//#define PLAY_IN_EDITOR
 
 std::string ResourcesManager::exe_path;
 
@@ -36,6 +40,7 @@ void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, 
 
 int main(int argc, char** argv)
 {
+
 	GLFWwindow* window;
 	
 	if (!glfwInit())
@@ -70,6 +75,11 @@ int main(int argc, char** argv)
 		}
 
 		ResourcesManager::LoadAll(*argv);
+
+#ifdef TEST_CASES
+		PlayPhysicsTestCases();
+#endif // TEST_CASES
+#ifdef PLAY_IN_EDITOR
 		GameManager::BeginPlay();
 
 		glClearColor(1.f, 1.f, 1.f, 1.f);
@@ -95,6 +105,6 @@ int main(int argc, char** argv)
 			glfwPollEvents();
 		}
 	}
-
+#endif // PLAY_IN_EDITOR
 	return 0;
 }

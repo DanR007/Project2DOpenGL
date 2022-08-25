@@ -34,7 +34,7 @@ namespace Game
 		_anim_sprite->Update(deltaTime);
 		_anim_sprite->Render();
 
-		PhysicsManager::IsOverlap(_collider);
+		PhysicsManager::CheckOverlapping(_collider);
 	}
 
 	void Actor::BeginPlay()

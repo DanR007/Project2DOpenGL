@@ -9,6 +9,7 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(${PROJECT_NAME} 
 "source/main.h"
 "source/main.cpp"
+"source/AllTestCases.h"
 "source/engine/renderer/stb_image.h"
 "source/engine/renderer/ShaderRender.h"
 "source/engine/renderer/ShaderRender.cpp"
@@ -24,6 +25,8 @@ add_executable(${PROJECT_NAME}
 "source/engine/managers/PhysicsManager.cpp"
 "source/engine/managers/GameManager.h"
 "source/engine/managers/GameManager.cpp"
+"source/engine/managers/physics_tests/CheckBlockPhysicsBetweenTwoObjects.h"
+"source/engine/managers/physics_tests/CheckOverlappingBetweenTwoObjects.h"
 "source/engine/controllers/Controller.h"
 "source/engine/controllers/Controller.cpp"
 "source/engine/controllers/PlayerController.h"

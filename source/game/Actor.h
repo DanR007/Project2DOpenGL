@@ -35,6 +35,8 @@ namespace Game
 		std::shared_ptr<Renderer::AnimSprite> GetAnimSprite();
 		std::shared_ptr<Physics::Collider> GetCollider() { return _collider; }
 
+		void SetCollider(std::shared_ptr<Physics::Collider> collider) { _collider = collider; }
+
 		glm::vec2 GetPosition() { return _position; }
 
 		void SetPosition(const glm::vec2& newPosition);

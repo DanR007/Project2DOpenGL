@@ -105,14 +105,6 @@ namespace Game
 				if (!is_ignore_move_input)
 					ChangeMoveVector(right_vector * -1.f);
 				break;
-			case GLFW_MOUSE_BUTTON_1:
-			{
-				std::cout << key << std::endl;
-				double xPos, yPos;
-				glfwGetCursorPos(currentWindow, &xPos, &yPos);
-				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
-			}
-				break;
 			}
 			break;
 		case GLFW_RELEASE:
@@ -130,27 +122,11 @@ namespace Game
 			case GLFW_KEY_A:
 				ChangeMoveVector(right_vector);
 				break;
-			case GLFW_MOUSE_BUTTON_1:
-			{
-				double xPos, yPos;
-				glfwGetCursorPos(currentWindow, &xPos, &yPos);
-				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
-			}
-				break;
 			}
 			break;
-		case GLFW_REPEAT:
-			switch (key)
-			{
-			case GLFW_MOUSE_BUTTON_1:
-			{
-				double xPos, yPos;
-				glfwGetCursorPos(currentWindow, &xPos, &yPos);
-				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
-			}
-				break;
-			}
-			break;
+		/*case GLFW_REPEAT:
+
+			break;*/
 		}
 	}
 	void MainCharacter::InputMouse(GLFWwindow* currentWindow, int button, int action, int mode)
@@ -162,7 +138,6 @@ namespace Game
 			{
 			case GLFW_MOUSE_BUTTON_1:
 			{
-				std::cout << button << std::endl;
 				double xPos, yPos;
 				glfwGetCursorPos(currentWindow, &xPos, &yPos);
 				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
