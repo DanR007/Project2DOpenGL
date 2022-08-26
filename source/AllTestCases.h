@@ -13,6 +13,7 @@ bool IsCorrect(T answer, T correct_answer)
 
 static void PlayPhysicsTestCases()
 {
+	std::cout << "Physic tests: " << std::endl;
 	std::cout << IsCorrect(CheckBlockPhysicsBetweenTwoObjects(), true) << std::endl;
 	std::cout << IsCorrect(CheckOverlappingBetweenTwoObjects(), true) << std::endl;
 }

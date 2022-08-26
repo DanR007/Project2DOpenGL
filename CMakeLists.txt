@@ -25,6 +25,8 @@ add_executable(${PROJECT_NAME}
 "source/engine/managers/PhysicsManager.cpp"
 "source/engine/managers/GameManager.h"
 "source/engine/managers/GameManager.cpp"
+"source/engine/managers/BSPMapGenerate.h"
+"source/engine/managers/BSPMapGenerate.cpp"
 "source/engine/managers/physics_tests/CheckBlockPhysicsBetweenTwoObjects.h"
 "source/engine/managers/physics_tests/CheckOverlappingBetweenTwoObjects.h"
 "source/engine/controllers/Controller.h"

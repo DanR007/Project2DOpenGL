@@ -12,6 +12,8 @@
 #include <thread>
 
 #define TEST_CASES
+#define PHYSIC_TESTS
+#define GAMEPLAY_TESTS
 //#define PLAY_IN_EDITOR
 
 std::string ResourcesManager::exe_path;
@@ -77,7 +79,12 @@ int main(int argc, char** argv)
 		ResourcesManager::LoadAll(*argv);
 
 #ifdef TEST_CASES
+#ifdef PHYSIC_TESTS
 		PlayPhysicsTestCases();
+#endif//PHYSIC_TESTS
+#ifdef GAMEPLAY_TESTS
+
+#endif//GAMEPLAT_TESTS
 #endif // TEST_CASES
 #ifdef PLAY_IN_EDITOR
 		GameManager::BeginPlay();
