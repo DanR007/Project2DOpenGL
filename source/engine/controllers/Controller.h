@@ -12,7 +12,7 @@ namespace Game
 class Controller
 {
 public:
-	//Controller(std::shared_ptr<Game::Pawn> controlledPawn, const float moveSpeed);
+	Controller(std::shared_ptr<Game::Pawn> controlledPawn, const float moveSpeed);
 	Controller(const float moveSpeed);
 	Controller();
 

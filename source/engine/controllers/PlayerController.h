@@ -13,9 +13,9 @@ class PlayerController : public Controller
 {
 public:
 
-	using Controller::Controller;
+	//using Controller::Controller;
 	//PlayerController(const float moveSpeed);
-
+	PlayerController(const float speed) { move_speed = speed; }
 	~PlayerController() = default;
 
 	virtual void Move(float deltaTime) override;

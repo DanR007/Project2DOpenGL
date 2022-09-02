@@ -1,9 +1,13 @@
 #include "BSPMapGenerate.h"
+#include "GameManager.h"
+
+#include "../../game/gameobjects/WallActor.h"
+
 #include <vector>
 
 std::vector<std::shared_ptr<Leaf>> leafs;
 
-std::shared_ptr<Leaf> rootLeaf = std::make_shared<Leaf>(glm::ivec2(0), glm::ivec2(5000, 5000));
+std::shared_ptr<Leaf> rootLeaf = std::make_shared<Leaf>(glm::ivec2(0), glm::ivec2(5000, 2500));
 
 Leaf::Leaf(const glm::ivec2& position, const glm::ivec2& size)
 	: _position(position), _size(size)
@@ -75,6 +79,150 @@ void Leaf::Split()
 			}
 		}
 	}
+
+	rootLeaf->CreateRooms();
+}
+
+void Leaf::CreateRooms()
+{
+	if (_left_leaf || _right_leaf)
+	{
+		if (_left_leaf)
+			_left_leaf->CreateRooms();
+		if (_right_leaf)
+			_right_leaf->CreateRooms();
+
+		if (_left_leaf && _right_leaf)
+		{
+			CreateHall(_left_leaf->GetRoom(), _right_leaf->GetRoom());
+		}
+	}
+	else
+	{
+		glm::ivec2 roomSize = glm::ivec2(500 + std::rand() % (500 - _size.x - 100), 500 + std::rand() % (500 - _size.y - 100));
+		glm::ivec2 roomCoord = glm::ivec2(10 + std::rand() % (_size.x - 10), 10 + std::rand() % (_size.y - 10));
+
+		_room = std::make_shared<Room>(roomSize, roomCoord + _position);
+	}
+}
+
+std::shared_ptr<Leaf::Room> Leaf::GetRoom()
+{
+	if (_room)
+		return _room;
+	else
+	{
+		std::shared_ptr<Room> leftRoom, rightRoom;
+		if (_left_leaf)
+			leftRoom = _left_leaf->GetRoom();
+		if (_right_leaf)
+			rightRoom = _right_leaf->GetRoom();
+
+		if (!leftRoom && !rightRoom)
+			return nullptr;
+		else
+			if (leftRoom)
+				return leftRoom;
+			else if (rightRoom)
+				return rightRoom;
+			else if (std::rand() % 2 == 0)
+				return rightRoom;
+			else
+				return leftRoom;
+	}
+}
+
+void Leaf::CreateHall(std::shared_ptr<Room> firstRoom, std::shared_ptr<Room> secondRoom)
+{
+	//glm::ivec2 firstPos = firstRoom->GetPosition(), firstSize = firstRoom->GetSize();
+	//glm::ivec2 secondPos = secondRoom->GetPosition(), secondSize = secondRoom->GetSize();
+	//
+	//glm::ivec2 point1 = glm::ivec2(firstPos.x + 20 + (std::rand() % (firstSize.x - 40)), firstPos.y + 20 + (std::rand() % (firstSize.y - 40)));
+	//glm::ivec2 point2 = glm::ivec2(secondPos.x + 20 + (std::rand() % (secondSize.x - 40)), secondPos.y + 20 + (std::rand() % (secondSize.y - 40)));
+
+
+	//int w = point2.x - point1.x;
+	//int h = point2.y - point1.y;
+
+	//if (w < 0)
+	//{
+	//	if (h < 0)
+	//	{
+	//		if (std::rand() % 2 == 0)
+	//		{
+	//			GameManager::SpawnActor<Game::Objects::Wall>("wall", point2, glm::vec2(float(std::abs(w)), 10.f));
+	//			GameManager::SpawnActor<Game::Objects::Wall>("wall", glm::vec2(point2) + glm::vec2(0.f, 80.f), glm::vec2(float(std::abs(w) - 80.f), 10.f));
+	//			//halls.push(new Rectangle(point2.x, point1.y, Math.abs(w), 1));
+	//			//halls.push(new Rectangle(point2.x, point2.y, 1, Math.abs(h)));
+	//		}
+	//		else
+	//		{
+	//			halls.push(new Rectangle(point2.x, point2.y, Math.abs(w), 1));
+	//			halls.push(new Rectangle(point1.x, point2.y, 1, Math.abs(h)));
+	//		}
+	//	}
+	//	else if (h > 0)
+	//	{
+	//		if (std::rand() % 2 == 0)
+	//		{
+	//			halls.push(new Rectangle(point2.x, point1.y, Math.abs(w), 1));
+	//			halls.push(new Rectangle(point2.x, point1.y, 1, Math.abs(h)));
+	//		}
+	//		else
+	//		{
+	//			halls.push(new Rectangle(point2.x, point2.y, Math.abs(w), 1));
+	//			halls.push(new Rectangle(point1.x, point1.y, 1, Math.abs(h)));
+	//		}
+	//	}
+	//	else // если (h == 0)
+	//	{
+	//		halls.push(new Rectangle(point2.x, point2.y, Math.abs(w), 1));
+	//	}
+	//}
+	//else if (w > 0)
+	//{
+	//	if (h < 0)
+	//	{
+	//		if (std::rand() % 2 == 0)
+	//		{
+	//			halls.push(new Rectangle(point1.x, point2.y, Math.abs(w), 1));
+	//			halls.push(new Rectangle(point1.x, point2.y, 1, Math.abs(h)));
+	//		}
+	//		else
+	//		{
+	//			halls.push(new Rectangle(point1.x, point1.y, Math.abs(w), 1));
+	//			halls.push(new Rectangle(point2.x, point2.y, 1, Math.abs(h)));
+	//		}
+	//	}
+	//	else if (h > 0)
+	//	{
+	//		if (std::rand() % 2 == 0)
+	//		{
+	//			halls.push(new Rectangle(point1.x, point1.y, Math.abs(w), 1));
+	//			halls.push(new Rectangle(point2.x, point1.y, 1, Math.abs(h)));
+	//		}
+	//		else
+	//		{
+	//			halls.push(new Rectangle(point1.x, point2.y, Math.abs(w), 1));
+	//			halls.push(new Rectangle(point1.x, point1.y, 1, Math.abs(h)));
+	//		}
+	//	}
+	//	else // если (h == 0)
+	//	{
+	//		halls.push(new Rectangle(point1.x, point1.y, Math.abs(w), 1));
+	//	}
+	//}
+	//else // если (w == 0)
+	//{
+	//	if (h < 0)
+	//	{
+	//		halls.push(new Rectangle(point2.x, point2.y, 1, Math.abs(h)));
+	//	}
+	//	else if (h > 0)
+	//	{
+	//		halls.push(new Rectangle(point1.x, point1.y, 1, Math.abs(h)));
+	//	}
+	//}
 }
 
 

@@ -13,4 +13,9 @@ namespace Game
             _health -= damage;
         }
     }
+
+    void FindPathToPlayer()
+    {
+
+    }
 }

@@ -17,6 +17,8 @@
 
 #include "../engine/physics/Collider.h"
 
+#include "../engine/controllers/PlayerController.h"
+
 #include "../main.h"
 
 #include <iostream>
@@ -37,6 +39,9 @@ namespace Game
 		_health_component = std::make_shared<HealthComponent>(10);
 
 		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
+
+		//_player_controller = std::make_shared<PlayerController>(100.f);
+		//_player_controller->SetCharacter(this);
 	}
 
 	MainCharacter::~MainCharacter()

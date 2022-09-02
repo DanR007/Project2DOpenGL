@@ -5,6 +5,7 @@
 #include "../main.h"
 
 class WeaponComponent;
+class PlayerController;
 
 namespace Game
 {
@@ -37,5 +38,7 @@ namespace Game
 
 		std::shared_ptr<HealthComponent> _health_component;
 		std::shared_ptr<WeaponComponent> _weapon_component;
+
+		std::shared_ptr<PlayerController> _player_controller;
 	};
 }

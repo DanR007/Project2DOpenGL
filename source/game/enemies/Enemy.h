@@ -23,6 +23,7 @@ namespace Game
 		int GetOverlapDamage() { return overlap_damage; }
 		void Hurt(int damage);
 
+		void FindPathToPlayer();
 	protected:
 		int _health;
 

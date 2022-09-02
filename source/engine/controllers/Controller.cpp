@@ -6,11 +6,11 @@
 
 #include "../../main.h"
 
-/*Controller::Controller(std::shared_ptr<Game::Pawn> controlledPawn, const float moveSpeed)
+Controller::Controller(std::shared_ptr<Game::Pawn> controlledPawn, const float moveSpeed)
 {
-	controlled_pawn = controlledPawn;
+	//controlled_pawn = controlledPawn;
 	move_speed = moveSpeed;
-}*/
+}
 
 Controller::Controller(const float moveSpeed)
 {

@@ -79,7 +79,7 @@ void GameManager::BeginPlay()
 
 	SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
 
-	glm::vec2 mainCharacterSize = glm::ivec2(100, 100);
+	glm::vec2 mainCharacterSize = glm::ivec2(50, 50);
 	main_character = SpawnActor<Game::MainCharacter>("mush1",
 		glm::vec2(window_size.x / 2 - mainCharacterSize.x / 2, window_size.y / 2 - mainCharacterSize.y / 2), mainCharacterSize);
 

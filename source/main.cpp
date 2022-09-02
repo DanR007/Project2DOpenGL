@@ -14,7 +14,7 @@
 #define TEST_CASES
 #define PHYSIC_TESTS
 #define GAMEPLAY_TESTS
-//#define PLAY_IN_EDITOR
+#define PLAY_IN_EDITOR
 
 std::string ResourcesManager::exe_path;
 
@@ -111,7 +111,8 @@ int main(int argc, char** argv)
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}
-	}
 #endif // PLAY_IN_EDITOR
+	}
+
 	return 0;
 }
