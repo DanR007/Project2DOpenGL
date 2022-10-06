@@ -15,7 +15,7 @@ HealthComponent::HealthComponent(int health)
 	_max_health = health;
 	_health = health - 2;
 
-	for (int i = 0; i < _max_health; i++)
+	for (int i = 1; i <= _max_health; i++)
 	{
 		std::shared_ptr heart = std::make_shared<Renderer::Sprite>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "fullHeart", 
 			_c_heart_offset * float(i) + glm::vec2(10.f, window_size.y - 50.f), _c_heart_size);
@@ -43,8 +43,6 @@ void HealthComponent::Hurt(int damageValue)
 	}
 
 	UpdateHearts();
-
-	std::cout << _health << std::endl;
 }
 
 void HealthComponent::Heal(int healValue)
@@ -63,7 +61,7 @@ void HealthComponent::UpdateHearts()
 {
 	for (int i = 0; i < _max_health; i++)
 	{
-		if (_health >= i)
+		if (_health >= i + 1)
 			vector_of_health[i]->SetNewSprite("fullHeart");
 		else
 			vector_of_health[i]->SetNewSprite("emptyHeart");

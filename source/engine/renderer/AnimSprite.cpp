@@ -85,5 +85,7 @@ namespace Renderer
 				}
 			}
 		}
+
+		Render();
 	}
 }

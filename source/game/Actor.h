@@ -44,10 +44,10 @@ namespace Game
 		void SetRotation(const float newRotation);
 		void SetIterator(std::vector<std::shared_ptr<Game::Actor>>::iterator iterator) { _iterator = iterator; }
 
+		void AddWorldPosition(const glm::vec2& value);
+
 		void AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration);
 		void PlayAnim(const std::string& stateName);
-
-		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) {};
 
 		void DestroyActor();
 

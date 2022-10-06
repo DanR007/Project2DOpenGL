@@ -14,7 +14,7 @@ namespace Game
 			const glm::vec2& startPosition, const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f);
 		~PistolBullet() {}
 
-		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) override;
+		void Overlap(Actor* overlappingActor);
 		//virtual void DestroyActor() override;
 	protected:
 	};

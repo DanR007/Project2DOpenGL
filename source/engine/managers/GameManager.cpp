@@ -15,16 +15,20 @@ std::shared_ptr<Game::MainCharacter> main_character;
 bool GameManager::_is_game_over;
 std::vector<std::shared_ptr<Game::Actor>>::iterator GameManager::_it;
 
-void GameManager::MoveAllActors(const glm::vec2& valuePosition)
-{
-	for (std::shared_ptr<Game::Actor> actor : all_actors)
-	{
-		if (main_character != actor)
-		{
-			actor->SetPosition(actor->GetPosition() - valuePosition);
+std::vector<std::shared_ptr<Game::Actor>> GameManager::_all_actors;
 
-			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(actor))
-				std::dynamic_pointer_cast<Game::MeleeEnemy>(actor)->ChangePatrolPointsCoordinate(main_character->GetMoveVector() * -1.f);
+void GameManager::MoveAllActors()
+{
+	auto it = _all_actors.begin();
+
+	for (; it != _all_actors.end(); it++)
+	{
+		if (main_character != *it)
+		{
+			it->get()->AddWorldPosition(main_character->GetMoveValue() * -1.f);
+
+			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(*it))
+				std::dynamic_pointer_cast<Game::MeleeEnemy>(*it)->ChangePatrolPointsCoordinate(main_character->GetMoveValue() * -1.f);
 		}
 	}
 }
@@ -33,28 +37,18 @@ void GameManager::Update(const float deltaTime)
 {
 	if (_is_game_over == false)
 	{
-		main_character->Update(deltaTime);
-		size_t size = all_actors.size();
-		/*for (size_t i = 0; i < size; i++)
-		{
-			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i])))
-				std::dynamic_pointer_cast<Game::MeleeEnemy>(std::dynamic_pointer_cast<Game::Pawn>(all_actors[i]))->Update(deltaTime);
-			else
-				all_actors[i]->Update(deltaTime);
-		}*/
-		_it = all_actors.begin();
+		//main_character->Update(deltaTime);
 		
-		for (; _it != all_actors.end(); _it++)
+		auto it = _all_actors.begin();
+		
+		for (; it != _all_actors.end(); it++)
 		{
-			if (_it->get())
-				if (std::dynamic_pointer_cast<Game::MeleeEnemy>(*_it))
-					std::dynamic_pointer_cast<Game::MeleeEnemy>(*_it)->Update(deltaTime);
-				else
-				{
-					_it->get()->Update(deltaTime);
-					if (_it == all_actors.end())
-						break;
-				}
+			if (it->get())
+			{
+				it->get()->Update(deltaTime);
+				if (it == _all_actors.end())
+					break;
+			}
 		}
 	}
 	else
@@ -77,7 +71,7 @@ void GameManager::BeginPlay()
 
 	enemy->SetMoveSpeed(50.f);
 
-	SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
+	//SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
 
 	glm::vec2 mainCharacterSize = glm::ivec2(50, 50);
 	main_character = SpawnActor<Game::MainCharacter>("mush1",
@@ -96,4 +90,17 @@ void GameManager::BeginPlay()
 	main_character->BeginPlay();
 
 	main_character->SetMoveSpeed(100.f);
+}
+
+void GameManager::DeleteActor(Game::Actor* actor)
+{
+	auto it = _all_actors.begin();
+	for (; it != _all_actors.end(); it++)
+	{
+		if (it->get() == actor)
+		{
+			_all_actors.erase(it);
+			break;
+		}
+	}
 }

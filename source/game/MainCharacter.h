@@ -30,7 +30,7 @@ namespace Game
 		void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
 		void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
 
-		virtual void Overlap(std::shared_ptr<Actor> overlappingActor) override;
+		void Overlap(Actor* overlappingActor);
 	protected:
 
 		bool is_pause = false;

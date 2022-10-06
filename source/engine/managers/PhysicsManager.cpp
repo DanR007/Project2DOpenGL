@@ -11,7 +11,7 @@ bool PhysicsManager::CanMove(Game::Actor* checkActor, const glm::vec2& nextPosit
 {
 	std::shared_ptr<Physics::Collider> checkCollider = checkActor->GetCollider();
 	glm::vec2& sizeActor = checkCollider->GetSize();
-	for (std::shared_ptr<Game::Actor> actor : all_actors)
+	for (std::shared_ptr<Game::Actor> actor : GameManager::_all_actors)
 	{
 		std::shared_ptr<Physics::Collider> currentActorCollider = actor->GetCollider();
 		glm::vec2 posCurrentCollider = actor->GetPosition(), sizeCurrentCollider = currentActorCollider->GetSize();
@@ -25,16 +25,15 @@ void PhysicsManager::CheckOverlapping(std::shared_ptr<Physics::Collider> checkCo
 {
 	std::shared_ptr<Game::Actor> ownerCollider;
 	glm::vec2& sizeActor = checkCollider->GetSize(), checkPosition = checkCollider->GetPosition();
-	std::vector<std::shared_ptr<Game::Actor>>::iterator it = all_actors.begin();
-	for (; it < all_actors.end(); it++)
+	auto it = GameManager::_all_actors.begin();
+	for (; it != GameManager::_all_actors.end(); it++)
 	{
 		std::shared_ptr<Physics::Collider> currentActorCollider = it->get()->GetCollider();
 		glm::vec2 posCurrentCollider = currentActorCollider->GetPosition(), sizeCurrentCollider = currentActorCollider->GetSize();
 		if (IsOverlap(posCurrentCollider, checkPosition, sizeActor, sizeCurrentCollider, checkCollider, currentActorCollider))
 		{
-			ownerCollider = checkCollider->GetOwner();
-			if(ownerCollider)
-				ownerCollider->Overlap(*it);
+			//Call Delegate
+			checkCollider->Overlap(it->get());
 			break;
 		}
 			

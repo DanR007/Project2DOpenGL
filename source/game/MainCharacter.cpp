@@ -40,6 +40,7 @@ namespace Game
 
 		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
 
+		_collider->Overlap.Connect(this, &MainCharacter::Overlap);
 		//_player_controller = std::make_shared<PlayerController>(100.f);
 		//_player_controller->SetCharacter(this);
 	}
@@ -71,11 +72,11 @@ namespace Game
 
 	void MainCharacter::Move(float deltaTime)
 	{
+		_move_value = move_vector * deltaTime * move_speed;
 		if (!is_ignore_move_input && move_vector != glm::vec2(0.f, 0.f) &&
-			PhysicsManager::CanMove(this, _position + move_vector * deltaTime * move_speed))
+			PhysicsManager::CanMove(this, _position + _move_value))
 		{
-			GameManager::MoveAllActors(move_vector * deltaTime * move_speed);
-			//_weapon_component->FollowOwner(move_vector * deltaTime * move_speed);
+			GameManager::MoveAllActors();
 		}
 	}
 
@@ -176,10 +177,10 @@ namespace Game
 			break;
 		}
 	}
-	void MainCharacter::Overlap(std::shared_ptr<Actor> overlappingActor)
+	void MainCharacter::Overlap(Actor* overlappingActor)
 	{
-		std::shared_ptr<Enemy> enemy = std::dynamic_pointer_cast<Enemy>(overlappingActor);
-		std::shared_ptr<HealActor> heal = std::dynamic_pointer_cast<HealActor>(overlappingActor);
+		Enemy* enemy = dynamic_cast<Enemy*>(overlappingActor);
+		HealActor* heal = dynamic_cast<HealActor*>(overlappingActor);
 		if (_health_component->GetInviolabilityTime() <= 0.f)
 		{
 			if (enemy)
@@ -189,7 +190,7 @@ namespace Game
 			}
 			else
 			{
-				std::shared_ptr<Enemy> bullet = std::dynamic_pointer_cast<Enemy>(overlappingActor);
+				//std::shared_ptr<Enemy> bullet = std::dynamic_pointer_cast<Enemy>(overlappingActor);
 				//here add a damage of bullet and make cast to a bullet class
 			}
 		}

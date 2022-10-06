@@ -21,14 +21,14 @@ namespace Game
 		void SetMoveSpeed(float speedValue) { move_speed = speedValue; }
 
 		glm::vec2 GetMoveVector() { return move_vector; }
-
+		glm::vec2 GetMoveValue() { return _move_value; }
 		~Pawn();
 	protected:
 
 		float move_speed;
 
 		glm::vec2 move_vector = glm::vec2(0.f);
-
+		glm::vec2 _move_value = glm::vec2(0.f);
 		
 	private:
 

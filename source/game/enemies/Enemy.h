@@ -18,7 +18,7 @@ namespace Game
 
 		virtual void ChangePatrolPointsCoordinate(const glm::vec2& value) {}
 
-		virtual void SetPatrolPoints(const std::vector<glm::vec2>& patrolPoints) {}
+		virtual void SetPatrolPoints(const std::vector<glm::vec2>& patrolPoints) { patrol_points = patrolPoints; }
 
 		int GetOverlapDamage() { return overlap_damage; }
 		void Hurt(int damage);

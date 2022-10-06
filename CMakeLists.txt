@@ -36,6 +36,7 @@ add_executable(${PROJECT_NAME}
 "source/engine/physics/EPhysicsTypes.h"
 "source/engine/physics/Collider.h"
 "source/engine/physics/Collider.cpp"
+"source/engine/physics/DelegateOverlap.h"
 "source/game/Actor.h"
 "source/game/Actor.cpp"
 "source/game/Pawn.h"

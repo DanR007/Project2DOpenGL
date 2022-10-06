@@ -32,7 +32,6 @@ namespace Game
 	void Actor::Update(float deltaTime)
 	{
 		_anim_sprite->Update(deltaTime);
-		_anim_sprite->Render();
 
 		PhysicsManager::CheckOverlapping(_collider);
 	}
@@ -62,6 +61,12 @@ namespace Game
 		_rotation = newRotation;
 		_anim_sprite->SetRotation(newRotation);
 	}
+	void Actor::AddWorldPosition(const glm::vec2& value)
+	{
+		_position += value;
+		_anim_sprite->SetPosition(_position);
+		_collider->SetPosition(_position);
+	}
 	void Actor::AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration)
 	{
 		_anim_sprite->InsertState(stateName, subTextureDuration);
@@ -72,15 +77,6 @@ namespace Game
 	}
 	void Actor::DestroyActor()
 	{
-		std::vector<std::shared_ptr<Game::Actor>>::iterator it = all_actors.begin();
-		for (; it != all_actors.end(); it++)
-		{
-			if (it->get() == this)
-			{
-
-				GameManager::SetIterator(all_actors.erase(it));
-				break;
-			}
-		}
+		GameManager::DeleteActor(this);
 	}
 }

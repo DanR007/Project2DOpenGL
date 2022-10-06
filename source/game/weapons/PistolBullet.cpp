@@ -20,28 +20,13 @@ namespace Game
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Projectile, EResponseType::ERT_Ignore);
 	}
 
-	void PistolBullet::Overlap(std::shared_ptr<Actor> overlappingActor)
+	void PistolBullet::Overlap(Actor* overlappingActor)
 	{
-		if (std::dynamic_pointer_cast<Enemy>(overlappingActor))
+		if (dynamic_cast<Enemy*>(overlappingActor))
 		{
-			std::dynamic_pointer_cast<Enemy>(overlappingActor)->Hurt(_damage);
+			dynamic_cast<Enemy*>(overlappingActor)->Hurt(_damage);
 		}
 
 		DestroyActor();
 	}
-
-	/*void PistolBullet::DestroyActor()
-	{
-		std::vector<std::shared_ptr<Game::Actor>>::iterator it = all_actors.begin();
-		for (; it != all_actors.end(); it++)
-		{
-			if (it->get() == this)
-			{
-				std::cout << it->use_count() << std::endl;
-				all_actors.erase(it);
-				
-				break;
-			}
-		}
-	}*/
 }
