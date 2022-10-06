@@ -6,6 +6,8 @@
 #include <glm/vec2.hpp>
 #include <memory>
 
+#include "DelegateOverlap.h"
+
 namespace Game
 {
 	class Actor;
@@ -28,6 +30,13 @@ namespace Physics
 		void SetSize(const glm::vec2& newSize) { _size = newSize; }
 
 		std::shared_ptr<Game::Actor> GetOwner();
+
+		template<class T>
+		void AddOverlapDelegate(T* method)
+		{
+			Overlap.Add(method);
+		}
+		OverlapDelegate Overlap;
 	private:
 		glm::vec2 _size, _position;
 
@@ -42,5 +51,7 @@ namespace Physics
 		};
 
 		EObjectTypes _object_type;
+
+		
 	};
 }
