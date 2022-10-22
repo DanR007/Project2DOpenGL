@@ -5,6 +5,7 @@
 #include "engine/managers/GameManager.h"
 
 #include "game/MainCharacter.h"
+#include "engine/controllers/PlayerController.h"
 
 #include <iostream>
 #include <time.h>
@@ -32,12 +33,12 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	main_character->InputKeyboard(currentWindow, key, scancode, action, mode);
+	main_character->GetPlayerController()->InputKeyboard(currentWindow, key, scancode, action, mode);
 }
 
 void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode)
 {
-	main_character->InputMouse(currentWindow, button, action, mode);
+	main_character->GetPlayerController()->InputMouse(currentWindow, button, action, mode);
 }
 
 int main(int argc, char** argv)

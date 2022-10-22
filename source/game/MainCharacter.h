@@ -1,6 +1,8 @@
 #pragma once
 
-#include "Pawn.h"
+#include "../engine/default_classes/Pawn.h"
+
+#include "../engine/controllers/PlayerController.h"
 
 #include "../main.h"
 
@@ -18,19 +20,18 @@ namespace Game
 			const float startMoveSpeed = 0.f);
 
 		~MainCharacter();
-		virtual void BeginPlay() override;
-		virtual void Move(const float deltaTime) override;
-		virtual void Update(float deltaTime) override;
-		virtual void ChangeMoveVector(const glm::vec2& value) override;
+
+		void BeginPlay() override;
+		void Update(float deltaTime) override;
 
 		void SetIgnoreMoveInput(bool isIgnore) { is_ignore_move_input = isIgnore; }
 
 		bool GetIsIgnoreMoveInput() { return is_ignore_move_input; }
 
-		void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
-		void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
-
 		void Overlap(Actor* overlappingActor);
+
+		inline PlayerController* GetPlayerController() { return dynamic_cast<PlayerController*>(_controller); }
+		inline WeaponComponent* GetWeaponComponent() { return _weapon_component.get(); }
 	protected:
 
 		bool is_pause = false;
@@ -38,7 +39,5 @@ namespace Game
 
 		std::shared_ptr<HealthComponent> _health_component;
 		std::shared_ptr<WeaponComponent> _weapon_component;
-
-		std::shared_ptr<PlayerController> _player_controller;
 	};
 }

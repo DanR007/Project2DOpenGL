@@ -15,16 +15,22 @@ public:
 
 	//using Controller::Controller;
 	//PlayerController(const float moveSpeed);
-	PlayerController(const float speed) { move_speed = speed; }
+	PlayerController(const float speed) { _move_speed = speed; _controlled_character = nullptr; }
+	PlayerController(Game::MainCharacter* character, const float speed) 
+	{
+		_move_speed = speed; _controlled_character = character;
+	}
+
 	~PlayerController() = default;
 
-	virtual void Move(float deltaTime) override;
-	virtual void ChangeMoveVector(glm::vec2 inputVector) override;
+	void Move(float deltaTime) override;
+	void ChangeMoveVector(glm::vec2 inputVector) override;
 
-	void Input(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
+	void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
+	void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
 
 	void SetCharacter(Game::MainCharacter* controlledCharacter);
 
 protected:
-	std::shared_ptr<Game::MainCharacter> controlled_character;
+	Game::MainCharacter* _controlled_character;
 };

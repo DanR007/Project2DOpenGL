@@ -1,5 +1,5 @@
 #pragma once 
-#include "../Actor.h"
+#include "../../engine/default_classes/Actor.h"
 
 namespace Game
 {

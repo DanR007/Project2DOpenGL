@@ -1,7 +1,7 @@
 #include "PhysicsManager.h"
 #include "GameManager.h"
 
-#include "../../game/Actor.h"
+#include "../default_classes/Actor.h"
 
 #include "../physics/Collider.h"
 

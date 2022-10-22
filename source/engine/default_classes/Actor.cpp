@@ -1,14 +1,14 @@
 #include "Actor.h"
 
-#include "../engine/renderer/AnimSprite.h"
-#include "../engine/renderer/TextureRender.h"
-#include "../engine/renderer/ShaderRender.h"
+#include "../renderer/AnimSprite.h"
+#include "../renderer/TextureRender.h"
+#include "../renderer/ShaderRender.h"
 
-#include "../engine/managers/ResourcesManager.h"
-#include "../engine/managers/GameManager.h"
-#include "../engine/managers/PhysicsManager.h"
+#include "../managers/ResourcesManager.h"
+#include "../managers/GameManager.h"
+#include "../managers/PhysicsManager.h"
 
-#include "../engine/physics/Collider.h"
+#include "../physics/Collider.h"
 
 namespace Game
 {

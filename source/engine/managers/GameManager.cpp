@@ -3,7 +3,8 @@
 #include "../../game/MainCharacter.h"
 #include "../../game/enemies/MeleeEnemy.h"
 
-#include "../../game/enemies/MeleeEnemy.h"
+#include "../controllers/PlayerController.h"
+#include "../controllers/EnemyController.h"
 
 #include "../../game/gameobjects/WallActor.h"
 #include "../../game/gameobjects/HealActor.h"
@@ -25,7 +26,7 @@ void GameManager::MoveAllActors()
 	{
 		if (main_character != *it)
 		{
-			it->get()->AddWorldPosition(main_character->GetMoveValue() * -1.f);
+			it->get()->AddWorldPosition(main_character->GetPlayerController()->GetMoveValue() * -1.f);
 
 			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(*it))
 				std::dynamic_pointer_cast<Game::MeleeEnemy>(*it)->ChangePatrolPointsCoordinate(main_character->GetMoveValue() * -1.f);
@@ -64,12 +65,13 @@ void GameManager::BeginPlay()
 	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 360.f), glm::vec2(240, 240));
 	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(100.f, 600.f), glm::vec2(240, 240));
 	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(800.f, 600.f), glm::vec2(240, 240));
-	std::vector<glm::vec2> patrolPos = { glm::vec2(100.f, 100.f),glm::vec2(150.f, 120.f),glm::vec2(120.f, 180.f) };
+	SpawnActor<Game::Objects::Wall>("wall", glm::vec2(120.f, 120.f), glm::vec2(100, 100));
+	std::vector<glm::vec2> patrolPos = { glm::vec2(300.f, 300.f),glm::vec2(0.f, 120.f),glm::vec2(300.f, 300.f) };
 
 	std::shared_ptr<Game::MeleeEnemy> enemy = SpawnActor<Game::MeleeEnemy>("mush1", glm::vec2(0.f), glm::vec2(100, 100));
-	enemy->SetPatrolPoints(patrolPos);
+	enemy->GetEnemyController()->SetPatrolPoints(patrolPos);
 
-	enemy->SetMoveSpeed(50.f);
+	enemy->GetEnemyController()->SetMoveSpeed(50.f);
 
 	//SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
 

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "Actor.h"
+#include "../../engine/managers/AI/AStar.h"
 
 class HealthComponent;
-
+class Controller;
 
 namespace Game
 {
@@ -14,8 +15,7 @@ namespace Game
 			const glm::vec2& startPosition = glm::vec2(0.f), const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f, const float moveSpeed = 0.f);
 		Pawn() = delete;
 
-		virtual void Update(float deltaTime) override;
-		virtual void Move(const float deltaTime);
+		void Update(float deltaTime) override;
 		virtual void ChangeMoveVector(const glm::vec2& value);
 
 		void SetMoveSpeed(float speedValue) { move_speed = speedValue; }
@@ -30,6 +30,9 @@ namespace Game
 		glm::vec2 move_vector = glm::vec2(0.f);
 		glm::vec2 _move_value = glm::vec2(0.f);
 		
+		
+
+		Controller* _controller;
 	private:
 
 	};

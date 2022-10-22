@@ -1,7 +1,7 @@
 #include "Collider.h"
 
 #include "../../game/AllObjects.h"
-#include "../../game/Actor.h"
+#include "../default_classes/Actor.h"
 
 #include "../managers/GameManager.h"
 namespace Physics

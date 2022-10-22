@@ -1,15 +1,15 @@
 #include "Pawn.h"
 
-#include "../engine/managers/PhysicsManager.h"
-#include "../engine/managers/GameManager.h"
+#include "../managers/PhysicsManager.h"
+#include "../managers/GameManager.h"
 
-#include "../engine/renderer/AnimSprite.h"
-#include "../engine/renderer/ShaderRender.h"
-#include "../engine/renderer/TextureRender.h"
+#include "../renderer/AnimSprite.h"
+#include "../renderer/ShaderRender.h"
+#include "../renderer/TextureRender.h"
 
-#include "../engine/controllers/Controller.h"
+#include "../controllers/Controller.h"
 
-#include "../main.h"
+#include "../../main.h"
 
 namespace Game
 {
@@ -18,24 +18,19 @@ namespace Game
 		Actor(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation)
 	{
 		move_speed = moveSpeed;
+		_controller = new Controller(this, moveSpeed);
 	}
 
 	void Pawn::Update(float deltaTime)
 	{
-		Move(deltaTime);
+		_controller->Move(deltaTime);
 		Actor::Update(deltaTime);
 	}
 
 	Pawn::~Pawn()
 	{
-
-	}
-
-	void Pawn::Move(float deltaTime)
-	{
-		if (move_vector != glm::vec2(0.f, 0.f) && 
-			PhysicsManager::CanMove(this, _position + move_vector * deltaTime * move_speed))
-			SetPosition(_position + move_vector * deltaTime * move_speed);
+		if(_controller)
+			delete _controller;
 	}
 
 	void Pawn::ChangeMoveVector(const glm::vec2& inputVector)

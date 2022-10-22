@@ -41,13 +41,15 @@ namespace Game
 		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
 
 		_collider->Overlap.Connect(this, &MainCharacter::Overlap);
-		//_player_controller = std::make_shared<PlayerController>(100.f);
-		//_player_controller->SetCharacter(this);
+
+		_controller = new PlayerController(100.f);
+		static_cast<PlayerController*>(_controller)->SetCharacter(this);
 	}
 
 	MainCharacter::~MainCharacter()
 	{
-
+		if(_controller)
+			delete _controller;
 	}
 
 
@@ -58,7 +60,7 @@ namespace Game
 
 	void MainCharacter::Update(float deltaTime)
 	{
-		Move(deltaTime);
+		_controller->Move(deltaTime);
 		Actor::Update(deltaTime);
 
 		if (_health_component->GetInviolabilityTime() > 0.f)
@@ -70,113 +72,6 @@ namespace Game
 		_weapon_component->Update(deltaTime);
 	}
 
-	void MainCharacter::Move(float deltaTime)
-	{
-		_move_value = move_vector * deltaTime * move_speed;
-		if (!is_ignore_move_input && move_vector != glm::vec2(0.f, 0.f) &&
-			PhysicsManager::CanMove(this, _position + _move_value))
-		{
-			GameManager::MoveAllActors();
-		}
-	}
-
-	void MainCharacter::ChangeMoveVector(const glm::vec2& inputVector)
-	{
-		move_vector += inputVector;
-	}
-
-	void MainCharacter::InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
-	{
-		switch (action)
-		{
-		case GLFW_PRESS:
-			switch (key)
-			{
-			case GLFW_KEY_ESCAPE:
-				glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
-				break;
-			case GLFW_KEY_W:
-				if (!is_ignore_move_input)
-					ChangeMoveVector(up_vector);
-				break;
-			case GLFW_KEY_S:
-				if (!is_ignore_move_input)
-					ChangeMoveVector(up_vector * -1.f);
-				break;
-			case GLFW_KEY_D:
-				if (!is_ignore_move_input)
-					ChangeMoveVector(right_vector);
-				break;
-			case GLFW_KEY_A:
-				if (!is_ignore_move_input)
-					ChangeMoveVector(right_vector * -1.f);
-				break;
-			}
-			break;
-		case GLFW_RELEASE:
-			switch (key)
-			{
-			case GLFW_KEY_W:
-				ChangeMoveVector(up_vector * -1.f);
-				break;
-			case GLFW_KEY_S:
-				ChangeMoveVector(up_vector);
-				break;
-			case GLFW_KEY_D:
-				ChangeMoveVector(right_vector * -1.f);
-				break;
-			case GLFW_KEY_A:
-				ChangeMoveVector(right_vector);
-				break;
-			}
-			break;
-		/*case GLFW_REPEAT:
-
-			break;*/
-		}
-	}
-	void MainCharacter::InputMouse(GLFWwindow* currentWindow, int button, int action, int mode)
-	{
-		switch (action)
-		{
-		case GLFW_PRESS:
-			switch (button)
-			{
-			case GLFW_MOUSE_BUTTON_1:
-			{
-				double xPos, yPos;
-				glfwGetCursorPos(currentWindow, &xPos, &yPos);
-				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
-			}
-			break;
-			}
-			break;
-		case GLFW_RELEASE:
-			switch (button)
-			{
-			case GLFW_MOUSE_BUTTON_1:
-			{
-				double xPos, yPos;
-				glfwGetCursorPos(currentWindow, &xPos, &yPos);
-				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
-			}
-			break;
-			}
-			break;
-		case GLFW_REPEAT:
-			switch (button)
-			{
-			case GLFW_MOUSE_BUTTON_1:
-			{
-				double xPos, yPos;
-				glfwGetCursorPos(currentWindow, &xPos, &yPos);
-				_weapon_component->Shoot(glm::vec2(float(xPos), float(yPos)));
-			}
-			break;
-			}
-			break;
-		}
-	}
 	void MainCharacter::Overlap(Actor* overlappingActor)
 	{
 		Enemy* enemy = dynamic_cast<Enemy*>(overlappingActor);

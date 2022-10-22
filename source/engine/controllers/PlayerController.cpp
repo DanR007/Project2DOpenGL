@@ -3,26 +3,26 @@
 #include "../../game/MainCharacter.h"
 
 #include "../managers/PhysicsManager.h"
+#include "../managers/GameManager.h"
 
+#include "../../game/weapons/WeaponComponent.h"
 
 void PlayerController::Move(float deltaTime)
 {
-	//if (!is_ignore_move_input && move_vector != glm::vec2(0.f, 0.f) &&
-		//PhysicsManager::CanMove(std::move(all_actors), controlled_character->position + move_vector * deltaTime * move_speed, controlled_character->size))
-	/*{
-		for (std::shared_ptr<Game::Actor> actor : all_actors)
-		{
-			actor->SetPosition(actor->GetPosition() - move_vector * deltaTime * move_speed);
-		}
-	}*/
+	_move_value = _move_vector * deltaTime * _move_speed;
+	if (!is_ignore_move_input && _move_value != glm::vec2(0.f, 0.f) &&
+		PhysicsManager::CanMove(_controlled_character, _controlled_character->GetPosition() + _move_value))
+	{
+		GameManager::MoveAllActors();
+	}
 }
 
 void PlayerController::ChangeMoveVector(glm::vec2 inputVector)
 {
-	move_vector += inputVector;
+	_move_vector += inputVector;
 }
 
-void PlayerController::Input(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
+void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
 	switch (action)
 	{
@@ -73,8 +73,51 @@ void PlayerController::Input(GLFWwindow* currentWindow, int key, int scancode, i
 	}
 }
 
+void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int action, int mode)
+{
+	switch (action)
+	{
+	case GLFW_PRESS:
+		switch (button)
+		{
+		case GLFW_MOUSE_BUTTON_1:
+		{
+			double xPos, yPos;
+			glfwGetCursorPos(currentWindow, &xPos, &yPos);
+			_controlled_character->GetWeaponComponent()->Shoot(glm::vec2(float(xPos), float(yPos)));
+		}
+		break;
+		}
+		break;
+	case GLFW_RELEASE:
+		switch (button)
+		{
+		case GLFW_MOUSE_BUTTON_1:
+		{
+			double xPos, yPos;
+			glfwGetCursorPos(currentWindow, &xPos, &yPos);
+			_controlled_character->GetWeaponComponent()->Shoot(glm::vec2(float(xPos), float(yPos)));
+		}
+		break;
+		}
+		break;
+	case GLFW_REPEAT:
+		switch (button)
+		{
+		case GLFW_MOUSE_BUTTON_1:
+		{
+			double xPos, yPos;
+			glfwGetCursorPos(currentWindow, &xPos, &yPos);
+			_controlled_character->GetWeaponComponent()->Shoot(glm::vec2(float(xPos), float(yPos)));
+		}
+		break;
+		}
+		break;
+	}
+}
+
 void PlayerController::SetCharacter(Game::MainCharacter* controlledCharacter)
 {
-	controlled_character.reset(controlledCharacter);
+	_controlled_character = controlledCharacter;
 }
 

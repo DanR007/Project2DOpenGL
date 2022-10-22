@@ -9,10 +9,12 @@ namespace Game
 	class Pawn;
 }
 
+class AStar;
+
 class Controller
 {
 public:
-	Controller(std::shared_ptr<Game::Pawn> controlledPawn, const float moveSpeed);
+	Controller(Game::Pawn* controlledPawn, const float moveSpeed);
 	Controller(const float moveSpeed);
 	Controller();
 
@@ -20,17 +22,24 @@ public:
 	virtual void Move(float deltaTime);
 
 	void SetIgnoreMoveInput(bool isIgnore);
-
+	void SetMoveSpeed(const float move_speed) { _move_speed = move_speed; }
 	virtual void ChangeMoveVector(glm::vec2 inputVector);
 
 	bool GetIsIgnoreMoveInput() { return is_ignore_move_input; }
+
+	inline glm::vec2 GetMoveValue() { return _move_vector; }
 protected:
 	bool is_pause = false;
 	bool is_ignore_move_input = false;
 
-	float move_speed;
+	float _move_speed;
 
-	glm::vec2 move_vector = glm::vec2(0.f);
+	glm::vec2 _move_vector = glm::vec2(0.f);
+	glm::vec2 _move_value  = glm::vec2(0.f);
+
+	Game::Pawn* _controlled_pawn;
+
+	AStar* _a_star;
 private:
-	//std::shared_ptr<Game::Pawn> controlled_pawn;
+	
 };

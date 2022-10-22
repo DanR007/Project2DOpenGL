@@ -7,7 +7,7 @@
 
 #include "../../physics/Collider.h"
 
-#include "../../../game/Actor.h"
+#include "../../default_classes/Actor.h"
 #include "../../../game/gameobjects/WallActor.h"
 
 static bool CheckBlockPhysicsBetweenTwoObjects()
