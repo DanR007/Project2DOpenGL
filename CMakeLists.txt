@@ -45,6 +45,8 @@ add_executable(${PROJECT_NAME}
 "source/engine/default_classes/Actor.cpp"
 "source/engine/default_classes/Pawn.h"
 "source/engine/default_classes/Pawn.cpp"
+"source/engine/parser/XMLParser.h"
+"source/engine/parser/XMLParser.cpp"
 "source/game/MainCharacter.h"
 "source/game/MainCharacter.cpp"
 "source/game/AllObjects.h"
