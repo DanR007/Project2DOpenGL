@@ -29,8 +29,11 @@ namespace Game
 
 	Pawn::~Pawn()
 	{
-		if(_controller)
+		if (_controller)
+		{
 			delete _controller;
+			_controller = nullptr;
+		}
 	}
 
 	void Pawn::ChangeMoveVector(const glm::vec2& inputVector)

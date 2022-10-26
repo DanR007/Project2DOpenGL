@@ -27,5 +27,14 @@ namespace Game
 		_controller = new EnemyController(this, move_speed);
 	}
 
+	MeleeEnemy::~MeleeEnemy()
+	{
+		if (_controller)
+		{
+			delete _controller;
+			_controller = nullptr;
+		}
+	}
+
 	
 }

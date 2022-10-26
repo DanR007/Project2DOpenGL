@@ -14,7 +14,7 @@ namespace Game
 			const glm::vec2& startPosition = glm::vec2(0.f), const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f,
 			const float moveSpeed = 0.f);
 
-		
+		~MeleeEnemy();
 	protected:
 
 		

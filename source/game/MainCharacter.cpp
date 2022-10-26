@@ -48,8 +48,11 @@ namespace Game
 
 	MainCharacter::~MainCharacter()
 	{
-		if(_controller)
+		if (_controller)
+		{
 			delete _controller;
+			_controller = nullptr;
+		}
 	}
 
 
