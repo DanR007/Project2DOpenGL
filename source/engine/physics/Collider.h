@@ -6,7 +6,7 @@
 #include <glm/vec2.hpp>
 #include <memory>
 
-#include "DelegateOverlap.h"
+#include "../Delegate.h"
 
 namespace Game
 {
@@ -31,13 +31,19 @@ namespace Physics
 
 		std::shared_ptr<Game::Actor> GetOwner();
 
-		template<class T>
-		void AddOverlapDelegate(T* method)
+		template<class T, class C>
+		void AddOverlapDelegate(C* own_class, T method)
 		{
-			Overlap.Add(method);
+			overlap.Connect(own_class, method);
+			//Overlap.Add(method);
 		}
-		OverlapDelegate Overlap;
-	private:
+
+		void Overlap(Game::Actor* actor)
+		{
+			overlap(actor);
+		}
+
+	protected:
 		glm::vec2 _size, _position;
 
 		std::map<EObjectTypes, EResponseType> objects_response_map =
@@ -51,7 +57,7 @@ namespace Physics
 		};
 
 		EObjectTypes _object_type;
-
+		Delegate overlap;
 		
 	};
 }

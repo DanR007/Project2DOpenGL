@@ -4,6 +4,12 @@
 
 #include "../../main.h"
 
+#include "../Delegate.h"
+
+#include <string>
+#include <map>
+#include <iostream>
+
 namespace Game
 {
 	class MainCharacter;
@@ -15,11 +21,8 @@ public:
 
 	//using Controller::Controller;
 	//PlayerController(const float moveSpeed);
-	PlayerController(const float speed) { _move_speed = speed; _controlled_character = nullptr; }
-	PlayerController(Game::MainCharacter* character, const float speed) 
-	{
-		_move_speed = speed; _controlled_character = character;
-	}
+	PlayerController(const float speed = 100.f);
+	PlayerController(Game::MainCharacter* character, const float speed);
 
 	~PlayerController() = default;
 
@@ -31,6 +34,39 @@ public:
 
 	void SetCharacter(Game::MainCharacter* controlledCharacter);
 
+	void SetupDefaultFunctions();
+
+	template<class C, class M>
+	void SetAction(const std::string& name, C* own_class, M method)
+	{
+		if (own_class)
+		{
+			Delegate new_delegate;
+			new_delegate.Connect(own_class, method);
+
+			_delegates_functions.emplace(name, new_delegate);
+		}
+		else
+		{
+			std::cerr << "Own class by function: " + name + " not valid" << std::endl;
+		}
+		//_delegates_functions.emplace(name, new_delegate);
+	}
+	template<typename T>
+	void CallFunction(const std::string& name_function, T arguiment)
+	{
+		std::map<std::string, Delegate>::iterator it = _delegates_functions.find(name_function);
+
+		if (it == _delegates_functions.end())
+		{
+			std::cerr << "PlayerController can not find function by name: " + name_function << std::endl;
+			return;
+		}
+
+		it->second(arguiment);
+	}
 protected:
 	Game::MainCharacter* _controlled_character;
+
+	std::map<std::string, Delegate> _delegates_functions;
 };

@@ -7,6 +7,22 @@
 
 #include "../../game/weapons/WeaponComponent.h"
 
+PlayerController::PlayerController(const float speed)
+{ 
+	_move_speed = speed; _controlled_character = nullptr;
+
+	SetupDefaultFunctions();
+}
+
+
+PlayerController::PlayerController(Game::MainCharacter* character, const float speed)
+{
+	_controlled_character = character;
+	_move_speed = speed;
+
+	SetupDefaultFunctions();
+}
+
 void PlayerController::Move(float deltaTime)
 {
 	_move_value = _move_vector * deltaTime * _move_speed;
@@ -34,19 +50,19 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 			break;
 		case GLFW_KEY_W:
 			if (!is_ignore_move_input)
-				ChangeMoveVector(up_vector);
+				CallFunction("MoveForward", up_vector);
 			break;
 		case GLFW_KEY_S:
 			if (!is_ignore_move_input)
-				ChangeMoveVector(up_vector * -1.f);
+				CallFunction("MoveForward", up_vector * -1.f);
 			break;
 		case GLFW_KEY_D:
 			if (!is_ignore_move_input)
-				ChangeMoveVector(right_vector);
+				CallFunction("MoveRight", right_vector);
 			break;
 		case GLFW_KEY_A:
 			if (!is_ignore_move_input)
-				ChangeMoveVector(right_vector * -1.f);
+				CallFunction("MoveRight", right_vector * -1.f);
 			break;
 		}
 		break;
@@ -54,16 +70,16 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 		switch (key)
 		{
 		case GLFW_KEY_W:
-			ChangeMoveVector(up_vector * -1.f);
+			CallFunction("MoveForward", up_vector * -1.f);
 			break;
 		case GLFW_KEY_S:
-			ChangeMoveVector(up_vector);
+			CallFunction("MoveForward", up_vector);
 			break;
 		case GLFW_KEY_D:
-			ChangeMoveVector(right_vector * -1.f);
+			CallFunction("MoveRight", right_vector * -1.f);
 			break;
 		case GLFW_KEY_A:
-			ChangeMoveVector(right_vector);
+			CallFunction("MoveRight", right_vector);
 			break;
 		}
 		break;
@@ -84,7 +100,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 		{
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
-			_controlled_character->GetWeaponComponent()->Shoot(glm::vec2(float(xPos), float(yPos)));
+			CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;
 		}
@@ -96,7 +112,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 		{
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
-			_controlled_character->GetWeaponComponent()->Shoot(glm::vec2(float(xPos), float(yPos)));
+			CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;
 		}
@@ -108,7 +124,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 		{
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
-			_controlled_character->GetWeaponComponent()->Shoot(glm::vec2(float(xPos), float(yPos)));
+			CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;
 		}
@@ -119,5 +135,20 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 void PlayerController::SetCharacter(Game::MainCharacter* controlledCharacter)
 {
 	_controlled_character = controlledCharacter;
+}
+
+void PlayerController::SetupDefaultFunctions()
+{
+	SetAction("MoveForward", this, &PlayerController::ChangeMoveVector);
+	SetAction("MoveRight", this, &PlayerController::ChangeMoveVector);
+
+	if (_controlled_character->GetWeaponComponent())
+	{
+		SetAction("Attack", _controlled_character->GetWeaponComponent(), &WeaponComponent::Shoot);
+	}
+	else
+	{
+		std::cerr << "Can not add function Attack because haven't owner class" << std::endl;
+	}
 }
 

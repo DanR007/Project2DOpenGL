@@ -40,10 +40,10 @@ namespace Game
 
 		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
 
-		_collider->Overlap.Connect(this, &MainCharacter::Overlap);
+		//_collider->Overlap.Connect(this, &MainCharacter::Overlap);
+		_collider->AddOverlapDelegate(this, &MainCharacter::Overlap);
 
-		_controller = new PlayerController(100.f);
-		static_cast<PlayerController*>(_controller)->SetCharacter(this);
+		_controller = new PlayerController(this, 100.f);
 	}
 
 	MainCharacter::~MainCharacter()
