@@ -19,23 +19,20 @@ public: T1 arg1;
 
 //   онтейнер дл€ хранени€ указател€ на метод.
 class IContainer { public: virtual void Call(IArguments*) = 0; };
-//template< class T, class M > class Container : public IContainer {};
+template< class Obj, class M > class Container : public IContainer {};
 
 //  —пециализаци€ дл€ метода без аргументов.
-//template< class T >
-//class Container< T, void (T::*)(void) > : public IContainer
-//{
-//	typedef void (T::* M)(void);
-//public: Container(T* c, M m) : m_class(c), m_method(m) {}
-//private: T* m_class; M m_method;
-//public: void Call(IArguments* i_args)
-//{
-//	(m_class->*m_method)();
-//}
-//};
-//
-
-template< class Obj, class M> class Container : public IContainer {};
+template< class Obj >
+class Container< Obj, void (Obj::*)(void) > : public IContainer
+{
+	typedef void (Obj::* M)(void);
+public: Container(Obj* c, M m) : m_class(c), m_method(m) {}
+private: Obj* m_class; M m_method;
+public: void Call(IArguments* i_args)
+{
+	(m_class->*m_method)();
+}
+};
 
 template<class Obj, class A1>
 class Container <Obj, void (Obj::*)(A1)> :public IContainer
@@ -74,12 +71,12 @@ template< class T, class U > void Connect(T* i_class, U i_method)
 if (m_container) delete m_container;
 m_container = new Container< T, U >(i_class, i_method);
 }
-/*
+
 void operator()()
 {
 	if (m_container)
 m_container->Call(&Arguments<>());
-}*/
+}
 
 template< class T1 > void operator()(T1 i_arg1)
 {
