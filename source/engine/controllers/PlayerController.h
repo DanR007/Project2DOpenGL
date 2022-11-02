@@ -42,18 +42,17 @@ public:
 		if (own_class)
 		{
 			Delegate new_delegate;
-			new_delegate.Connect(own_class, method);
 
 			_delegates_functions.emplace(name, new_delegate);
+			_delegates_functions[name].Connect(own_class, method);
 		}
 		else
 		{
 			std::cerr << "Own class by function: " + name + " not valid" << std::endl;
 		}
-		//_delegates_functions.emplace(name, new_delegate);
 	}
 	template<typename T>
-	void CallFunction(const std::string& name_function, T arguiment)
+	void CallFunction(const std::string& name_function, T argument)
 	{
 		std::map<std::string, Delegate>::iterator it = _delegates_functions.find(name_function);
 
@@ -63,7 +62,7 @@ public:
 			return;
 		}
 
-		it->second(arguiment);
+		it->second(argument);
 	}
 protected:
 	Game::MainCharacter* _controlled_character;

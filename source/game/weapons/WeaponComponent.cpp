@@ -23,6 +23,7 @@ WeaponComponent::WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, s
 
 void WeaponComponent::Shoot(const glm::vec2& mousePosition)
 {
+	std::cout << "Shoot" << std::endl;
 	if (_reload_time <= 0.f)
 	{
 		switch (_weapon_type)
