@@ -8,11 +8,11 @@ in this folder you can find Collider and enum file EPhisicsType (with EResponseT
 PhysicsManager is located by path source/engine/managers/
 
 
-  <p>Collider includes: /n
-    - Overlap Delegate /n
-    Variables: /n
-    - std::map<EObjectTypes, EResponseType> Map of response to objects /n
-    - glm::vec2 Size /n
+  <p>Collider includes: </n>
+    - Overlap Delegate </n>
+    Variables: </n>
+    - std::map<EObjectTypes, EResponseType> Map of response to objects </n>
+    - glm::vec2 Size </n>
     - glm::vec2 World position </n>
     - EObjectTypes Object type </n>
     Methods: </n>
