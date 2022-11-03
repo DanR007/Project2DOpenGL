@@ -8,38 +8,38 @@ in this folder you can find Collider and enum file EPhisicsType (with EResponseT
 PhysicsManager is located by path source/engine/managers/
 
 
-  Collider includes:
-    - Overlap Delegate
-    Variables:
-    - std::map<EObjectTypes, EResponseType> Map of response to objects
-    - glm::vec2 Size
-    - glm::vec2 World position
-    - EObjectTypes Object type
-    Methods:
-    - void AddOverlapDelegate(Object, method by reference)
-    - void Overlap(Actor*)
-    - void SetObjectType(EObjectTypes)
-    - void SetSize(glm::vec2)
-    - void SetPosition(glm::vec2)
-    - void SetCollisionResponse(EObjectTypes, EResponseType)
-    - Actor* GetOwner()
-    - glm::vec2 GetSize()
-    - glm::vec2 GetPosition()
-    - EObjectTypes GetObjectType()
-    - EResponseType GetResponseType(EObjectTypes)
-    Constructors:
-    - Collider(EOdjectTypes, glm::vec2(position), glm::vec2(size))
-  PhysicsManager includes:
-    Methods:
-    - static bool CanMove(Actor* actor_that_need_to_check, glm::vec2(next_position))
-    - static void CheckOverlapping(Collider* check_collider)
-    - static bool IsOverlap(glm::vec2 position, glm::vec2 check_position, 
-    glm::vec2 size, glm::vec3 size_checking_colllider,
-    Physics::Collider* check_collider, Physics::Collider* current_checking_collider)
-    - static bool IsBlocking(glm::vec2 position, glm::vec2 check_position, 
-		glm::vec2 size, glm::vec2 size_checking_colllider,
-		Physics::Collider* check_collider, Physics::Collider* current_checking_collider)
-    
+  <p>Collider includes: </n>
+    - Overlap Delegate </n>
+    Variables: </n>
+    - std::map<EObjectTypes, EResponseType> Map of response to objects </n>
+    - glm::vec2 Size </n>
+    - glm::vec2 World position </n>
+    - EObjectTypes Object type </n>
+    Methods: </n>
+    - void AddOverlapDelegate(Object, method by reference) </n>
+    - void Overlap(Actor*) </n>
+    - void SetObjectType(EObjectTypes) </n>
+    - void SetSize(glm::vec2) </n>
+    - void SetPosition(glm::vec2) </n>
+    - void SetCollisionResponse(EObjectTypes, EResponseType) </n>
+    - Actor* GetOwner() </n>
+    - glm::vec2 GetSize() </n> 
+    - glm::vec2 GetPosition() </n>
+    - EObjectTypes GetObjectType() </n>
+    - EResponseType GetResponseType(EObjectTypes) </n>
+    Constructors: </n>
+    - Collider(EOdjectTypes, glm::vec2(position), glm::vec2(size)) </n>
+  PhysicsManager includes: </n>
+    Methods: </n>
+    - static bool CanMove(Actor* actor_that_need_to_check, glm::vec2(next_position)) </n>
+    - static void CheckOverlapping(Collider* check_collider) </n>
+    - static bool IsOverlap(glm::vec2 position, glm::vec2 check_position,  </n>
+    glm::vec2 size, glm::vec3 size_checking_colllider, </n>
+    Physics::Collider* check_collider, Physics::Collider* current_checking_collider) </n>
+    - static bool IsBlocking(glm::vec2 position, glm::vec2 check_position, </n>
+		glm::vec2 size, glm::vec2 size_checking_colllider, </n>
+		Physics::Collider* check_collider, Physics::Collider* current_checking_collider) </n>
+    </p>
 Renderer:
   Located by path source/engine/renderer/
   
