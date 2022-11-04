@@ -20,7 +20,7 @@ namespace Game
 		~Pawn();
 	protected:
 	
-		Controller* _controller;
+		Controller* _controller = nullptr;
 	private:
 
 	};

@@ -21,6 +21,8 @@ namespace Game
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Overlap);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Ignore);
 		
+		_collider->Attach(this);
+
 		_health = 1;
 
 		_controller = new EnemyController(this, move_speed);
