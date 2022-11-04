@@ -27,7 +27,7 @@ namespace Game
 {
 	MainCharacter::MainCharacter(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
 		const std::string& initSubtextureName, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float startMoveSpeed)
-		:Pawn(texture, shader, initSubtextureName, startPosition, startSize, startRotation, startMoveSpeed)
+		:Pawn(texture, shader, initSubtextureName, startPosition, startSize, startRotation)
 	{
 		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, startPosition, startSize);
 
@@ -37,6 +37,7 @@ namespace Game
 		_collider->SetCollisionResponse(EObjectTypes::EOT_InteractiveObject, EResponseType::ERT_Overlap);
 
 		_health_component = std::make_shared<HealthComponent>(10);
+		_health_component->Attach(this);
 
 		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
 

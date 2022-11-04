@@ -444,9 +444,9 @@ MapGenerator::Leaf::Room::Room(const glm::ivec2& size, const glm::ivec2 position
 	:_size(size), _position(position)
 {
 	char free_cell = '.', wall_cell = 'B';
-	for (uint32_t i = _position.y; i < _position.y + _size.y; i++)
+	for (int32_t i = _position.y; i < _position.y + _size.y; i++)
 	{
-		for (uint32_t j = _position.x; j < _position.x + _size.x; j++)
+		for (int32_t j = _position.x; j < _position.x + _size.x; j++)
 		{
 			generator->_map[i][j] = free_cell;
 			if(i == _position.y)
@@ -466,8 +466,8 @@ MapGenerator::Leaf::Room::Room(const glm::ivec2& size, const glm::ivec2 position
 std::vector<std::string> MapGenerator::StartGenerate(const glm::ivec2& map_size)
 {
 	_map.resize(map_size.y + 2);
-	for (uint32_t i = 0; i < map_size.y + 2; i++)
-		for(uint32_t j = 0; j < map_size.y + 2; j++)
+	for (int32_t i = 0; i < map_size.y + 2; i++)
+		for(int32_t j = 0; j < map_size.y + 2; j++)
 		_map[i] += 'O';
 
 	g_root_leaf = new Leaf(glm::ivec2(0), map_size);
@@ -477,7 +477,7 @@ std::vector<std::string> MapGenerator::StartGenerate(const glm::ivec2& map_size)
 	Leaf::Room* character_room = _rooms[std::rand() % _rooms.size()];
 	_character_position = character_room->GetPosition() + glm::ivec2(std::rand() % character_room->GetSize().x, std::rand() % character_room->GetSize().y);
 	_map[_character_position.y][_character_position.x] = 'P';
-	for (uint32_t i = 0; i < map_size.y + 2; i++)
+	for (int32_t i = 0; i < map_size.y + 2; i++)
 		std::cout << _map[i] << std::endl;
 
 	return _map;

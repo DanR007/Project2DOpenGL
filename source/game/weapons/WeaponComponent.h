@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../../engine/default_classes/Component.h"
 #include "EWeaponTypes.h"
 
 #include <memory>
@@ -14,7 +14,7 @@ namespace Renderer
 	class Sprite;
 }
 
-class WeaponComponent
+class WeaponComponent : public Component
 {
 public:
 	WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSpriteName,

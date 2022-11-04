@@ -1,6 +1,6 @@
 cmake_minimum_required (VERSION 3.13 FATAL_ERROR)
 
-set(PROJECT_NAME Platformer2DOpenGL)
+set(PROJECT_NAME Project2DOpenGL)
 
 project(${PROJECT_NAME})
 
@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME}
 "source/main.h"
 "source/main.cpp"
 "source/AllTestCases.h"
+"source/engine/tests/PhysicsTests.h"
 "source/engine/Delegate.h"
 "source/engine/renderer/stb_image.h"
 "source/engine/renderer/ShaderRender.h"
@@ -30,8 +31,6 @@ add_executable(${PROJECT_NAME}
 "source/engine/managers/BSPMapGenerate.cpp"
 "source/engine/managers/AI/AStar.h"
 "source/engine/managers/AI/AStar.cpp"
-"source/engine/managers/physics_tests/CheckBlockPhysicsBetweenTwoObjects.h"
-"source/engine/managers/physics_tests/CheckOverlappingBetweenTwoObjects.h"
 "source/engine/controllers/Controller.h"
 "source/engine/controllers/Controller.cpp"
 "source/engine/controllers/EnemyController.h"
@@ -45,11 +44,12 @@ add_executable(${PROJECT_NAME}
 "source/engine/default_classes/Actor.cpp"
 "source/engine/default_classes/Pawn.h"
 "source/engine/default_classes/Pawn.cpp"
+"source/engine/default_classes/Component.h"
+"source/engine/default_classes/Component.cpp"
 "source/engine/parser/XMLParser.h"
 "source/engine/parser/XMLParser.cpp"
 "source/game/MainCharacter.h"
 "source/game/MainCharacter.cpp"
-"source/game/AllObjects.h"
 "source/game/HealthComponent.h"
 "source/game/HealthComponent.cpp"
 "source/game/gameobjects/WallActor.h"

@@ -1,7 +1,5 @@
 #include "Bullet.h"
 
-#include "../../engine/managers/PhysicsManager.h"
-
 namespace Game
 {
 	Bullet::Bullet(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
@@ -13,10 +11,6 @@ namespace Game
 	}
 	void Bullet::Update(float deltaTime)
 	{
-		if (PhysicsManager::CanMove(this, _move_vector * _speed * deltaTime))
-		{
-			SetPosition(GetPosition() + _move_vector * _speed * deltaTime);
-			Actor::Update(deltaTime);
-		}
+		Actor::Update(deltaTime);
 	}
 }

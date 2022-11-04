@@ -8,40 +8,37 @@
 
 #include "../Delegate.h"
 
-namespace Game
-{
-	class Actor;
-}
+#include "../default_classes/Component.h"
+
+
 
 namespace Physics
 {
-	class Collider
+	class Collider : public Component
 	{
 	public:
-		Collider(const EObjectTypes objectType, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f)) { _position = position; _size = size; _object_type = objectType; }
+		Collider(const EObjectTypes objectType, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f)) 
+			: Component(nullptr)
+		{
+			_position = position; _size = size; _object_type = objectType;
+		}
+
 		void SetCollisionResponse(EObjectTypes objectType, EResponseType responseType);
 		void SetPosition(const glm::vec2& newPosition) { _position = newPosition; }
-		EResponseType GetResponseType(EObjectTypes objectType) { return objects_response_map[objectType]; }
-		EObjectTypes GetObjectType() { return _object_type; }
-
-		glm::vec2 GetSize() { return _size; }
-		glm::vec2 GetPosition() { return _position; }
-
 		void SetSize(const glm::vec2& newSize) { _size = newSize; }
 
-		std::shared_ptr<Game::Actor> GetOwner();
+		EResponseType GetResponseType(EObjectTypes objectType) { return objects_response_map[objectType]; }
+		EObjectTypes GetObjectType() { return _object_type; }
+		glm::vec2 GetSize() { return _size; }
+		glm::vec2 GetPosition() { return _position; }
 
 		template<class T, class C>
 		void AddOverlapDelegate(C* own_class, T method)
 		{
-			overlap.Connect(own_class, method);
-			//Overlap.Add(method);
+			_delegate_overlap.Connect(own_class, method);
 		}
 
-		void Overlap(Game::Actor* actor)
-		{
-			overlap(actor);
-		}
+		void Overlap(Game::Actor* actor) { _delegate_overlap(actor); }
 
 	protected:
 		glm::vec2 _size, _position;
@@ -57,7 +54,6 @@ namespace Physics
 		};
 
 		EObjectTypes _object_type;
-		Delegate overlap;
-		
+		Delegate _delegate_overlap;
 	};
 }

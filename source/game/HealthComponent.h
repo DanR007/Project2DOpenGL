@@ -1,4 +1,5 @@
 #pragma once
+#include "../engine/default_classes/Component.h"
 
 #include <vector>
 #include <memory>
@@ -10,7 +11,7 @@ namespace Renderer
 	class Sprite;
 }
 
-class HealthComponent
+class HealthComponent : public Component
 {
 public:
 	HealthComponent(int health);
@@ -19,7 +20,6 @@ public:
 	void Heal(int healValue);
 
 	int GetHealth() { return _health; }
-
 	float GetInviolabilityTime() { return _inviolability_time; }
 
 	void UpdateInviolability(float deltaTime);

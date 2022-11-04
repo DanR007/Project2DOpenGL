@@ -2,8 +2,7 @@
 
 #include <iostream>
 
-#include "engine/managers/physics_tests/CheckBlockPhysicsBetweenTwoObjects.h"
-#include "engine/managers/physics_tests/CheckOverlappingBetweenTwoObjects.h"
+#include "engine/tests/PhysicsTests.h"
 
 template<typename T>
 bool IsCorrect(T answer, T correct_answer)
@@ -13,7 +12,11 @@ bool IsCorrect(T answer, T correct_answer)
 
 static void PlayPhysicsTestCases()
 {
+	PhysicsTests* tests = new PhysicsTests();
+
 	std::cout << "Physic tests: " << std::endl;
-	std::cout << IsCorrect(CheckBlockPhysicsBetweenTwoObjects(), true) << std::endl;
-	std::cout << IsCorrect(CheckOverlappingBetweenTwoObjects(), true) << std::endl;
+	std::cout << IsCorrect(tests->CheckBlockPhysicsBetweenTwoObjects(), true) << std::endl;
+	std::cout << IsCorrect(tests->CheckOverlappingBetweenTwoObjects(), true) << std::endl;
+
+	delete tests;
 }

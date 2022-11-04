@@ -13,27 +13,18 @@
 
 #include <iostream>
 
-std::vector<std::shared_ptr<Game::Actor>> all_actors;
-std::vector<std::shared_ptr<Game::Pawn>> all_pawns;
-std::shared_ptr<Game::MainCharacter> main_character;
-
-bool GameManager::_is_game_over;
-std::vector<std::shared_ptr<Game::Actor>>::iterator GameManager::_it;
-
-std::vector<std::shared_ptr<Game::Actor>> GameManager::_all_actors;
-
 void GameManager::MoveAllActors()
 {
 	auto it = _all_actors.begin();
 
 	for (; it != _all_actors.end(); it++)
 	{
-		if (main_character != *it)
+		if (_main_character != *it)
 		{
-			it->get()->AddWorldPosition(main_character->GetPlayerController()->GetMoveValue() * -1.f);
+			it->get()->AddWorldPosition(_main_character->GetPlayerController()->GetMoveValue() * -1.f);
 
-			if (std::dynamic_pointer_cast<Game::MeleeEnemy>(*it))
-				std::dynamic_pointer_cast<Game::MeleeEnemy>(*it)->ChangePatrolPointsCoordinate(main_character->GetMoveValue() * -1.f);
+			if (std::dynamic_pointer_cast<Game::Enemy>(*it))
+				std::dynamic_pointer_cast<Game::Enemy>(*it)->GetEnemyController()->ChangePatrolPointsCoordinate(_main_character->GetPlayerController()->GetMoveValue() * -1.f);
 		}
 	}
 }
@@ -49,6 +40,8 @@ void GameManager::Update(const float deltaTime)
 			if (it->get())
 			{
 				it->get()->Update(deltaTime);
+				_physics_manager->CheckOverlapping(it->get()->GetCollider());
+
 				if (it == _all_actors.end())
 					break;
 			}
@@ -64,7 +57,7 @@ void GameManager::BeginPlay()
 {
 	SetGameOver(false);
 
-	main_character = nullptr;
+	_main_character = nullptr;
 
 	std::vector<std::string> map;
 	MapGenerator* generator = new MapGenerator();
@@ -79,9 +72,7 @@ void GameManager::BeginPlay()
 	generator->Destroy();
 	generator = nullptr;
 
-	main_character = SpawnActor<Game::MainCharacter>("mush1",
-		glm::vec2(player_position * 40), mainCharacterSize);
-	main_character->GetPlayerController()->SetMoveSpeed(300.f);
+	
 
 	for (int i = 0; i < max + 2; i++)
 	{
@@ -101,8 +92,6 @@ void GameManager::BeginPlay()
 
 	//SpawnActor<Game::HealActor>("heal", glm::vec2(200.f, 200.f), glm::vec2(50.f, 50.f));
 
-
-
 	std::vector<std::pair<std::string, float>> stateDuration =
 	{
 		std::make_pair(std::string("mush1"), 1.f),
@@ -110,22 +99,18 @@ void GameManager::BeginPlay()
 		std::make_pair(std::string("mush3"), 1.f)
 	};
 
-	main_character->AddAnimState("walk", stateDuration);
-	main_character->PlayAnim("walk");
-	main_character->BeginPlay();
+	_main_character = SpawnActor<Game::MainCharacter>("mush1",
+		glm::vec2(player_position * 40), mainCharacterSize);
+	_main_character->GetPlayerController()->SetMoveSpeed(300.f);
+
+	_main_character->AddAnimState("walk", stateDuration);
+	_main_character->PlayAnim("walk");
+	_main_character->BeginPlay();
 
 
 }
 
-void GameManager::DeleteActor(Game::Actor* actor)
+void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator delete_iterator)
 {
-	auto it = _all_actors.begin();
-	for (; it != _all_actors.end(); it++)
-	{
-		if (it->get() == actor)
-		{
-			_all_actors.erase(it);
-			break;
-		}
-	}
+	_all_actors.erase(delete_iterator);
 }

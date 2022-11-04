@@ -1,7 +1,6 @@
 #include "HealthComponent.h"
 
 #include "../engine/managers/GameManager.h"
-#include "../engine/managers/ResourcesManager.h"
 
 #include "../engine/renderer/Sprite.h"
 
@@ -35,7 +34,7 @@ void HealthComponent::Hurt(int damageValue)
 	_health = std::max(0, _health - damageValue);
 	if (_health == 0)
 	{
-		GameManager::SetGameOver(true);
+		GetWorld()->SetGameOver(true);
 	}
 	else
 	{

@@ -11,10 +11,8 @@
 glm::vec2 AStar::DevelopPath(const glm::vec2& position, const glm::vec2& target, Game::Actor* actor)
 {
 	glm::vec2 collider_size = actor->GetCollider()->GetSize();
-	/*{ glm::vec2(-1.f, -1.f), glm::vec2(0.f, -1.f), glm::vec2(-1.f, 0.f), glm::vec2(1.f, 1.f),
-								glm::vec2(0.f, 1.f), glm::vec2(1.f, 0.f), glm::vec2(-1.f, 1.f), glm::vec2(1.f, -1.f) };*/
-	_steps = /*{glm::vec2(-10.f, -10.f), glm::vec2(0.f, -10.f), glm::vec2(-10.f, 0.f), glm::vec2(10.f, 10.f),
-								glm::vec2(0.f, 10.f), glm::vec2(10.f, 0.f), glm::vec2(-10.f, 10.f), glm::vec2(10.f, -10.f) };*/{ -collider_size, glm::vec2(0.f, -collider_size.y), glm::vec2(-collider_size.x, 0.f), collider_size,
+
+	_steps = { -collider_size, glm::vec2(0.f, -collider_size.y), glm::vec2(-collider_size.x, 0.f), collider_size,
 	glm::vec2(0.f, collider_size.y), glm::vec2(collider_size.x, 0.f), glm::vec2(-collider_size.x, collider_size.y), glm::vec2(collider_size.x, -collider_size.y)};
 	_next_position_algorithm = Vector2(glm::vec2(0.f));
 	_target = target;
@@ -33,7 +31,7 @@ glm::vec2 AStar::DevelopPath(const glm::vec2& position, const glm::vec2& target,
 				_closed_coordinates.end(), next_position);
 
 			if (position_iterator == _closed_coordinates.end() 
-				&& PhysicsManager::CanMove(actor, next_position._pos)
+				/* && GetWorld()->CanMove(actor, next_position._pos)*/
 				/*&& next_position.GetCost() < current_position.GetCost() + Length(_steps[i])*/)
 			{
 				next_position._dir = _steps_direction[i];

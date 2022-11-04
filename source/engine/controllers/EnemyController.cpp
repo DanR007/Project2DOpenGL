@@ -30,8 +30,8 @@ void EnemyController::Move(float deltaTime)
 		_move_vector = glm::vec2(glm::vec2(current_patrol_point - _controlled_pawn->GetPosition()).x / length,
 			glm::vec2(current_patrol_point - _controlled_pawn->GetPosition()).y / length);
 
-		if (_move_vector != glm::vec2(0.f, 0.f) &&
-			PhysicsManager::CanMove(_controlled_pawn, _controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed))
+		if (_move_vector != glm::vec2(0.f, 0.f) /*&&
+			PhysicsManager::CanMove(_controlled_pawn, _controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed)*/)
 			_controlled_pawn->SetPosition(_controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed);
 	}
 }

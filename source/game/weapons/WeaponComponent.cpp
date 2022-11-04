@@ -30,7 +30,7 @@ void WeaponComponent::Shoot(const glm::vec2& mousePosition)
 		{
 		case EWeaponTypes::EWT_Pistol:
 		{
-			std::shared_ptr<Game::PistolBullet> newBullet = GameManager::SpawnActor<Game::PistolBullet>("pistolBullet", _sprite_weapon->GetPosition(), _sprite_weapon->GetSize(), _sprite_weapon->GetRotation());
+			std::shared_ptr<Game::PistolBullet> newBullet = GetWorld()->SpawnActor<Game::PistolBullet>("pistolBullet", _sprite_weapon->GetPosition(), _sprite_weapon->GetSize(), _sprite_weapon->GetRotation());
 
 			newBullet->SetDamage(5);
 			newBullet->SetSpeed(200.f);

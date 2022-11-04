@@ -21,6 +21,8 @@ namespace Game
 		_position = startPosition;
 		_rotation = startRotation;
 
+		if (_collider)
+			_collider->Attach(this);
 	}
 
 	Actor::~Actor()
@@ -32,8 +34,6 @@ namespace Game
 	void Actor::Update(float deltaTime)
 	{
 		_anim_sprite->Update(deltaTime);
-
-		PhysicsManager::CheckOverlapping(_collider);
 	}
 
 	void Actor::BeginPlay()
@@ -77,6 +77,6 @@ namespace Game
 	}
 	void Actor::DestroyActor()
 	{
-		GameManager::DeleteActor(this);
+		GetWorld()->DeleteActor(_iterator);
 	}
 }

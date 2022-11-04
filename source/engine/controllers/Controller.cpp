@@ -26,8 +26,8 @@ Controller::Controller()
 
 void Controller::Move(float deltaTime)
 {
-	if (_move_vector != glm::vec2(0.f, 0.f) &&
-		PhysicsManager::CanMove(_controlled_pawn, _controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed))
+	if (_move_vector != glm::vec2(0.f, 0.f)/* &&
+		PhysicsManager::CanMove(_controlled_pawn, _controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed)*/)
 		_controlled_pawn->SetPosition(_controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed);
 }
 

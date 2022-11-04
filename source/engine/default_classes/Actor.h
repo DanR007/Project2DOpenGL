@@ -34,15 +34,13 @@ namespace Game
 
 		std::shared_ptr<Renderer::AnimSprite> GetAnimSprite();
 		std::shared_ptr<Physics::Collider> GetCollider() { return _collider; }
-
-		void SetCollider(std::shared_ptr<Physics::Collider> collider) { _collider = collider; }
-
 		glm::vec2 GetPosition() { return _position; }
 
 		void SetPosition(const glm::vec2& newPosition);
 		void SetSize(const glm::vec2& newSize);
 		void SetRotation(const float newRotation);
 		void SetIterator(std::vector<std::shared_ptr<Game::Actor>>::iterator iterator) { _iterator = iterator; }
+		void SetCollider(std::shared_ptr<Physics::Collider> collider) { _collider = collider; }
 
 		void AddWorldPosition(const glm::vec2& value);
 

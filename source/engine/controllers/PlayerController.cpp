@@ -27,9 +27,9 @@ void PlayerController::Move(float deltaTime)
 {
 	_move_value = _move_vector * deltaTime * _move_speed;
 	if (!is_ignore_move_input && _move_value != glm::vec2(0.f, 0.f) &&
-		PhysicsManager::CanMove(_controlled_character, _controlled_character->GetPosition() + _move_value))
+		GetWorld()->GetPhysicsManager()->CanMove(_controlled_character, _controlled_character->GetPosition() + _move_value))
 	{
-		GameManager::MoveAllActors();
+		GetWorld()->MoveAllActors();
 	}
 }
 

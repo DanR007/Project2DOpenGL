@@ -24,6 +24,10 @@ TexturesMap ResourcesManager::textures_map;
 SpritesMap ResourcesManager::sprites_map;
 AnimSpritesMap ResourcesManager::anim_sprites_map;
 
+GameManager* world = nullptr;
+
+GameManager* GetWorld() { return world; }
+
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
 	window_size.x = size_x;
@@ -33,12 +37,12 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	main_character->GetPlayerController()->InputKeyboard(currentWindow, key, scancode, action, mode);
+	world->_main_character->GetPlayerController()->InputKeyboard(currentWindow, key, scancode, action, mode);
 }
 
 void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode)
 {
-	main_character->GetPlayerController()->InputMouse(currentWindow, button, action, mode);
+	world->_main_character->GetPlayerController()->InputMouse(currentWindow, button, action, mode);
 }
 
 int main(int argc, char** argv)
@@ -88,7 +92,8 @@ int main(int argc, char** argv)
 #endif//GAMEPLAT_TESTS
 #endif // TEST_CASES
 #ifdef PLAY_IN_EDITOR
-		GameManager::BeginPlay();
+		world = new GameManager();
+		world->BeginPlay();
 
 		glClearColor(1.f, 1.f, 1.f, 1.f);
 
@@ -107,13 +112,15 @@ int main(int argc, char** argv)
 			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
 			lastTime = currentTime;
 
-			GameManager::Update(duration);
+			world->Update(duration);
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 		}
 #endif // PLAY_IN_EDITOR
 	}
+
+	delete world;
 
 	return 0;
 }
