@@ -34,7 +34,7 @@ PhysicsManager is located by path source/engine/managers/
 
 ### Constructors: 
 
-* \- Collider(EOdjectTypes, glm::vec2(position), glm::vec2(size))
+* Collider(EOdjectTypes, glm::vec2(position), glm::vec2(size))
 
 ### PhysicsManager includes: 
 #### Methods: 
@@ -92,7 +92,7 @@ Located by path source/engine/renderer/
 * std::map<std::string, std::vector<std::pair<std::string, float>>> states_map 
 * std::map<std::string, std::vector<std::pair<std::string, float>>>::const_iterator current_anim_duration 
 			
-#### Inherited members: </h5>
+#### Inherited members:
     
 * std::shared_ptr<Texture2D> spr_texture 
 * std::shared_ptr<ShaderProgram> spr_shader 
