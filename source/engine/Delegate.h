@@ -60,12 +60,6 @@ public:
 Delegate() : m_container(0) {}
 ~Delegate() { if (m_container) delete m_container; }
 
-
-Delegate(const Delegate& old_delegate) { m_container = old_delegate.m_container; }
-
-Delegate operator=(const Delegate& old_delegate) { m_container = old_delegate.m_container; }
-
-
 template< class T, class U > void Connect(T* i_class, U i_method)
 {
 if (m_container) delete m_container;

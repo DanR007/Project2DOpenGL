@@ -19,7 +19,7 @@ class WeaponComponent : public Component
 public:
 	WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSpriteName,
 		const glm::vec2& position, const glm::vec2& size, const float rotation);
-	void Shoot(const glm::vec2& mousePosition);
+	void Shoot(const glm::vec2 mousePosition);
 
 	void UpdateReloadTime(float deltaTime);
 

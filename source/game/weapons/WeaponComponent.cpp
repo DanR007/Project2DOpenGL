@@ -21,7 +21,7 @@ WeaponComponent::WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, s
 	_sprite_weapon = std::make_shared<Renderer::Sprite>(texture, shader, initSpriteName, position, size, rotation);
 }
 
-void WeaponComponent::Shoot(const glm::vec2& mousePosition)
+void WeaponComponent::Shoot(const glm::vec2 mousePosition)
 {
 	std::cout << "Shoot" << std::endl;
 	if (_reload_time <= 0.f)
