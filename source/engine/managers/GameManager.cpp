@@ -66,9 +66,10 @@ void GameManager::BeginPlay()
 
 	glm::ivec2 player_position = generator->GetCharacterPosition();
 	glm::vec2 mainCharacterSize = glm::ivec2(35, 35);
-	glm::vec2 position = glm::vec2(window_size.x / 2 - mainCharacterSize.x / 2, window_size.y / 2 - mainCharacterSize.y / 2),
-		offset = -glm::vec2(player_position * 40) + position;
-
+	glm::vec2 position = glm::vec2((window_size.x - mainCharacterSize.x) / 2, (window_size.y - mainCharacterSize.y) / 2),
+		block_size = glm::vec2(mainCharacterSize.x + 10.f, mainCharacterSize.y + 20.f), 
+		offset = position;
+	
 	generator->Destroy();
 	generator = nullptr;
 
@@ -79,7 +80,7 @@ void GameManager::BeginPlay()
 		for (int j = 0; j < max + 2; j++)
 		{
 			if (map[i][j] == 'B')
-				SpawnActor<Game::Objects::Wall>("wall", glm::vec2(j * 40.f, i * 40.f), glm::vec2(40.f, 40.f));
+				SpawnActor<Game::Objects::Wall>("wall", glm::vec2( -(player_position.x - j) * block_size.x + offset.x, (player_position.y - i) * block_size.y + offset.y), block_size);
 		}
 	}
 
@@ -100,7 +101,7 @@ void GameManager::BeginPlay()
 	};
 
 	_main_character = SpawnActor<Game::MainCharacter>("mush1",
-		glm::vec2(player_position * 40), mainCharacterSize);
+		position, mainCharacterSize);
 	_main_character->GetPlayerController()->SetMoveSpeed(300.f);
 
 	_main_character->AddAnimState("walk", stateDuration);
