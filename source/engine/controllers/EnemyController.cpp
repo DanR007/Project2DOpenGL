@@ -1,6 +1,6 @@
 #include "EnemyController.h"
 
-#include "../managers/AI/AStar.h"
+#include "../AI/AStar.h"
 
 #include "../default_classes/Pawn.h"
 

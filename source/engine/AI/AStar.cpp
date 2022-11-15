@@ -1,10 +1,10 @@
 #include "AStar.h"
 
-#include "../PhysicsManager.h"
+#include "../managers/PhysicsManager.h"
 
-#include "../../physics/Collider.h"
+#include "../physics/Collider.h"
 
-#include "../../default_classes/Actor.h"
+#include "../default_classes/Actor.h"
 
 #include <algorithm>
 
