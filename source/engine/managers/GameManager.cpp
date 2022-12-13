@@ -13,6 +13,7 @@
 
 #include <iostream>
 
+
 void GameManager::MoveAllActors()
 {
 	auto it = _all_actors.begin();
@@ -67,7 +68,7 @@ void GameManager::BeginPlay()
 	glm::ivec2 player_position_generator = generator->GetCharacterPosition();
 	glm::vec2 mainCharacterSize = glm::ivec2(35, 35);
 	glm::vec2 position_player = glm::vec2((window_size.x - mainCharacterSize.x) / 2, (window_size.y - mainCharacterSize.y) / 2),
-		block_size = glm::vec2(mainCharacterSize.x + 10.f, mainCharacterSize.y + 20.f), 
+		block_size = glm::vec2(mainCharacterSize.x + 10.f, mainCharacterSize.y + 10.f), 
 		offset = position_player;
 	
 	generator->Destroy();
@@ -80,7 +81,12 @@ void GameManager::BeginPlay()
 		for (int j = 0; j < max + 2; j++)
 		{
 			if (map[i][j] == 'B')
-				SpawnActor<Game::Objects::Wall>("wall", glm::vec2( -(player_position_generator.x - j) * block_size.x + offset.x, (player_position_generator.y - i) * block_size.y + offset.y), block_size);
+			{
+				std::pair<glm::vec2, glm::ivec2> s_c = WallCreater::GetWallSizeAndCoord(map, glm::ivec2(i,j), block_size);
+				glm::vec2 coordinate = glm::vec2(-(player_position_generator.x - s_c.second.y) * block_size.x + offset.x,
+					(player_position_generator.y - s_c.second.x) * block_size.y + offset.y);
+				SpawnActor<Game::Objects::Wall>("wall", coordinate, s_c.first);
+			}
 		}
 	}
 
@@ -109,7 +115,7 @@ void GameManager::BeginPlay()
 	_main_character->BeginPlay();
 }
 
-void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator delete_iterator)
+void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator)
 {
-	_all_actors.erase(delete_iterator);
+	_all_actors.erase(actor_iterator);
 }

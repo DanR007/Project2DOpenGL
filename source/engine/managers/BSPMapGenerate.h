@@ -10,6 +10,41 @@
 const uint64_t c_min_leaf_size = 5;
 const uint64_t c_max_leaf_size = 15;
 
+class WallCreater
+{
+public:
+	static std::pair<glm::vec2, glm::ivec2> GetWallSizeAndCoord(std::vector<std::string>& map, glm::ivec2& start_coord, glm::vec2& block_size)
+	{
+		glm::vec2 wall_size = block_size;
+		glm::ivec2 wall_start = start_coord;
+		int i = 1;
+		map[start_coord.x][start_coord.y] = 'O';
+		if (map[start_coord.x][start_coord.y + i] == 'B')
+		{
+			while (map[start_coord.x][start_coord.y + i] == 'B')
+			{
+				map[start_coord.x][start_coord.y + i] = 'O';
+				i++;
+			}
+			wall_size = wall_size + glm::vec2(block_size.x * (i - 1), 0.f);
+
+		}
+		else
+		{
+			//if wall exist lower (in console view) we
+			//change wall coordinates
+			while (map[start_coord.x + i][start_coord.y] == 'B')
+			{
+				map[start_coord.x + i][start_coord.y] = 'O';
+				i++;
+			}
+			wall_size = wall_size + glm::vec2(0.f, block_size.y * (i - 1));
+			wall_start = start_coord + glm::ivec2(i - 1, 0.f);
+		}
+		return std::make_pair(wall_size, wall_start);
+	}
+};
+
 class MapGenerator
 {
 public:

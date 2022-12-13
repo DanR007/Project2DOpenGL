@@ -23,7 +23,12 @@ class GameManager
 {
 public:
 	GameManager() { _physics_manager = new PhysicsManager(this); }
-	~GameManager() { if (_physics_manager) delete _physics_manager; }
+	~GameManager() {
+		if (_physics_manager) {
+			delete _physics_manager; 
+			_physics_manager = nullptr;
+		}
+	}
 
 	template<typename T>
 	std::shared_ptr<T> SpawnActor(const std::string& initSpriteName, const glm::vec2& actorPosition = glm::vec2(0.f), const glm::vec2& actorSize = glm::vec2(100.f, 100.f), const float actorRotation = 0.f,
@@ -48,7 +53,7 @@ public:
 
 	PhysicsManager* GetPhysicsManager() { return _physics_manager; }
 
-	void DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator delete_iterator);
+	void DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator);
 private:
 	PhysicsManager* _physics_manager;
 	std::vector<std::shared_ptr<Game::Actor>>::iterator _it;
