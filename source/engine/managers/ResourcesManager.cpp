@@ -68,7 +68,7 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::st
 		textures_map.emplace(textureName, std::make_shared<Renderer::Texture2D>(Renderer::Texture2D(imageData,
 																									width,
 																									height,
-																									channels))).first->second;
+																									channels, GL_REPEAT))).first->second;
 
 	if (!texture)
 	{

@@ -8,6 +8,7 @@
 
 #include "ResourcesManager.h"
 #include "PhysicsManager.h"
+#include "../AI/NavMesh.h"
 
 #include "../../game/MainCharacter.h"
 
@@ -22,7 +23,12 @@ namespace Renderer
 class GameManager
 {
 public:
-	GameManager() { _physics_manager = new PhysicsManager(this); }
+	GameManager() 
+	{ 
+		_physics_manager = new PhysicsManager(this); 
+		_nav_mesh = new NavMesh();
+	}
+
 	~GameManager() {
 		if (_physics_manager) {
 			delete _physics_manager; 
@@ -51,16 +57,27 @@ public:
 	void SetGameOver(bool isGameOver) { _is_game_over = isGameOver; }
 	void SetIterator(std::vector<std::shared_ptr<Game::Actor>>::iterator it) { _it = it; }
 
-	PhysicsManager* GetPhysicsManager() { return _physics_manager; }
-
+	PhysicsManager* GetPhysicsManager() const { return _physics_manager; }
+	NavMesh* GetNavMesh() const { return _nav_mesh; }
 	void DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator);
+
+	glm::vec2 GetBlockSize() const { return _block_size; }
+	glm::vec2 GetOffset() const { return _offset; }
+
 private:
+	void CreateMap();
+	void InitiateMainCharacter(const glm::vec2& main_character_size, const glm::vec2& position_player);
+
 	PhysicsManager* _physics_manager;
+	NavMesh* _nav_mesh;
+
 	std::vector<std::shared_ptr<Game::Actor>>::iterator _it;
 
 	std::vector<std::shared_ptr<Game::Actor>> _all_actors;
 	std::shared_ptr<Game::MainCharacter> _main_character;
 
+	glm::vec2 _block_size, _offset;
+	
 	bool _is_game_over;
 
 	friend class PhysicsManager;

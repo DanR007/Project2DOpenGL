@@ -1,6 +1,8 @@
 #include "BSPMapGenerate.h"
 #include "GameManager.h"
 
+#include "../../main.h"
+
 #include "../../game/gameobjects/WallActor.h"
 
 #include <iostream>
@@ -10,7 +12,7 @@ MapGenerator* generator;
 MapGenerator::MapGenerator()
 {
 	generator = this;
-	
+	_manager = GetWorld();
 }
 
 MapGenerator::~MapGenerator()
@@ -126,7 +128,7 @@ void MapGenerator::Leaf::CreateRooms()
 	}
 	else
 	{//10 min_leaf_size
-		glm::ivec2 room_size = glm::ivec2(2 + std::rand() % (_size.x - 4), 2 + std::rand() % (_size.y - 4));
+		glm::ivec2 room_size = glm::ivec2(5 + std::rand() % (_size.x - 7), 5 + std::rand() % (_size.y - 7));
 		glm::ivec2 room_coord = glm::ivec2(1 + std::rand() % (_size.x - room_size.x - 1), 1 + std::rand() % (_size.y - room_size.y - 1));
 
 		_room = new Room(room_size, room_coord + _position);
@@ -172,8 +174,6 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 	int w = point2.x - point1.x;
 	int h = point2.y - point1.y;
 
-	char free_cell = '.', wall_cell = 'B';
-
 	if (w < 0)
 	{
 		if (h < 0)
@@ -181,51 +181,23 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 			if (std::rand() % 2 == 0)
 			{
 				/*
+				*		p1
+				*		0
 				p2OOOOOOO
-						O
-						O
-						p1
 				*/
-				for (int32_t i = w; i <= 0; i++)
-				{
-					generator->_map[point2.y][point1.x + i] = free_cell;
-					if(generator->_map[point2.y - 1][point1.x + i] != free_cell)
-					generator->_map[point2.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point2.y + 1][point1.x + i] != free_cell)
-					generator->_map[point2.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = h; i <= 0; i++)
-				{
-					generator->_map[point1.y + i][point1.x] = free_cell;
-					if(generator->_map[point1.y + i][point1.x - 1] != free_cell)
-					generator->_map[point1.y + i][point1.x - 1] = wall_cell;
-					if(generator->_map[point1.y + i][point1.x + 1] != free_cell)
-					generator->_map[point1.y + i][point1.x + 1] = wall_cell;
-				}
+				CreateVerticalHall(point2.y, point1.y, point1.x);
+				CreateHorizontalHall(point2.x, point1.x, point2.y);
 			}
 			else
 			{
 				/*
-				* OOOOOOOp2
-				  O	 
-				p1O	 
+				*
+				00000000000p1
+				0
+				p2
 				*/
-				for (int32_t i = w; i <= 0; i++)
-				{
-					generator->_map[point1.y][point1.x + i] = free_cell;
-					if(generator->_map[point1.y - 1][point1.x + i] != free_cell)
-					generator->_map[point1.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point1.y + 1][point1.x + i] != free_cell)
-					generator->_map[point1.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = 0; i <= point1.y - point2.y; i++)
-				{
-					generator->_map[point2.y + i][point2.x] = free_cell;
-					if(generator->_map[point2.y + i][point2.x + 1] != free_cell)
-					generator->_map[point2.y + i][point2.x + 1] = wall_cell;
-					if(generator->_map[point2.y + i][point2.x - 1] != free_cell)
-					generator->_map[point2.y + i][point2.x - 1] = wall_cell;
-				}
+				CreateVerticalHall(point2.y, point1.y, point2.x);
+				CreateHorizontalHall(point2.x, point1.x, point1.y);
 			}
 		}
 		else if (h > 0)
@@ -237,46 +209,17 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 						 O
 				        p1
 				*/
-				for (int32_t i = w; i <= 0; i++)
-				{
-					generator->_map[point2.y][point1.x + i] = free_cell;
-					if(generator->_map[point2.y - 1][point1.x + i] != free_cell)
-					generator->_map[point2.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point2.y + 1][point1.x + i] != free_cell)
-					generator->_map[point2.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = 0; i <= h; i++)
-				{
-					generator->_map[point1.y + i][point1.x] = free_cell;
-					if(generator->_map[point1.y + i][point1.x - 1] != free_cell)
-					generator->_map[point1.y + i][point1.x - 1] = wall_cell;
-					if(generator->_map[point1.y + i][point1.x + 1] != free_cell)
-					generator->_map[point1.y + i][point1.x + 1] = wall_cell;
-				}
+				CreateVerticalHall(point1.y, point2.y, point1.x);
+				CreateHorizontalHall(point2.x, point1.x, point2.y);
 			}
 			else
 			{
 				/*
 				p2 O
-				   O	 
 				   OOOOOOp1
 				*/
-				for (int32_t i = w; i <= 0; i++)
-				{
-					generator->_map[point1.y][point1.x + i] = free_cell;
-					if(generator->_map[point1.y - 1][point1.x + i] != free_cell)
-					generator->_map[point1.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point1.y + 1][point1.x + i] != free_cell)
-					generator->_map[point1.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = 0; i >= point1.y - point2.y; i--)
-				{
-					generator->_map[point2.y + i][point2.x] = free_cell;
-					if(generator->_map[point2.y + i][point2.x + 1] != free_cell)
-					generator->_map[point2.y + i][point2.x + 1] = wall_cell;
-					if(generator->_map[point2.y + i][point2.x - 1] != free_cell)
-					generator->_map[point2.y + i][point2.x - 1] = wall_cell;
-				}
+				CreateVerticalHall(point1.y, point2.y, point2.x);
+				CreateHorizontalHall(point2.x, point1.x, point1.y);
 			}
 		}
 		else // если (h == 0)
@@ -284,14 +227,7 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 			/*
 			p2 OOOOOOOOO p1
 			*/
-			for (int32_t i = w; i <= 0; i++)
-			{
-				generator->_map[point1.y][point1.x + i] = free_cell;
-				if(generator->_map[point1.y - 1][point1.x + i] != free_cell)
-				generator->_map[point1.y - 1][point1.x + i] = wall_cell;
-				if(generator->_map[point1.y + 1][point1.x + i] != free_cell)
-				generator->_map[point1.y + 1][point1.x + i] = wall_cell;
-			}
+			CreateHorizontalHall(point2.x, point1.x, point1.y);
 		}
 	}
 	else if (w > 0)
@@ -301,26 +237,12 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 			if (std::rand() % 2 == 0)
 			{
 				/*
-							p2
-							O
 				p1 OOOOOOOOOO
+							O
+							p2
 				*/
-				for (int32_t i = 0; i <= w; i++)
-				{
-					generator->_map[point1.y][point1.x + i] = free_cell;
-					if(generator->_map[point1.y - 1][point1.x + i] != free_cell)
-					generator->_map[point1.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point1.y + 1][point1.x + i] != free_cell)
-					generator->_map[point1.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = h; i <= 0; i++)
-				{
-					generator->_map[point1.y + i][point2.x] = free_cell;
-					if(generator->_map[point1.y + i][point2.x - 1] != free_cell)
-					generator->_map[point1.y + i][point2.x - 1] = wall_cell;
-					if(generator->_map[point1.y + i][point2.x + 1] != free_cell)
-					generator->_map[point1.y + i][point2.x + 1] = wall_cell;
-				}
+				CreateVerticalHall(point2.y, point1.y, point2.x);
+				CreateHorizontalHall(point1.x, point2.x, point1.y);
 			}
 			else
 			{
@@ -329,22 +251,8 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 				   O		
 				p1 O
 				*/
-				for (int32_t i = 0; i <= w; i++)
-				{
-					generator->_map[point2.y][point1.x + i] = free_cell;
-					if(generator->_map[point2.y - 1][point1.x + i] != free_cell)
-					generator->_map[point2.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point2.y + 1][point1.x + i] != free_cell)
-					generator->_map[point2.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = h; i <= 0; i++)
-				{
-					generator->_map[point1.y + i][point1.x] = free_cell;
-					if(generator->_map[point1.y + i][point1.x + 1] != free_cell)
-					generator->_map[point1.y + i][point1.x + 1] = wall_cell;
-					if(generator->_map[point1.y + i][point1.x - 1] != free_cell)
-					generator->_map[point1.y + i][point1.x - 1] = wall_cell;
-				}
+				CreateVerticalHall(point2.y, point1.y, point1.x);
+				CreateHorizontalHall(point1.x, point2.x, point2.y);
 			}
 		}
 		else if (h > 0)
@@ -356,46 +264,19 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 							O
 				p1 OOOOOOOOOO
 				*/
-				for (int32_t i = 0; i <= w; i++)
-				{
-					generator->_map[point1.y][point1.x + i] = free_cell;
-					if(generator->_map[point1.y - 1][point1.x + i] != free_cell)
-					generator->_map[point1.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point1.y + 1][point1.x + i] != free_cell)
-					generator->_map[point1.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = 0; i <= h; i++)
-				{
-					generator->_map[point1.y + i][point2.x] = free_cell;
-					if(generator->_map[point1.y + i][point2.x - 1] != free_cell)
-					generator->_map[point1.y + i][point2.x - 1] = wall_cell;
-					if(generator->_map[point1.y + i][point2.x + 1] != free_cell)
-					generator->_map[point1.y + i][point2.x + 1] = wall_cell;
-				}
+
+				CreateVerticalHall(point1.y, point2.y, point1.x);
+				CreateHorizontalHall(point1.x, point2.x, point2.y);
 			}
 			else
 			{
 				/*
-				   OOOOOOOOOOp1
+				   OOOOOOOOOOp2
 				   O
-				p2 O
+				p1 O
 				*/
-				for (int32_t i = 0; i <= w; i++)
-				{
-					generator->_map[point1.y][point1.x + i] = free_cell;
-					if(generator->_map[point1.y - 1][point1.x + i] != free_cell)
-					generator->_map[point1.y - 1][point1.x + i] = wall_cell;
-					if(generator->_map[point1.y + 1][point1.x + i] != free_cell)
-					generator->_map[point1.y + 1][point1.x + i] = wall_cell;
-				}
-				for (int32_t i = 0; i <= h; i++)
-				{
-					generator->_map[point1.y + i][point2.x] = free_cell;
-					if(generator->_map[point1.y + i][point2.x - 1] != free_cell)
-					generator->_map[point1.y + i][point2.x - 1] = wall_cell;
-					if(generator->_map[point1.y + i][point2.x + 1] != free_cell)
-					generator->_map[point1.y + i][point2.x + 1] = wall_cell;
-				}
+				CreateVerticalHall(point1.y, point2.y, point2.x);
+				CreateHorizontalHall(point1.x, point2.x, point1.y);
 			}
 		}
 		else // если (h == 0)
@@ -403,40 +284,46 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 			/*
 			p1 OOOOOOOOO p2
 			*/
-			for (int32_t i = 0; i <= w; i++)
-			{
-				generator->_map[point1.y][point1.x + i] = free_cell;
-				if(generator->_map[point1.y - 1][point1.x + i] != free_cell)
-				generator->_map[point1.y - 1][point1.x + i] = wall_cell;
-				if(generator->_map[point1.y + 1][point1.x + i] != free_cell)
-				generator->_map[point1.y + 1][point1.x + i] = wall_cell;
-			}
+			CreateHorizontalHall(point1.x, point2.x, point1.y);
+
 		}
 	}
 	else // если (w == 0)
 	{
 		if (h < 0)
 		{
-			for (int32_t i = h; i <= 0; i++)
-			{
-				generator->_map[point1.y + i][point1.x] = free_cell;
-				if(generator->_map[point1.y + i][point1.x - 1] != free_cell)
-				generator->_map[point1.y + i][point1.x - 1] = wall_cell;
-				if(generator->_map[point1.y + i][point1.x + 1] != free_cell)
-				generator->_map[point1.y + i][point1.x + 1] = wall_cell;
-			}
+			CreateVerticalHall(point2.y, point1.y, point1.x);
 		}
 		else if (h > 0)
 		{
-			for (int32_t i = 0; i <= h; i++)
-			{
-				generator->_map[point1.y + i][point1.x] = free_cell;
-				if(generator->_map[point1.y + i][point1.x - 1] != free_cell)
-				generator->_map[point1.y + i][point1.x - 1] = wall_cell;
-				if(generator->_map[point1.y + i][point1.x + 1] != free_cell)
-				generator->_map[point1.y + i][point1.x + 1] = wall_cell;
-			}
+			CreateVerticalHall(point1.y, point2.y, point1.x);
 		}
+	}
+
+	
+}
+
+void MapGenerator::Leaf::CreateHorizontalHall(const int32_t& x1, const int32_t& x2, const int32_t& y)
+{
+	for (int32_t i = x1 - 1; i <= x2 + 1; i++)
+	{
+		if(i <= x2 && i >= x1)
+		generator->_map[y][i] = free_cell;
+		if (generator->_map[y - 1][i] != free_cell)
+			generator->_map[y - 1][i] = wall_cell;
+		if (generator->_map[y + 1][i] != free_cell)
+			generator->_map[y + 1][i] = wall_cell;
+	}
+}
+void MapGenerator::Leaf::CreateVerticalHall(const int32_t& y1, const int32_t& y2, const int32_t& x)
+{
+	for (int32_t i = y1; i <= y2; i++)
+	{
+		generator->_map[i][x] = free_cell;
+		if (generator->_map[i][x - 1] != free_cell)
+			generator->_map[i][x - 1] = wall_cell;
+		if (generator->_map[i][x + 1] != free_cell)
+			generator->_map[i][x + 1] = wall_cell;
 	}
 }
 
@@ -446,7 +333,7 @@ MapGenerator::Leaf::Room::Room(const glm::ivec2& size, const glm::ivec2 position
 	char free_cell = '.', wall_cell = 'B';
 	for (int32_t i = _position.y; i < _position.y + _size.y; i++)
 	{
-		for (int32_t j = _position.x; j < _position.x + _size.x; j++)
+		for (int32_t j = _position.x - 1; j < _position.x + _size.x + 1; j++)
 		{
 			generator->_map[i][j] = free_cell;
 			if(i == _position.y)
@@ -460,7 +347,6 @@ MapGenerator::Leaf::Room::Room(const glm::ivec2& size, const glm::ivec2 position
 		generator->_map[i][_position.x - 1] = wall_cell;
 		generator->_map[i][_position.x + _size.x] = wall_cell;
 	}
-	
 }
 
 std::vector<std::string> MapGenerator::StartGenerate(const glm::ivec2& map_size)
@@ -476,7 +362,7 @@ std::vector<std::string> MapGenerator::StartGenerate(const glm::ivec2& map_size)
 	generator = nullptr;
 	Leaf::Room* character_room = _rooms[std::rand() % _rooms.size()];
 	_character_position = character_room->GetPosition() + glm::ivec2(std::rand() % character_room->GetSize().x, std::rand() % character_room->GetSize().y);
-	_map[_character_position.y][_character_position.x] = 'P';
+	//_map[_character_position.y][_character_position.x] = 'P';
 	for (int32_t i = 0; i < map_size.y + 2; i++)
 		std::cout << _map[i] << std::endl;
 
@@ -491,4 +377,28 @@ void MapGenerator::Destroy()
 			delete l;
 	}
 	delete this;
+}
+
+void MapGenerator::CreateNavMeshInRooms()
+{
+	NavMesh* nav_mesh = _manager->GetNavMesh();
+	glm::vec2 block_size = _manager->GetBlockSize();
+	glm::vec2 offset = _manager->GetOffset();
+	for (Leaf::Room* room : _rooms)
+	{
+		glm::vec2 position = glm::vec2(-(_character_position.x - room->GetPosition().x) * block_size.x + offset.x,
+			(_character_position.y - room->GetPosition().y) * block_size.y + offset.y);
+		//nav_mesh->AddRectangleArea(position, glm::vec2(room->GetSize().x * block_size.x, room->GetSize().y * block_size.y));
+	}
+}
+
+void MapGenerator::CreateHallNavMesh(const glm::ivec2& start, const glm::ivec2 size)
+{
+	NavMesh* nav_mesh = _manager->GetNavMesh();
+	glm::vec2 block_size = _manager->GetBlockSize();
+	glm::vec2 offset = _manager->GetOffset();
+
+	glm::vec2 position = glm::vec2(-(_character_position.x - start.x) * block_size.x + offset.x,
+		(_character_position.y - start.y) * block_size.y + offset.y);
+	//nav_mesh->AddRectangleArea(position, glm::vec2(size.x * block_size.x, size.y * block_size.y));
 }

@@ -7,17 +7,20 @@
 #include <glm/vec2.hpp>
 
 
-const uint64_t c_min_leaf_size = 5;
-const uint64_t c_max_leaf_size = 15;
+const uint64_t c_min_leaf_size = 10;
+const uint64_t c_max_leaf_size = 25;
+
+class GameManager;
 
 class WallCreater
 {
 public:
-	static std::pair<glm::vec2, glm::ivec2> GetWallSizeAndCoord(std::vector<std::string>& map, glm::ivec2& start_coord, glm::vec2& block_size)
+	static std::pair<glm::vec2, glm::ivec2> GetWallSizeAndCoord(std::vector<std::string>& map, const glm::ivec2& start_coord, const glm::vec2& block_size)
 	{
 		glm::vec2 wall_size = block_size;
 		glm::ivec2 wall_start = start_coord;
 		int i = 1;
+		
 		map[start_coord.x][start_coord.y] = 'O';
 		if (map[start_coord.x][start_coord.y + i] == 'B')
 		{
@@ -55,6 +58,8 @@ public:
 	std::vector<std::string> StartGenerate(const glm::ivec2& map_size);
 
 	void Destroy();
+	void CreateNavMeshInRooms();
+	void CreateHallNavMesh(const glm::ivec2& start, const glm::ivec2 size);
 
 	glm::ivec2 GetCharacterPosition() const { return _character_position; }
 	class Leaf
@@ -65,8 +70,8 @@ public:
 		public:
 			Room(const glm::ivec2& size, const glm::ivec2 position);
 
-			glm::ivec2 GetPosition() { return _position; }
-			glm::ivec2 GetSize() { return _size; }
+			glm::ivec2 GetPosition() const { return _position; }
+			glm::ivec2 GetSize() const { return _size; }
 		private:
 			glm::ivec2 _position;
 			glm::ivec2 _size;
@@ -82,6 +87,9 @@ public:
 		Room* GetRoom();
 
 		void CreateHall(Room* firstRoom, Room* secondRoom);
+
+		void CreateHorizontalHall(const int32_t& x1, const int32_t& x2, const int32_t& y);
+		void CreateVerticalHall(const int32_t& y1, const int32_t& y2, const int32_t& x);
 	private:
 		glm::ivec2 _position, _size;
 		Leaf* _left_leaf;
@@ -89,11 +97,15 @@ public:
 
 		Room* _room;
 
+		const char free_cell = '.';
+		const char wall_cell = 'B';
 	};
 
 
 
 private:
+	GameManager* _manager;
+
 	std::vector<Leaf*> leafs;
 	std::vector<Leaf::Room*> _rooms;
 
@@ -101,7 +113,7 @@ private:
 
 	std::vector<std::string> _map;
 
-	glm::ivec2 _character_position;
+	glm::ivec2 _character_position = glm::ivec2(18, 21);
 
 	friend class Leaf::Room;
 	friend class Leaf;
