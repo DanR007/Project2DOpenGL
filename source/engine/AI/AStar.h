@@ -25,11 +25,20 @@ class AStar
 		Vector2(const glm::vec2& pos, const EDirection& dir) : _pos(pos), _dir(dir) {}
 		
 		void SetCost(const float cost) { _cost = cost; }
-		float GetCost() { return _cost; }
+		float GetCost() const { return _cost; }
+		EDirection GetDirection() const { return _dir; }
 
 		bool operator==(const Vector2& vec)
 		{
 			return vec._pos == _pos;
+		}
+		bool operator> (const Vector2& vec)
+		{
+			return _cost > vec._cost;
+		}
+		bool operator< (const Vector2& vec)
+		{
+			return _cost < vec._cost;
 		}
 
 		glm::vec2 _pos;

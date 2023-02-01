@@ -100,9 +100,6 @@ int main(int argc, char** argv)
 		
 		//textureAtlas - texture name
 		//names - vector of names subtextures
-
-		
-
 		auto lastTime = std::chrono::high_resolution_clock::now();
 		while (!glfwWindowShouldClose(window))
 		{
