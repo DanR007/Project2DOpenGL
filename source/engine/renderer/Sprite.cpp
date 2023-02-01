@@ -27,6 +27,8 @@ namespace Renderer
 		};
 
 		auto subTexture = texture->GetSubTexture(initialSubtextureName);
+		//coordinates that will be use in sprite 
+		//if > 1.f textures will repeat otherwise it will be crop
 		GLfloat texCoord[] =
 		{
 				subTexture.left_bottom_UV.x, subTexture.left_bottom_UV.y,

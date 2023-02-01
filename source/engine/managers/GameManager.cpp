@@ -31,7 +31,7 @@ void GameManager::MoveAllActors()
 		}
 	}
 
-	_nav_mesh->ChangeNavMeshCoord(offset);
+	//_nav_mesh->ChangeNavMeshCoord(offset);
 }
 
 void GameManager::Update(const float deltaTime)
@@ -93,30 +93,31 @@ void GameManager::CreateMap()
 	std::vector<std::string> map;
 	MapGenerator* generator = new MapGenerator();
 
-	int max = 55;
+	int max = 70;
 	map = generator->StartGenerate(glm::ivec2(max));
 
 	glm::ivec2 player_position_generator = generator->GetCharacterPosition();
-	//generator->CreateNavMeshInRooms();
 
 	generator->Destroy();
 	generator = nullptr;
 
-	for (int i = 0; i < max + 2; i++)
+	for (int y = max - 1; y >= 0; y--)
 	{
-		for (int j = 0; j < max + 2; j++)
+		for (int x = 0; x < max; x++)
 		{
-			if (map[i][j] == 'B')
+			if (map[y][x] == 'B')
 			{
-				std::pair<glm::vec2, glm::ivec2> s_c = WallCreater::GetWallSizeAndCoord(map, glm::ivec2(i, j), _block_size);
-				glm::vec2 coordinate = glm::vec2(-(player_position_generator.x - s_c.second.y) * _block_size.x + _offset.x,
-					(player_position_generator.y - s_c.second.x) * _block_size.y + _offset.y);
-				SpawnActor<Game::Objects::Wall>("wall", coordinate, s_c.first);
+				std::pair<glm::vec2, glm::ivec2> size_coordinates = WallCreater::GetWallSizeAndCoord(map, glm::ivec2(x, y), _block_size);
+
+				glm::vec2 coordinate = glm::vec2((size_coordinates.second.x - player_position_generator.x) * _block_size.x + _offset.x,
+					(size_coordinates.second.y - player_position_generator.y) * _block_size.y + _offset.y);
+
+				SpawnActor<Game::Objects::Wall>("wall", coordinate, size_coordinates.first);
 			}
 		}
 	}
-	int a = 0;
-	//_nav_mesh->CreateNavMesh(map, _block_size, _block_size);
+
+	_nav_mesh->CreateNavMesh(map, _block_size, _block_size);
 }
 
 void GameManager::InitiateMainCharacter(const glm::vec2& main_character_size, const glm::vec2& position_player)

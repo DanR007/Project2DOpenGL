@@ -7,8 +7,8 @@
 #include <glm/vec2.hpp>
 
 
-const uint64_t c_min_leaf_size = 10;
-const uint64_t c_max_leaf_size = 25;
+const uint64_t c_min_leaf_size = 15;
+const uint64_t c_max_leaf_size = 35;
 
 class GameManager;
 
@@ -20,13 +20,14 @@ public:
 		glm::vec2 wall_size = block_size;
 		glm::ivec2 wall_start = start_coord;
 		int i = 1;
-		
-		map[start_coord.x][start_coord.y] = 'O';
-		if (map[start_coord.x][start_coord.y + i] == 'B')
+		char block_cell = 'B', wall_cell = 'W';
+		map[start_coord.y][start_coord.x] = wall_cell;
+		if (map[start_coord.y][start_coord.x + i] == block_cell)
 		{
-			while (map[start_coord.x][start_coord.y + i] == 'B')
+			//if wall horizontal change size
+			while (map[start_coord.y][start_coord.x + i] == block_cell)
 			{
-				map[start_coord.x][start_coord.y + i] = 'O';
+				map[start_coord.y][start_coord.x + i] = wall_cell;
 				i++;
 			}
 			wall_size = wall_size + glm::vec2(block_size.x * (i - 1), 0.f);
@@ -34,15 +35,16 @@ public:
 		}
 		else
 		{
-			//if wall exist lower (in console view) we
-			//change wall coordinates
-			while (map[start_coord.x + i][start_coord.y] == 'B')
+			//if wall vertical then change start coordinate too
+			while (map[start_coord.y - i][start_coord.x] == block_cell)
 			{
-				map[start_coord.x + i][start_coord.y] = 'O';
+				map[start_coord.y - i][start_coord.x] = wall_cell;
 				i++;
+				if (start_coord.y < i)
+					break;
 			}
 			wall_size = wall_size + glm::vec2(0.f, block_size.y * (i - 1));
-			wall_start = start_coord + glm::ivec2(i - 1, 0.f);
+			wall_start = start_coord - glm::ivec2(0, i - 1);
 		}
 		return std::make_pair(wall_size, wall_start);
 	}

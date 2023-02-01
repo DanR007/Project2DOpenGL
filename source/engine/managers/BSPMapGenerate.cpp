@@ -168,8 +168,8 @@ void MapGenerator::Leaf::CreateHall(Room* first_room, Room* second_room)
 	glm::ivec2 first_pos = first_room->GetPosition(), first_size = first_room->GetSize();
 	glm::ivec2 second_pos = second_room->GetPosition(), second_size = second_room->GetSize();
 
-	glm::ivec2 point1 = glm::ivec2(first_pos.x + 1 + (std::rand() % (first_size.x - 1)), first_pos.y + 1 + (std::rand() % (first_size.y - 1)));
-	glm::ivec2 point2 = glm::ivec2(second_pos.x + 1 + (std::rand() % (second_size.x - 1)), second_pos.y + 1 + (std::rand() % (second_size.y - 1)));
+	glm::ivec2 point1 = glm::ivec2(first_pos.x + 2 + (std::rand() % (first_size.x - 2)), first_pos.y + 2 + (std::rand() % (first_size.y - 2)));
+	glm::ivec2 point2 = glm::ivec2(second_pos.x + 2 + (std::rand() % (second_size.x - 2)), second_pos.y + 2 + (std::rand() % (second_size.y - 2)));
 
 	int w = point2.x - point1.x;
 	int h = point2.y - point1.y;
@@ -307,21 +307,32 @@ void MapGenerator::Leaf::CreateHorizontalHall(const int32_t& x1, const int32_t& 
 {
 	for (int32_t i = x1 - 1; i <= x2 + 1; i++)
 	{
-		if(i <= x2 && i >= x1)
-		generator->_map[y][i] = free_cell;
-		if (generator->_map[y - 1][i] != free_cell)
-			generator->_map[y - 1][i] = wall_cell;
+		if (i <= x2 && i >= x1)
+		{
+			generator->_map[y][i] = free_cell;
+			generator->_map[y - 1][i] = free_cell;
+		}
+
+		if (0 <= y - 2 && generator->_map[y - 2][i] != free_cell)
+			generator->_map[y - 2][i] = wall_cell;
 		if (generator->_map[y + 1][i] != free_cell)
 			generator->_map[y + 1][i] = wall_cell;
 	}
 }
+
 void MapGenerator::Leaf::CreateVerticalHall(const int32_t& y1, const int32_t& y2, const int32_t& x)
 {
 	for (int32_t i = y1; i <= y2; i++)
 	{
-		generator->_map[i][x] = free_cell;
-		if (generator->_map[i][x - 1] != free_cell)
-			generator->_map[i][x - 1] = wall_cell;
+		if (i <= y2 && i >= y1)
+		{
+			generator->_map[i][x] = free_cell;
+			generator->_map[i][x - 1] = free_cell;
+		}
+
+		if (0 <= x - 2 && generator->_map[i][x - 2] != free_cell)
+			generator->_map[i][x - 2] = wall_cell;
+		
 		if (generator->_map[i][x + 1] != free_cell)
 			generator->_map[i][x + 1] = wall_cell;
 	}
@@ -351,19 +362,22 @@ MapGenerator::Leaf::Room::Room(const glm::ivec2& size, const glm::ivec2 position
 
 std::vector<std::string> MapGenerator::StartGenerate(const glm::ivec2& map_size)
 {
-	_map.resize(map_size.y + 2);
-	for (int32_t i = 0; i < map_size.y + 2; i++)
-		for(int32_t j = 0; j < map_size.y + 2; j++)
+	_map.resize(map_size.y);
+	for (int32_t i = 0; i < map_size.y; i++)
+		for(int32_t j = 0; j < map_size.y; j++)
 		_map[i] += 'O';
 
 	g_root_leaf = new Leaf(glm::ivec2(0), map_size);
 	g_root_leaf->Split();
 
 	generator = nullptr;
+
 	Leaf::Room* character_room = _rooms[std::rand() % _rooms.size()];
 	_character_position = character_room->GetPosition() + glm::ivec2(std::rand() % character_room->GetSize().x, std::rand() % character_room->GetSize().y);
-	//_map[_character_position.y][_character_position.x] = 'P';
-	for (int32_t i = 0; i < map_size.y + 2; i++)
+	_map[_character_position.y][_character_position.x] = 'P';
+
+	//print map
+	for (int32_t i = map_size.y - 1; i >= 0; i--)
 		std::cout << _map[i] << std::endl;
 
 	return _map;
