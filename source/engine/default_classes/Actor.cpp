@@ -17,13 +17,21 @@ namespace Game
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
 		_anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(texture), std::move(shader), 
-			initSubtextureName, startPosition, startSize, startRotation);
+			initSubtextureName, this, startPosition, startSize, startRotation);
 
-		_position = startPosition;
+		_world_position = startPosition + startSize / 2.f;
 		_rotation = startRotation;
+		_size = startSize;
 
 		if (_collider)
-			_collider->Attach(this);
+		{
+			//_collider->Attach(this);
+			_anim_sprite->SetRelativePosition(-startSize / 2.f);
+		}
+		if (_anim_sprite)
+		{
+			_anim_sprite->SetRelativePosition(-startSize / 2.f);
+		}
 	}
 
 	Actor::~Actor()
@@ -41,32 +49,45 @@ namespace Game
 	{
 	}
 
-	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite()
-	{
-		return std::move(_anim_sprite);
-	}
+	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite() { return std::move(_anim_sprite); }
 
-	void Actor::SetPosition(const glm::vec2& newPosition)
+	void Actor::SetPosition(const glm::vec2& new_position)
 	{
-		_position = newPosition;
-		_anim_sprite->SetPosition(newPosition);
-		_collider->SetPosition(newPosition);
+		_world_position = new_position;
+		_anim_sprite->SetPosition(new_position);
+		_collider->SetPosition(new_position);
 	}
-	void Actor::SetSize(const glm::vec2& newSize)
+	void Actor::SetSize(const glm::vec2& new_size)
 	{
-		_anim_sprite->SetSize(newSize);
-		_collider->SetSize(newSize);
+		_size = new_size;
+		_anim_sprite->SetSize(new_size);
+		_collider->SetSize(new_size);
 	}
-	void Actor::SetRotation(const float newRotation)
+	void Actor::SetRotation(const float& new_rotation)
 	{
-		_rotation = newRotation;
-		_anim_sprite->SetRotation(newRotation);
+		_rotation = new_rotation;
+		_anim_sprite->SetRotation(new_rotation);
+		_collider->SetRotation(new_rotation);
 	}
-	void Actor::AddWorldPosition(const glm::vec2& value)
+	void Actor::SetRelativePosition(const glm::vec2& new_position)
 	{
-		_position += value;
-		_anim_sprite->SetPosition(_position);
-		_collider->SetPosition(_position);
+		glm::vec2 d_pos = new_position - _relative_position;
+
+		_relative_position = new_position;
+		_anim_sprite->AddWorldPosition(d_pos);
+		_collider->AddWorldPosition(d_pos);
+	}
+	void Actor::AddWorldPosition(const glm::vec2& d_pos)
+	{
+		_world_position += d_pos;
+		_anim_sprite->AddWorldPosition(d_pos);
+		_collider->AddWorldPosition(d_pos);
+	}
+	void Actor::AddWorldRotation(const float& d_rot)
+	{
+		_rotation += d_rot;
+		_anim_sprite->AddWorldRotation(d_rot);
+		_collider->AddWorldRotation(d_rot);
 	}
 	void Actor::AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration)
 	{

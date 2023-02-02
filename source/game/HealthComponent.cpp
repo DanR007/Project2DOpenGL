@@ -8,7 +8,26 @@
 #include <iostream>
 
 
+HealthComponent::HealthComponent(Game::Actor* owner, int health)
+	: Component(owner)
+{
+	_max_health = health;
+	_health = health - 2;
 
+	for (int i = 1; i <= _max_health; i++)
+	{
+		std::shared_ptr heart = std::make_shared<Renderer::Sprite>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "fullHeart",
+			owner, _c_heart_offset * float(i) + glm::vec2(10.f, window_size.y - 50.f), _c_heart_size);
+
+
+		vector_of_health.push_back(heart);
+
+		if (_health >= i)
+			heart->SetNewSprite("fullHeart");
+		else
+			heart->SetNewSprite("emptyHeart");
+	}
+}
 HealthComponent::HealthComponent(int health)
 {
 	_max_health = health;
@@ -17,7 +36,7 @@ HealthComponent::HealthComponent(int health)
 	for (int i = 1; i <= _max_health; i++)
 	{
 		std::shared_ptr heart = std::make_shared<Renderer::Sprite>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "fullHeart", 
-			_c_heart_offset * float(i) + glm::vec2(10.f, window_size.y - 50.f), _c_heart_size);
+			_owner,	_c_heart_offset * float(i) + glm::vec2(10.f, window_size.y - 50.f), _c_heart_size);
 
 
 		vector_of_health.push_back(heart);

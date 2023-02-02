@@ -29,22 +29,20 @@ namespace Game
 		const std::string& initSubtextureName, const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation, const float startMoveSpeed)
 		:Pawn(texture, shader, initSubtextureName, startPosition, startSize, startRotation)
 	{
-		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, startPosition, startSize);
+		_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, this, startPosition, startSize);
 
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Enemy, EResponseType::ERT_Overlap);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Ignore);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_Projectile, EResponseType::ERT_Ignore);
 		_collider->SetCollisionResponse(EObjectTypes::EOT_InteractiveObject, EResponseType::ERT_Overlap);
 
-		_health_component = std::make_shared<HealthComponent>(10);
-		_health_component->Attach(this);
-
-		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
-		_weapon_component->Attach(this);
-
 		//_collider->Overlap.Connect(this, &MainCharacter::Overlap);
 		_collider->AddOverlapDelegate(this, &MainCharacter::Overlap);
 		_collider->Attach(this);
+
+		_health_component = std::make_shared<HealthComponent>(this, 10);
+
+		_weapon_component = std::make_shared<WeaponComponent>(std::move(texture), std::move(shader), "pistol", this, startPosition + (startSize / 2.f), startSize / 4.f, startRotation);
 
 		_controller = new PlayerController(this, 100.f);
 	}

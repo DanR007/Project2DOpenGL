@@ -73,7 +73,7 @@ void GameManager::BeginPlay()
 	CreateMap();
 	InitiateMainCharacter(main_character_size, position_player);
 
-	std::vector<glm::vec2> patrolPos = { glm::vec2(300.f, 300.f),glm::vec2(0.f, 120.f),glm::vec2(300.f, 300.f) };
+	std::vector<glm::vec2> patrolPos = { glm::vec2(300.f, 300.f),glm::vec2(0.f, 120.f),glm::vec2(0.f) };
 
 	std::shared_ptr<Game::MeleeEnemy> enemy = SpawnActor<Game::MeleeEnemy>("mush1", glm::vec2(0.f), glm::vec2(100, 100));
 	enemy->GetEnemyController()->SetPatrolPoints(patrolPos);

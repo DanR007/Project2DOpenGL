@@ -17,7 +17,7 @@ namespace Renderer
 class WeaponComponent : public Component
 {
 public:
-	WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSpriteName,
+	WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSpriteName, Game::Actor* owner,
 		const glm::vec2& position, const glm::vec2& size, const float rotation);
 	void Shoot(const glm::vec2 mousePosition);
 
@@ -25,7 +25,7 @@ public:
 
 	void Update(float deltaTime);
 
-	float GetReloadTime() { return _reload_time; }
+	inline float GetReloadTime() const { return _reload_time; }
 
 	void FollowOwner(const glm::vec2 value);
 	bool SetWeaponActive(bool isActive) { _weapon_active = isActive; }

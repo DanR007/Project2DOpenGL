@@ -169,7 +169,7 @@ std::shared_ptr<Renderer::Sprite> ResourcesManager::LoadSprite(const std::string
 		std::cerr << "Cant find shader (" + shaderName + ")  for the sprite " + spriteName << std::endl;
 	}
 
-	std::shared_ptr<Renderer::Sprite> newSprite = sprites_map.emplace(textureName, std::make_shared<Renderer::Sprite>(l_texture, l_shader, subTextureName,
+	std::shared_ptr<Renderer::Sprite> newSprite = sprites_map.emplace(textureName, std::make_shared<Renderer::Sprite>(l_texture, l_shader, subTextureName, nullptr,
 		glm::vec2(0.f, 0.f),
 		glm::vec2(spriteWidth, spriteHeight))).first->second;
 
@@ -208,7 +208,7 @@ std::shared_ptr<Renderer::AnimSprite> ResourcesManager::LoadAnimSprite(const std
 		std::cerr << "Cant find shader (" + shaderName + ")  for the sprite " + spriteName << std::endl;
 	}
 
-	std::shared_ptr<Renderer::AnimSprite> newSprite = anim_sprites_map.emplace(spriteName, std::make_shared<Renderer::AnimSprite>(l_texture, l_shader, subTextureName,
+	std::shared_ptr<Renderer::AnimSprite> newSprite = anim_sprites_map.emplace(spriteName, std::make_shared<Renderer::AnimSprite>(l_texture, l_shader, subTextureName, nullptr,
 		glm::vec2(0.f, 0.f),
 		glm::vec2(spriteWidth, spriteHeight))).first->second;
 

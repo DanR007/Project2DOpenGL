@@ -5,11 +5,12 @@
 namespace Renderer
 {
 	AnimSprite::AnimSprite(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader,
-		const std::string& initialSubtextureName, const glm::vec2& position,
+		const std::string& initialSubtextureName, Game::Actor* owner, const glm::vec2& position,
 		const glm::vec2& size, const float rotation)
 		:Sprite(texture,
 			shader,
 			initialSubtextureName,
+			owner,
 			position,
 			size,
 			rotation)
@@ -27,7 +28,7 @@ namespace Renderer
 	{
 		if (is_dirty)
 		{
-			auto subTexture = spr_texture->GetSubTexture(current_anim_duration->second[current_frame].first);
+			auto subTexture = _texture->GetSubTexture(current_anim_duration->second[current_frame].first);
 
 			const GLfloat textureCoords[] =
 			{

@@ -11,7 +11,6 @@ source/game/MainCharacter.h
 source/game/HealthComponent.h
 source/game/gameobjects/WallActor.h
 source/game/gameobjects/HealActor.h
-source/game/gameobjects/Hall.h
 source/game/enemies/Enemy.h
 source/game/enemies/MeleeEnemy.h
 source/game/weapons/Bullet.h
@@ -25,7 +24,6 @@ source/game/MainCharacter.cpp
 source/game/HealthComponent.cpp
 source/game/gameobjects/WallActor.cpp
 source/game/gameobjects/HealActor.cpp
-source/game/gameobjects/Hall.cpp
 source/game/enemies/Enemy.cpp
 source/game/enemies/MeleeEnemy.cpp
 source/game/weapons/Bullet.cpp

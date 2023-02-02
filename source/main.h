@@ -7,6 +7,7 @@
 #include <memory>
 #include <vector>
 
+#define DEBUG
 
 namespace Game
 {

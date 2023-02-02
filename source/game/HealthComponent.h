@@ -1,4 +1,7 @@
 #pragma once
+
+#define STATIC
+
 #include "../engine/default_classes/Component.h"
 
 #include <vector>
@@ -14,13 +17,14 @@ namespace Renderer
 class HealthComponent : public Component
 {
 public:
+	HealthComponent(Game::Actor* owner, int health);
 	HealthComponent(int health);
 
 	void Hurt(int damageValue);
 	void Heal(int healValue);
 
-	int GetHealth() { return _health; }
-	float GetInviolabilityTime() { return _inviolability_time; }
+	inline int GetHealth() const { return _health; }
+	inline float GetInviolabilityTime() const { return _inviolability_time; }
 
 	void UpdateInviolability(float deltaTime);
 	void UpdateHearts();

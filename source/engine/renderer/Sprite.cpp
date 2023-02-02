@@ -7,10 +7,9 @@
 namespace Renderer
 {
 	Sprite::Sprite(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader, 
-		const std::string& initialSubtextureName, const glm::vec2& position, 
+		const std::string& initialSubtextureName, Game::Actor* owner, const glm::vec2& position, 
 		const glm::vec2& size, const float rotation)
-		: spr_texture(texture), spr_shader(shader), spr_pos(position),
-		spr_rot(rotation), spr_size(size), spr_subtexture_name(initialSubtextureName)
+		: MovableComponent(owner, position, size, rotation), _texture(texture), _shader(shader), _subtexture_name(initialSubtextureName)
 	{
 		GLfloat vertexCoord[] =
 		{
@@ -37,13 +36,13 @@ namespace Renderer
 				subTexture.right_upper_UV.x, subTexture.right_upper_UV.y
 		};
 
-		glGenVertexArrays(1, &spr_vertex_array_objects);
+		glGenVertexArrays(1, &_vertex_array_objects);
 
 		glGenBuffers(1, &texture_coord_buffer);
 		glGenBuffers(1, &vertex_coord_buffer);
 		glGenBuffers(1, &vertex_element_buffer);
 
-		glBindVertexArray(spr_vertex_array_objects);
+		glBindVertexArray(_vertex_array_objects);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vertex_coord_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexCoord), vertexCoord, GL_STATIC_DRAW);
@@ -67,25 +66,12 @@ namespace Renderer
 		glDeleteBuffers(1, &vertex_coord_buffer);
 		glDeleteBuffers(1, &texture_coord_buffer);
 		glDeleteBuffers(1, &vertex_element_buffer);
-		glDeleteVertexArrays(1, &spr_vertex_array_objects);
-	}
-
-	void Sprite::SetPosition(const glm::vec2& newPosition)
-	{
-		spr_pos = newPosition;
-	}
-	void Sprite::SetSize(const glm::vec2& newSize)
-	{
-		spr_size = newSize;
-	}
-	void Sprite::SetRotation(const float newRotation)
-	{
-		spr_rot = newRotation;
+		glDeleteVertexArrays(1, &_vertex_array_objects);
 	}
 
 	void Sprite::SetNewSprite(const std::string& newSubtextureName)
 	{
-		auto subTexture = spr_texture->GetSubTexture(newSubtextureName);
+		auto subTexture = _texture->GetSubTexture(newSubtextureName);
 
 		const GLfloat textureCoords[] =
 		{
@@ -102,21 +88,21 @@ namespace Renderer
 
 	void Sprite::Render() const
 	{
-		spr_shader->Use();
+		_shader->Use();
 
 		glm::mat4 model(1.f);//create a model matrix
 		
-		model = glm::translate(model, glm::vec3(spr_pos, 0.f));
-		model = glm::translate(model, glm::vec3(0.5f * spr_size.x, 0.5f * spr_size.y, 0.f));
-		model = glm::rotate(model, glm::radians(spr_rot), glm::vec3(0.f, 0.f, 1.f));
-		model = glm::translate(model, glm::vec3(-0.5f * spr_size.x, -0.5f * spr_size.y, 0.f));
-		model = glm::scale(model, glm::vec3(spr_size, 1.f));
+		model = glm::translate(model, glm::vec3(_world_position, 0.f));
+		model = glm::translate(model, glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.f));
+		model = glm::rotate(model, glm::radians(_world_rotation), glm::vec3(0.f, 0.f, 1.f));
+		model = glm::translate(model, glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.f));
+		model = glm::scale(model, glm::vec3(_size, 1.f));
 
-		glBindVertexArray(spr_vertex_array_objects);
-		spr_shader->SetMatrix4("modelMat", model);
+		glBindVertexArray(_vertex_array_objects);
+		_shader->SetMatrix4("modelMat", model);
 
 		glActiveTexture(GL_TEXTURE0);
-		spr_texture->Bind();
+		_texture->Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
 	}

@@ -15,10 +15,11 @@ std::map<EWeaponTypes, std::pair<uint8_t, float>> weapon_type_and_damage = {
 	{EWeaponTypes::EWT_SubMachineGun, std::make_pair(2, 0.5f)}
 };
 
-WeaponComponent::WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, 
-	const std::string& initSpriteName, const glm::vec2& position, const glm::vec2& size, const float rotation)
+WeaponComponent::WeaponComponent(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
+	const std::string& initSpriteName, Game::Actor* owner, const glm::vec2& position, const glm::vec2& size, const float rotation)
+	: Component(owner)
 {
-	_sprite_weapon = std::make_shared<Renderer::Sprite>(texture, shader, initSpriteName, position, size, rotation);
+	_sprite_weapon = std::make_shared<Renderer::Sprite>(texture, shader, initSpriteName, owner, position, size, rotation);
 }
 
 void WeaponComponent::Shoot(const glm::vec2 mousePosition)

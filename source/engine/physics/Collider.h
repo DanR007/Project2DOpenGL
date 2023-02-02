@@ -2,8 +2,6 @@
 #include "EPhysicsTypes.h"
 
 #include <map>
-
-#include <glm/vec2.hpp>
 #include <memory>
 
 #include "../Delegate.h"
@@ -14,23 +12,19 @@
 
 namespace Physics
 {
-	class Collider : public Component
+	class Collider : public MovableComponent
 	{
 	public:
-		Collider(const EObjectTypes objectType, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f)) 
-			: Component(nullptr)
+		Collider(const EObjectTypes objectType, Game::Actor* owner, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f), const float& rotation = 0.f) 
+			: MovableComponent(owner, position, size, rotation)
 		{
-			_position = position; _size = size; _object_type = objectType;
+			_object_type = objectType;
 		}
 
 		void SetCollisionResponse(EObjectTypes objectType, EResponseType responseType);
-		void SetPosition(const glm::vec2& newPosition) { _position = newPosition; }
-		void SetSize(const glm::vec2& newSize) { _size = newSize; }
 
-		EResponseType GetResponseType(EObjectTypes objectType) { return objects_response_map[objectType]; }
-		EObjectTypes GetObjectType() { return _object_type; }
-		glm::vec2 GetSize() { return _size; }
-		glm::vec2 GetPosition() { return _position; }
+		inline EResponseType GetResponseType(EObjectTypes objectType) { return objects_response_map[objectType]; }
+		inline EObjectTypes GetObjectType() const { return _object_type; }
 
 		template<class T, class C>
 		void AddOverlapDelegate(C* own_class, T method)
@@ -41,8 +35,6 @@ namespace Physics
 		void Overlap(Game::Actor* actor) { _delegate_overlap(actor); }
 
 	protected:
-		glm::vec2 _size, _position;
-
 		std::map<EObjectTypes, EResponseType> objects_response_map =
 		{
 			{EObjectTypes::EOT_Enemy, EResponseType::ERT_Block},
