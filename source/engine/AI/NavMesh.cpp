@@ -14,10 +14,18 @@ NavMesh::~NavMesh()
 {
 	for (p2t::Point* p : _points)
 	{
+		if(p)
 		delete p;
 		p = nullptr;
 	}
+
+	_triangles.clear();
+	_map.clear();
 	_points.clear();
+
+	if(_cdt)
+	delete _cdt;
+	_cdt = nullptr;
 }
 
 void NavMesh::FillArrayOfPoints(std::vector<std::string>& map, const glm::vec2& block_size)
@@ -32,7 +40,7 @@ void NavMesh::FillArrayOfPoints(std::vector<std::string>& map, const glm::vec2& 
 		{
 			if (map[i][j] == wall)
 			{
-				_points.push_back(new p2t::Point(glm::dvec2((j - 0.5) * block_size.x, (i + 0.5) * block_size.y)));
+				_points.push_back(new p2t::Point(glm::dvec2((j + 0.5) * block_size.x, (i - 0.5) * block_size.y)));
 				point_start = glm::ivec2(j, i);
 				map[i][j] = checked_wall;
 				flag = true;

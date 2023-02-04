@@ -15,7 +15,8 @@
 #define TEST_CASES
 #define PHYSIC_TESTS
 #define GAMEPLAY_TESTS
-#define PLAY_IN_EDITOR
+#define NAVMESH_TESTS
+//#define PLAY_IN_EDITOR
 
 std::string ResourcesManager::exe_path;
 
@@ -89,7 +90,10 @@ int main(int argc, char** argv)
 #endif//PHYSIC_TESTS
 #ifdef GAMEPLAY_TESTS
 
-#endif//GAMEPLAT_TESTS
+#endif//GAMEPLAY_TESTS
+#ifdef NAVMESH_TESTS
+		PlayNavMeshTests();
+#endif
 #endif // TEST_CASES
 #ifdef PLAY_IN_EDITOR
 		world = new GameManager();

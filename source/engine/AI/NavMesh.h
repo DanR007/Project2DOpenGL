@@ -26,6 +26,11 @@ public:
 	void CreateNavMesh(std::vector<std::string>&, const glm::vec2 actors_size, const glm::vec2& block_size);
 
 	void FillArrayOfPoints(std::vector<std::string>& map, const glm::vec2& block_size);
+
+	std::vector<p2t::Point*> GetArrayOfPoints() { return _points; }
+	std::vector<p2t::Triangle*> GetTriangles() { return _triangles; }
+	p2t::CDT* GetCDT() { return _cdt; }
+
 private:
 	bool CheckCorner(const std::vector<std::string>& map, const glm::ivec2 current_pos,
 		const glm::ivec2& corner_f, const glm::ivec2& corner_s, const glm::ivec2& checking);
@@ -37,4 +42,6 @@ private:
 	std::vector<p2t::Triangle*> _triangles;
 
 	std::list<p2t::Triangle*> _map;
+
+	friend void TriangulateTestMap(NavMesh* nav_mesh);
 };

@@ -32,6 +32,7 @@ source/game/weapons/WeaponComponent.cpp
 )
 set(ENGINE_HEADERS 
 source/engine/tests/PhysicsTests.h
+source/engine/tests/AStarTests.h
 source/engine/renderer/stb_image.h
 source/engine/Delegate.h
 source/engine/renderer/ShaderRender.h

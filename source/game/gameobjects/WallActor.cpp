@@ -12,10 +12,6 @@ namespace Game
 			:Actor(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation)
 		{
 			_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_StaticObject, this, startPosition, startSize);
-			if (_collider)
-			{
-				_collider->SetRelativePosition(-startSize / 2.f);
-			}
 		}
 	}
 }

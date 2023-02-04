@@ -75,6 +75,10 @@ struct Point {
     _pos.y = y;
   }
 
+  bool operator==(const Point& v)
+  {
+      return _pos.x == v._pos.x && _pos.y == v._pos.y;
+  }
   /// Negate this point.
   Point operator -() const
   {
@@ -93,6 +97,10 @@ struct Point {
   void operator -=(const Point& v)
   {
       _pos -= v._pos;
+  }
+  Point operator -(const Point& v)
+  {
+      return Point(_pos - v._pos);
   }
 
   /// Multiply this point by a scalar.
@@ -140,6 +148,9 @@ struct Edge {
 
     q->edge_list.push_back(this);
   }
+
+  inline Point* GetPoint1() const { return p; }
+  inline Point* GetPoint2() const { return q; }
 };
 
 // Triangle-based data structures are know to have better performance than quad-edge structures
@@ -186,6 +197,22 @@ void SetDelunayEdgeCW(Point& p, bool e);
 bool Contains(Point* p);
 bool Contains(const Edge& e);
 bool Contains(Point* p, Point* q);
+bool ContainPoint(Point* p)
+{
+    glm::dvec2 vec1, vec2, vec3;
+    vec1 = p->_pos - points_[0]->_pos;
+    vec2 = p->_pos - points_[1]->_pos;
+    vec3 = p->_pos - points_[2]->_pos;
+    //edges of triangle
+    glm::dvec2 f_e, s_e, t_e;
+    f_e = points_[1]->_pos - points_[0]->_pos;
+    s_e = points_[2]->_pos - points_[0]->_pos;
+    t_e = points_[2]->_pos - points_[1]->_pos;
+    bool f_c = (vec1.x * f_e.y - f_e.x * vec1.y) * (vec1.x * s_e.y - s_e.x * vec1.y) <= 0;
+    bool s_c = (vec2.x * t_e.y - t_e.x * vec2.y) * (vec2.x * (-s_e.y) - (-s_e.x) * vec2.y) <= 0;
+    bool t_c = (vec3.x * (-s_e.y) - (-s_e.x) * vec3.y) * (vec3.x * (-t_e.y) - (-t_e.x) * vec3.y) <= 0;
+    return f_c && s_c && t_c;
+}
 void Legalize(Point& point);
 void Legalize(Point& opoint, Point& npoint);
 /**

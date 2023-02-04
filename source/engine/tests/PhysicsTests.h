@@ -16,19 +16,35 @@ public:
 	PhysicsTests() { manager = new PhysicsManager(nullptr); }
 	~PhysicsTests() { delete manager; }
 
-	bool CheckBlockPhysicsBetweenTwoObjects()
+	bool CheckBlockPhysicsBetweenTwoObjectsMustBeFalse()
 	{
 		std::shared_ptr<Game::Actor> actor = std::make_shared<Game::Actor>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "mush1", glm::vec2(0.f),
 			glm::vec2(100.f, 100.f), 0.f);
 		actor->SetCollider(std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, actor.get(), glm::vec2(0.f)));
 		actor->GetCollider()->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Ignore);
 		actor->GetCollider()->SetCollisionResponse(EObjectTypes::EOT_StaticObject, EResponseType::ERT_Block);
+
+
 		std::shared_ptr<Game::Objects::Wall> wallActor = std::make_shared<Game::Objects::Wall>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "wall", glm::vec2(0.f, 101.f),
 			glm::vec2(100.f, 100.f), 0.f);
+
 		return manager->IsBlocking(glm::vec2(0.f), actor->GetCollider(), wallActor->GetCollider());
 	}
+	bool CheckBlockPhysicsBetweenTwoObjectsMustBeTrue()
+	{
+		std::shared_ptr<Game::Actor> actor = std::make_shared<Game::Actor>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "mush1", glm::vec2(0.f),
+			glm::vec2(100.f, 100.f), 0.f);
+		actor->SetCollider(std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, actor.get(), glm::vec2(0.f)));
+		actor->GetCollider()->SetCollisionResponse(EObjectTypes::EOT_Character, EResponseType::ERT_Ignore);
+		actor->GetCollider()->SetCollisionResponse(EObjectTypes::EOT_StaticObject, EResponseType::ERT_Block);
 
-	bool CheckOverlappingBetweenTwoObjects()
+
+		std::shared_ptr<Game::Objects::Wall> wallActor = std::make_shared<Game::Objects::Wall>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "wall", glm::vec2(0.f, 101.f),
+			glm::vec2(100.f, 100.f), 0.f);
+
+		return manager->IsBlocking(glm::vec2(2.f), actor->GetCollider(), wallActor->GetCollider());
+	}
+	bool CheckOverlappingBetweenTwoObjectsMustBeFalse()
 	{
 		std::shared_ptr<Game::Actor> actor = std::make_shared<Game::Actor>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "mush1", glm::vec2(0.f),
 			glm::vec2(100.f, 100.f), 0.f);
@@ -38,7 +54,16 @@ public:
 			glm::vec2(100.f, 100.f), 0.f);
 		return manager->IsOverlap(actor->GetCollider(), healActor->GetCollider());
 	}
-
+	bool CheckOverlappingBetweenTwoObjectsMustBeTrue()
+	{
+		std::shared_ptr<Game::Actor> actor = std::make_shared<Game::Actor>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "mush1", glm::vec2(0.f),
+			glm::vec2(100.f, 100.f), 0.f);
+		actor->SetCollider(std::make_shared<Physics::Collider>(EObjectTypes::EOT_Character, actor.get(), glm::vec2(0.f)));
+		actor->GetCollider()->SetCollisionResponse(EObjectTypes::EOT_InteractiveObject, EResponseType::ERT_Overlap);
+		std::shared_ptr<Game::HealActor> healActor = std::make_shared<Game::HealActor>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "wall", glm::vec2(10.f, 10.f),
+			glm::vec2(50.f, 50.f), 0.f);
+		return manager->IsOverlap(actor->GetCollider(), healActor->GetCollider());
+	}
 private:
 	PhysicsManager* manager;
 };

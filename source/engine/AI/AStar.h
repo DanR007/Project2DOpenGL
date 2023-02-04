@@ -4,6 +4,13 @@
 
 #include <cmath>
 #include <vector>
+#include <queue>
+
+namespace p2t
+{
+	struct Point;
+	class Triangle;
+}
 
 namespace Game
 {
@@ -12,79 +19,60 @@ namespace Game
 
 class AStar
 {
-	enum EDirection
+	struct NavMeshPoint
 	{
-		ED_Up, ED_Down, ED_Right, ED_Left,
-		ED_UpLeft, ED_UpRight, ED_DownLeft,
-		ED_DownRight, ED_Zero
-	};
-	struct Vector2
-	{
-		Vector2() : _pos(glm::vec2(0.f)), _dir(ED_Zero) {}
-		Vector2(const glm::vec2& pos) : _pos(pos), _dir(ED_Zero) {}
-		Vector2(const glm::vec2& pos, const EDirection& dir) : _pos(pos), _dir(dir) {}
-		
-		void SetCost(const float cost) { _cost = cost; }
-		float GetCost() const { return _cost; }
-		EDirection GetDirection() const { return _dir; }
+		NavMeshPoint(p2t::Point* current_point);
+		NavMeshPoint(NavMeshPoint* previous_point, p2t::Point* current);
 
-		bool operator==(const Vector2& vec)
-		{
-			return vec._pos == _pos;
-		}
-		bool operator> (const Vector2& vec)
-		{
-			return _cost > vec._cost;
-		}
-		bool operator< (const Vector2& vec)
-		{
-			return _cost < vec._cost;
-		}
+		inline double GetCost() const { return _cost; }
+		inline double GetLength() const { return _length; }
+		inline p2t::Point* GetPoint() const { return _current_point; }
+		inline NavMeshPoint* GetPreviousPoint() const { return _previous_point; }
 
-		glm::vec2 _pos;
-		EDirection _dir;
+		bool operator() (NavMeshPoint* l, NavMeshPoint* r) { return l->GetCost() > r->GetCost(); }
+		bool operator== (NavMeshPoint* p) { return _current_point == (p->_current_point); }
 	private:
-		float _cost = FLT_MAX;
+		double _cost, _length;
+		NavMeshPoint* _previous_point;
+		p2t::Point* _current_point;
 	};
 public:
 	AStar() {}
-	glm::vec2 DevelopPath(const glm::vec2& position, const glm::vec2& target, Game::Actor* actor);
-	glm::vec2 GetMoveVector();
+	void DevelopPath(const std::vector<p2t::Triangle*> nav_mesh, p2t::Point* position, p2t::Point* target);
+
+	std::vector<p2t::Point*> GetPath() { return _path; }
+	p2t::Point* GetPointOfPath() { return _path[_path_index]; }
+
+	void ClearNavPath();
 private:
-	inline float SquareDistance(const glm::vec2& first, const glm::vec2& second) const
+
+	void FillPath(p2t::Point* start);
+	void DevelopPath(p2t::Triangle* start_triangle, p2t::Triangle* finish_triangle);
+
+	inline static double SquareDistance(const glm::dvec2& first, const glm::dvec2& second)
 	{
-		return (float)std::pow(first.x - second.x, 2) + (float)std::pow(first.y - second.y, 2);
+		return std::pow(first.x - second.x, 2) + std::pow(first.y - second.y, 2);
 	}
-	inline float Distance(const glm::vec2& first, const glm::vec2& second) const
+	inline static double Distance(const glm::dvec2& first, const glm::dvec2& second)
 	{
-		return (float)std::sqrt(std::pow(first.x - second.x, 2) + std::pow(first.y - second.y, 2));
+		return std::sqrt(std::pow(first.x - second.x, 2) + std::pow(first.y - second.y, 2));
 	}
-	inline float SquareLength(const glm::vec2& vec) const
+	inline static double SquareLength(const glm::dvec2& vec)
 	{
-		return (float)std::pow(vec.x , 2) + (float)std::pow(vec.y, 2);
+		return std::pow(vec.x , 2) + std::pow(vec.y, 2);
 	}
-	inline float Length(const glm::vec2& vec) const
+	inline static double Length(const glm::dvec2& vec)
 	{
-		return (float)std::sqrt(std::pow(vec.x, 2) + std::pow(vec.y, 2));
-	}
-	inline float DistanceInTurns(const glm::vec2& cell) const
-	{
-		return std::abs(cell.x - _target.x) + std::abs(cell.y - _target.y);
+		return std::sqrt(std::pow(vec.x, 2) + std::pow(vec.y, 2));
 	}
 
-	void ChoiceSmallestCost(Vector2& smallest_position);
-	glm::vec2 MakePathToPlayer(Vector2 pos_algorithm);
+	p2t::Point* _current_position,* _target;
 
-	glm::vec2 _position, _target;
-	Vector2 _next_position_algorithm;
-	Vector2 _move_vector;
+	size_t _path_index;
 
-	const size_t c_count_step = 8;
-	std::vector<glm::vec2> _steps = { glm::vec2(-1.f, -1.f), glm::vec2(0.f, -1.f), glm::vec2(-1.f, 0.f), glm::vec2(1.f, 1.f),
-								glm::vec2(0.f, 1.f), glm::vec2(1.f, 0.f), glm::vec2(-1.f, 1.f), glm::vec2(1.f, -1.f) };
-	const EDirection _steps_direction[8] = {ED_UpRight, ED_Up, ED_Right, ED_DownLeft, ED_Left, ED_Down, ED_DownRight, ED_UpLeft};
+	std::vector<p2t::Point*> _path;
+	std::vector<NavMeshPoint*> _close_coordinates;
+	std::priority_queue<NavMeshPoint*, std::vector<NavMeshPoint*>, std::less<NavMeshPoint*>> _open_coordinates;
 
-	std::vector<glm::vec2> _path;
-	std::vector<Vector2> _closed_coordinates;
-	std::vector<Vector2> _open_coordinates;
+	friend NavMeshPoint;
 };
