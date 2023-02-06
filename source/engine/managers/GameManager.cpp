@@ -45,7 +45,6 @@ void GameManager::Update(const float deltaTime)
 			if (it->get())
 			{
 				it->get()->Update(deltaTime);
-				_physics_manager->CheckOverlapping(it->get()->GetCollider());
 
 				if (it == _all_actors.end())
 					break;

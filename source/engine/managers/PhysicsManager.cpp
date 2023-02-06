@@ -29,6 +29,9 @@ bool PhysicsManager::CanMove(Game::Actor* firstActor, const glm::vec2& delta)
 
 void PhysicsManager::CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider)
 {
+	std::lock_guard<std::mutex> lock(first_collider->_mtx);
+	first_collider->ClearOverlappingActors();
+
 	auto it = _world->_all_actors.begin();
 	for (; it != _world->_all_actors.end(); it++)
 	{
@@ -41,6 +44,17 @@ void PhysicsManager::CheckOverlapping(std::shared_ptr<Physics::Collider> first_c
 			break;
 		}
 			
+	}
+}
+
+void PhysicsManager::Update()
+{
+	auto it = _world->_all_actors.begin();
+	for (; it != _world->_all_actors.end(); it++)
+	{
+		std::shared_ptr<Physics::Collider> collider = it->get()->GetCollider();
+
+		CheckOverlapping(collider);
 	}
 }
 

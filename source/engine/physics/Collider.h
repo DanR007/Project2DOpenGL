@@ -3,12 +3,14 @@
 
 #include <map>
 #include <memory>
+#include <vector>
+#include <mutex>
 
 #include "../Delegate.h"
 
 #include "../default_classes/Component.h"
 
-
+#include "../managers/PhysicsManager.h"
 
 namespace Physics
 {
@@ -33,9 +35,15 @@ namespace Physics
 		}
 
 		void SetCollisionResponse(EObjectTypes objectType, EResponseType responseType);
+		void ClearOverlappingActors() { _overlapping_actors.clear(); }
 
 		inline EResponseType GetResponseType(EObjectTypes objectType) { return objects_response_map[objectType]; }
 		inline EObjectTypes GetObjectType() const { return _object_type; }
+		inline std::vector<Game::Actor*> GetOverlappingActors() 
+		{
+			std::lock_guard<std::mutex> lock(_mtx);
+			return _overlapping_actors;
+		}
 
 		template<class T, class C>
 		void AddOverlapDelegate(C* own_class, T method)
@@ -43,7 +51,7 @@ namespace Physics
 			_delegate_overlap.Connect(own_class, method);
 		}
 
-		void Overlap(Game::Actor* actor) { _delegate_overlap(actor); }
+		void Overlap(Game::Actor* actor);
 
 	protected:
 		std::map<EObjectTypes, EResponseType> objects_response_map =
@@ -58,5 +66,11 @@ namespace Physics
 
 		EObjectTypes _object_type;
 		Delegate _delegate_overlap;
+
+		std::vector<Game::Actor*> _overlapping_actors;
+
+		std::mutex _mtx;
+
+		friend void PhysicsManager::CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider);
 	};
 }

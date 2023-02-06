@@ -16,7 +16,7 @@
 #define PHYSIC_TESTS
 #define GAMEPLAY_TESTS
 #define NAVMESH_TESTS
-//#define PLAY_IN_EDITOR
+#define PLAY_IN_EDITOR
 
 std::string ResourcesManager::exe_path;
 
@@ -101,7 +101,6 @@ int main(int argc, char** argv)
 
 		glClearColor(1.f, 1.f, 1.f, 1.f);
 
-		
 		//textureAtlas - texture name
 		//names - vector of names subtextures
 		auto lastTime = std::chrono::high_resolution_clock::now();
@@ -114,6 +113,7 @@ int main(int argc, char** argv)
 			lastTime = currentTime;
 
 			world->Update(duration);
+			world->GetPhysicsManager()->Update();
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();

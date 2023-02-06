@@ -81,7 +81,6 @@ private:
 	bool _is_game_over;
 
 	friend class PhysicsManager;
-	friend class AStar;
 
 	friend void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
 	friend void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode);

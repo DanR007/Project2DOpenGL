@@ -3,11 +3,11 @@
 
 void MovableComponent::Attach(Game::Actor* owner)
 {
-	/*if (owner)
+	if (owner)
 	{
 		_relative_rotation = owner->GetRotation() - _world_rotation;
 		_relative_position = owner->GetPosition() - _world_position;
-	}*/
+	}
 	_owner = owner;
 }
 

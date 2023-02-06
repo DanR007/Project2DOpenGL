@@ -19,6 +19,7 @@ public:
 	bool CanMove(Game::Actor* checkActor, const glm::vec2& delta);
 	void CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider);
 
+	void Update();
 private:
 	bool IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider, const glm::vec2& pos_second_collider, const glm::vec2& size_second_collider);
 
