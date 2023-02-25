@@ -15,7 +15,7 @@
 #define TEST_CASES
 #define PHYSIC_TESTS
 #define GAMEPLAY_TESTS
-#define NAVMESH_TESTS
+//#define NAVMESH_TESTS
 #define PLAY_IN_EDITOR
 
 std::string ResourcesManager::exe_path;
@@ -83,7 +83,9 @@ int main(int argc, char** argv)
 		}
 
 		ResourcesManager::LoadAll(*argv);
+		glm::dvec2 a(1.);
 
+		world = new GameManager();
 #ifdef TEST_CASES
 #ifdef PHYSIC_TESTS
 		PlayPhysicsTestCases();
@@ -94,9 +96,11 @@ int main(int argc, char** argv)
 #ifdef NAVMESH_TESTS
 		PlayNavMeshTests();
 #endif
+		delete world;
+		world = new GameManager();
 #endif // TEST_CASES
 #ifdef PLAY_IN_EDITOR
-		world = new GameManager();
+		
 		world->BeginPlay();
 
 		glClearColor(1.f, 1.f, 1.f, 1.f);

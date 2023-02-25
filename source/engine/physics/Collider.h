@@ -38,6 +38,7 @@ namespace Physics
 		void ClearOverlappingActors() { _overlapping_actors.clear(); }
 
 		inline EResponseType GetResponseType(EObjectTypes objectType) { return objects_response_map[objectType]; }
+		inline EResponseType GetTraceResponseType(ERaycastTypes ray_type) { return ray_response_map[ray_type]; }
 		inline EObjectTypes GetObjectType() const { return _object_type; }
 		inline std::vector<Game::Actor*> GetOverlappingActors() 
 		{
@@ -56,12 +57,18 @@ namespace Physics
 	protected:
 		std::map<EObjectTypes, EResponseType> objects_response_map =
 		{
-			{EObjectTypes::EOT_Enemy, EResponseType::ERT_Block},
+			{EObjectTypes::EOT_Pawn, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_Character, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_StaticObject, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_Projectile, EResponseType::ERT_Overlap},
 			{EObjectTypes::EOT_DynamicObject, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_InteractiveObject, EResponseType::ERT_Ignore}
+		};
+		std::map<ERaycastTypes, EResponseType> ray_response_map =
+		{
+			{ERaycastTypes::ERT_Character, EResponseType::ERT_Block},
+			{ERaycastTypes::ERT_StaticObject, EResponseType::ERT_Block},
+			{ERaycastTypes::ERT_Visible, EResponseType::ERT_Block}
 		};
 
 		EObjectTypes _object_type;

@@ -7,5 +7,10 @@ enum class EResponseType
 
 enum class EObjectTypes
 {
-	EOT_Character, EOT_Enemy, EOT_StaticObject, EOT_Projectile, EOT_DynamicObject, EOT_InteractiveObject
+	EOT_Character, EOT_StaticObject, EOT_Projectile, EOT_DynamicObject, EOT_InteractiveObject, EOT_Pawn
+};
+
+enum class ERaycastTypes
+{
+	ERT_Character, ERT_StaticObject, ERT_Visible
 };
