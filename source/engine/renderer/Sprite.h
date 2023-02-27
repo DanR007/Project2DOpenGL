@@ -6,7 +6,6 @@
 
 #include <glad/glad.h>
 
-#define DYNAMIC
 
 #include "../default_classes/Component.h"
 
@@ -26,6 +25,8 @@ namespace Renderer
 		Sprite(const Sprite&) = delete;
 		Sprite& operator=(const Sprite&) = delete;
 
+
+
 		void SetNewSprite(const std::string& newSubtextureName);
 
 		inline std::shared_ptr<Renderer::ShaderProgram> GetShaderProgram() const { return _shader; }
@@ -38,6 +39,6 @@ namespace Renderer
 
 		std::string _subtexture_name;
 
-		GLuint _vertex_array_objects, texture_coord_buffer, vertex_coord_buffer, vertex_element_buffer;
+		GLuint _vertex_array_objects, _texture_coord_buffer, _vertex_coord_buffer, _vertex_element_buffer;
 	};
 }

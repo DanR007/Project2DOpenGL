@@ -19,19 +19,16 @@ namespace Game
 		_anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(texture), std::move(shader), 
 			initSubtextureName, this, startPosition, startSize, startRotation);
 
-		_world_position = startPosition + startSize / 2.f;
+		_world_position = startPosition;
 		_rotation = startRotation;
 		_size = startSize;
 
 		if (_collider)
 		{
 			//_collider->Attach(this);
-			_anim_sprite->SetRelativePosition(-startSize / 2.f);
+			_collider->SetRelativePosition(-startSize / 2.f);
 		}
-		if (_anim_sprite)
-		{
-			_anim_sprite->SetRelativePosition(-startSize / 2.f);
-		}
+		
 	}
 
 	Actor::~Actor()

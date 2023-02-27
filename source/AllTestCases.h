@@ -26,9 +26,11 @@ static void PlayPhysicsTestCases()
 	std::cout << "-----------------------" << std::endl;
 	std::cout << IsCorrect(tests->CheckRaycastMustBeTrueAndPosZero(), true) << std::endl;
 	std::cout << "-----------------------" << std::endl;
-	std::cout << IsCorrect(tests->CheckRaycastMustBeFalse(), false) << std::endl;
-	//std::cout << "-----------------------" << std::endl;
-	//std::cout << IsCorrect(tests->CheckRaycastMustBeTruePosSqrtOf3MUltyply10ByXAndMinus10ByY(), true) << std::endl;
+	std::cout << IsCorrect(tests->CheckRaycastMustBeFalseBecauseDirectionAwayFromBox(), false) << std::endl;
+	std::cout << "-----------------------" << std::endl;
+	std::cout << IsCorrect(tests->CheckRaycastMustBeFalseBecauseRaySmallerThenDistanceToBox(), false) << std::endl;
+	std::cout << "-----------------------" << std::endl;
+	std::cout << IsCorrect(tests->CheckRaycastMustBeTrueAndDistanceEqualDirectionMinusHalfSizeByX(), true) << std::endl;
 	std::cout << "=======================" << std::endl;
 	delete tests;
 }

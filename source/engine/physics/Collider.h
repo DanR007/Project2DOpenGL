@@ -31,7 +31,7 @@ namespace Physics
 			_object_type = objectType;
 
 
-			_relative_position = -size / 2.f;
+			_relative_position = glm::vec2(0);
 		}
 
 		void SetCollisionResponse(EObjectTypes objectType, EResponseType responseType);

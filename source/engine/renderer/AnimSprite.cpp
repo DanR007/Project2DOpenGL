@@ -39,7 +39,7 @@ namespace Renderer
 			};
 
 
-			glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
+			glBindBuffer(GL_ARRAY_BUFFER, _texture_coord_buffer);
 			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), &textureCoords);
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 

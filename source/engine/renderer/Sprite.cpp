@@ -38,23 +38,23 @@ namespace Renderer
 
 		glGenVertexArrays(1, &_vertex_array_objects);
 
-		glGenBuffers(1, &texture_coord_buffer);
-		glGenBuffers(1, &vertex_coord_buffer);
-		glGenBuffers(1, &vertex_element_buffer);
+		glGenBuffers(1, &_texture_coord_buffer);
+		glGenBuffers(1, &_vertex_coord_buffer);
+		glGenBuffers(1, &_vertex_element_buffer);
 
 		glBindVertexArray(_vertex_array_objects);
 
-		glBindBuffer(GL_ARRAY_BUFFER, vertex_coord_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, _vertex_coord_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(vertexCoord), vertexCoord, GL_STATIC_DRAW);
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-		glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, _texture_coord_buffer);
 		glBufferData(GL_ARRAY_BUFFER, sizeof(texCoord), texCoord, GL_STATIC_DRAW);
 		glEnableVertexAttribArray(1);
 		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 0, nullptr);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vertex_element_buffer);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _vertex_element_buffer);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elementArray), elementArray, GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -63,9 +63,9 @@ namespace Renderer
 
 	Sprite::~Sprite()
 	{
-		glDeleteBuffers(1, &vertex_coord_buffer);
-		glDeleteBuffers(1, &texture_coord_buffer);
-		glDeleteBuffers(1, &vertex_element_buffer);
+		glDeleteBuffers(1, &_vertex_coord_buffer);
+		glDeleteBuffers(1, &_texture_coord_buffer);
+		glDeleteBuffers(1, &_vertex_element_buffer);
 		glDeleteVertexArrays(1, &_vertex_array_objects);
 	}
 
@@ -81,7 +81,7 @@ namespace Renderer
 			subTexture.right_upper_UV.x, subTexture.right_upper_UV.y
 		};
 
-		glBindBuffer(GL_ARRAY_BUFFER, texture_coord_buffer);
+		glBindBuffer(GL_ARRAY_BUFFER, _texture_coord_buffer);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), &textureCoords);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
@@ -92,7 +92,9 @@ namespace Renderer
 
 		glm::mat4 model(1.f);//create a model matrix
 		
-		model = glm::translate(model, glm::vec3(_world_position, 0.f));
+		glm::vec2 position = _world_position - _size / 2.f;
+
+		model = glm::translate(model, glm::vec3(position, 0.f));
 		model = glm::translate(model, glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.f));
 		model = glm::rotate(model, glm::radians(_world_rotation), glm::vec3(0.f, 0.f, 1.f));
 		model = glm::translate(model, glm::vec3(-0.5f * _size.x, -0.5f * _size.y, 0.f));

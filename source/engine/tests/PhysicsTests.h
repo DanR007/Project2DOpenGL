@@ -72,26 +72,38 @@ public:
 	bool CheckRaycastMustBeTrueAndPosZero()
 	{
 		RaycastResult result;
-		GetWorld()->SpawnActor<Game::Objects::Wall>("wall", glm::vec2(0), glm::vec2(100.f));
+		GetWorld()->SpawnActor<Game::Objects::Wall>("wall", glm::vec2(50), glm::vec2(100.f));
 		GetWorld()->GetPhysicsManager()->Raycast(result, glm::vec2(-10), glm::vec2(10), ERaycastTypes::ERT_Visible);
 		GetWorld()->Clear();
 		return result._is_hit && result._hit_position == glm::vec2(0);
 	}
-	bool CheckRaycastMustBeFalse()
+	bool CheckRaycastMustBeFalseBecauseDirectionAwayFromBox()
 	{
 		RaycastResult result;
-		GetWorld()->SpawnActor<Game::Objects::Wall>("wall", glm::vec2(0), glm::vec2(100.f));
+		GetWorld()->SpawnActor<Game::Objects::Wall>("wall", glm::vec2(50), glm::vec2(100.f));
 		GetWorld()->GetPhysicsManager()->Raycast(result, glm::vec2(-10), glm::vec2(-100), ERaycastTypes::ERT_Visible);
 		GetWorld()->Clear();
 		return result._is_hit;
 	}
-	bool CheckRaycastMustBeTruePosSqrtOf3MUltyply10ByXAndMinus10ByY()
+	bool CheckRaycastMustBeFalseBecauseRaySmallerThenDistanceToBox()
 	{
 		RaycastResult result;
-		GetWorld()->SpawnActor<Game::Objects::Wall>("wall", glm::vec2(0), glm::vec2(100.f), 30.f);
-		GetWorld()->GetPhysicsManager()->Raycast(result, glm::vec2(-10), glm::vec2(-10.f, 30.f), ERaycastTypes::ERT_Visible);
+		GetWorld()->SpawnActor<Game::Objects::Wall>("wall", glm::vec2(50), glm::vec2(100.f), 45.f);
+		GetWorld()->GetPhysicsManager()->Raycast(result, glm::vec2(-10), glm::vec2(0), ERaycastTypes::ERT_Visible);
 		GetWorld()->Clear();
-		return result._is_hit && result._hit_position == glm::vec2(std::sqrt(3) * 10.f, -10.f);
+		return result._is_hit;
+	}
+	bool CheckRaycastMustBeTrueAndDistanceEqualDirectionMinusHalfSizeByX()
+	{
+		RaycastResult result;
+		glm::vec2 size = glm::vec2(100.f);
+		GetWorld()->SpawnActor<Game::Objects::Wall>("wall", glm::vec2(50), size, 45.f);
+		glm::vec2 start = glm::vec2(0.f), end = glm::vec2(50.f);
+		glm::vec2 direction = end - start;
+		GetWorld()->GetPhysicsManager()->Raycast(result, start, end, ERaycastTypes::ERT_Visible);
+		GetWorld()->Clear();
+		float distance = (float)std::sqrt(std::pow(direction.x, 2) + std::pow(direction.y, 2)) - size.x / 2;
+		return result._is_hit && std::abs(result._distance - distance) < 0.0001;
 	}
 private:
 	Physics::PhysicsManager* manager;
