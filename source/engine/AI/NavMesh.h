@@ -1,47 +1,22 @@
 #pragma once
 #include <glm/vec2.hpp>
 #include <vector>
-#include <string>
-#include <list>
 
+#include "../generators/RTSMapGenerator.h"
 
-namespace Game
-{
-	class Actor;
-}
+struct Cell;
 
-namespace p2t
-{
-	class CDT;
-	class Triangle;
-	struct Point;
-}
-
-class NavMesh
+class NavMeshRTS
 {
 public:
-	NavMesh();
-	~NavMesh();
+	NavMeshRTS(std::vector<std::vector<Cell>>& map);
+	NavMeshRTS();
 
-	void CreateNavMesh(std::vector<std::string>&, const glm::vec2 actors_size, const glm::vec2& block_size);
-
-	void FillArrayOfPoints(std::vector<std::string>& map, const glm::vec2& block_size);
-
-	std::vector<p2t::Point*> GetArrayOfPoints() { return _points; }
-	std::vector<p2t::Triangle*> GetTriangles() { return _triangles; }
-	p2t::CDT* GetCDT() { return _cdt; }
-
+	void FillMap(std::vector<std::vector<Cell>>& map);
+	
+	std::vector<std::vector<Cell>> GetMap();
 private:
-	bool CheckCorner(const std::vector<std::string>& map, const glm::ivec2 current_pos,
-		const glm::ivec2& corner_f, const glm::ivec2& corner_s, const glm::ivec2& checking);
+	std::vector<std::vector<Cell>> _map;
 
-
-	p2t::CDT* _cdt;
-
-	std::vector<p2t::Point*> _points;
-	std::vector<p2t::Triangle*> _triangles;
-
-	std::list<p2t::Triangle*> _map;
-
-	friend void TriangulateTestMap(NavMesh* nav_mesh);
+	friend class AStarRTS;
 };
