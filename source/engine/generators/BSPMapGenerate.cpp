@@ -1,9 +1,7 @@
 #include "BSPMapGenerate.h"
-#include "GameManager.h"
+#include "../managers/GameManager.h"
 
 #include "../../main.h"
-
-#include "../../game/gameobjects/WallActor.h"
 
 #include <iostream>
 
@@ -17,7 +15,12 @@ MapGenerator::MapGenerator()
 
 MapGenerator::~MapGenerator()
 {
-	
+	for (Leaf* l : leafs)
+	{
+		if (l)
+			delete l;
+	}
+	leafs.clear();
 }
 
 MapGenerator::Leaf::Leaf(const glm::ivec2& position, const glm::ivec2& size)
@@ -332,7 +335,7 @@ void MapGenerator::Leaf::CreateVerticalHall(const int32_t& y1, const int32_t& y2
 
 		if (0 <= x - 2 && generator->_map[i][x - 2] != free_cell)
 			generator->_map[i][x - 2] = wall_cell;
-		
+
 		if (generator->_map[i][x + 1] != free_cell)
 			generator->_map[i][x + 1] = wall_cell;
 	}
@@ -381,38 +384,4 @@ std::vector<std::string> MapGenerator::StartGenerate(const glm::ivec2& map_size)
 		std::cout << _map[i] << std::endl;
 
 	return _map;
-}
-
-void MapGenerator::Destroy()
-{
-	for (Leaf* l : leafs)
-	{
-		if (l)
-			delete l;
-	}
-	delete this;
-}
-
-void MapGenerator::CreateNavMeshInRooms()
-{
-	NavMesh* nav_mesh = _manager->GetNavMesh();
-	glm::vec2 block_size = _manager->GetBlockSize();
-	glm::vec2 offset = _manager->GetOffset();
-	for (Leaf::Room* room : _rooms)
-	{
-		glm::vec2 position = glm::vec2(-(_character_position.x - room->GetPosition().x) * block_size.x + offset.x,
-			(_character_position.y - room->GetPosition().y) * block_size.y + offset.y);
-		//nav_mesh->AddRectangleArea(position, glm::vec2(room->GetSize().x * block_size.x, room->GetSize().y * block_size.y));
-	}
-}
-
-void MapGenerator::CreateHallNavMesh(const glm::ivec2& start, const glm::ivec2 size)
-{
-	NavMesh* nav_mesh = _manager->GetNavMesh();
-	glm::vec2 block_size = _manager->GetBlockSize();
-	glm::vec2 offset = _manager->GetOffset();
-
-	glm::vec2 position = glm::vec2(-(_character_position.x - start.x) * block_size.x + offset.x,
-		(_character_position.y - start.y) * block_size.y + offset.y);
-	//nav_mesh->AddRectangleArea(position, glm::vec2(size.x * block_size.x, size.y * block_size.y));
 }

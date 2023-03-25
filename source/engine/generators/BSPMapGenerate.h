@@ -1,6 +1,5 @@
 #pragma once
 
-#include <memory>
 #include <vector>
 #include <string>
 
@@ -58,10 +57,6 @@ public:
 	~MapGenerator();
 
 	std::vector<std::string> StartGenerate(const glm::ivec2& map_size);
-
-	void Destroy();
-	void CreateNavMeshInRooms();
-	void CreateHallNavMesh(const glm::ivec2& start, const glm::ivec2 size);
 
 	glm::ivec2 GetCharacterPosition() const { return _character_position; }
 	class Leaf

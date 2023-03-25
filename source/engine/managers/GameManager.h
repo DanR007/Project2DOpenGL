@@ -8,9 +8,8 @@
 
 #include "ResourcesManager.h"
 #include "PhysicsManager.h"
-#include "../AI/NavMesh.h"
 
-#include "../../game/MainCharacter.h"
+#include "../AI/NavMesh.h"
 
 #include "../default_classes/Actor.h"
 
@@ -20,13 +19,15 @@ namespace Renderer
 	class ShaderProgram;
 }
 
+class PlayerController;
+
 class GameManager
 {
 public:
 	GameManager() 
 	{ 
 		_physics_manager = new Physics::PhysicsManager(this); 
-		_nav_mesh = new NavMesh();
+		_nav_mesh = new NavMeshRTS();
 	}
 	~GameManager() 
 	{
@@ -69,7 +70,7 @@ public:
 	void SetOffset(const glm::dvec2& offset) { _offset = offset; }
 
 	Physics::PhysicsManager* GetPhysicsManager() const { return _physics_manager; }
-	NavMesh* GetNavMesh() const { return _nav_mesh; }
+	NavMeshRTS* GetNavMesh() const { return _nav_mesh; }
 
 	void DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator);
 
@@ -81,16 +82,16 @@ public:
 
 	void ReadMap(std::vector<std::string>& map, const glm::ivec2& middle_position);
 private:
-	void CreateMap();
 	void InitiateMainCharacter(const glm::vec2& main_character_size, const glm::vec2& position_player);
+	
 
 	Physics::PhysicsManager* _physics_manager;
-	NavMesh* _nav_mesh;
+	NavMeshRTS* _nav_mesh;
+	PlayerController* _player_controller;
 
 	std::vector<std::shared_ptr<Game::Actor>>::iterator _it;
 
 	std::vector<std::shared_ptr<Game::Actor>> _all_actors;
-	std::shared_ptr<Game::MainCharacter> _main_character;
 
 	glm::vec2 _block_size, _offset;
 	glm::dvec2 _start_point_map, _size_map;
@@ -98,7 +99,7 @@ private:
 	bool _is_game_over;
 
 	friend class Physics::PhysicsManager;
-
+	
 	friend void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
 	friend void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode);
 };

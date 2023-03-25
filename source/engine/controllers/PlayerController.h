@@ -20,9 +20,7 @@ class PlayerController : public Controller
 public:
 
 	//using Controller::Controller;
-	//PlayerController(const float moveSpeed);
-	PlayerController(const float speed = 100.f);
-	PlayerController(Game::MainCharacter* character, const float speed);
+	PlayerController(const float speed);
 
 	~PlayerController() = default;
 
@@ -31,8 +29,6 @@ public:
 
 	void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
 	void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
-
-	void SetCharacter(Game::MainCharacter* controlledCharacter);
 
 	void SetupDefaultFunctions();
 
@@ -65,7 +61,5 @@ public:
 		it->second(argument);
 	}
 protected:
-	Game::MainCharacter* _controlled_character;
-
 	std::map<std::string, Delegate> _delegates_functions;
 };

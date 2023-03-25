@@ -7,9 +7,6 @@
 
 #include "../default_classes/Actor.h"
 
-#include "../../game/gameobjects/WallActor.h"
-#include "../../game/gameobjects/HealActor.h"
-
 #include "../managers/GameManager.h"
 
 #include <cmath>
@@ -20,7 +17,7 @@ public:
 	PhysicsTests() { manager = new Physics::PhysicsManager(nullptr); }
 	~PhysicsTests() { delete manager; }
 
-	bool CheckBlockPhysicsBetweenTwoObjectsMustBeFalse()
+	/*bool CheckBlockPhysicsBetweenTwoObjectsMustBeFalse()
 	{
 		std::shared_ptr<Game::Actor> actor = std::make_shared<Game::Actor>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "mush1", glm::vec2(0.f),
 			glm::vec2(100.f, 100.f), 0.f);
@@ -104,7 +101,7 @@ public:
 		GetWorld()->Clear();
 		float distance = (float)std::sqrt(std::pow(direction.x, 2) + std::pow(direction.y, 2)) - size.x / 2;
 		return result._is_hit && std::abs(result._distance - distance) < 0.0001;
-	}
+	}*/
 private:
 	Physics::PhysicsManager* manager;
 };

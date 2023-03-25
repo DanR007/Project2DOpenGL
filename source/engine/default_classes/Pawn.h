@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Actor.h"
-#include "../../engine/AI/AStar.h"
 
 class HealthComponent;
 class Controller;

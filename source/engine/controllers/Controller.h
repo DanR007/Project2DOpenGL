@@ -9,7 +9,7 @@ namespace Game
 	class Pawn;
 }
 
-class AStar;
+class AStarRTS;
 
 const glm::vec2 right_vector = glm::vec2(1.f, 0.f);
 const glm::vec2 up_vector = glm::vec2(0.f, 1.f);
@@ -24,16 +24,12 @@ public:
 	~Controller() = default;
 	virtual void Move(float deltaTime);
 
-	void SetIgnoreMoveInput(bool isIgnore);
 	void SetMoveSpeed(const float move_speed) { _move_speed = move_speed; }
 	virtual void ChangeMoveVector(glm::vec2 inputVector);
-
-	bool GetIsIgnoreMoveInput() { return is_ignore_move_input; }
 
 	inline glm::vec2 GetMoveValue() { return _move_vector; }
 protected:
 	bool is_pause = false;
-	bool is_ignore_move_input = false;
 
 	float _move_speed;
 
@@ -42,7 +38,7 @@ protected:
 
 	Game::Pawn* _controlled_pawn;
 
-	AStar* _a_star;
+	AStarRTS* _a_star;
 private:
 	
 };
