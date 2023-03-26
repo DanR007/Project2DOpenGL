@@ -83,7 +83,10 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
 			std::cout << (int)(xPos / 15) << " " << (int)(yPos / 15) << std::endl;
-			std::cout << GetWorld()->GetNavMesh()->GetMap()[(int)(xPos / 45)][(int)(yPos / 45)]._symbol << std::endl;
+			int size = GetWorld()->GetNavMesh()->GetMap().size();
+			if((int)(xPos / 45) < size && size > (int)(yPos / 45) && (int)(yPos / 45) >= 0 && (int)(xPos / 45) >= 0)
+				std::cout << GetWorld()->GetNavMesh()->GetMap()[(int)(xPos / 45)][(int)(yPos / 45)]._symbol << std::endl;
+			GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2(xPos, 720 - yPos));
 			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;

@@ -15,6 +15,8 @@ namespace Game
 	class MainCharacter;
 }
 
+class Unit;
+
 class PlayerController : public Controller
 {
 public:
@@ -62,4 +64,6 @@ public:
 	}
 protected:
 	std::map<std::string, Delegate> _delegates_functions;
+
+	std::vector<Unit*> _choicing_units;
 };

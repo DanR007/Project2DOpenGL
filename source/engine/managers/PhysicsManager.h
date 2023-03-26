@@ -14,6 +14,8 @@ namespace p2t { struct Point; }
 class GameManager;
 class PhysicsTests;
 
+class Unit;
+
 namespace Physics 
 {
 	class Collider;
@@ -30,6 +32,8 @@ namespace Physics
 
 		bool Raycast(RaycastResult& result, const glm::vec2& start, const glm::vec2& end, const ERaycastTypes& raycast_type,
 			Game::Actor* self = nullptr, bool ignore_self = true);
+
+		Unit* GetUnitUnderCursor(const glm::vec2& cursor_pos);
 	private:
 		bool IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider, const glm::vec2& pos_second_collider, const glm::vec2& size_second_collider);
 

@@ -7,7 +7,7 @@
 
 struct Cell
 {
-	Cell(const glm::ivec2& position, const short int& height = 0, const short int& cost = 1, const char& symbol = '.', const short int& field_id = 0):
+	Cell(const glm::ivec2& position, const short int& height = 0, const short int& cost = 1, const char& symbol = '.', const unsigned short int& field_id = 0):
 		_height(height), _cost(cost), _position(position), _symbol(symbol), _field_id(field_id)
 	{
 
@@ -31,7 +31,8 @@ struct Cell
 	}
 	glm::ivec2 _position;
 
-	short int _height, _cost, _field_id;
+	short int _height, _cost;
+	unsigned short int _field_id;
 	char _symbol;
 };
 

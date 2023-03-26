@@ -10,6 +10,8 @@
 
 #include "../../main.h"
 
+#include "../../game/gameobjects/Unit.h"
+
 #define PI 3.141592653f
 
 namespace Physics
@@ -149,6 +151,25 @@ namespace Physics
 		}
 
 		return result._is_hit;
+	}
+
+	Unit* PhysicsManager::GetUnitUnderCursor(const glm::vec2& cursor_pos)
+	{
+		for (std::shared_ptr<Game::Actor> actor : _world->_all_actors)
+		{
+			if (IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), actor->GetPosition(), actor->GetCollider()->GetSize()))
+			{
+				std::shared_ptr<Unit> u = std::dynamic_pointer_cast<Unit>(actor);
+				if (u)
+					return u.get();
+			}
+		}
+
+#ifdef DEBUG
+		std::cout << "No selecting units: " << std::endl;
+#endif
+
+		return nullptr;
 	}
 
 	bool PhysicsManager::IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider,

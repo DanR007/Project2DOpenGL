@@ -55,12 +55,24 @@ source/engine/default_classes/Pawn.cpp
 source/engine/default_classes/Component.cpp
 source/engine/parser/XMLParser.cpp
 )
+
+
+set(GAME_HEADERS
+source/game/gameobjects/Unit.h
+)
+
+set(GAME_CPP
+source/game/gameobjects/Unit.cpp
+)
+
 add_executable(${PROJECT_NAME} 
 "source/main.cpp"
 "source/main.h"
 "source/AllTestCases.h"
 ${ENGINE_CPP}
 ${ENGINE_HEADERS}
+${GAME_HEADERS}
+${GAME_CPP}
 )
 
 add_subdirectory(external/glfw)

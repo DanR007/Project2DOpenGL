@@ -6,6 +6,9 @@
 
 #include <iostream>
 
+#include "../AI/AStarRTS.h"
+
+#include "../../game/gameobjects/Unit.h"
 
 void GameManager::Clear()
 {
@@ -58,9 +61,13 @@ void GameManager::BeginPlay()
 	_block_size = main_character_size + glm::vec2(10.f);
 	_offset = position_player;
 
+	SpawnActor<Unit>("mush1", glm::vec2(50, 670));
+
 	RTSMapGenerator* generator = new RTSMapGenerator(glm::ivec2(0));
 	_nav_mesh->FillMap(generator->GenerateMap());
 
+	AStarRTS* star = new AStarRTS();
+	//star->DevelopPath(Cell(glm::ivec2(0), 0, 1, '.', 2), Cell(glm::ivec2(4, 0), 0, 1, '.', 1));
 }
 
 void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator)
