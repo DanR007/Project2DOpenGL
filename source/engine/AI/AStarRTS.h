@@ -91,7 +91,11 @@ private:
 	void CollectPath(PathCell* cell);
 	bool LocateInMap(const glm::ivec2& pos);
 
+	Cell FindNearestCell(const Cell& target, unsigned short need_id);
+
 	PathCell* GetMinCostCell();
+
+	bool CanStepInto(const glm::ivec2& move, const Cell& next_cell, const Cell& cur_cell);
 
 	const glm::ivec2 _move_dir[8]= 
 	{

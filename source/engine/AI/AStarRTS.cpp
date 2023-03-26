@@ -6,6 +6,9 @@
 
 #include "../../main.h"
 
+#include <iostream>
+#include <queue>
+
 AStarRTS::AStarRTS()
 {
 	_nav_mesh = GetWorld()->GetNavMesh();
@@ -32,15 +35,22 @@ float GetLengthTurn(const glm::ivec2& dir, const Cell& cell)
 
 void AStarRTS::DevelopPath(const Cell& start, const Cell& target)
 {
+	Cell trully_target = target;
+
+	if (start._field_id != target._field_id)
+	{
+		trully_target = FindNearestCell(target, start._field_id);
+	}
+
 	PathCell* c = new PathCell(start);
-	c->SetDistance(target._position);
+	c->SetDistance(trully_target._position);
 	c->CalculateCost();
 
 	PathCell* p_cur = c;
 
 	_close_cells.push_back(c);
 
-	while (!_close_cells.empty() && p_cur->GetCell() != target)
+	while (!_close_cells.empty() && p_cur->GetCell() != trully_target)
 	{
 		p_cur = _close_cells.back();
 		Cell cur = p_cur->GetCell();
@@ -53,7 +63,7 @@ void AStarRTS::DevelopPath(const Cell& start, const Cell& target)
 			if (LocateInMap(next._position))
 			{
 				next = _nav_mesh->_map[next._position.y][next._position.x];
-				if (next._cost != -1 && std::abs(next._height - p_cur->GetCell()._height) < 10.f)
+				if (CanStepInto(_move_dir[i], next, p_cur->GetCell()))
 				{
 					PathCell* new_cell = new PathCell(next);
 					auto it = Find(_open_cells.begin(), _open_cells.end(), new_cell);
@@ -78,7 +88,7 @@ void AStarRTS::DevelopPath(const Cell& start, const Cell& target)
 						{
 							new_cell->SetPrev(p_cur);
 							new_cell->SetLength(length);
-							new_cell->SetDistance(target._position);
+							new_cell->SetDistance(trully_target._position);
 							new_cell->SetDirection(_move_dir[i]);
 							new_cell->CalculateCost();
 
@@ -103,12 +113,52 @@ void AStarRTS::CollectPath(PathCell* end_cell)
 		_path.emplace(_path.begin(), cell->GetCell()._position);
 		cell = cell->GetPrev();
 	}
-	int a = 0;
 }
 
 bool AStarRTS::LocateInMap(const glm::ivec2& pos)
 {
 	return _nav_mesh->_map.size() > pos.x && _nav_mesh->_map.size() > pos.y && 0 <= pos.x && 0 <= pos.y;
+}
+
+Cell AStarRTS::FindNearestCell(const Cell& target, unsigned short need_id)
+{
+	Cell nearest = Cell();
+	std::queue<glm::ivec2> q;
+	std::vector<glm::ivec2> close;
+	q.push(target._position);
+	while (!q.empty())
+	{
+		glm::ivec2 current = q.back();
+		glm::ivec2 next;
+		close.push_back(current);
+		q.pop();
+		for (unsigned short int i = 0; i < _count_move_dir; i++)
+		{
+			next = current + _move_dir[i];
+
+			if (LocateInMap(next))
+			{
+				if (_nav_mesh->_map[next.y][next.x]._field_id == need_id && _nav_mesh->_map[next.y][next.x]._cost != -1)
+				{
+					return _nav_mesh->_map[next.y][next.x];
+				}
+				else
+				{
+					std::vector<glm::ivec2>::iterator it = std::find(close.begin(), close.end(), next);
+					if (it == close.end())
+					{
+						q.push(next);
+					}
+				}
+			}
+
+		}
+	}
+
+#ifdef DEBUG
+	std::cout << "There's not cell with this id: " << need_id << std::endl;
+#endif //DEBUG
+	return nearest;
 }
 
 PathCell* AStarRTS::GetMinCostCell()
@@ -128,4 +178,14 @@ PathCell* AStarRTS::GetMinCostCell()
 	_open_cells.erase(min_it);
 
 	return min_p;
+}
+
+bool AStarRTS::CanStepInto(const glm::ivec2& move, const Cell& next_cell, const Cell& cur_cell)
+{
+	//-1 is blocked cell
+	glm::ivec2 f = cur_cell._position + glm::ivec2(move.x, 0);
+	glm::ivec2 s = cur_cell._position + glm::ivec2(0, move.y);
+	return next_cell._cost != -1 && std::abs(next_cell._height - cur_cell._height) < 10.f  
+		//this condition mean that unit can't step diagonal if this split wall
+		&& (_nav_mesh->_map[f.x][f.y]._cost != -1 || _nav_mesh->_map[s.x][s.y]._cost != -1);
 }
