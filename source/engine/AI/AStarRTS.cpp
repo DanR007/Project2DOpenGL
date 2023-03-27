@@ -14,6 +14,12 @@ AStarRTS::AStarRTS()
 	_nav_mesh = GetWorld()->GetNavMesh();
 }
 
+AStarRTS::~AStarRTS()
+{
+	Clear();
+	_path.clear();
+}
+
 
 std::vector<PathCell*>::iterator Find(std::vector<PathCell*>::iterator s, std::vector<PathCell*>::iterator e, PathCell* value)
 {
@@ -33,16 +39,17 @@ float GetLengthTurn(const glm::ivec2& dir, const Cell& cell)
 	return std::sqrtf(std::pow(cell._cost, 2) * std::abs(dir.x) + std::pow(cell._cost, 2) * std::abs(dir.y));
 }
 
-void AStarRTS::DevelopPath(const Cell& start, const Cell& target)
+void AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 {
 	Cell trully_target = target;
-
-	if (start._field_id != target._field_id)
+	Cell start_cell = _nav_mesh->_map[start.y][start.x];
+	if (start_cell._field_id != target._field_id
+|| target._cost == -1)
 	{
-		trully_target = FindNearestCell(target, start._field_id);
+		trully_target = FindNearestCell(target, start_cell._field_id);
 	}
 
-	PathCell* c = new PathCell(start);
+	PathCell* c = new PathCell(start_cell);
 	c->SetDistance(trully_target._position);
 	c->CalculateCost();
 
@@ -105,14 +112,33 @@ void AStarRTS::DevelopPath(const Cell& start, const Cell& target)
 	CollectPath(p_cur);
 }
 
+void AStarRTS::Clear()
+{
+	for (PathCell* c : _close_cells)
+	{
+		delete c;
+	}
+	_close_cells.clear();
+
+	for (PathCell* c : _open_cells)
+	{
+		delete c;
+	}
+	_open_cells.clear();
+}
+
 void AStarRTS::CollectPath(PathCell* end_cell)
 {
+	_path.clear();
+
 	PathCell* cell = end_cell;
 	while (cell->GetPrev())
 	{
 		_path.emplace(_path.begin(), cell->GetCell()._position);
 		cell = cell->GetPrev();
 	}
+
+	Clear();
 }
 
 bool AStarRTS::LocateInMap(const glm::ivec2& pos)
@@ -185,7 +211,8 @@ bool AStarRTS::CanStepInto(const glm::ivec2& move, const Cell& next_cell, const 
 	//-1 is blocked cell
 	glm::ivec2 f = cur_cell._position + glm::ivec2(move.x, 0);
 	glm::ivec2 s = cur_cell._position + glm::ivec2(0, move.y);
+	
 	return next_cell._cost != -1 && std::abs(next_cell._height - cur_cell._height) < 10.f  
 		//this condition mean that unit can't step diagonal if this split wall
-		&& (_nav_mesh->_map[f.x][f.y]._cost != -1 || _nav_mesh->_map[s.x][s.y]._cost != -1);
+		&& LocateInMap(f) && LocateInMap(s) && (_nav_mesh->_map[f.x][f.y]._cost != -1 || _nav_mesh->_map[s.x][s.y]._cost != -1);
 }

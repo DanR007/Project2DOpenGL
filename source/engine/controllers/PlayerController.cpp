@@ -2,11 +2,10 @@
 #include "../managers/PhysicsManager.h"
 #include "../managers/GameManager.h"
 
+#include "../../game/gameobjects/Unit.h"
 
-PlayerController::PlayerController(const float speed)
+PlayerController::PlayerController()
 { 
-	_move_speed = speed;
-
 	SetupDefaultFunctions();
 }
 
@@ -82,11 +81,30 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 		{
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
-			std::cout << (int)(xPos / 15) << " " << (int)(yPos / 15) << std::endl;
+			std::cout << (int)(xPos / 45) << " " << (int)(yPos / 45) << std::endl;
 			int size = GetWorld()->GetNavMesh()->GetMap().size();
 			if((int)(xPos / 45) < size && size > (int)(yPos / 45) && (int)(yPos / 45) >= 0 && (int)(xPos / 45) >= 0)
 				std::cout << GetWorld()->GetNavMesh()->GetMap()[(int)(xPos / 45)][(int)(yPos / 45)]._symbol << std::endl;
-			GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2(xPos, 720 - yPos));
+			_unit = GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2(xPos, window_size.y - yPos));
+			if (_unit)
+			{
+				_unit->SetChoicing(true);
+			}
+			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
+		}
+		break;
+		case GLFW_MOUSE_BUTTON_2:
+		{
+			double xPos, yPos;
+			glfwGetCursorPos(currentWindow, &xPos, &yPos);
+			std::cout << (int)(xPos / 45) << " " << (int)(yPos / 45) << std::endl;
+			int size = GetWorld()->GetNavMesh()->GetMap().size();
+			if (_unit && (int)(xPos / 45) < size && size > (int)(yPos / 45) && (int)(yPos / 45) >= 0 && (int)(xPos / 45) >= 0)
+			{
+				_unit->MoveTo(GetWorld()->GetNavMesh()->GetMap()[yPos / 45][xPos / 45]);
+				std::cout << GetWorld()->GetNavMesh()->GetMap()[(int)(yPos / 45)][(int)(xPos / 45)]._symbol << std::endl;
+			}
+			
 			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;

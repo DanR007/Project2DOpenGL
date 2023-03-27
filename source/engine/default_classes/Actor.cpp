@@ -22,13 +22,19 @@ namespace Game
 		_world_position = startPosition;
 		_rotation = startRotation;
 		_size = startSize;
-
-		if (_collider)
-		{
-			//_collider->Attach(this);
-			_collider->SetRelativePosition(-startSize / 2.f);
-		}
 		
+	}
+
+	Actor::Actor(Actor&& a) noexcept
+	{
+		_relative_position = a._relative_position;
+		_world_position = a._world_position;
+		_rotation = a._rotation;
+		_size = a._size;
+
+		_collider = a._collider;
+		_iterator = a._iterator;
+		_anim_sprite = std::move(a._anim_sprite);
 	}
 
 	Actor::~Actor()

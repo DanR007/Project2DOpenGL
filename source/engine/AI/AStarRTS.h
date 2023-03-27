@@ -83,8 +83,9 @@ class AStarRTS
 {
 public:
 	AStarRTS();
+	~AStarRTS();
 
-	void DevelopPath(const Cell& start, const Cell& target);
+	void DevelopPath(const glm::ivec2& start, const Cell& target);
 
 	void Clear();
 private:

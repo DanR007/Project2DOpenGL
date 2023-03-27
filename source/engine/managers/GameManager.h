@@ -87,7 +87,7 @@ private:
 
 	Physics::PhysicsManager* _physics_manager;
 	NavMeshRTS* _nav_mesh;
-	PlayerController* _player_controller;
+	PlayerController* _player_controller = nullptr;
 
 	std::vector<std::shared_ptr<Game::Actor>>::iterator _it;
 

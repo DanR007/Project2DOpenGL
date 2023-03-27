@@ -11,6 +11,8 @@ namespace Game
 
 class AStarRTS;
 
+struct Cell;
+
 const glm::vec2 right_vector = glm::vec2(1.f, 0.f);
 const glm::vec2 up_vector = glm::vec2(0.f, 1.f);
 
@@ -28,6 +30,8 @@ public:
 	virtual void ChangeMoveVector(glm::vec2 inputVector);
 
 	inline glm::vec2 GetMoveValue() { return _move_vector; }
+
+	void MakePathForGoal(const Cell& goal);
 protected:
 	bool is_pause = false;
 

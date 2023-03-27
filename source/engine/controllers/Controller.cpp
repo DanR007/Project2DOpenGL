@@ -2,7 +2,7 @@
 
 #include "../default_classes/Pawn.h"
 
-#include "../managers/PhysicsManager.h"
+#include "../managers/GameManager.h"
 
 #include "../AI/AStarRTS.h"
 
@@ -39,5 +39,8 @@ void Controller::ChangeMoveVector(glm::vec2 inputVector)
 	_move_vector += inputVector;
 }
 
-
-
+void Controller::MakePathForGoal(const Cell& goal)
+{
+	glm::ivec2 cell_pos = glm::ivec2(_controlled_pawn->GetPosition().x / GetWorld()->GetBlockSize().x,(window_size.y - _controlled_pawn->GetPosition().y) / GetWorld()->GetBlockSize().y);
+	_a_star->DevelopPath(cell_pos, goal);
+}

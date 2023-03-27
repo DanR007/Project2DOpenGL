@@ -34,6 +34,7 @@ namespace Game
 		Actor(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
 			const std::string& initSubtextureName,
 			const glm::vec2& startPosition, const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f);
+		Actor(Actor&& a) noexcept;
 
 		Actor() = delete;
 		~Actor();

@@ -20,9 +20,8 @@ class Unit;
 class PlayerController : public Controller
 {
 public:
-
 	//using Controller::Controller;
-	PlayerController(const float speed);
+	PlayerController();
 
 	~PlayerController() = default;
 
@@ -63,6 +62,8 @@ public:
 		it->second(argument);
 	}
 protected:
+	Unit* _unit = nullptr;
+
 	std::map<std::string, Delegate> _delegates_functions;
 
 	std::vector<Unit*> _choicing_units;

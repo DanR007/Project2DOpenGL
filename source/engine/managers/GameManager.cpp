@@ -63,10 +63,11 @@ void GameManager::BeginPlay()
 
 	SpawnActor<Unit>("mush1", glm::vec2(50, 670));
 
+	_player_controller = new PlayerController();
+
 	RTSMapGenerator* generator = new RTSMapGenerator(glm::ivec2(0));
 	_nav_mesh->FillMap(generator->GenerateMap());
 
-	AStarRTS* star = new AStarRTS();
 	//star->DevelopPath(Cell(glm::ivec2(0), 0, 1, '.', 2), Cell(glm::ivec2(4, 0), 0, 1, '.', 1));
 }
 

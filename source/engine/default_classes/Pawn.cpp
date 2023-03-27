@@ -20,6 +20,14 @@ namespace Game
 		
 	}
 
+	Pawn::Pawn(Pawn&& p) noexcept
+		:Actor(std::move(p))
+	{
+		delete _controller;
+
+		_controller = p._controller;
+	}
+
 	void Pawn::Update(float deltaTime)
 	{
 		_controller->Move(deltaTime);
