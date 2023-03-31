@@ -59,9 +59,10 @@ void GameManager::BeginPlay()
 	glm::vec2 position_player = glm::vec2((window_size.x - main_character_size.x) / 2, (window_size.y - main_character_size.y) / 2);
 
 	_block_size = main_character_size + glm::vec2(10.f);
-	_offset = position_player;
 
-	SpawnActor<Unit>("mush1", glm::vec2(50, 670));
+	_offset = glm::vec2(_size_map.x / 2 * _block_size.x, _size_map.y / 2 * _block_size.y) - glm::vec2(window_size / 2);
+
+	SpawnActor<Unit>("mush1", glm::vec2(0) - _offset, glm::vec2(45.f));
 
 	_player_controller = new PlayerController();
 

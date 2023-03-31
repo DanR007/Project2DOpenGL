@@ -13,7 +13,7 @@ Unit::Unit(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Rendere
 	_hp = 100;
 
 	_controller = new Controller(this, 0);
-	_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Pawn, this, startPosition);
+	_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
 }
 
 Unit::Unit(Unit&& u) noexcept :

@@ -28,6 +28,8 @@ public:
 	{ 
 		_physics_manager = new Physics::PhysicsManager(this); 
 		_nav_mesh = new NavMeshRTS();
+
+		_size_map = glm::ivec2(7);
 	}
 	~GameManager() 
 	{
@@ -75,7 +77,9 @@ public:
 	void DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator);
 
 	glm::vec2 GetBlockSize() const { return _block_size; }
+	//offset is map_coord - window_coord
 	glm::vec2 GetOffset() const { return _offset; }
+	glm::ivec2 GetSizeMap() const { return _size_map; }
 
 	std::vector<std::shared_ptr<Game::Actor>> GetActors() { return _all_actors; }
 	std::vector<std::shared_ptr<Game::Actor>> GetActorsOfType();
@@ -93,8 +97,9 @@ private:
 
 	std::vector<std::shared_ptr<Game::Actor>> _all_actors;
 
+	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _block_size, _offset;
-	glm::dvec2 _start_point_map, _size_map;
+	glm::ivec2 _start_point_map, _size_map;
 
 	bool _is_game_over;
 

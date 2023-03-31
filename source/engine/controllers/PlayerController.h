@@ -62,6 +62,9 @@ public:
 		it->second(argument);
 	}
 protected:
+	//offset is map_coord (multiply by block_size) - window_coord
+	glm::vec2 _offset;
+
 	Unit* _unit = nullptr;
 
 	std::map<std::string, Delegate> _delegates_functions;
