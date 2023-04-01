@@ -39,8 +39,7 @@ void Controller::ChangeMoveVector(glm::vec2 inputVector)
 	_move_vector += inputVector;
 }
 
-void Controller::MakePathForGoal(const Cell& goal)
+void Controller::MakePathForGoal(const Cell& goal, const glm::ivec2& move_from)
 {
-	glm::ivec2 cell_pos = glm::ivec2(_controlled_pawn->GetPosition().x / GetWorld()->GetBlockSize().x,(window_size.y - _controlled_pawn->GetPosition().y) / GetWorld()->GetBlockSize().y);
-	_a_star->DevelopPath(cell_pos, goal);
+	_a_star->DevelopPath(move_from, goal);
 }

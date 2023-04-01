@@ -17,21 +17,11 @@ namespace Physics
 	class Collider : public MovableComponent
 	{
 	public:
-		/// <summary>
-		/// Spawn collider which have relative position (-size / 2)
-		/// </summary>
-		/// <param name="objectType"></param>
-		/// <param name="owner"></param>
-		/// <param name="position"></param>
-		/// <param name="size"></param>
-		/// <param name="rotation"></param>
+
 		Collider(const EObjectTypes objectType, Game::Actor* owner, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f), const float& rotation = 0.f) 
 			: MovableComponent(owner, position, size, rotation)
 		{
 			_object_type = objectType;
-
-
-			_relative_position = glm::vec2(0);
 		}
 
 		void SetCollisionResponse(EObjectTypes objectType, EResponseType responseType);

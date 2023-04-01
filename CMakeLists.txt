@@ -59,10 +59,14 @@ source/engine/parser/XMLParser.cpp
 
 set(GAME_HEADERS
 source/game/gameobjects/Unit.h
+source/game/gameobjects/Goal.h
+source/game/gameobjects/Wall.h
 )
 
 set(GAME_CPP
 source/game/gameobjects/Unit.cpp
+source/game/gameobjects/Goal.cpp
+source/game/gameobjects/Wall.cpp
 )
 
 add_executable(${PROJECT_NAME} 

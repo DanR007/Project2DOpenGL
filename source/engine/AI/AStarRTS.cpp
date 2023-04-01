@@ -6,6 +6,8 @@
 
 #include "../../main.h"
 
+#include "../../game/gameobjects/Goal.h"
+
 #include <iostream>
 #include <queue>
 
@@ -48,6 +50,10 @@ void AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 	{
 		trully_target = FindNearestCell(target, start_cell._field_id);
 	}
+
+	GetWorld()->SpawnActor<Goal>("pistolBullet", 
+		glm::vec2(trully_target._position.x * GetWorld()->GetBlockSize().x, trully_target._position.y * GetWorld()->GetBlockSize().y) - GetWorld()->GetOffset(),
+		GetWorld()->GetBlockSize());
 
 	PathCell* c = new PathCell(start_cell);
 	c->SetDistance(trully_target._position);

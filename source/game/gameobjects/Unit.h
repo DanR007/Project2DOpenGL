@@ -20,4 +20,5 @@ private:
 
 	int _hp;
 
+	glm::ivec2 _map_position;
 };

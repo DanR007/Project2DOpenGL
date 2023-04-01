@@ -81,14 +81,14 @@ public:
 	glm::vec2 GetOffset() const { return _offset; }
 	glm::ivec2 GetSizeMap() const { return _size_map; }
 
+	PlayerController* GetPlayerController() { return _player_controller; }
+	PlayerController* GetPlayerController(const unsigned short int& id) { return _controllers[id]; }
+
 	std::vector<std::shared_ptr<Game::Actor>> GetActors() { return _all_actors; }
 	std::vector<std::shared_ptr<Game::Actor>> GetActorsOfType();
 
-	void ReadMap(std::vector<std::string>& map, const glm::ivec2& middle_position);
+	void ReadMap();
 private:
-	void InitiateMainCharacter(const glm::vec2& main_character_size, const glm::vec2& position_player);
-	
-
 	Physics::PhysicsManager* _physics_manager;
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
@@ -97,6 +97,7 @@ private:
 
 	std::vector<std::shared_ptr<Game::Actor>> _all_actors;
 
+	std::vector< PlayerController*> _controllers;
 	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _block_size, _offset;
 	glm::ivec2 _start_point_map, _size_map;

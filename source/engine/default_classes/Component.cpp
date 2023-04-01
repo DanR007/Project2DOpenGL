@@ -6,35 +6,7 @@
 
 void MovableComponent::Attach(Game::Actor* owner)
 {
-	if (owner)
-	{
-		_relative_rotation = owner->GetRotation() - _world_rotation;
-		_relative_position = owner->GetPosition() - _world_position;
-	}
 	_owner = owner;
-}
-
-void MovableComponent::Attach(Game::Actor* owner, const glm::vec2& relative_position, const float& relative_rotation)
-{
-	_relative_rotation = relative_rotation;
-	_relative_position = relative_position;
-	_owner = owner;
-}
-
-void MovableComponent::SetRelativeRotation(const float new_rotation)
-{
-	_relative_rotation = new_rotation;
-	_world_rotation = _owner->GetRotation() + _relative_rotation;
-
-	Rotate();
-}
-
-void MovableComponent::AddRelativeRotation(const float& d_rot)
-{
-	_relative_rotation += d_rot;
-	_world_rotation = _owner->GetRotation() + _relative_rotation;
-
-	Rotate();
 }
 
 void MovableComponent::Rotate()

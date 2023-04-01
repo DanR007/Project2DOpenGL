@@ -92,7 +92,7 @@ namespace Renderer
 
 		glm::mat4 model(1.f);//create a model matrix
 		
-		glm::vec2 position = _world_position - _size / 2.f;
+		glm::vec2 position = _world_position/* - _size / 2.f*/;
 
 		model = glm::translate(model, glm::vec3(position, 0.f));
 		model = glm::translate(model, glm::vec3(0.5f * _size.x, 0.5f * _size.y, 0.f));

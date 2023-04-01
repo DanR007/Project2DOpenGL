@@ -9,6 +9,7 @@
 #include "../AI/AStarRTS.h"
 
 #include "../../game/gameobjects/Unit.h"
+#include "../../game/gameobjects/Wall.h"
 
 void GameManager::Clear()
 {
@@ -60,15 +61,16 @@ void GameManager::BeginPlay()
 
 	_block_size = main_character_size + glm::vec2(10.f);
 
-	_offset = glm::vec2(_size_map.x / 2 * _block_size.x, _size_map.y / 2 * _block_size.y) - glm::vec2(window_size / 2);
-
-	SpawnActor<Unit>("mush1", glm::vec2(0) - _offset, glm::vec2(45.f));
-
 	_player_controller = new PlayerController();
+
+	_controllers.push_back(_player_controller);
+
+	SpawnActor<Unit>("mush1", glm::vec2(0) - _offset, _block_size);
 
 	RTSMapGenerator* generator = new RTSMapGenerator(glm::ivec2(0));
 	_nav_mesh->FillMap(generator->GenerateMap());
 
+	ReadMap();
 	//star->DevelopPath(Cell(glm::ivec2(0), 0, 1, '.', 2), Cell(glm::ivec2(4, 0), 0, 1, '.', 1));
 }
 
@@ -81,13 +83,16 @@ void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterato
 	//clear map here
 }
 
-void GameManager::ReadMap(std::vector<std::string>& map, const glm::ivec2& middle_position)
+void GameManager::ReadMap()
 {
-	for (int y = map.size() - 1; y >= 0; y--)
+	for (int y = _size_map.y - 1; y >= 0; y--)
 	{
-		for (int x = 0; x < map.size(); x++)
+		for (int x = 0; x < _size_map.x; x++)
 		{
-			
+			if (GetNavMesh()->GetMap()[y][x]._cost == -1)
+			{
+				SpawnActor<Wall>("wall", glm::vec2(x * _block_size.x, y * _block_size.y) - _offset, _block_size);
+			}
 		}
 	}
 }

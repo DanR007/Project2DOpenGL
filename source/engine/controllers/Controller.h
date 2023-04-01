@@ -31,7 +31,7 @@ public:
 
 	inline glm::vec2 GetMoveValue() { return _move_vector; }
 
-	void MakePathForGoal(const Cell& goal);
+	void MakePathForGoal(const Cell& goal, const glm::ivec2& move_from);
 protected:
 	bool is_pause = false;
 

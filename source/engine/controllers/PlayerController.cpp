@@ -3,6 +3,7 @@
 #include "../managers/GameManager.h"
 
 #include "../../game/gameobjects/Unit.h"
+#include "../../game/gameobjects/Goal.h"
 
 PlayerController::PlayerController()
 { 
@@ -12,7 +13,9 @@ PlayerController::PlayerController()
 	glm::vec2 block_size = GetWorld()->GetBlockSize();
 
 	//offset is map_coord (multiply by block_size) - window_coord
-	_offset = glm::vec2(window_size / 2) - glm::vec2(float(size.x) / 2 * block_size.x, float(size.y) / 2 * block_size.y);
+	_offset = glm::vec2(float(size.x) / 2 * block_size.x, float(size.y) / 2 * block_size.y) - glm::vec2(window_size / 2);
+
+	GetWorld()->SetOffset(_offset);
 }
 
 void PlayerController::Move(float deltaTime)
@@ -88,19 +91,17 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
 
-			glm::vec2 block_size = GetWorld()->GetBlockSize();
-
-			yPos = window_size.y - yPos - 2 * _offset.y;
-			xPos = xPos - 2 * _offset.x;
+			yPos = window_size.y - yPos;
+			glm::ivec2 map_coord = GetMapCoord(xPos, yPos);
 
 			//Print map coordinates
-			std::cout << (int)(xPos / block_size.x) << " " << (int)(yPos / block_size.y) << std::endl;
+			std::cout << "ASCII Map coordinates (x, y): " << map_coord.x << " " << map_coord.y << std::endl;
 
-			int size = GetWorld()->GetNavMesh()->GetMap().size();
 			//Print map symbol by coordinates
-			if((int)(xPos / block_size.x) < size && size > (int)(yPos / block_size.y) && (int)(yPos / block_size.y) >= 0 && (int)(xPos / block_size.x) >= 0)
-				std::cout << GetWorld()->GetNavMesh()->GetMap()[(int)(xPos / block_size.x)][(int)(yPos / block_size.y)]._symbol << std::endl;
+			if(map_coord.y >= 0 && map_coord.x >= 0)
+				std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]._symbol << std::endl;
 
+			//find unit under cursor
 			_unit = GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2(xPos, yPos));
 			if (_unit)
 			{
@@ -116,18 +117,16 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 
 			glm::vec2 block_size = GetWorld()->GetBlockSize();
 
-			yPos = yPos  - _offset.y;
-			xPos = xPos + _offset.x;
+			yPos = window_size.y - yPos;
+			glm::ivec2 map_coord = GetMapCoord(xPos, yPos);
 
 			//Print map coordinates
-			std::cout << (int)(xPos / block_size.x) << " " << (int)(yPos / block_size.y) << std::endl;
+			std::cout << "ASCII Map coordinates (x, y): " << map_coord.x << " " << map_coord.y << std::endl;
 
-			int size = GetWorld()->GetNavMesh()->GetMap().size();
 			//Print map symbol by coordinates
-			if ((int)(xPos / block_size.x) < size && size > (int)(yPos / block_size.y) && (int)(yPos / block_size.y) >= 0 && (int)(xPos / block_size.x) >= 0)
+			if (_unit && map_coord.y >= 0 && map_coord.x >= 0)
 			{
-				std::cout << GetWorld()->GetNavMesh()->GetMap()[(int)(xPos / block_size.x)][(int)(yPos / block_size.y)]._symbol << std::endl;
-				_unit->MoveTo(GetWorld()->GetNavMesh()->GetMap()[yPos / block_size.y][xPos / block_size.x]);
+				_unit->MoveTo(GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]);
 			}
 			
 			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
@@ -156,6 +155,22 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 		}
 		break;
 	}
+}
+
+glm::ivec2 PlayerController::GetMapCoord(const float& xPos, const float& yPos)
+{
+	glm::vec2 block_size = GetWorld()->GetBlockSize();
+	int size = GetWorld()->GetNavMesh()->GetMap().size();
+
+	int yPos_map = (yPos + _offset.y) / block_size.y;
+	if (yPos + _offset.y < 0 || yPos_map >= size)
+		yPos_map = -1;
+
+	int xPos_map = (xPos + _offset.x) / block_size.x;
+	if (xPos + _offset.x < 0 || xPos_map >= size)
+		xPos_map = -1;
+
+	return glm::ivec2(xPos_map, yPos_map);
 }
 
 void PlayerController::SetupDefaultFunctions()

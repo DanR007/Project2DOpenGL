@@ -31,6 +31,8 @@ public:
 	void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
 	void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
 
+	glm::ivec2 GetMapCoord(const float& xPos, const float& yPos);
+
 	void SetupDefaultFunctions();
 
 	template<class C, class M>

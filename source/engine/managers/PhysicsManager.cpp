@@ -175,8 +175,8 @@ namespace Physics
 	bool PhysicsManager::IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider,
 		const glm::vec2& pos_second_collider, const glm::vec2& size_second_collider)
 	{
-		glm::vec2 start_first_collider = pos_first_collider - size_first_collider / 2.f,
-			start_second_collider = pos_second_collider - size_second_collider / 2.f;
+		glm::vec2 start_first_collider = pos_first_collider,
+			start_second_collider = pos_second_collider;
 		glm::vec2 end_first_collider = start_first_collider + size_first_collider,
 			end_second_collider = start_second_collider + size_second_collider;
 		if (start_first_collider.x < start_second_collider.x && end_first_collider.x > start_second_collider.x || start_first_collider.x >= start_second_collider.x && start_first_collider.x < end_second_collider.x)
