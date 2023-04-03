@@ -3,7 +3,11 @@
 #include "../../engine/managers/ResourcesManager.h"
 #include "../../engine/managers/GameManager.h"
 
+#include "../../engine/renderer/AnimSprite.h"
+
 #include "../../engine/physics/Collider.h"
+
+#include "Unit.h"
 
 Goal::Goal(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
 	const std::string& initSubtextureName,
@@ -11,4 +15,12 @@ Goal::Goal(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Rendere
 	:Actor(texture, shader, initSubtextureName, startPosition, startSize, startRotation)
 {
 	_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_InteractiveObject, this, startPosition, startSize);
+}
+
+void Goal::Update(float deltaTime)
+{
+	if (_unit && _unit->GetIsChoicing())
+	{
+		_anim_sprite->Update(deltaTime);
+	}
 }

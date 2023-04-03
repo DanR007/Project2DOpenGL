@@ -7,6 +7,7 @@
 #include "../generators/RTSMapGenerator.h"
 
 class NavMeshRTS;
+class Goal;
 
 struct PathCell
 {
@@ -85,9 +86,11 @@ public:
 	AStarRTS();
 	~AStarRTS();
 
-	void DevelopPath(const glm::ivec2& start, const Cell& target);
+	Goal* DevelopPath(const glm::ivec2& start, const Cell& target);
 
 	void Clear();
+
+	glm::ivec2 GetNextMapGoal();
 private:
 	void CollectPath(PathCell* cell);
 	bool LocateInMap(const glm::ivec2& pos);

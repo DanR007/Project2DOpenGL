@@ -37,14 +37,23 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	if(world->_player_controller)
-		world->_player_controller->InputKeyboard(currentWindow, key, scancode, action, mode);
+	PlayerController* controller = world->GetPlayerController();
+	if(controller)
+		controller->InputKeyboard(currentWindow, key, scancode, action, mode);
 }
 
 void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode)
 {
-	if(world->_player_controller)
-		world->_player_controller->InputMouse(currentWindow, button, action, mode);
+	PlayerController* controller = world->GetPlayerController();
+	if(controller)
+		controller->InputMouse(currentWindow, button, action, mode);
+}
+
+void glfwCursorPosCallback(GLFWwindow* currentWindow, double xPos, double yPos)
+{
+	PlayerController* controller = world->GetPlayerController();
+	if (controller)
+		controller->CursorMove(currentWindow, xPos, yPos);
 }
 
 int main(int argc, char** argv)
@@ -74,6 +83,7 @@ int main(int argc, char** argv)
 		glfwSetWindowSizeCallback(window, glfwWindowSizeCallback);
 		glfwSetKeyCallback(window, glfwKeyCallback);
 		glfwSetMouseButtonCallback(window, glfwMouseButtonCallback);
+		glfwSetCursorPosCallback(window, glfwCursorPosCallback);
 
 		glfwMakeContextCurrent(window);
 
@@ -104,7 +114,7 @@ int main(int argc, char** argv)
 		
 		world->BeginPlay();
 
-		glClearColor(1.f, 1.f, 1.f, 1.f);
+		glClearColor(0.9f, 0.9f, 0.9f, 1.f);
 
 		//textureAtlas - texture name
 		//names - vector of names subtextures

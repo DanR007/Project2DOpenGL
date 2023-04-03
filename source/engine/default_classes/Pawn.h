@@ -19,6 +19,8 @@ namespace Game
 		void Update(float deltaTime) override;
 
 		~Pawn();
+
+		Controller* GetController() { return _controller; }
 	protected:
 	
 		Controller* _controller = nullptr;

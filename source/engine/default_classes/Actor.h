@@ -47,6 +47,7 @@ namespace Game
 		inline glm::vec2 GetPosition() const { return _world_position; }
 		inline glm::vec2 GetRelativePosition() const { return _relative_position; }
 		inline float GetRotation() const { return _rotation; }
+		inline std::vector<std::shared_ptr<Game::Actor>>::iterator GetIterator() { return _iterator; }
 
 		void SetPosition(const glm::vec2& new_position);
 		void SetSize(const glm::vec2& new_size);

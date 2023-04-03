@@ -41,7 +41,7 @@ float GetLengthTurn(const glm::ivec2& dir, const Cell& cell)
 	return std::sqrtf(std::pow(cell._cost, 2) * std::abs(dir.x) + std::pow(cell._cost, 2) * std::abs(dir.y));
 }
 
-void AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
+Goal* AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 {
 	Cell trully_target = target;
 	Cell start_cell = _nav_mesh->_map[start.y][start.x];
@@ -51,7 +51,7 @@ void AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 		trully_target = FindNearestCell(target, start_cell._field_id);
 	}
 
-	GetWorld()->SpawnActor<Goal>("pistolBullet", 
+	std::shared_ptr<Goal> goal = GetWorld()->SpawnActor<Goal>("pistolBullet",
 		glm::vec2(trully_target._position.x * GetWorld()->GetBlockSize().x, trully_target._position.y * GetWorld()->GetBlockSize().y) - GetWorld()->GetOffset(),
 		GetWorld()->GetBlockSize());
 
@@ -116,6 +116,8 @@ void AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 	}
 
 	CollectPath(p_cur);
+
+	return goal.get();
 }
 
 void AStarRTS::Clear()
@@ -132,6 +134,21 @@ void AStarRTS::Clear()
 	}
 	_open_cells.clear();
 }
+
+glm::ivec2 AStarRTS::GetNextMapGoal()
+{
+	if (_path.empty())
+	{
+		std::cout << "Path is empty" << std::endl;
+		return glm::ivec2(-1, -1);
+	}
+
+	glm::ivec2 goal = _path.front(); 
+	_path.erase(_path.begin()); 
+	return goal;
+}
+
+
 
 void AStarRTS::CollectPath(PathCell* end_cell)
 {

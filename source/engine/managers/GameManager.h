@@ -61,9 +61,9 @@ public:
 		return new_actor;
 	}
 
-	void MoveAllActors();
+	void MoveAllActors(const glm::vec2& offset);
 
-	void Update(const float deltaTime);
+	void Update(const float& deltaTime);
 	void BeginPlay();
 
 	void SetGameOver(bool isGameOver) { _is_game_over = isGameOver; }
@@ -105,8 +105,5 @@ private:
 	bool _is_game_over;
 
 	friend class Physics::PhysicsManager;
-	
-	friend void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
-	friend void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode);
 };
 

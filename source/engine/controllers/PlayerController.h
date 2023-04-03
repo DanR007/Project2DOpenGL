@@ -30,6 +30,7 @@ public:
 
 	void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
 	void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
+	void CursorMove(GLFWwindow* currentWindow, double xPos, double yPos);
 
 	glm::ivec2 GetMapCoord(const float& xPos, const float& yPos);
 

@@ -17,20 +17,25 @@ void GameManager::Clear()
 }
 
 
-void GameManager::MoveAllActors()
+void GameManager::MoveAllActors(const glm::vec2& offset)
 {
 	auto it = _all_actors.begin();
-	glm::vec2 offset = glm::vec2(0.f);
+	_offset -= offset;
 	for (; it != _all_actors.end(); it++)
 	{
 		it->get()->AddWorldPosition(offset);
+
+		if (std::dynamic_pointer_cast<Unit>(*it))
+			std::dynamic_pointer_cast<Unit>(*it)->GetController()->ChangeGoalPositionWindow(offset);
 	}
 }
 
-void GameManager::Update(const float deltaTime)
+void GameManager::Update(const float& deltaTime)
 {
 	if (_is_game_over == false)
 	{
+		_player_controller->Move(deltaTime);
+
 		auto it = _all_actors.begin();
 		
 		for (; it != _all_actors.end(); it++)
@@ -43,8 +48,6 @@ void GameManager::Update(const float deltaTime)
 					break;
 			}
 		}
-
-		
 	}
 	else
 	{
