@@ -53,7 +53,7 @@ public:
 		std::shared_ptr<Renderer::Texture2D> texture = ResourcesManager::GetTexture("textureAtlas"),
 		std::shared_ptr<Renderer::ShaderProgram> shader = ResourcesManager::GetShaderProgram("spriteShader"))
 	{
-		std::shared_ptr<T> new_actor = std::make_shared<T>(texture, shader, initSpriteName, actorPosition, actorSize, actorRotation); 
+		std::shared_ptr<T> new_actor = std::make_shared<T>(initSpriteName, actorPosition, actorSize, actorRotation); 
 
 		if(std::dynamic_pointer_cast<Game::Actor>(new_actor))
 			std::dynamic_pointer_cast<Game::Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
@@ -80,6 +80,11 @@ public:
 	//offset is map_coord - window_coord
 	glm::vec2 GetOffset() const { return _offset; }
 	glm::ivec2 GetSizeMap() const { return _size_map; }
+
+	glm::vec2 ConvertToWindowSpace(const glm::ivec2& position_in_map);
+	glm::vec2 ConvertToWindowSpace(const int& x, const int& y);
+	glm::ivec2 ConvertToMapSpace(const glm::vec2& position_in_window);
+	glm::ivec2 ConvertToMapSpace(const float& x, const float& y);
 
 	PlayerController* GetPlayerController() { return _player_controller; }
 	PlayerController* GetPlayerController(const unsigned short int& id) { return _controllers[id]; }

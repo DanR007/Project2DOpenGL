@@ -12,11 +12,10 @@
 
 namespace Game
 {
-	Actor::Actor(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
-		const std::string& initSubtextureName,
+	Actor::Actor(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
-		_anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(texture), std::move(shader), 
+		_anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(ResourcesManager::GetTexture("textureAtlas")), std::move(ResourcesManager::GetShaderProgram("spriteShader")),
 			initSubtextureName, this, startPosition, startSize, startRotation);
 
 		_world_position = startPosition;

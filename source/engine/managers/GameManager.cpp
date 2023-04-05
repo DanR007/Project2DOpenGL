@@ -66,16 +66,13 @@ void GameManager::BeginPlay()
 {
 	SetGameOver(false);
 
-	glm::vec2 main_character_size = glm::ivec2(35, 35);
-	glm::vec2 position_player = glm::vec2((window_size.x - main_character_size.x) / 2, (window_size.y - main_character_size.y) / 2);
-
-	_block_size = main_character_size + glm::vec2(10.f);
+	_block_size = glm::vec2(45.f);
 
 	_player_controller = new PlayerController();
 
 	_controllers.push_back(_player_controller);
 
-	SpawnActor<Unit>("mush1", glm::vec2(0) - _offset, _block_size);
+	SpawnActor<Unit>("mush1", ConvertToWindowSpace(0, 0), _block_size);
 
 	RTSMapGenerator* generator = new RTSMapGenerator(glm::ivec2(0));
 	_nav_mesh->FillMap(generator->GenerateMap());
@@ -93,6 +90,47 @@ void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterato
 	//clear map here
 }
 
+glm::vec2 GameManager::ConvertToWindowSpace(const glm::ivec2& position_in_map)
+{
+	return glm::vec2(position_in_map.x * _block_size.x, position_in_map.y * _block_size.y) - _offset;
+}
+glm::vec2 GameManager::ConvertToWindowSpace(const int& x, const int& y)
+{
+	return glm::vec2(x * _block_size.x, y * _block_size.y) - _offset;
+}
+
+glm::ivec2 GameManager::ConvertToMapSpace(const glm::vec2& position_in_window)
+{
+	glm::ivec2 map_coord;
+	if ((position_in_window.x + _offset.x) < 0)
+		map_coord = glm::ivec2(-1, 0);
+	else
+		map_coord = glm::ivec2((position_in_window.x + _offset.x) / _block_size.x, 0);
+
+	if ((position_in_window.y + _offset.y) < 0)
+		map_coord += glm::ivec2(0, -1);
+	else
+		map_coord += glm::ivec2(0, (position_in_window.y + _offset.y) / _block_size.y);
+
+	return map_coord;
+}
+glm::ivec2 GameManager::ConvertToMapSpace(const float& x, const float& y)
+{
+	glm::ivec2 map_coord;
+	if ((x + _offset.x) < 0)
+		map_coord = glm::ivec2(-1, 0);
+	else
+		map_coord = glm::ivec2((x + _offset.x) / _block_size.x, 0);
+
+	if ((y + _offset.y) < 0)
+		map_coord += glm::ivec2(0, -1);
+	else
+		map_coord += glm::ivec2(0, (y + _offset.y) / _block_size.y);
+
+	return map_coord;
+}
+
+
 void GameManager::ReadMap()
 {
 	for (int y = _size_map.y - 1; y >= 0; y--)
@@ -101,7 +139,7 @@ void GameManager::ReadMap()
 		{
 			if (GetNavMesh()->GetMap()[y][x]._cost == -1)
 			{
-				SpawnActor<Wall>("wall", glm::vec2(x * _block_size.x, y * _block_size.y) - _offset, _block_size);
+				SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
 			}
 		}
 	}

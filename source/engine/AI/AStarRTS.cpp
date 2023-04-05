@@ -52,7 +52,7 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 	}
 
 	std::shared_ptr<Goal> goal = GetWorld()->SpawnActor<Goal>("goal",
-		glm::vec2(trully_target._position.x * GetWorld()->GetBlockSize().x, trully_target._position.y * GetWorld()->GetBlockSize().y) - GetWorld()->GetOffset(),
+		GetWorld()->ConvertToWindowSpace(trully_target._position),
 		GetWorld()->GetBlockSize());
 
 	PathCell* c = new PathCell(start_cell);

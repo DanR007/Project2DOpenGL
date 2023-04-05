@@ -13,9 +13,9 @@
 
 namespace Game
 {
-	Pawn::Pawn(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSubtextureName,
+	Pawn::Pawn(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation):
-		Actor(std::move(texture), std::move(shader), initSubtextureName, startPosition, startSize, startRotation)
+		Actor(initSubtextureName, startPosition, startSize, startRotation)
 	{
 		
 	}

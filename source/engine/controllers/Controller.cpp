@@ -113,5 +113,5 @@ void Controller::SetNewGoal(const glm::ivec2& map_coord)
 	}
 
 	_goal_int = map_coord;
-	_goal = glm::vec2(map_coord.x * GetWorld()->GetBlockSize().x, map_coord.y * GetWorld()->GetBlockSize().y) - GetWorld()->GetOffset();
+	_goal = GetWorld()->ConvertToWindowSpace(map_coord);
 }

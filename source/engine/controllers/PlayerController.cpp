@@ -96,7 +96,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
 
 			yPos = window_size.y - yPos;
-			glm::ivec2 map_coord = GetMapCoord(xPos, yPos);
+			glm::ivec2 map_coord = GetWorld()->ConvertToMapSpace(xPos, yPos);
 
 			//Print map coordinates
 			std::cout << "ASCII Map coordinates (x, y): " << map_coord.x << " " << map_coord.y << std::endl;
@@ -124,10 +124,8 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
 
-			glm::vec2 block_size = GetWorld()->GetBlockSize();
-
 			yPos = window_size.y - yPos;
-			glm::ivec2 map_coord = GetMapCoord(xPos, yPos);
+			glm::ivec2 map_coord = GetWorld()->ConvertToMapSpace(xPos, yPos);
 
 			//Print map coordinates
 			std::cout << "ASCII Map coordinates (x, y): " << map_coord.x << " " << map_coord.y << std::endl;
@@ -178,22 +176,6 @@ void PlayerController::CursorMove(GLFWwindow* currentWindow, double xPos, double
 		_move_vector += up;
 	if ((double)window_size.y - yPos < 5)
 		_move_vector -= up;
-}
-
-glm::ivec2 PlayerController::GetMapCoord(const float& xPos, const float& yPos)
-{
-	glm::vec2 block_size = GetWorld()->GetBlockSize();
-	int size = GetWorld()->GetNavMesh()->GetMap().size();
-
-	int yPos_map = (yPos + _offset.y) / block_size.y;
-	if (yPos + _offset.y < 0 || yPos_map >= size)
-		yPos_map = -1;
-
-	int xPos_map = (xPos + _offset.x) / block_size.x;
-	if (xPos + _offset.x < 0 || xPos_map >= size)
-		xPos_map = -1;
-
-	return glm::ivec2(xPos_map, yPos_map);
 }
 
 void PlayerController::SetupDefaultFunctions()
