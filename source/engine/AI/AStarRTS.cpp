@@ -51,7 +51,7 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 		trully_target = FindNearestCell(target, start_cell._field_id);
 	}
 
-	std::shared_ptr<Goal> goal = GetWorld()->SpawnActor<Goal>("pistolBullet",
+	std::shared_ptr<Goal> goal = GetWorld()->SpawnActor<Goal>("goal",
 		glm::vec2(trully_target._position.x * GetWorld()->GetBlockSize().x, trully_target._position.y * GetWorld()->GetBlockSize().y) - GetWorld()->GetOffset(),
 		GetWorld()->GetBlockSize());
 

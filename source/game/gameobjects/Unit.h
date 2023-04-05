@@ -6,6 +6,11 @@ struct Cell;
 
 class Goal;
 
+namespace Renderer
+{
+	class Sprite;
+}
+
 class Unit : public Game::Pawn
 {
 public:
@@ -15,11 +20,15 @@ public:
 	Unit(Unit&& u) noexcept;
 	~Unit();
 
-	bool GetIsChoicing() const { return _is_choicing; }
+	virtual void Update(const float deltaTime) override;
+
+	bool GetIsSelected() const { return _is_selected; }
 	Goal* GetGoal() { return _goal; }
 	glm::ivec2 GetMapPosition() const { return _map_position; }
+	
+	void Move(const glm::vec2& position);
 
-	void SetChoicing(bool is_choicing) { _is_choicing = is_choicing; }
+	void SetSelected(bool is_selected) { _is_selected = is_selected; }
 	void SetGoal(Goal* goal) { _goal = goal; }
 	void SetMapPosition(const glm::ivec2& map_pos) { _map_position = map_pos; }
 
@@ -27,10 +36,12 @@ public:
 
 	void PathComplete();
 private:
-	bool _is_choicing;
+	bool _is_selected;
 
 	int _hp;
 
 	glm::ivec2 _map_position;
 	Goal* _goal = nullptr;
+
+	std::unique_ptr<Renderer::Sprite> _selected_sprite;
 };

@@ -109,12 +109,12 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			Unit* unit = GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2(xPos, yPos));
 
 			if(_unit)
-				_unit->SetChoicing(_unit == unit);
+				_unit->SetSelected(_unit == unit);
 
 			if (unit)
 			{
 				_unit = unit;
-				_unit->SetChoicing(true);
+				_unit->SetSelected(true);
 			}
 			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
@@ -170,13 +170,13 @@ void PlayerController::CursorMove(GLFWwindow* currentWindow, double xPos, double
 {
 	glm::vec2 up = glm::vec2(0, 1), right = glm::vec2(1, 0);
 	_move_vector = glm::vec2(0);
-	if (std::abs((double)window_size.x - xPos) < 0.5)
+	if ((double)window_size.x - xPos < 5)
 		_move_vector += right;
-	if(xPos < 0.5)
+	if(xPos < 5)
 		_move_vector -= right;
-	if(yPos < 0.5)
+	if(yPos < 5)
 		_move_vector += up;
-	if (std::abs((double)window_size.y - yPos) < 0.5)
+	if ((double)window_size.y - yPos < 5)
 		_move_vector -= up;
 }
 

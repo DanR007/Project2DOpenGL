@@ -42,13 +42,13 @@ void Controller::Move(float deltaTime)
 			//
 			if (deltaTime * _move_speed / cost > distance)
 			{
-				_controlled_pawn->SetPosition(_goal);
+				_controlled_pawn->Move(_goal);
 
 				SetNewGoal(_a_star->GetNextMapGoal());
 			}
 			else
 			{
-				_controlled_pawn->SetPosition(_controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed / cost);
+				_controlled_pawn->Move(_controlled_pawn->GetPosition() + _move_vector * deltaTime * _move_speed / cost);
 			}
 		}
 		else

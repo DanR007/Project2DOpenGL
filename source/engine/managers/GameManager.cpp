@@ -23,10 +23,17 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 	_offset -= offset;
 	for (; it != _all_actors.end(); it++)
 	{
-		it->get()->AddWorldPosition(offset);
+		std::shared_ptr<Unit> u = std::dynamic_pointer_cast<Unit>(*it);
 
-		if (std::dynamic_pointer_cast<Unit>(*it))
-			std::dynamic_pointer_cast<Unit>(*it)->GetController()->ChangeGoalPositionWindow(offset);
+		if (u)
+		{
+			u->Move(u->GetPosition() + offset);
+			u->GetController()->ChangeGoalPositionWindow(offset);
+		}
+		else
+		{
+			it->get()->AddWorldPosition(offset);
+		}
 	}
 }
 

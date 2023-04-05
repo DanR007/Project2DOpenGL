@@ -19,7 +19,7 @@ Goal::Goal(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Rendere
 
 void Goal::Update(float deltaTime)
 {
-	if (_unit && _unit->GetIsChoicing())
+	if (_unit && _unit->GetIsSelected())
 	{
 		_anim_sprite->Update(deltaTime);
 	}
