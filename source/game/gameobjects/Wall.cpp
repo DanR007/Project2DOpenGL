@@ -5,10 +5,9 @@
 
 #include "../../engine/physics/Collider.h"
 
-Wall::Wall(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
-	const std::string& initSubtextureName,
+Wall::Wall(const std::string& initSubtextureName,
 	const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
-	:Actor(texture, shader, initSubtextureName, startPosition, startSize, startRotation)
+	:Actor(initSubtextureName, startPosition, startSize, startRotation)
 {
 	_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_InteractiveObject, this, startPosition, startSize);
 }

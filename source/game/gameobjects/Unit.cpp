@@ -10,11 +10,11 @@
 
 #include <iostream>
 
-Unit::Unit(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initSubtextureName, 
+Unit::Unit(const std::string& initSubtextureName, 
 	const glm::vec2& startPosition, const glm::vec2& startSize, const float& startRotation)
-	:Pawn(texture, shader, initSubtextureName, startPosition, startSize, startRotation)
+	:Pawn(initSubtextureName, startPosition, startSize, startRotation)
 {
-	_selected_sprite = std::make_unique<Renderer::Sprite>(texture, shader, "selected", this, startPosition, startSize);
+	_selected_sprite = std::make_unique<Renderer::Sprite>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "selected", this, startPosition, startSize);
 
 	_map_position = glm::ivec2((startPosition.x + GetWorld()->GetOffset().x) / GetWorld()->GetBlockSize().x, 
 		(startPosition.y + GetWorld()->GetOffset().y) / GetWorld()->GetBlockSize().y);

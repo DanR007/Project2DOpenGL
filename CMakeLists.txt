@@ -61,12 +61,14 @@ set(GAME_HEADERS
 source/game/gameobjects/Unit.h
 source/game/gameobjects/Goal.h
 source/game/gameobjects/Wall.h
+source/game/gameobjects/Resource.h
 )
 
 set(GAME_CPP
 source/game/gameobjects/Unit.cpp
 source/game/gameobjects/Goal.cpp
 source/game/gameobjects/Wall.cpp
+source/game/gameobjects/Resource.cpp
 )
 
 add_executable(${PROJECT_NAME} 

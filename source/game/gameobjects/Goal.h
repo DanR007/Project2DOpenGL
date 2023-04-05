@@ -6,8 +6,7 @@ class Unit;
 class Goal : public Game::Actor
 {
 public:
-	Goal(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader,
-		const std::string& initSubtextureName,
+	Goal(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation);
 
 	virtual void Update(float deltaTime) override;
