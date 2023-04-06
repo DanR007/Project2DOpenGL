@@ -49,15 +49,23 @@ public:
 	
 
 	template<typename T>
-	std::shared_ptr<T> SpawnActor(const std::string& initSpriteName, const glm::vec2& actorPosition = glm::vec2(0.f), const glm::vec2& actorSize = glm::vec2(100.f, 100.f), const float actorRotation = 0.f,
-		std::shared_ptr<Renderer::Texture2D> texture = ResourcesManager::GetTexture("textureAtlas"),
-		std::shared_ptr<Renderer::ShaderProgram> shader = ResourcesManager::GetShaderProgram("spriteShader"))
+	std::shared_ptr<T> SpawnActor(const std::string& initSpriteName, const glm::vec2& actorPosition = glm::vec2(0.f), const glm::vec2& actorSize = glm::vec2(100.f, 100.f), const float actorRotation = 0.f)
 	{
 		std::shared_ptr<T> new_actor = std::make_shared<T>(initSpriteName, actorPosition, actorSize, actorRotation); 
 
 		if(std::dynamic_pointer_cast<Game::Actor>(new_actor))
 			std::dynamic_pointer_cast<Game::Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
 		
+		return new_actor;
+	}
+	template<typename T>
+	std::shared_ptr<T> SpawnActor(const glm::ivec2& position)
+	{
+		std::shared_ptr<T> new_actor = std::make_shared<T>(position);
+
+		if (std::dynamic_pointer_cast<Game::Actor>(new_actor))
+			std::dynamic_pointer_cast<Game::Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
+
 		return new_actor;
 	}
 

@@ -11,6 +11,9 @@
 #include "../../game/gameobjects/Unit.h"
 #include "../../game/gameobjects/Wall.h"
 
+#include "../../game/gameobjects/static/Stone.h"
+#include "../../game/gameobjects/static/Wood.h"
+
 void GameManager::Clear()
 {
 	_all_actors.clear();
@@ -74,7 +77,7 @@ void GameManager::BeginPlay()
 
 	SpawnActor<Unit>("mush1", ConvertToWindowSpace(0, 0), _block_size);
 
-	RTSMapGenerator* generator = new RTSMapGenerator(glm::ivec2(0));
+	RTSMapGenerator* generator = new RTSMapGenerator(glm::ivec2(10));
 	_nav_mesh->FillMap(generator->GenerateMap());
 
 	ReadMap();
@@ -139,7 +142,19 @@ void GameManager::ReadMap()
 		{
 			if (GetNavMesh()->GetMap()[y][x]._cost == -1)
 			{
-				SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
+				char symbol = GetNavMesh()->GetMap()[y][x]._symbol;
+				switch (symbol)
+				{
+				case 'W':
+					SpawnActor<Wood>(glm::ivec2(x, y));
+					break;
+				case 'S':
+					SpawnActor<Stone>(glm::ivec2(x, y));
+					break;
+				case 'B':
+					SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
+					break;
+				}
 			}
 		}
 	}

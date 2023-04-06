@@ -42,8 +42,14 @@ class RTSMapGenerator
 public:
 	RTSMapGenerator(const glm::ivec2& size);
 
+	float Noise(const glm::ivec2& pos);
+
 	std::vector<std::vector<Cell>> GenerateMap();
 
 private:
 	glm::ivec2 _size;
+
+	std::vector<std::vector<Cell>> _map;
+
+	std::vector<std::vector<glm::vec2>> _rand_vectors;
 };
