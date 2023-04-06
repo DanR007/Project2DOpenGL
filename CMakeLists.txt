@@ -58,10 +58,13 @@ source/engine/parser/XMLParser.cpp
 
 
 set(GAME_HEADERS
+source/game/ResourceTypes.h
 source/game/gameobjects/Unit.h
 source/game/gameobjects/Goal.h
 source/game/gameobjects/Wall.h
 source/game/gameobjects/Resource.h
+source/game/gameobjects/static/Stone.h
+source/game/gameobjects/static/Wood.h
 )
 
 set(GAME_CPP
@@ -69,6 +72,8 @@ source/game/gameobjects/Unit.cpp
 source/game/gameobjects/Goal.cpp
 source/game/gameobjects/Wall.cpp
 source/game/gameobjects/Resource.cpp
+source/game/gameobjects/static/Stone.cpp
+source/game/gameobjects/static/Wood.cpp
 )
 
 add_executable(${PROJECT_NAME} 

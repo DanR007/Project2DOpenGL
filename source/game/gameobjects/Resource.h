@@ -2,6 +2,7 @@
 
 #include "../../engine/default_classes/Actor.h"
 
+#include "../ResourceTypes.h"
 
 class Resource : public Game::Actor 
 {
@@ -15,9 +16,9 @@ public:
 	}
 
 
-private:
+protected:
 
-
+	EResorceTypes _resource_type;
 
 	uint16_t _resources_count;
 	const uint16_t _max_resources_count = 100;
