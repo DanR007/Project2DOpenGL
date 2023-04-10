@@ -3,6 +3,7 @@
 #include "RTSMapGenerator.h"
 
 #include <cmath>
+#include <iostream>
 
 RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 {
@@ -10,7 +11,7 @@ RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 }
 
 
-glm::vec2 RendomVector()
+glm::vec2 RandomVector()
 {
 	int angle = std::rand() % 360;
 	float rad_angle = float(angle) * M_PI / 180.f;
@@ -34,7 +35,7 @@ float Lerp(float t, float a1, float a2)
 
 float RTSMapGenerator::Noise(const glm::ivec2& pos)
 {
-	glm::vec2 rand_offset = glm::vec2(float(std::rand() % 11) / 10.f, float(std::rand() % 11) / 10.f);
+	glm::vec2 rand_offset = glm::vec2(float(std::rand() % 10 + 1) / 10.f, float(std::rand() % 10 + 1) / 10.f);
 
 	glm::vec2 left_bottom, left_top, right_top, right_bottom;
 
@@ -59,6 +60,19 @@ float RTSMapGenerator::Noise(const glm::ivec2& pos)
 
 }
 
+float RTSMapGenerator::FBM(const int& count, int x, int y)
+{
+	float value = 0.f;
+	float amplitude = 1.f;
+
+	for (int i = 1; i <= count; i++)
+	{
+		value += amplitude * Noise(glm::ivec2(x, y));
+		amplitude /= 2.f;
+	}
+	return value;
+}
+
 std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 {
 	std::vector<std::vector<float>> value_array;
@@ -79,20 +93,47 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		_rand_vectors[y].resize(_size.x + 1);
 		for (int x = 0; x < _size.x + 1; x++)
 		{
-			_rand_vectors[y][x] = const_vectors[std::rand() & 3];
+			_rand_vectors[y][x] = RandomVector();
 		}
 	}
+
+	float min = FLT_MAX, max = FLT_MIN;
 
 	for (int y = 0; y < _size.y; y++)
 	{
 		value_array[y].resize(_size.x);
 		for (int x = 0; x < _size.x; x++)
 		{
-			value_array[y][x] = Noise(glm::ivec2(x, y));
+			value_array[y][x] = FBM(3, x, y);
+			min = std::min(value_array[y][x], min);
+			max = std::max(value_array[y][x], max);
 		}
 	}
+	for (int y = 0; y < _size.y; y++)
+	{
+		for (int x = 0; x < _size.x; x++)
+		{
+			value_array[y][x] = (value_array[y][x] - min) / (max - min);
+		}
+	}
+	float wood_value = 0.45f;
+	float rock_value = 0.55f;
 
-	_map =
+	_map.resize(_size.y);
+	for (int y = 0; y < _size.y; y++)
+	{
+		_map[y].resize(_size.x);
+		for (int x = 0; x < _size.x; x++)
+		{
+			char symbol = value_array[y][x] <= wood_value ? '.' : value_array[y][x] <= rock_value ? 'W' : '.';
+			_map[y][x] = Cell(glm::ivec2(x, y), 0, 1, symbol);
+			std::cout << symbol;
+		}
+		std::cout << std::endl;
+	}
+
+
+	/*_map =
 	{
 		{
 			Cell(), Cell(glm::ivec2(1, 0), 0, 1, '.', 0), Cell(glm::ivec2(2, 0), 0, 1, '.', 0), Cell(glm::ivec2(3, 0), 0, -1, 'W'), Cell(glm::ivec2(4, 0), 0, 1, '.', 1), Cell(glm::ivec2(5, 0), 0, 1, '.', 1), Cell(glm::ivec2(6, 0), 0, 1, '.', 1)
@@ -115,7 +156,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		{
 			Cell(glm::ivec2(0, 6), 0, 1, '.', 0), Cell(glm::ivec2(1, 6), 0, 1, '.', 0), Cell(glm::ivec2(2, 6), 0, 1, '.', 0), Cell(glm::ivec2(3, 6), 0, 1, '.', 0), Cell(glm::ivec2(4, 6), 0, 1, '.', 0), Cell(glm::ivec2(5, 6), 0, 1, '.', 0), Cell(glm::ivec2(6, 6), 0, 1, '.', 0)
 		}
-	};
+	};*/
 	/*{
 			Cell(glm::ivec2(0), 0, -1, 'B'), Cell(glm::ivec2(1, 0), 0, -1, 'B'), Cell(glm::ivec2(2, 0), 0, -1, 'B'), Cell(glm::ivec2(3, 0), 0, -1, 'B'), Cell(glm::ivec2(4, 0)), Cell(glm::ivec2(5, 0)), Cell(glm::ivec2(6, 0))
 		},

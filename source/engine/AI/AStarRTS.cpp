@@ -187,7 +187,7 @@ Cell AStarRTS::FindNearestCell(const Cell& target, unsigned short need_id)
 
 			if (LocateInMap(next))
 			{
-				if (_nav_mesh->_map[next.y][next.x]._field_id == need_id && _nav_mesh->_map[next.y][next.x]._cost != -1)
+				if (_nav_mesh->_map[next.y][next.x]._field_id == need_id && _nav_mesh->_map[next.y][next.x]._symbol == '.')
 				{
 					return _nav_mesh->_map[next.y][next.x];
 				}
@@ -235,7 +235,7 @@ bool AStarRTS::CanStepInto(const glm::ivec2& move, const Cell& next_cell, const 
 	glm::ivec2 f = cur_cell._position + glm::ivec2(move.x, 0);
 	glm::ivec2 s = cur_cell._position + glm::ivec2(0, move.y);
 	
-	return next_cell._cost != -1 && std::abs(next_cell._height - cur_cell._height) < 10.f  
+	return next_cell._symbol == '.' && std::abs(next_cell._height - cur_cell._height) < 10.f
 		//this condition mean that unit can't step diagonal if this split wall
-		&& LocateInMap(f) && LocateInMap(s) && (_nav_mesh->_map[f.x][f.y]._cost != -1 || _nav_mesh->_map[s.x][s.y]._cost != -1);
+		&& LocateInMap(f) && LocateInMap(s) && (_nav_mesh->_map[f.x][f.y]._symbol == '.' || _nav_mesh->_map[s.x][s.y]._symbol == '.');
 }

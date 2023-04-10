@@ -77,7 +77,7 @@ void GameManager::BeginPlay()
 
 	SpawnActor<Unit>("mush1", ConvertToWindowSpace(0, 0), _block_size);
 
-	RTSMapGenerator* generator = new RTSMapGenerator(glm::ivec2(10));
+	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
 	_nav_mesh->FillMap(generator->GenerateMap());
 
 	ReadMap();
@@ -140,22 +140,23 @@ void GameManager::ReadMap()
 	{
 		for (int x = 0; x < _size_map.x; x++)
 		{
-			if (GetNavMesh()->GetMap()[y][x]._cost == -1)
+
+			char symbol = GetNavMesh()->GetMap()[y][x]._symbol;
+			switch (symbol)
 			{
-				char symbol = GetNavMesh()->GetMap()[y][x]._symbol;
-				switch (symbol)
-				{
-				case 'W':
-					SpawnActor<Wood>(glm::ivec2(x, y));
-					break;
-				case 'S':
-					SpawnActor<Stone>(glm::ivec2(x, y));
-					break;
-				case 'B':
-					SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
-					break;
-				}
+			case 'W':
+				SpawnActor<Wood>(glm::ivec2(x, y));
+				break;
+			case 'S':
+				SpawnActor<Stone>(glm::ivec2(x, y));
+				break;
+			case 'B':
+				SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
+				break;
+			default:
+				break;
 			}
+
 		}
 	}
 }

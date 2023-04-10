@@ -15,6 +15,11 @@ public:
 	void FillMap(std::vector<std::vector<Cell>>& map);
 	
 	std::vector<std::vector<Cell>> GetMap();
+
+	void ClearMapCell(const glm::ivec2& position);
+	void OccupiedMapCell(const glm::ivec2& position);
+	void SetMapCell(const glm::ivec2& position, const char& symbol);
+
 private:
 	std::vector<std::vector<Cell>> _map;
 

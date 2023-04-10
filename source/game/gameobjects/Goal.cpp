@@ -23,3 +23,4 @@ void Goal::Update(float deltaTime)
 		_anim_sprite->Update(deltaTime);
 	}
 }
+

@@ -29,7 +29,7 @@ public:
 		_physics_manager = new Physics::PhysicsManager(this); 
 		_nav_mesh = new NavMeshRTS();
 
-		_size_map = glm::ivec2(7);
+		_size_map = glm::ivec2(25);
 	}
 	~GameManager() 
 	{
