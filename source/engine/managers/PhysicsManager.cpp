@@ -1,4 +1,5 @@
-#include <cmath>
+#define _USE_MATH_DEFINES
+
 #include <iostream>
 
 #include "PhysicsManager.h"
@@ -10,24 +11,13 @@
 
 #include "../../main.h"
 
+#include "../math/Math.h"
+
 #include "../../game/gameobjects/Unit.h"
 
-#define PI 3.141592653f
 
 namespace Physics
 {
-	float VM(const glm::vec2& a, const glm::vec2& b)
-	{
-		return a.x * b.y - a.y * b.x;
-	}
-	float DOT(const glm::vec2& a, const glm::vec2& b)
-	{
-		return a.x * b.x + a.y * b.y;
-	}
-	float Length(const glm::vec2& a)
-	{
-		return std::sqrt(std::pow(a.x , 2) + std::pow(a.y, 2));
-	}
 	bool PhysicsManager::CanMove(Game::Actor* firstActor, const glm::vec2& delta)
 	{
 		std::shared_ptr<Physics::Collider> first_collider = firstActor->GetCollider();
@@ -94,14 +84,14 @@ namespace Physics
 				glm::vec2 x_axis = collider->GetXAxis();
 				glm::vec2 y_axis = collider->GetYAxis();
 
-				float length = Length(end - start);
+				float length = Math::Length(end - start);
 
 				glm::vec2 direction = (end - start) / length;
 
 				glm::vec2 to_center = actor->GetPosition() - start;
-				glm::vec2 dir_onto_axis = glm::vec2(DOT(x_axis, direction), DOT(y_axis, direction));
+				glm::vec2 dir_onto_axis = glm::vec2(Math::DOT(x_axis, direction), Math::DOT(y_axis, direction));
 
-				glm::vec2 e = glm::vec2(DOT(x_axis, to_center), DOT(y_axis, to_center));
+				glm::vec2 e = glm::vec2(Math::DOT(x_axis, to_center), Math::DOT(y_axis, to_center));
 
 				float t_arr[] = { 0.f,0.f,0.f,0.f };
 

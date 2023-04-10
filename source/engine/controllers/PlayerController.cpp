@@ -1,6 +1,9 @@
 #include "PlayerController.h"
+
 #include "../managers/PhysicsManager.h"
 #include "../managers/GameManager.h"
+
+#include "../AI/NavMesh.h"
 
 #include "../../game/gameobjects/Unit.h"
 #include "../../game/gameobjects/Goal.h"

@@ -9,7 +9,7 @@
 #include "ResourcesManager.h"
 #include "PhysicsManager.h"
 
-#include "../AI/NavMesh.h"
+
 
 #include "../default_classes/Actor.h"
 
@@ -19,18 +19,15 @@ namespace Renderer
 	class ShaderProgram;
 }
 
+class NavMeshRTS;
+
 class PlayerController;
 
 class GameManager
 {
 public:
-	GameManager() 
-	{ 
-		_physics_manager = new Physics::PhysicsManager(this); 
-		_nav_mesh = new NavMeshRTS();
-
-		_size_map = glm::ivec2(25);
-	}
+	GameManager();
+	
 	~GameManager() 
 	{
 		if (_physics_manager) 
@@ -102,6 +99,8 @@ public:
 
 	void ReadMap();
 private:
+	void ClearDeleteActors();
+
 	Physics::PhysicsManager* _physics_manager;
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
@@ -109,6 +108,8 @@ private:
 	std::vector<std::shared_ptr<Game::Actor>>::iterator _it;
 
 	std::vector<std::shared_ptr<Game::Actor>> _all_actors;
+
+	std::vector<std::vector<std::shared_ptr<Game::Actor>>::iterator> _need_to_delete;
 
 	std::vector< PlayerController*> _controllers;
 	//offset is map_coord (multiply by block_size) - window_coord

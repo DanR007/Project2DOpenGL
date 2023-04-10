@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <string>
-#include <cmath>
 
 struct Cell
 {
@@ -36,6 +35,20 @@ struct Cell
 	char _symbol;
 };
 
+struct GenSymbol
+{
+	GenSymbol(float height, float population, float humidity, char symbol)
+	{
+		_height = height;
+		_population = population;
+		_humidity = humidity;
+
+		_symbol = symbol;
+	}
+	float _height, _population, _humidity;
+
+	char _symbol;
+};
 
 class RTSMapGenerator
 {
@@ -47,10 +60,15 @@ public:
 
 	std::vector<std::vector<Cell>> GenerateMap();
 
+	float FBM(const glm::ivec2& pos, const int& count);
 private:
+	char GetSymbol(const float& height, const float& humidity, const float& population);
+
 	glm::ivec2 _size;
 
 	std::vector<std::vector<Cell>> _map;
 
 	std::vector<std::vector<glm::vec2>> _rand_vectors;
+
+	std::vector<GenSymbol> _symbols;
 };

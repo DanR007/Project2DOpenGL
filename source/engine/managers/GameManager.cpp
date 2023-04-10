@@ -8,11 +8,22 @@
 
 #include "../AI/AStarRTS.h"
 
+#include "../AI/NavMesh.h"
+
 #include "../../game/gameobjects/Unit.h"
 #include "../../game/gameobjects/Wall.h"
 
 #include "../../game/gameobjects/static/Stone.h"
 #include "../../game/gameobjects/static/Wood.h"
+
+
+GameManager::GameManager()
+{
+	_physics_manager = new Physics::PhysicsManager(this);
+	_nav_mesh = new NavMeshRTS();
+
+	_size_map = glm::ivec2(50);
+}
 
 void GameManager::Clear()
 {
@@ -53,11 +64,10 @@ void GameManager::Update(const float& deltaTime)
 			if (it->get())
 			{
 				it->get()->Update(deltaTime);
-
-				if (it == _all_actors.end())
-					break;
 			}
 		}
+
+		ClearDeleteActors();
 	}
 	else
 	{
@@ -86,10 +96,7 @@ void GameManager::BeginPlay()
 
 void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator)
 {
-	bool is_blocking_actor = actor_iterator->get()->GetCollider()->GetResponseType(EObjectTypes::EOT_Pawn) == EResponseType::ERT_Block;
-	
-	_all_actors.erase(actor_iterator);
-
+	_need_to_delete.push_back(actor_iterator);
 	//clear map here
 }
 
@@ -153,10 +160,18 @@ void GameManager::ReadMap()
 			case 'B':
 				SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
 				break;
-			default:
-				break;
 			}
 
 		}
+	}
+}
+
+void GameManager::ClearDeleteActors()
+{
+	auto it = _need_to_delete.begin();
+	for (; it != _need_to_delete.end();)
+	{
+		_all_actors.erase(*it);
+		it = _need_to_delete.erase(it);
 	}
 }
