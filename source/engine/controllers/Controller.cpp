@@ -3,6 +3,8 @@
 #include "../managers/GameManager.h"
 
 #include "../AI/AStarRTS.h"
+#include "../AI/NavMesh.h"
+
 
 #include "../../main.h"
 

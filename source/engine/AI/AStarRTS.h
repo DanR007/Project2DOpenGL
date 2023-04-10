@@ -4,6 +4,8 @@
 #include <vector>
 #include <queue>
 
+#include <cmath>
+
 #include "../generators/RTSMapGenerator.h"
 
 class NavMeshRTS;

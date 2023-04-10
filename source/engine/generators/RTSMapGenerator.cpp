@@ -2,24 +2,22 @@
 
 #include "RTSMapGenerator.h"
 
-#include <cmath>
+#include "../math/Math.h"
+
+#include <iostream>
 
 RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 {
 	_size = size;
-}
 
+	_symbols = { GenSymbol(0.3f, 0.7f, 0.7f, 'W'), GenSymbol(0.7f, 0.7f, 0.4f, 'S')};
+}
 
 glm::vec2 RendomVector()
 {
 	int angle = std::rand() % 360;
 	float rad_angle = float(angle) * M_PI / 180.f;
 	return glm::vec2(std::cos(rad_angle), std::sin(rad_angle));
-}
-
-float Dot(const glm::vec2& a, const glm::vec2& b)
-{
-	return a.x * b.x + a.y * b.y;
 }
 
 float Fade(float t) 
@@ -44,10 +42,10 @@ float RTSMapGenerator::Noise(const glm::ivec2& pos)
 	right_bottom = glm::vec2(rand_offset.x - 1, rand_offset.y);
 
 	
-	float dot_top_left = Dot(_rand_vectors[pos.y + 1][pos.x], left_top);
-	float dot_top_right = Dot(_rand_vectors[pos.y + 1][pos.x + 1], right_top);
-	float dot_bottom_left = Dot(_rand_vectors[pos.y][pos.x], left_bottom);
-	float dot_bottom_right = Dot(_rand_vectors[pos.y][pos.x + 1], right_bottom);
+	float dot_top_left = Math::DOT(_rand_vectors[pos.y + 1][pos.x], left_top);
+	float dot_top_right = Math::DOT(_rand_vectors[pos.y + 1][pos.x + 1], right_top);
+	float dot_bottom_left = Math::DOT(_rand_vectors[pos.y][pos.x], left_bottom);
+	float dot_bottom_right = Math::DOT(_rand_vectors[pos.y][pos.x + 1], right_bottom);
 
 	const float u = Fade(rand_offset.x);
 	const float v = Fade(rand_offset.y);
@@ -61,8 +59,10 @@ float RTSMapGenerator::Noise(const glm::ivec2& pos)
 
 std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 {
-	std::vector<std::vector<float>> value_array;
-	
+	std::vector<std::vector<float>> humidity_array;
+	std::vector<std::vector<float>> height_array;
+	std::vector<std::vector<float>> population_array;
+
 	//also I should use RandomVector()
 
 	std::vector<glm::vec2> const_vectors =
@@ -72,7 +72,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 
 
 	_rand_vectors.resize(_size.y + 1);
-	value_array.resize(_size.y);
+
 
 	for (int y = 0; y < _size.y + 1; y++)
 	{
@@ -83,16 +83,60 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		}
 	}
 
+	float min_height = FLT_MAX;
+	float min_humidity = FLT_MAX;
+	float min_population = FLT_MAX;
+	float max_height = FLT_MIN;
+	float max_humidity = FLT_MIN;
+	float max_population = FLT_MIN;
+
+	humidity_array.resize(_size.y);
+	height_array.resize(_size.y);
+	population_array.resize(_size.y);
+	_map.resize(_size.y);
+
 	for (int y = 0; y < _size.y; y++)
 	{
-		value_array[y].resize(_size.x);
+		humidity_array[y].resize(_size.x);
+		height_array[y].resize(_size.x);
+		population_array[y].resize(_size.x);
+		_map[y].resize(_size.x);
+
 		for (int x = 0; x < _size.x; x++)
 		{
-			value_array[y][x] = Noise(glm::ivec2(x, y));
+			height_array[y][x] = FBM(glm::ivec2(x, y), 2);
+			humidity_array[y][x] = FBM(glm::ivec2(x, y), 2);
+			population_array[y][x] = FBM(glm::ivec2(x, y), 2);
+
+			min_height = std::min(min_height, height_array[y][x]);
+			min_humidity = std::min(min_humidity, humidity_array[y][x]);
+			min_population = std::min(min_population, population_array[y][x]);
+
+			max_height = std::max(max_height, height_array[y][x]);
+			max_humidity = std::max(max_humidity, humidity_array[y][x]);
+			max_population = std::max(max_population, population_array[y][x]);
+
 		}
 	}
 
-	_map =
+	for (int y = 0; y < _size.y; y++)
+	{
+		for (int x = 0; x < _size.x; x++)
+		{
+			height_array[y][x] = (height_array[y][x] - min_height) / (max_height - min_height);
+			humidity_array[y][x] = (humidity_array[y][x] - min_humidity) / (max_humidity - min_humidity);
+			population_array[y][x] = (population_array[y][x] - min_population) / (max_population - min_population);
+
+			_map[x][y] = Cell(glm::ivec2(x, y), 0, 1, GetSymbol(height_array[y][x], humidity_array[y][x], population_array[y][x]), 0);
+
+			std::cout << _map[x][y]._symbol;
+
+		}
+		std::cout << std::endl;
+
+	}
+
+	/*_map =
 	{
 		{
 			Cell(), Cell(glm::ivec2(1, 0), 0, 1, '.', 0), Cell(glm::ivec2(2, 0), 0, 1, '.', 0), Cell(glm::ivec2(3, 0), 0, -1, 'W'), Cell(glm::ivec2(4, 0), 0, 1, '.', 1), Cell(glm::ivec2(5, 0), 0, 1, '.', 1), Cell(glm::ivec2(6, 0), 0, 1, '.', 1)
@@ -115,7 +159,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		{
 			Cell(glm::ivec2(0, 6), 0, 1, '.', 0), Cell(glm::ivec2(1, 6), 0, 1, '.', 0), Cell(glm::ivec2(2, 6), 0, 1, '.', 0), Cell(glm::ivec2(3, 6), 0, 1, '.', 0), Cell(glm::ivec2(4, 6), 0, 1, '.', 0), Cell(glm::ivec2(5, 6), 0, 1, '.', 0), Cell(glm::ivec2(6, 6), 0, 1, '.', 0)
 		}
-	};
+	};*/
 	/*{
 			Cell(glm::ivec2(0), 0, -1, 'B'), Cell(glm::ivec2(1, 0), 0, -1, 'B'), Cell(glm::ivec2(2, 0), 0, -1, 'B'), Cell(glm::ivec2(3, 0), 0, -1, 'B'), Cell(glm::ivec2(4, 0)), Cell(glm::ivec2(5, 0)), Cell(glm::ivec2(6, 0))
 		},
@@ -139,3 +183,30 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		}*/
 	return _map;
 }
+
+float RTSMapGenerator::FBM(const glm::ivec2& pos, const int& count)
+{
+	float amplitude = 1.f;
+	float result = 0;
+
+	for (int i = 0; i < count; i++)
+	{
+		result += amplitude * Noise(pos);
+		amplitude /= 2;
+	}
+
+	return result;
+}
+
+char RTSMapGenerator::GetSymbol(const float& height, const float& humidity, const float& population)
+{
+	for (int i = 0; i < _symbols.size(); i++)
+	{
+		if (_symbols[i]._height < height && _symbols[i]._humidity < humidity && _symbols[i]._population < population)
+			return _symbols[i]._symbol;
+	}
+
+	return ' ';
+}
+
+
