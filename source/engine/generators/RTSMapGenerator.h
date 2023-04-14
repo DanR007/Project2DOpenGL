@@ -56,6 +56,7 @@ public:
 	RTSMapGenerator(const glm::ivec2& size);
 
 	float Noise(const glm::ivec2& pos);
+	float FBM(const int& count, int x, int y);
 
 	std::vector<std::vector<Cell>> GenerateMap();
 
