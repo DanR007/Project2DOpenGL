@@ -32,6 +32,9 @@ public:
 
 	inline glm::vec2 GetMoveValue() { return _move_vector; }
 	glm::vec2 GetGoal() const { return _goal; }
+	glm::ivec2 GetMapGoal() const { return _goal_int; }
+
+	bool GetPathComplete() { return _complete_path; }
 
 	void MakePathForGoal(const Cell& goal, const glm::ivec2& move_from);
 protected:

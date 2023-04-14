@@ -99,7 +99,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
 
 			yPos = window_size.y - yPos;
-			glm::ivec2 map_coord = GetWorld()->ConvertToMapSpace(xPos, yPos);
+			glm::ivec2 map_coord = GetWorld()->ConvertToMapSpace((float)xPos, (float)yPos);
 
 			//Print map coordinates
 			std::cout << "ASCII Map coordinates (x, y): " << map_coord.x << " " << map_coord.y << std::endl;
@@ -109,7 +109,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 				std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]._symbol << std::endl;
 
 			//find unit under cursor
-			Unit* unit = GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2(xPos, yPos));
+			Unit* unit = GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
 
 			if(_unit)
 				_unit->SetSelected(_unit == unit);

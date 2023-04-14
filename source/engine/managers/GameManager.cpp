@@ -22,7 +22,21 @@ GameManager::GameManager()
 	_physics_manager = new Physics::PhysicsManager(this);
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(50);
+	_size_map = glm::ivec2(20);
+}
+
+GameManager::~GameManager()
+{
+	if (_physics_manager)
+	{
+		delete _physics_manager;
+		_physics_manager = nullptr;
+	}
+	if (_nav_mesh)
+	{
+		delete _nav_mesh;
+		_nav_mesh = nullptr;
+	}
 }
 
 void GameManager::Clear()
@@ -166,12 +180,34 @@ void GameManager::ReadMap()
 	}
 }
 
+void GameManager::ChangeIterators()
+{
+	_need_to_delete.clear();
+
+	auto it = _all_actors.begin();
+
+	for (; it != _all_actors.end(); it++)
+	{
+		if ((*it)->GetDeleteFlag())
+			_need_to_delete.push_back(it);
+
+		(*it)->SetIterator(it);
+	}
+}
+
 void GameManager::ClearDeleteActors()
 {
-	auto it = _need_to_delete.begin();
-	for (; it != _need_to_delete.end();)
+	if (_need_to_delete.empty() == false)
 	{
-		_all_actors.erase(*it);
-		it = _need_to_delete.erase(it);
+		auto it = _all_actors.begin();
+		for (; it != _all_actors.end();)
+		{
+			if ((*it)->GetDeleteFlag())
+				it = _all_actors.erase(it);
+			else
+				it++;
+		}
+
+		_need_to_delete.clear();
 	}
 }

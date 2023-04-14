@@ -101,6 +101,7 @@ namespace Game
 	}
 	void Actor::DestroyActor()
 	{
+		_delete_flag = true;
 		GetWorld()->DeleteActor(_iterator);
 	}
 }

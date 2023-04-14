@@ -75,30 +75,25 @@ void Controller::MakePathForGoal(const Cell& goal, const glm::ivec2& move_from)
 	{
 		_controlled_pawn->PathComplete();
 		_a_star->Clear();
-		std::cout << "Destroy Goal" << std::endl;
 
+		//_complete_path = false;
+		//if (_controlled_pawn)
+		//	_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
 
-		_complete_path = false;
-		if (_controlled_pawn)
-			_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
+		//std::cout << "path is ok" << std::endl;
 
-		std::cout << "path is ok" << std::endl;
-
-		_controlled_pawn->GetGoal()->SetUnit(_controlled_pawn);
+		//_controlled_pawn->GetGoal()->SetUnit(_controlled_pawn);
 	}
-	else
-	{
-		_complete_path = false;
-		if (_controlled_pawn)
-			_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
 
-		std::cout << "path is ok" << std::endl;
+	_complete_path = false;
+	if (_controlled_pawn)
+		_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
 
-		_controlled_pawn->GetGoal()->SetUnit(_controlled_pawn);
+	std::cout << "path is ok" << std::endl;
 
-		SetNewGoal(_a_star->GetNextMapGoal());
-	}
-	
+	_controlled_pawn->GetGoal()->SetUnit(_controlled_pawn);
+
+	SetNewGoal(_a_star->GetNextMapGoal());
 }
 
 void Controller::SetNewGoal(const glm::ivec2& map_coord)

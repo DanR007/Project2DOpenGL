@@ -45,6 +45,8 @@ namespace Game
 		inline glm::vec2 GetRelativePosition() const { return _relative_position; }
 		inline float GetRotation() const { return _rotation; }
 		inline std::vector<std::shared_ptr<Game::Actor>>::iterator GetIterator() { return _iterator; }
+		inline bool GetDeleteFlag() const { return _delete_flag; }
+
 
 		void SetPosition(const glm::vec2& new_position);
 		void SetSize(const glm::vec2& new_size);
@@ -63,6 +65,8 @@ namespace Game
 		void DestroyActor();
 
 	protected:
+		bool _delete_flag = false;
+
 		glm::vec2 _world_position, _relative_position;
 		glm::vec2 _size;
 		float _rotation;

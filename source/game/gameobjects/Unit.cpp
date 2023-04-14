@@ -16,8 +16,7 @@ Unit::Unit(const std::string& initSubtextureName,
 {
 	_selected_sprite = std::make_unique<Renderer::Sprite>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "selected", this, startPosition, startSize);
 
-	_map_position = glm::ivec2((startPosition.x + GetWorld()->GetOffset().x) / GetWorld()->GetBlockSize().x, 
-		(startPosition.y + GetWorld()->GetOffset().y) / GetWorld()->GetBlockSize().y);
+	_map_position = GetWorld()->ConvertToMapSpace(startPosition);
 
 	_is_selected = false;
 	_hp = 100;
@@ -55,12 +54,25 @@ void Unit::Move(const glm::vec2& position)
 
 void Unit::MoveTo(const Cell& cell)
 {
-	_controller->MakePathForGoal(cell, _map_position);
+	if (GetController()->GetPathComplete())
+	{
+		_controller->MakePathForGoal(cell, _map_position);
+	}
+	else
+	{
+		_controller->MakePathForGoal(cell, GetController()->GetMapGoal());
+	}
 }
 
 void Unit::PathComplete()
 {
+#ifdef DEBUG
 	std::cout << "Path Complete" << std::endl;
+#endif
 	_goal->DestroyActor();
+#ifdef DEBUG
+	
+	std::cout << "Destroy Goal" << std::endl;
+#endif
 	_goal = nullptr;
 }

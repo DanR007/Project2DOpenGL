@@ -27,20 +27,7 @@ class GameManager
 {
 public:
 	GameManager();
-	
-	~GameManager() 
-	{
-		if (_physics_manager) 
-		{
-			delete _physics_manager; 
-			_physics_manager = nullptr;
-		}
-		if (_nav_mesh)
-		{
-			delete _nav_mesh;
-			_nav_mesh = nullptr;
-		}
-	}
+	~GameManager();
 
 	void Clear();
 	
@@ -50,9 +37,14 @@ public:
 	{
 		std::shared_ptr<T> new_actor = std::make_shared<T>(initSpriteName, actorPosition, actorSize, actorRotation); 
 
+		int old_cap = _all_actors.capacity();
+
 		if(std::dynamic_pointer_cast<Game::Actor>(new_actor))
 			std::dynamic_pointer_cast<Game::Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
 		
+		if (_all_actors.capacity() != old_cap)
+			ChangeIterators();
+
 		return new_actor;
 	}
 	template<typename T>
@@ -60,8 +52,14 @@ public:
 	{
 		std::shared_ptr<T> new_actor = std::make_shared<T>(position);
 
+		int old_cap = _all_actors.capacity();
+
 		if (std::dynamic_pointer_cast<Game::Actor>(new_actor))
 			std::dynamic_pointer_cast<Game::Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
+
+		if (_all_actors.capacity() != old_cap)
+			ChangeIterators();
+
 
 		return new_actor;
 	}
@@ -72,7 +70,7 @@ public:
 	void BeginPlay();
 
 	void SetGameOver(bool isGameOver) { _is_game_over = isGameOver; }
-	void SetIterator(std::vector<std::shared_ptr<Game::Actor>>::iterator it) { _it = it; }
+
 	void SetBlockSize(const glm::dvec2& size) { _block_size = size; }
 	void SetOffset(const glm::dvec2& offset) { _offset = offset; }
 
@@ -99,13 +97,12 @@ public:
 
 	void ReadMap();
 private:
+	void ChangeIterators();
 	void ClearDeleteActors();
 
 	Physics::PhysicsManager* _physics_manager;
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
-
-	std::vector<std::shared_ptr<Game::Actor>>::iterator _it;
 
 	std::vector<std::shared_ptr<Game::Actor>> _all_actors;
 

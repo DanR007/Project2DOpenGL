@@ -61,7 +61,17 @@ public:
 
 	float FBM(const glm::ivec2& pos, const int& count);
 private:
+	void CellularAutomaton(const int& count_life_cells_need, const char& symbol);
+	void FillFieldID(std::vector<std::vector<char>>& map);
+
+	void BFS(const glm::ivec2& start, std::vector<std::vector<char>>& map, unsigned short int id);
+	
+
+	size_t GetLifeCell(const glm::ivec2& pos, const char& life_symbol);
+
 	char GetSymbol(const float& height, const float& humidity, const float& population);
+
+
 
 	glm::ivec2 _size;
 

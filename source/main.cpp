@@ -58,7 +58,11 @@ void glfwCursorPosCallback(GLFWwindow* currentWindow, double xPos, double yPos)
 
 int main(int argc, char** argv)
 {
+	bool is_debuging = false;
+#ifdef DEBUG
+	is_debuging = true;
 
+#endif
 	GLFWwindow* window;
 	
 	if (!glfwInit())
@@ -67,7 +71,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	{
-		window = glfwCreateWindow(window_size.x, window_size.y, "Platformer2D", NULL, NULL);
+		window = glfwCreateWindow(window_size.x, window_size.y, "Platformer2D", is_debuging ? nullptr : glfwGetPrimaryMonitor(), NULL);
 
 		if (!window)
 		{

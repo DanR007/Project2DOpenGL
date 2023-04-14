@@ -5,17 +5,20 @@
 #include "../math/Math.h"
 
 #include <iostream>
+#include <iomanip>
+#include <queue>
+
 
 RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 {
 	_size = size;
-
-	_symbols = { GenSymbol(0.3f, 0.7f, 0.7f, 'W'), GenSymbol(0.7f, 0.7f, 0.4f, 'S')};
+	//height population (normalize) humidity
+	_symbols = { GenSymbol(0.f, 0.6f, 0.f, 'W'), GenSymbol(0.3f, 0.6f, -0.1f, 'S')};
 }
 
 glm::vec2 RendomVector()
 {
-	int angle = std::rand() % 360;
+	int angle = std::rand() & 360;
 	float rad_angle = float(angle) * M_PI / 180.f;
 	return glm::vec2(std::cos(rad_angle), std::sin(rad_angle));
 }
@@ -32,7 +35,7 @@ float Lerp(float t, float a1, float a2)
 
 float RTSMapGenerator::Noise(const glm::ivec2& pos)
 {
-	glm::vec2 rand_offset = glm::vec2(float(std::rand() % 11) / 10.f, float(std::rand() % 11) / 10.f);
+	glm::vec2 rand_offset = glm::vec2(float(std::rand() % 10 + 1) / 10.f, float(std::rand() % 10 + 1) / 10.f);
 
 	glm::vec2 left_bottom, left_top, right_top, right_bottom;
 
@@ -62,6 +65,8 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 	std::vector<std::vector<float>> humidity_array;
 	std::vector<std::vector<float>> height_array;
 	std::vector<std::vector<float>> population_array;
+
+	std::vector<std::vector<char>> symbol_array;
 
 	//also I should use RandomVector()
 
@@ -93,6 +98,8 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 	humidity_array.resize(_size.y);
 	height_array.resize(_size.y);
 	population_array.resize(_size.y);
+	symbol_array.resize(_size.y);
+
 	_map.resize(_size.y);
 
 	for (int y = 0; y < _size.y; y++)
@@ -100,6 +107,8 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		humidity_array[y].resize(_size.x);
 		height_array[y].resize(_size.x);
 		population_array[y].resize(_size.x);
+		symbol_array[y].resize(_size.x);
+
 		_map[y].resize(_size.x);
 
 		for (int x = 0; x < _size.x; x++)
@@ -108,79 +117,64 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 			humidity_array[y][x] = FBM(glm::ivec2(x, y), 2);
 			population_array[y][x] = FBM(glm::ivec2(x, y), 2);
 
-			min_height = std::min(min_height, height_array[y][x]);
+			/*min_height = std::min(min_height, height_array[y][x]);
 			min_humidity = std::min(min_humidity, humidity_array[y][x]);
-			min_population = std::min(min_population, population_array[y][x]);
 
 			max_height = std::max(max_height, height_array[y][x]);
-			max_humidity = std::max(max_humidity, humidity_array[y][x]);
+			max_humidity = std::max(max_humidity, humidity_array[y][x]);*/
+			min_population = std::min(min_population, population_array[y][x]);
 			max_population = std::max(max_population, population_array[y][x]);
 
 		}
 	}
 
+	//_symbols[0]._humidity = (max_humidity + min_humidity) / 2.f;
+
 	for (int y = 0; y < _size.y; y++)
 	{
 		for (int x = 0; x < _size.x; x++)
 		{
-			height_array[y][x] = (height_array[y][x] - min_height) / (max_height - min_height);
-			humidity_array[y][x] = (humidity_array[y][x] - min_humidity) / (max_humidity - min_humidity);
+			//height_array[y][x] = (height_array[y][x] - min_height) / (max_height - min_height);
+			//humidity_array[y][x] = (humidity_array[y][x] - min_humidity) / (max_humidity - min_humidity);
 			population_array[y][x] = (population_array[y][x] - min_population) / (max_population - min_population);
 
-			_map[x][y] = Cell(glm::ivec2(x, y), 0, 1, GetSymbol(height_array[y][x], humidity_array[y][x], population_array[y][x]), 0);
+			_map[y][x] = Cell(glm::ivec2(x, y), 0, 1, GetSymbol(height_array[y][x], humidity_array[y][x], population_array[y][x]), 0);
 
-			std::cout << _map[x][y]._symbol;
+			std::cout << _map[y][x]._symbol;
 
 		}
 		std::cout << std::endl;
 
 	}
+	std::cout <<"/////////////////" << std::endl;
+	CellularAutomaton(4, _symbols[0]._symbol);
+	CellularAutomaton(3, _symbols[0]._symbol);
 
-	/*_map =
+	CellularAutomaton(2, _symbols[1]._symbol);
+
+	for (int y = 0; y < _size.y; y++)
 	{
+		for (int x = 0; x < _size.x; x++)
 		{
-			Cell(), Cell(glm::ivec2(1, 0), 0, 1, '.', 0), Cell(glm::ivec2(2, 0), 0, 1, '.', 0), Cell(glm::ivec2(3, 0), 0, -1, 'W'), Cell(glm::ivec2(4, 0), 0, 1, '.', 1), Cell(glm::ivec2(5, 0), 0, 1, '.', 1), Cell(glm::ivec2(6, 0), 0, 1, '.', 1)
-		},
-		{
-			Cell(glm::ivec2(0, 1), 0, 1, '.', 0), Cell(glm::ivec2(1, 1)), Cell(glm::ivec2(2, 1), 0, -1, 'W'), Cell(glm::ivec2(3, 1), 0, -1, 'W'), Cell(glm::ivec2(4, 1), 0, 1, '.', 1), Cell(glm::ivec2(5, 1), 0, 1, '.', 1), Cell(glm::ivec2(6, 1), 0, 1, '.', 1)
-		},
-		{
-			Cell(glm::ivec2(0, 2), 0, 1, '.', 0), Cell(glm::ivec2(1, 2)), Cell(glm::ivec2(2, 2), 0, -1, 'S'), Cell(glm::ivec2(3, 2), 0, 1, '.', 1), Cell(glm::ivec2(4, 2), 0, 1, '.', 1), Cell(glm::ivec2(5, 2), 0, 1, '.', 1), Cell(glm::ivec2(6, 2), 0, 1, '.', 1)
-		},
-		{
-			Cell(glm::ivec2(0, 3), 0, 1, '.', 0), Cell(glm::ivec2(1, 3), 0, -1, 'B'), Cell(glm::ivec2(2, 3), 0, -1, 'S'), Cell(glm::ivec2(3, 3), 0, 1, '.', 1), Cell(glm::ivec2(4, 3), 0, 1, '.', 1), Cell(glm::ivec2(5, 3), 0, 1, '.', 1), Cell(glm::ivec2(6, 3), 0, 1, '.', 1)
-		},
-		{
-			Cell(glm::ivec2(0, 4), 0, 1, '.', 0), Cell(glm::ivec2(1, 4), 0, -1, 'B'), Cell(glm::ivec2(2, 4), 0, 1, '.', 1), Cell(glm::ivec2(3, 4), 0, 1, '.', 1), Cell(glm::ivec2(4, 4), 0, 1, '.', 1), Cell(glm::ivec2(5, 4), 0, -1, 'B'), Cell(glm::ivec2(6, 4), 0, -1, 'B')
-		},
-		{
-			Cell(glm::ivec2(0, 5), 0, 1, '.', 0), Cell(glm::ivec2(1, 5), 0, -1, 'B'), Cell(glm::ivec2(2, 5), 0, -1, 'B'), Cell(glm::ivec2(3, 5), 0, -1, 'B'), Cell(glm::ivec2(4, 5), 0, -1, 'B'), Cell(glm::ivec2(5, 5), 0, -1, 'B'), Cell(glm::ivec2(6, 5), 0, 1, '.', 0)
-		},
-		{
-			Cell(glm::ivec2(0, 6), 0, 1, '.', 0), Cell(glm::ivec2(1, 6), 0, 1, '.', 0), Cell(glm::ivec2(2, 6), 0, 1, '.', 0), Cell(glm::ivec2(3, 6), 0, 1, '.', 0), Cell(glm::ivec2(4, 6), 0, 1, '.', 0), Cell(glm::ivec2(5, 6), 0, 1, '.', 0), Cell(glm::ivec2(6, 6), 0, 1, '.', 0)
+			std::cout << _map[y][x]._symbol;
+			symbol_array[y][x] = _map[y][x]._symbol;
 		}
-	};*/
-	/*{
-			Cell(glm::ivec2(0), 0, -1, 'B'), Cell(glm::ivec2(1, 0), 0, -1, 'B'), Cell(glm::ivec2(2, 0), 0, -1, 'B'), Cell(glm::ivec2(3, 0), 0, -1, 'B'), Cell(glm::ivec2(4, 0)), Cell(glm::ivec2(5, 0)), Cell(glm::ivec2(6, 0))
-		},
+		std::cout << std::endl;
+
+	}
+	std::cout << "/////////////////" << std::endl;
+	FillFieldID(symbol_array);
+
+	for (int y = 0; y < _size.y; y++)
+	{
+		for (int x = 0; x < _size.x; x++)
 		{
-			Cell(glm::ivec2(0, 1), 0, -1, 'B'), Cell(glm::ivec2(1, 1)), Cell(glm::ivec2(2, 1), 0, -1, 'B'), Cell(glm::ivec2(3, 1), 0, -1, 'B'), Cell(glm::ivec2(4, 1)), Cell(glm::ivec2(5, 1), 0, 4), Cell(glm::ivec2(6, 1), 0, 4)
-		},
-		{
-			Cell(glm::ivec2(0, 2), 0, -1, 'B'), Cell(glm::ivec2(1, 2)), Cell(glm::ivec2(2, 2), 0, 5), Cell(glm::ivec2(3, 2), 0, 5), Cell(glm::ivec2(4, 2), 0, 4), Cell(glm::ivec2(5, 2), 0, 4), Cell(glm::ivec2(6, 2), 0, 4)
-		},
-		{
-			Cell(glm::ivec2(0, 3), 0, -1, 'B'), Cell(glm::ivec2(1, 3), 0, 5), Cell(glm::ivec2(2, 3), 0, 5), Cell(glm::ivec2(3, 3), 0, 5), Cell(glm::ivec2(4, 3)), Cell(glm::ivec2(5, 3)), Cell(glm::ivec2(6, 3))
-		},
-		{
-			Cell(glm::ivec2(0, 4)), Cell(glm::ivec2(1, 4), 0, 1), Cell(glm::ivec2(2, 4), 0, -1, 'B'), Cell(glm::ivec2(3, 4)), Cell(glm::ivec2(4, 4)), Cell(glm::ivec2(5, 4), 0, -1, 'B'), Cell(glm::ivec2(6, 4), 0, -1, 'B')
-		},
-		{
-			Cell(glm::ivec2(0, 5), 0, -1, 'B'), Cell(glm::ivec2(1, 5), 0, -1, 'B'), Cell(glm::ivec2(2, 5), 0, -1, 'B'), Cell(glm::ivec2(3, 5)), Cell(glm::ivec2(4, 5), 0, -1, 'B'), Cell(glm::ivec2(5, 5), 0, -1, 'B'), Cell(glm::ivec2(6, 5))
-		},
-		{
-			Cell(glm::ivec2(0, 6), 0, -1, 'B'), Cell(glm::ivec2(1, 6)), Cell(glm::ivec2(2, 6)), Cell(glm::ivec2(3, 6)), Cell(glm::ivec2(4, 6)), Cell(glm::ivec2(5, 6)), Cell(glm::ivec2(6, 6))
-		}*/
+			std::cout << _map[y][x]._field_id;
+		}
+		std::cout << std::endl;
+
+	}
+
 	return _map;
 }
 
@@ -198,11 +192,137 @@ float RTSMapGenerator::FBM(const glm::ivec2& pos, const int& count)
 	return result;
 }
 
+
+
+void RTSMapGenerator::CellularAutomaton(const int& count_life_cells_need, const char& symbol)
+{
+	std::vector<std::vector<char>> cell_condition;
+
+	cell_condition.resize(_size.y);
+
+	for (int y = 0; y < _size.y; y++)
+	{
+		cell_condition[y].resize(_size.x);
+
+		for (int x = 0; x < _size.x; x++)
+		{
+			if (_map[y][x]._symbol == symbol)
+			{
+				if (GetLifeCell(glm::ivec2(x, y), _map[y][x]._symbol) >= count_life_cells_need)
+				{
+					cell_condition[y][x] = _map[y][x]._symbol;
+				}
+				else
+				{
+					cell_condition[y][x] = ' ';
+				}
+			}
+			else
+			{
+				cell_condition[y][x] = _map[y][x]._symbol;
+			}
+		}
+	}
+
+	for (int y = 0; y < _size.y; y++)
+	{
+		for (int x = 0; x < _size.x; x++)
+		{
+			_map[y][x]._symbol = cell_condition[y][x];
+		}
+	}
+}
+
+void RTSMapGenerator::FillFieldID(std::vector<std::vector<char>>& map)
+{
+	unsigned short int num = 0;
+
+	for (int i = 0; i < _size.y; i++)
+	{
+		for (int j = 0; j < _size.x; j++)
+		{
+			if (map[i][j] == ' ')
+			{
+				BFS(glm::ivec2(j, i), map, num++);
+			}
+		}
+	}
+}
+
+void RTSMapGenerator::BFS(const glm::ivec2& start, std::vector<std::vector<char>>& map, unsigned short int id)
+{
+	std::queue<glm::ivec2> q;
+
+	q.push(start);
+
+	map[start.y][start.x] = '.';
+	_map[start.y][start.x]._field_id = id;
+
+	std::vector<glm::ivec2> neighbours =
+	{
+		glm::ivec2(1, 0),
+		glm::ivec2(-1, 0),
+		glm::ivec2(0, 1),
+		glm::ivec2(0, -1)
+	};
+
+	while (!q.empty())
+	{
+		glm::ivec2 cur = q.front();
+		q.pop();
+
+		for (int i = 0; i < neighbours.size(); i++)
+		{
+			glm::ivec2 neighbour = cur + neighbours[i];
+
+			if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < _size.x && neighbour.y < _size.y && map[neighbour.y][neighbour.x] == ' ')
+			{
+				q.push(neighbour);
+				map[neighbour.y][neighbour.x] = '.';
+				_map[neighbour.y][neighbour.x]._field_id = id;
+			}
+
+		}
+	}
+}
+
+
+size_t RTSMapGenerator::GetLifeCell(const glm::ivec2& pos, const char& life_symbol)
+{
+	size_t count = 0;
+
+	std::vector<glm::ivec2> neighbours =
+	{
+		glm::ivec2(1, 0),
+		glm::ivec2(-1, 0),
+		glm::ivec2(0, 1),
+		glm::ivec2(0, -1),
+
+		glm::ivec2(1, 1),
+		glm::ivec2(-1, 1),
+		glm::ivec2(-1, -1),
+		glm::ivec2(1, -1)
+	};
+
+	for (int i = 0; i < neighbours.size(); i++)
+	{
+		glm::ivec2 neighbour = pos + neighbours[i];
+
+		if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < _size.x && neighbour.y < _size.y)
+		{
+			count += _map[neighbour.y][neighbour.x]._symbol == life_symbol ? 1 : 0;
+		}
+
+	}
+
+	return count;
+}
+
 char RTSMapGenerator::GetSymbol(const float& height, const float& humidity, const float& population)
 {
 	for (int i = 0; i < _symbols.size(); i++)
 	{
-		if (_symbols[i]._height < height && _symbols[i]._humidity < humidity && _symbols[i]._population < population)
+		if (/*_symbols[i]._height < height && */_symbols[i]._humidity < humidity/* && _symbols[i]._population < population*/)
 			return _symbols[i]._symbol;
 	}
 
