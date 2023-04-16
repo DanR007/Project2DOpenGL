@@ -33,6 +33,8 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 	window_size.x = size_x;
 	window_size.y = size_y;
 	glViewport(0, 0, window_size.x, window_size.y);
+	
+	std::cout << window_size.x << " " << window_size.y << std::endl;
 }
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
@@ -98,7 +100,6 @@ int main(int argc, char** argv)
 		}
 
 		ResourcesManager::LoadAll(*argv);
-		glm::dvec2 a(1.);
 
 		world = new GameManager();
 #ifdef TEST_CASES

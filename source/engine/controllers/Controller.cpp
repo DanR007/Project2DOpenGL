@@ -32,6 +32,7 @@ Controller::Controller()
 	_move_speed = 0.f;
 }
 
+//move while path doesn't complete 
 void Controller::Move(float deltaTime)
 {
 	if (!_complete_path)
@@ -41,7 +42,7 @@ void Controller::Move(float deltaTime)
 		if (_move_vector != glm::vec2(0.f, 0.f))
 		{
 			float cost = GetWorld()->GetNavMesh()->GetMap()[_goal_int.y][_goal_int.x]._cost;
-			//
+			
 			if (deltaTime * _move_speed / cost > distance)
 			{
 				_controlled_pawn->Move(_goal);
@@ -71,18 +72,14 @@ void Controller::ChangeMoveVector(glm::vec2 inputVector)
 void Controller::MakePathForGoal(const Cell& goal, const glm::ivec2& move_from)
 {
 	_goal_int = _controlled_pawn->GetMapPosition();
+
+	//if path doesn't complete then 
+	//pawn continue move to current target but path creating from
+	//current target to new target
 	if (!_complete_path)
 	{
 		_controlled_pawn->PathComplete();
 		_a_star->Clear();
-
-		//_complete_path = false;
-		//if (_controlled_pawn)
-		//	_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
-
-		//std::cout << "path is ok" << std::endl;
-
-		//_controlled_pawn->GetGoal()->SetUnit(_controlled_pawn);
 	}
 
 	_complete_path = false;
@@ -96,6 +93,9 @@ void Controller::MakePathForGoal(const Cell& goal, const glm::ivec2& move_from)
 	SetNewGoal(_a_star->GetNextMapGoal());
 }
 
+
+//set map position to unit and choice new map position
+//if path doesn't empty
 void Controller::SetNewGoal(const glm::ivec2& map_coord)
 {
 	_controlled_pawn->SetMapPosition(_goal_int);

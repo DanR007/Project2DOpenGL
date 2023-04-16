@@ -18,4 +18,4 @@ class GameManager;
 
 GameManager* GetWorld();
 
-static glm::ivec2 window_size(1920, 1080);
+static glm::ivec2 window_size(1280, 720);

@@ -45,3 +45,17 @@ void NavMeshRTS::SetMapCell(const glm::ivec2& position, const char& symbol)
 {
 	_map[position.y][position.x]._symbol = symbol;
 }
+
+void NavMeshRTS::PrintMap()
+{
+	std::cout <<"Print map: " << std::endl;
+	for (int y = _map.size() - 1; y >= 0; y--)
+	{
+		for (int x = 0; x < _map.size(); x++)
+		{
+			std::cout << _map[y][x]._symbol;
+		}
+		std::cout << std::endl;
+	}
+	std::cout << "End map " << std::endl;
+}
