@@ -11,7 +11,7 @@ namespace Renderer
 	class Sprite;
 }
 
-class Unit : public Game::Pawn
+class Unit : public Pawn
 {
 public:
 	Unit(const std::string& initSubtextureName,

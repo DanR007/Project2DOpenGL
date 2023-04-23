@@ -2,10 +2,8 @@
 
 #include <glm/vec2.hpp>
 
-namespace Game
-{
-	class Actor;
-}
+class Actor;
+
 
 struct RaycastResult
 {
@@ -22,5 +20,5 @@ struct RaycastResult
 	float _distance = FLT_MAX;
 	glm::vec2 _hit_position = glm::vec2(0);
 	glm::vec2 _normal = glm::vec2(0);
-	Game::Actor* _hit_actor = nullptr;
+	Actor* _hit_actor = nullptr;
 };

@@ -39,7 +39,7 @@ Unit::~Unit()
 
 void Unit::Update(const float deltaTime)
 {
-	if (_is_selected)
+	if (_is_selected && _selected_sprite->InView())
 	{
 		_selected_sprite->Render();
 	}
@@ -69,7 +69,7 @@ void Unit::PathComplete()
 #ifdef DEBUG
 	std::cout << "Path Complete" << std::endl;
 #endif
-	_goal->DestroyActor();
+	_goal->Destroy();
 #ifdef DEBUG
 	
 	std::cout << "Destroy Goal" << std::endl;

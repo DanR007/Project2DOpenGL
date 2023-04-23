@@ -22,7 +22,7 @@ GameManager::GameManager()
 	_physics_manager = new Physics::PhysicsManager(this);
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(20);
+	_size_map = glm::ivec2(50);
 }
 
 GameManager::~GameManager()
@@ -108,7 +108,7 @@ void GameManager::BeginPlay()
 	//star->DevelopPath(Cell(glm::ivec2(0), 0, 1, '.', 2), Cell(glm::ivec2(4, 0), 0, 1, '.', 1));
 }
 
-void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator)
+void GameManager::DeleteActor(std::vector<std::shared_ptr<Actor>>::iterator actor_iterator)
 {
 	_need_to_delete.push_back(actor_iterator);
 	//clear map here

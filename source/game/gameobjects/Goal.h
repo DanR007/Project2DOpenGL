@@ -3,7 +3,7 @@
 
 class Unit;
 
-class Goal : public Game::Actor
+class Goal : public Actor
 {
 public:
 	Goal(const std::string& initSubtextureName,

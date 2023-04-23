@@ -2,33 +2,32 @@
 
 #include <glm/vec2.hpp>
 
+#include "Object.h"
 
-namespace Game
-{
-	class Actor;
-}
+class Actor;
 
-class Component
+
+class Component : public Object
 {
 public:
-	Component(Game::Actor* owner = nullptr)
+	Component(Actor* owner = nullptr)
 	{
 		_owner = owner;
 	}
 	~Component() { _owner = nullptr; }
 
-	inline Game::Actor* GetOwner() const { return _owner; }
+	inline Actor* GetOwner() const { return _owner; }
 
-	virtual void Attach(Game::Actor* owner) { _owner = owner; }
+	virtual void Attach(Actor* owner) { _owner = owner; }
 
 protected:
-	Game::Actor* _owner;
+	Actor* _owner;
 };
 
 class MovableComponent:public Component
 {
 public:
-	MovableComponent(Game::Actor* owner = nullptr,
+	MovableComponent(Actor* owner = nullptr,
 		const glm::vec2& position = glm::vec2(0.f),
 		const glm::vec2& size = glm::vec2(1.f),
 		const float& rotation = 0.f) : Component(owner)
@@ -41,7 +40,7 @@ public:
 	}
 	~MovableComponent() { _owner = nullptr; }
 
-	void Attach(Game::Actor* owner) override;
+	void Attach(Actor* owner) override;
 
 	void SetPosition(const glm::vec2& new_position)
 	{

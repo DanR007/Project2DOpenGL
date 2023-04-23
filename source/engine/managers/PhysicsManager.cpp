@@ -18,11 +18,11 @@
 
 namespace Physics
 {
-	bool PhysicsManager::CanMove(Game::Actor* firstActor, const glm::vec2& delta)
+	bool PhysicsManager::CanMove(Actor* firstActor, const glm::vec2& delta)
 	{
 		std::shared_ptr<Physics::Collider> first_collider = firstActor->GetCollider();
 
-		for (std::shared_ptr<Game::Actor> actor : _world->_all_actors)
+		for (std::shared_ptr<Actor> actor : _world->_all_actors)
 		{
 			std::shared_ptr<Physics::Collider> second_collider = actor->GetCollider();
 			if (IsBlocking(delta, first_collider, second_collider))
@@ -40,7 +40,6 @@ namespace Physics
 
 	void PhysicsManager::CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider)
 	{
-		std::lock_guard<std::mutex> lock(first_collider->_mtx);
 		first_collider->ClearOverlappingActors();
 
 		auto it = _world->_all_actors.begin();
@@ -69,11 +68,11 @@ namespace Physics
 		}
 	}
 
-	bool PhysicsManager::Raycast(RaycastResult& result, const glm::vec2& start, const glm::vec2& end, const ERaycastTypes& raycast_type, Game::Actor* self, bool ignore_self)
+	bool PhysicsManager::Raycast(RaycastResult& result, const glm::vec2& start, const glm::vec2& end, const ERaycastTypes& raycast_type, Actor* self, bool ignore_self)
 	{
 		result.Clear();
 		glm::vec2 half_size;
-		for (std::shared_ptr<Game::Actor> actor : _world->_all_actors)
+		for (std::shared_ptr<Actor> actor : _world->_all_actors)
 		{
 			Collider* collider = actor->GetCollider().get();
 			if (collider && collider->GetTraceResponseType(raycast_type) == EResponseType::ERT_Block 
@@ -145,7 +144,7 @@ namespace Physics
 
 	Unit* PhysicsManager::GetUnitUnderCursor(const glm::vec2& cursor_pos)
 	{
-		for (std::shared_ptr<Game::Actor> actor : _world->_all_actors)
+		for (std::shared_ptr<Actor> actor : _world->_all_actors)
 		{
 			if (IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), actor->GetPosition(), actor->GetCollider()->GetSize()))
 			{

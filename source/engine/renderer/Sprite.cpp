@@ -4,10 +4,15 @@
 #include "ShaderRender.h"
 
 #include <glm/matrix.hpp>
+
+#include "../../main.h"
+
+#include <iostream>
+
 namespace Renderer
 {
 	Sprite::Sprite(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader, 
-		const std::string& initialSubtextureName, Game::Actor* owner, const glm::vec2& position, 
+		const std::string& initialSubtextureName, Actor* owner, const glm::vec2& position, 
 		const glm::vec2& size, const float rotation)
 		: MovableComponent(owner, position, size, rotation), _texture(texture), _shader(shader), _subtexture_name(initialSubtextureName)
 	{
@@ -91,7 +96,7 @@ namespace Renderer
 		_shader->Use();
 
 		glm::mat4 model(1.f);//create a model matrix
-		
+
 		glm::vec2 position = _world_position/* - _size / 2.f*/;
 
 		model = glm::translate(model, glm::vec3(position, 0.f));
@@ -107,6 +112,22 @@ namespace Renderer
 		_texture->Bind();
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		glBindVertexArray(0);
+	}
+
+	bool Sprite::InView() const
+	{
+		glm::vec2 view_position = glm::vec2(0);
+		glm::vec2 sprite_end = _world_position + _size,
+			view_size = view_position + glm::vec2(window_size);
+		if (_world_position.x < view_position.x && sprite_end.x > view_position.x || _world_position.x >= view_position.x && _world_position.x < view_size.x)
+		{
+			return _world_position.y < view_position.y && sprite_end.y > view_position.y || _world_position.y >= view_position.y && _world_position.y < view_size.y;
+		}
+		else
+		{
+			return false;
+		}
+
 	}
 
 

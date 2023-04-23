@@ -4,7 +4,7 @@
 #include "Component.h"
 #include "Actor.h"
 
-void MovableComponent::Attach(Game::Actor* owner)
+void MovableComponent::Attach(Actor* owner)
 {
 	_owner = owner;
 }

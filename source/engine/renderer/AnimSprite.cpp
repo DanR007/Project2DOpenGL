@@ -1,11 +1,12 @@
 #include "AnimSprite.h"
 #include "TextureRender.h"
+
 #include <iostream>
 
 namespace Renderer
 {
 	AnimSprite::AnimSprite(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader,
-		const std::string& initialSubtextureName, Game::Actor* owner, const glm::vec2& position,
+		const std::string& initialSubtextureName, Actor* owner, const glm::vec2& position,
 		const glm::vec2& size, const float rotation)
 		:Sprite(texture,
 			shader,
@@ -87,6 +88,7 @@ namespace Renderer
 			}
 		}
 
-		Render();
+		if(InView())
+			Render();
 	}
 }

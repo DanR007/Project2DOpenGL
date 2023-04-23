@@ -1,7 +1,7 @@
 #pragma once
 #include "../../engine/default_classes/Actor.h"
 
-class Wall : public Game::Actor
+class Wall : public Actor
 {
 public:
 	Wall(const std::string& initSubtextureName,

@@ -9,7 +9,7 @@ namespace Physics
 		objects_response_map[objectType] = responseType;
 	}
 
-	void Collider::Overlap(Game::Actor* actor) 
+	void Collider::Overlap(Actor* actor) 
 	{ 
 		_delegate_overlap(actor); 
 		_overlapping_actors.push_back(actor);

@@ -28,6 +28,7 @@ source/engine/physics/EPhysicsTypes.h
 source/engine/physics/Collider.h
 source/engine/physics/RaycastResult.h
 source/engine/physics/PhysicsBody.h
+source/engine/default_classes/Object.h
 source/engine/default_classes/Actor.h
 source/engine/default_classes/Pawn.h
 source/engine/default_classes/Component.h
@@ -51,6 +52,7 @@ source/engine/generators/BSPMapGenerate.cpp
 source/engine/physics/Collider.cpp
 source/engine/physics/RaycastResult.cpp
 source/engine/physics/PhysicsBody.cpp
+source/engine/default_classes/Object.cpp
 source/engine/default_classes/Actor.cpp
 source/engine/default_classes/Pawn.cpp
 source/engine/default_classes/Component.cpp

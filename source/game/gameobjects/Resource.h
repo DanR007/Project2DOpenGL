@@ -4,7 +4,7 @@
 
 #include "../ResourceTypes.h"
 
-class Resource : public Game::Actor 
+class Resource : public Actor 
 {
 public:
 	Resource(const std::string& init_sprite_name, const glm::ivec2& position, const glm::vec2& size = glm::vec2(45.f), const float& rotation = 0.f);

@@ -10,8 +10,7 @@
 
 #include "../physics/Collider.h"
 
-namespace Game
-{
+
 	Actor::Actor(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
@@ -99,9 +98,8 @@ namespace Game
 	{
 		_anim_sprite->SetState(stateName);
 	}
-	void Actor::DestroyActor()
+	void Actor::Destroy()
 	{
 		_delete_flag = true;
 		GetWorld()->DeleteActor(_iterator);
 	}
-}

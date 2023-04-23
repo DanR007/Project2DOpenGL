@@ -39,8 +39,8 @@ public:
 
 		int old_cap = _all_actors.capacity();
 
-		if(std::dynamic_pointer_cast<Game::Actor>(new_actor))
-			std::dynamic_pointer_cast<Game::Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
+		if(std::dynamic_pointer_cast<Actor>(new_actor))
+			std::dynamic_pointer_cast<Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
 		
 		if (_all_actors.capacity() != old_cap)
 			ChangeIterators();
@@ -54,8 +54,8 @@ public:
 
 		int old_cap = _all_actors.capacity();
 
-		if (std::dynamic_pointer_cast<Game::Actor>(new_actor))
-			std::dynamic_pointer_cast<Game::Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
+		if (std::dynamic_pointer_cast<Actor>(new_actor))
+			std::dynamic_pointer_cast<Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
 
 		if (_all_actors.capacity() != old_cap)
 			ChangeIterators();
@@ -77,7 +77,7 @@ public:
 	Physics::PhysicsManager* GetPhysicsManager() const { return _physics_manager; }
 	NavMeshRTS* GetNavMesh() const { return _nav_mesh; }
 
-	void DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator);
+	void DeleteActor(std::vector<std::shared_ptr<Actor>>::iterator actor_iterator);
 
 	glm::vec2 GetBlockSize() const { return _block_size; }
 	//offset is map_coord - window_coord
@@ -92,8 +92,8 @@ public:
 	PlayerController* GetPlayerController() { return _player_controller; }
 	PlayerController* GetPlayerController(const unsigned short int& id) { return _controllers[id]; }
 
-	std::vector<std::shared_ptr<Game::Actor>> GetActors() { return _all_actors; }
-	std::vector<std::shared_ptr<Game::Actor>> GetActorsOfType();
+	std::vector<std::shared_ptr<Actor>> GetActors() { return _all_actors; }
+	std::vector<std::shared_ptr<Actor>> GetActorsOfType();
 
 	void ReadMap();
 private:
@@ -104,9 +104,9 @@ private:
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
 
-	std::vector<std::shared_ptr<Game::Actor>> _all_actors;
+	std::vector<std::shared_ptr<Actor>> _all_actors;
 
-	std::vector<std::vector<std::shared_ptr<Game::Actor>>::iterator> _need_to_delete;
+	std::vector<std::vector<std::shared_ptr<Actor>>::iterator> _need_to_delete;
 
 	std::vector< PlayerController*> _controllers;
 	//offset is map_coord (multiply by block_size) - window_coord

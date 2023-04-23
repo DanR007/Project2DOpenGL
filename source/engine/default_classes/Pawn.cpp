@@ -11,8 +11,7 @@
 
 #include "../../main.h"
 
-namespace Game
-{
+
 	Pawn::Pawn(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation):
 		Actor(initSubtextureName, startPosition, startSize, startRotation)
@@ -42,4 +41,3 @@ namespace Game
 			_controller = nullptr;
 		}
 	}
-}

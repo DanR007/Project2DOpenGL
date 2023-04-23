@@ -22,10 +22,9 @@ namespace Renderer
 	class AnimSprite;
 }
 
-namespace Game
-{
-	class Actor;
-}
+
+class Actor;
+
 
 typedef std::map<std::string, std::shared_ptr<Renderer::ShaderProgram>> ShaderProgramMap;
 typedef std::map <std::string, std::shared_ptr<Renderer::Texture2D>> TexturesMap;

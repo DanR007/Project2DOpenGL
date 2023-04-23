@@ -8,8 +8,7 @@
 #include "../physics/EPhysicsTypes.h"
 #include "../physics/RaycastResult.h"
 
-namespace Game { class Actor; }
-namespace p2t { struct Point; }
+class Actor;
 
 class GameManager;
 class PhysicsTests;
@@ -25,13 +24,13 @@ namespace Physics
 	public:
 		PhysicsManager(GameManager* world) : _world(world) {}
 
-		bool CanMove(Game::Actor* checkActor, const glm::vec2& delta);
+		bool CanMove(Actor* checkActor, const glm::vec2& delta);
 		void CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider);
 
 		void Update();
 
 		bool Raycast(RaycastResult& result, const glm::vec2& start, const glm::vec2& end, const ERaycastTypes& raycast_type,
-			Game::Actor* self = nullptr, bool ignore_self = true);
+			Actor* self = nullptr, bool ignore_self = true);
 
 		Unit* GetUnitUnderCursor(const glm::vec2& cursor_pos);
 	private:

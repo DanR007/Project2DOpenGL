@@ -62,7 +62,7 @@ int main(int argc, char** argv)
 #ifdef DEBUG
 	is_debuging = true;
 
-#endif
+#endif//DEBUG
 	GLFWwindow* window;
 	
 	if (!glfwInit())
@@ -71,11 +71,11 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	{
-		window = glfwCreateWindow(window_size.x, window_size.y, "Platformer2D", is_debuging ? nullptr : glfwGetPrimaryMonitor(), NULL);
+		window = glfwCreateWindow(window_size.x, window_size.y, "Strategy2D", is_debuging ? nullptr : glfwGetPrimaryMonitor(), NULL);
 
 		if (!window)
 		{
-			std::cerr << "Cant create a window" << std::endl;
+			std::cerr << "Can't create a window" << std::endl;
 			glfwTerminate();
 			return -1;
 		}
@@ -132,10 +132,12 @@ int main(int argc, char** argv)
 			lastTime = currentTime;
 
 			world->Update(duration);
-			world->GetPhysicsManager()->Update();
+			std::thread physics_thread(&Physics::PhysicsManager::Update, world->GetPhysicsManager());
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();
+
+			physics_thread.join();
 		}
 #endif // PLAY_IN_EDITOR
 	}
