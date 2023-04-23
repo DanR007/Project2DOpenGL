@@ -130,7 +130,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 
 	//_symbols[0]._humidity = (max_humidity + min_humidity) / 2.f;
 
-	for (int y = 0; y < _size.y; y++)
+	for (int y = _size.y - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < _size.x; x++)
 		{
@@ -152,7 +152,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 
 	CellularAutomaton(2, _symbols[1]._symbol);
 
-	for (int y = 0; y < _size.y; y++)
+	for (int y = _size.y - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < _size.x; x++)
 		{
@@ -165,7 +165,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 	std::cout << "/////////////////" << std::endl;
 	FillFieldID(symbol_array);
 
-	for (int y = 0; y < _size.y; y++)
+	for (int y = _size.y - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < _size.x; x++)
 		{

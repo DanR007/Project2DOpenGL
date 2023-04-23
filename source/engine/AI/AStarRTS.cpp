@@ -38,7 +38,7 @@ std::vector<PathCell*>::iterator Find(std::vector<PathCell*>::iterator s, std::v
 
 float GetLengthTurn(const glm::ivec2& dir, const Cell& cell)
 {
-	return std::sqrtf(std::pow(cell._cost, 2) * std::abs(dir.x) + std::pow(cell._cost, 2) * std::abs(dir.y));
+	return std::sqrtf(std::powf(cell._cost, 2) * std::fabs(dir.x) + std::powf(cell._cost, 2) * std::fabs(dir.y));
 }
 
 Goal* AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
@@ -61,11 +61,11 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 
 	_close_cells.push_back(c);
 
-	while (!_close_cells.empty() && p_cur->GetCell() != trully_target)
+	while (p_cur->GetCell() != trully_target)
 	{
 		p_cur = _close_cells.back();
 		Cell cur = p_cur->GetCell();
-		_close_cells.pop_back();
+
 		for (short unsigned int i = 0; i < _count_move_dir; i++)
 		{
 			Cell next = Cell();
@@ -211,8 +211,8 @@ Cell AStarRTS::FindNearestCell(const Cell& target, unsigned short need_id)
 PathCell* AStarRTS::GetMinCostCell()
 {
 	float min = FLT_MAX;
-	std::vector<PathCell*>::iterator min_it;
-	for (std::vector<PathCell*>::iterator it = _open_cells.begin(); it != _open_cells.end(); it++)
+	std::vector<PathCell*>::const_iterator min_it;
+	for (std::vector<PathCell*>::const_iterator it = _open_cells.begin(); it != _open_cells.end(); it++)
 	{
 		if ((*it)->GetCost() < min)
 		{
@@ -229,11 +229,10 @@ PathCell* AStarRTS::GetMinCostCell()
 
 bool AStarRTS::CanStepInto(const glm::ivec2& move, const Cell& next_cell, const Cell& cur_cell)
 {
-	//-1 is blocked cell
 	glm::ivec2 f = cur_cell._position + glm::ivec2(move.x, 0);
 	glm::ivec2 s = cur_cell._position + glm::ivec2(0, move.y);
 	
-	return next_cell._symbol == ' ' && std::abs(next_cell._height - cur_cell._height) < 10.f
+	return next_cell._symbol == ' ' 
 		//this condition mean that unit can't step diagonal if this split wall
-		&& LocateInMap(f) && LocateInMap(s) && (_nav_mesh->_map[f.x][f.y]._symbol == ' ' || _nav_mesh->_map[s.x][s.y]._symbol == ' ');
+		&& LocateInMap(f) && LocateInMap(s) && (_nav_mesh->_map[f.y][f.x]._symbol == ' ' || _nav_mesh->_map[s.y][s.x]._symbol == ' ');
 }

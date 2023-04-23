@@ -11,6 +11,9 @@
 class NavMeshRTS;
 class Goal;
 
+
+float GetLengthTurn(const glm::ivec2& dir, const Cell& cell);
+
 struct PathCell
 {
 	PathCell(PathCell* prev, const Cell& cell)
@@ -18,7 +21,7 @@ struct PathCell
 		_cell = cell;
 		_prev = prev;
 		_dir = prev->_cell._position - cell._position;
-		_length = prev->GetLength() + std::sqrt(std::powf(cell._cost, 2) * std::abs(_dir.x) + std::powf(cell._cost, 2) * std::abs(_dir.y));
+		_length = prev->GetLength() + GetLengthTurn(_dir, cell);
 	}
 	PathCell(const Cell& cell)
 	{
@@ -61,17 +64,17 @@ struct PathCell
 	}
 	
 
-	float GetCost() const { return _cost; }
-	float GetLength() const { return _length; }
-	Cell GetCell() const { return _cell; }
-	PathCell* GetPrev() { return _prev; }
+	inline float GetCost() const { return _cost; }
+	inline float GetLength() const { return _length; }
+	inline Cell GetCell() const { return _cell; }
+	inline PathCell* GetPrev() { return _prev; }
 
 	void SetCell(const Cell& c) { _cell = c; }
 	void SetCost(const float& c) { _cost = c; }
 	void SetLength(const float& l) { _length = l; }
 	void SetPrev(PathCell* c) { _prev = std::move(c); }
-	void SetDistance(const glm::ivec2& point) { _distance = std::sqrtf(std::pow(point.x - _cell._position.x, 2) + std::pow(point.y - _cell._position.y, 2)); }
-	void SetDirection(const glm::ivec2 dir) { _dir = dir; }
+	void SetDistance(const glm::ivec2& point) { _distance = std::sqrtf(std::powf(point.x - _cell._position.x, 2) + std::powf(point.y - _cell._position.y, 2)); }
+	void SetDirection(const glm::ivec2& dir) { _dir = dir; }
 
 	void CalculateCost() { _cost = _length + _distance; }
 private:
@@ -103,7 +106,9 @@ private:
 
 	bool CanStepInto(const glm::ivec2& move, const Cell& next_cell, const Cell& cur_cell);
 
-	const glm::ivec2 _move_dir[8]= 
+	static const short unsigned int _count_move_dir = 8;
+
+	const glm::ivec2 _move_dir[_count_move_dir]=
 	{
 		glm::ivec2(1, 0),
 		glm::ivec2(-1, 0),
@@ -114,8 +119,6 @@ private:
 		glm::ivec2(-1, 1),
 		glm::ivec2(-1, -1)
 	};
-
-	const short unsigned int _count_move_dir = 8;
 
 	NavMeshRTS* _nav_mesh;
 
