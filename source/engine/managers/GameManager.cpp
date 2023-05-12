@@ -4,8 +4,6 @@
 
 #include "../controllers/PlayerController.h"
 
-#include <iostream>
-
 #include "../AI/AStarRTS.h"
 
 #include "../AI/NavMesh.h"
@@ -16,17 +14,18 @@
 #include "../../game/gameobjects/static/Stone.h"
 #include "../../game/gameobjects/static/Wood.h"
 
-
 GameManager::GameManager()
 {
 	_physics_manager = new Physics::PhysicsManager(this);
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(50);
+	_size_map = glm::ivec2(150);
 }
 
 GameManager::~GameManager()
 {
+	Clear();
+
 	if (_physics_manager)
 	{
 		delete _physics_manager;
