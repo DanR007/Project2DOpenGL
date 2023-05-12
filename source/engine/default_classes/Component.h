@@ -14,7 +14,7 @@ public:
 	{
 		_owner = owner;
 	}
-	~Component() { _owner = nullptr; }
+	~Component();
 
 	inline Actor* GetOwner() const { return _owner; }
 
@@ -38,7 +38,7 @@ public:
 
 		Rotate();
 	}
-	~MovableComponent() { _owner = nullptr; }
+	~MovableComponent();
 
 	void Attach(Actor* owner) override;
 

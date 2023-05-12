@@ -26,6 +26,9 @@ namespace Renderer
 			format = GL_RGBA;
 		}
 
+		for (int i = 0; i < tex_height * tex_width; i++)
+			std::cout << imageData[i];
+
 		glTexImage2D(GL_TEXTURE_2D, 0, format, tex_width, tex_height, 0, format, GL_UNSIGNED_BYTE, imageData);
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_mode);

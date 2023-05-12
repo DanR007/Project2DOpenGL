@@ -9,8 +9,6 @@
 
 #include "../controllers/Controller.h"
 
-#include "../../main.h"
-
 
 	Pawn::Pawn(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation):
@@ -35,6 +33,9 @@
 
 	Pawn::~Pawn()
 	{
+#ifdef DEBUG
+		std::cout << "Destroy Pawn" << std::endl;
+#endif
 		if (_controller)
 		{
 			delete _controller;

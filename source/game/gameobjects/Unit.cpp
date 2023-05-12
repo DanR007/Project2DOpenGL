@@ -6,7 +6,7 @@
 
 #include "../../engine/renderer/AnimSprite.h"
 
-#include "../../engine/managers/GameManager.h"
+#include "../../engine/managers/EngineManager.h"
 
 #include <iostream>
 
@@ -14,7 +14,7 @@ Unit::Unit(const std::string& initSubtextureName,
 	const glm::vec2& startPosition, const glm::vec2& startSize, const float& startRotation)
 	:Pawn(initSubtextureName, startPosition, startSize, startRotation)
 {
-	_selected_sprite = std::make_unique<Renderer::Sprite>(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), "selected", this, startPosition, startSize);
+	_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(this, startPosition, startSize, "selected");
 
 	_map_position = GetWorld()->ConvertToMapSpace(startPosition);
 
@@ -35,14 +35,13 @@ Unit::Unit(Unit&& u) noexcept :
 
 Unit::~Unit()
 {
+#ifdef DEBUG
+	std::cout << "Destroy Unit" << std::endl;
+#endif
 }
 
 void Unit::Update(const float deltaTime)
 {
-	if (_is_selected && _selected_sprite->InView())
-	{
-		_selected_sprite->Render();
-	}
 	Pawn::Update(deltaTime);
 }
 

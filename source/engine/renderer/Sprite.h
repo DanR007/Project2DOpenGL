@@ -6,7 +6,6 @@
 
 #include <glad/glad.h>
 
-
 #include "../default_classes/Component.h"
 
 namespace Renderer
@@ -14,32 +13,49 @@ namespace Renderer
 	class ShaderProgram;
 	class Texture2D;
 
-	class Sprite  : public MovableComponent
+	class RenderImage
 	{
 	public:
-		Sprite(std::shared_ptr<Texture2D> texture, std::shared_ptr <ShaderProgram> shader, 
-			const std::string& initialSubtextureName, Actor* owner = nullptr, const glm::vec2& position = glm::vec2(0.f), 
+		RenderImage(std::shared_ptr<Texture2D> texture, std::shared_ptr <ShaderProgram> shader, const std::string& initialSubtextureName);
+		~RenderImage();
+
+		void SetNewImage(const std::string& newSubtextureName);
+
+		void BindVAO(unsigned int count);
+
+		inline GLuint GetVAO() { return _vertex_array_object; };
+		Texture2D* GetTexture() { return _texture.get(); }
+		ShaderProgram* GetShader() { return _shader.get(); }
+	private:
+		std::shared_ptr<Texture2D> _texture;
+		std::shared_ptr<ShaderProgram> _shader;
+
+		std::string _subtexture_name;
+	public:
+		GLuint _vertex_array_object, _texture_buffer_object, _vertex_buffer_object, _element_buffer_object;
+	};
+
+	class Sprite : public MovableComponent
+	{
+	public:
+		Sprite(Renderer::RenderImage* image,
+			Actor* owner = nullptr, const glm::vec2& position = glm::vec2(0.f),
 			const glm::vec2& size = glm::vec2(1.f), const float rotation = 0.f);
-		~Sprite();
+
+		virtual ~Sprite();
 
 		Sprite(const Sprite&) = delete;
 		Sprite& operator=(const Sprite&) = delete;
 
 		void SetNewSprite(const std::string& newSubtextureName);
 
-		inline std::shared_ptr<Renderer::ShaderProgram> GetShaderProgram() const { return _shader; }
-		inline std::shared_ptr<Renderer::Texture2D> GetTexture() const { return _texture; }
+		inline RenderImage* GetRenderImage() { return _image; }
 
-		virtual void Render() const;
-	
 		bool InView() const;
 
 	protected:
-		std::shared_ptr<Texture2D> _texture;
-		std::shared_ptr<ShaderProgram> _shader;
+		RenderImage* _image;
 
 		std::string _subtexture_name;
-
-		GLuint _vertex_array_objects, _texture_coord_buffer, _vertex_coord_buffer, _vertex_element_buffer;
 	};
 }

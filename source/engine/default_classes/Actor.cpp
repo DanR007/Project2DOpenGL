@@ -4,18 +4,14 @@
 #include "../renderer/TextureRender.h"
 #include "../renderer/ShaderRender.h"
 
-#include "../managers/ResourcesManager.h"
-#include "../managers/GameManager.h"
-#include "../managers/PhysicsManager.h"
+#include "../managers/EngineManager.h"
 
 #include "../physics/Collider.h"
-
 
 	Actor::Actor(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
-		_anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(ResourcesManager::GetTexture("textureAtlas")), std::move(ResourcesManager::GetShaderProgram("spriteShader")),
-			initSubtextureName, this, startPosition, startSize, startRotation);
+		_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, startPosition, startSize, initSubtextureName, startRotation);
 
 		_world_position = startPosition;
 		_rotation = startRotation;
@@ -37,20 +33,20 @@
 
 	Actor::~Actor()
 	{
-		
+#ifdef DEBUG
+		std::cout << "Destroy Actor" << std::endl;
+#endif
 	}
 
 
 	void Actor::Update(float deltaTime)
 	{
-		_anim_sprite->Update(deltaTime);
+		
 	}
 
 	void Actor::BeginPlay()
 	{
 	}
-
-	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite() { return std::move(_anim_sprite); }
 
 	void Actor::SetPosition(const glm::vec2& new_position)
 	{

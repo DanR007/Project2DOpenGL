@@ -11,3 +11,10 @@ Wall::Wall(const std::string& initSubtextureName,
 {
 	_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_InteractiveObject, this, startPosition, startSize);
 }
+
+Wall::~Wall()
+{
+#ifdef DEBUG
+	std::cout << "Destroy Wall" << std::endl;
+#endif
+}

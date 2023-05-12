@@ -24,6 +24,8 @@ namespace Physics
 			_object_type = objectType;
 		}
 
+		virtual ~Collider();
+
 		void SetCollisionResponse(EObjectTypes objectType, EResponseType responseType);
 		void ClearOverlappingActors() { _overlapping_actors.clear(); }
 

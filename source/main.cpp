@@ -2,7 +2,8 @@
 #include "AllTestCases.h"
 
 #include "engine/managers/ResourcesManager.h"
-#include "engine/managers/GameManager.h"
+#include "engine/managers/EngineManager.h"
+#include "engine/managers/RenderManager.h"
 
 #include "engine/controllers/PlayerController.h"
 
@@ -11,22 +12,27 @@
 #include <chrono>
 #include <thread>
 
-#define TEST_CASES
+#include "engine/renderer/AnimSprite.h"
+#include "engine/renderer/ShaderRender.h"
+#include "engine/renderer/TextureRender.h"
+
+//#define TEST_CASES
 #define PHYSIC_TESTS
 #define GAMEPLAY_TESTS
 //#define NAVMESH_TESTS
 #define PLAY_IN_EDITOR
 
+//uniform mat4 modelMat;
+
 std::string ResourcesManager::exe_path;
 
 ShaderProgramMap ResourcesManager::shader_program_map;
 TexturesMap ResourcesManager::textures_map;
-SpritesMap ResourcesManager::sprites_map;
-AnimSpritesMap ResourcesManager::anim_sprites_map;
 
-GameManager* world = nullptr;
+EngineManager* engine = nullptr;
 
-GameManager* GetWorld() { return world; }
+GameManager* GetWorld() { return engine->GetWorld(); }
+EngineManager* GetEngine() { return engine; }
 
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
@@ -39,21 +45,21 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	PlayerController* controller = world->GetPlayerController();
+	PlayerController* controller = GetWorld()->GetPlayerController();
 	if(controller)
 		controller->InputKeyboard(currentWindow, key, scancode, action, mode);
 }
 
 void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode)
 {
-	PlayerController* controller = world->GetPlayerController();
+	PlayerController* controller = GetWorld()->GetPlayerController();
 	if(controller)
 		controller->InputMouse(currentWindow, button, action, mode);
 }
 
 void glfwCursorPosCallback(GLFWwindow* currentWindow, double xPos, double yPos)
 {
-	PlayerController* controller = world->GetPlayerController();
+	PlayerController* controller = GetWorld()->GetPlayerController();
 	if (controller)
 		controller->CursorMove(currentWindow, xPos, yPos);
 }
@@ -99,9 +105,7 @@ int main(int argc, char** argv)
 			return -1;
 		}
 
-		ResourcesManager::LoadAll(*argv);
-
-		world = new GameManager();
+		engine = new EngineManager(argv);
 #ifdef TEST_CASES
 #ifdef PHYSIC_TESTS
 		PlayPhysicsTestCases();
@@ -112,17 +116,13 @@ int main(int argc, char** argv)
 #ifdef NAVMESH_TESTS
 		PlayNavMeshTests();
 #endif
-		delete world;
-		world = new GameManager();
+
 #endif // TEST_CASES
 #ifdef PLAY_IN_EDITOR
-		
-		world->BeginPlay();
+		engine->Begin();
 
 		glClearColor(0.9f, 0.9f, 0.9f, 1.f);
 
-		//textureAtlas - texture name
-		//names - vector of names subtextures
 		auto lastTime = std::chrono::high_resolution_clock::now();
 		while (!glfwWindowShouldClose(window))
 		{
@@ -132,18 +132,18 @@ int main(int argc, char** argv)
 			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
 			lastTime = currentTime;
 
-			world->Update(duration);
-			std::thread physics_thread(&Physics::PhysicsManager::Update, world->GetPhysicsManager());
+			engine->Update(duration);
+
+			//world->Update(duration);
+			//std::thread physics_thread(&Physics::PhysicsManager::Update, world->GetPhysicsManager());
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 
-			physics_thread.join();
+			//physics_thread.join();
 		}
 #endif // PLAY_IN_EDITOR
 	}
-
-	delete world;
 
 	return 0;
 }

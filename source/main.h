@@ -7,13 +7,17 @@
 #include <memory>
 #include <vector>
 
+#include <iostream>
+
 #define DEBUG
 
 class Actor;
 class Pawn;
 
+class EngineManager;
 class GameManager;
 
 GameManager* GetWorld();
+EngineManager* GetEngine();
 
 static glm::ivec2 window_size(1280, 720);

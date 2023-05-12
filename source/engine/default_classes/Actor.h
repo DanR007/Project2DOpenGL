@@ -40,7 +40,7 @@ public:
 	virtual void Update(float deltaTime);
 	virtual void BeginPlay();
 
-	inline std::shared_ptr<Renderer::AnimSprite> GetAnimSprite();
+	inline Renderer::AnimSprite* GetAnimSprite() { return _anim_sprite; }
 	inline std::shared_ptr<Physics::Collider> GetCollider() const { return _collider; }
 	inline glm::vec2 GetPosition() const { return _world_position; }
 	inline glm::vec2 GetRelativePosition() const { return _relative_position; }
@@ -74,6 +74,6 @@ protected:
 
 	std::vector<std::shared_ptr<Actor>>::iterator _iterator;
 
-	std::unique_ptr<Renderer::AnimSprite> _anim_sprite;
+	Renderer::AnimSprite* _anim_sprite;
 	std::shared_ptr<Physics::Collider> _collider;
 };

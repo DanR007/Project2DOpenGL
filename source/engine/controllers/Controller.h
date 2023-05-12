@@ -21,7 +21,7 @@ public:
 	Controller(const float moveSpeed);
 	Controller();
 
-	~Controller() = default;
+	virtual ~Controller();
 	virtual void Move(float deltaTime);
 
 	void SetNewGoal(const glm::ivec2& map_coord);

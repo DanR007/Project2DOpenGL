@@ -43,5 +43,5 @@ private:
 	glm::ivec2 _map_position;
 	Goal* _goal = nullptr;
 
-	std::unique_ptr<Renderer::Sprite> _selected_sprite;
+	Renderer::Sprite* _selected_sprite;
 };

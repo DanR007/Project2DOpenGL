@@ -1,8 +1,12 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
+#include "../../main.h"
+
 #include "Component.h"
 #include "Actor.h"
+
+
 
 void MovableComponent::Attach(Actor* owner)
 {
@@ -21,4 +25,18 @@ void MovableComponent::Rotate()
 		_x_axis.x * std::sin(rad_degrees) + _x_axis.y * std::cos(rad_degrees));
 	_y_axis = glm::vec2(_y_axis.x * std::cos(rad_degrees) - _y_axis.y * std::sin(rad_degrees),
 		_y_axis.x * std::sin(rad_degrees) + _y_axis.y * std::cos(rad_degrees));
+}
+
+Component::~Component()
+{
+#ifdef DEBUG
+	std::cout << "Destroy Component" << std::endl;
+#endif
+}
+
+MovableComponent::~MovableComponent()
+{
+#ifdef DEBUG
+	std::cout << "Destroy MovableComponent" << std::endl;
+#endif
 }
