@@ -4,9 +4,11 @@
 #include "../../engine/controllers/Controller.h"
 #include "../../engine/physics/Collider.h"
 
-#include "../../engine/renderer/AnimSprite.h"
-
+#include "../../engine/managers/RenderManager.h"
 #include "../../engine/managers/EngineManager.h"
+#include "../../engine/managers/GameManager.h"
+
+#include "../../main.h"
 
 #include <iostream>
 
@@ -15,6 +17,8 @@ Unit::Unit(const std::string& initSubtextureName,
 	:Pawn(initSubtextureName, startPosition, startSize, startRotation)
 {
 	_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(this, startPosition, startSize, "selected");
+	
+	_components.push_back(_selected_sprite);
 
 	_map_position = GetWorld()->ConvertToMapSpace(startPosition);
 
@@ -43,6 +47,7 @@ Unit::~Unit()
 void Unit::Update(const float deltaTime)
 {
 	Pawn::Update(deltaTime);
+	_selected_sprite->SetNeedToRender(_is_selected);
 }
 
 void Unit::Move(const glm::vec2& position)

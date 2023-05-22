@@ -8,6 +8,8 @@
 
 #include "../default_classes/Component.h"
 
+#include "../Delegate.h"
+
 namespace Renderer
 {
 	class ShaderProgram;
@@ -20,8 +22,6 @@ namespace Renderer
 		~RenderImage();
 
 		void SetNewImage(const std::string& newSubtextureName);
-
-		void BindVAO(unsigned int count);
 
 		inline GLuint GetVAO() { return _vertex_array_object; };
 		Texture2D* GetTexture() { return _texture.get(); }
@@ -53,7 +53,13 @@ namespace Renderer
 
 		bool InView() const;
 
+		bool GetNeedToRender() {
+			return InView() && _need_to_render;
+		}
+
+		inline void SetNeedToRender(const bool& need_to_render) { _need_to_render = need_to_render; }
 	protected:
+		bool _need_to_render = true;
 		RenderImage* _image;
 
 		std::string _subtexture_name;

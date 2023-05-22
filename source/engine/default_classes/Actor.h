@@ -19,6 +19,7 @@ namespace Physics
 	class Collider;
 }
 
+class Component;
 
 class Actor : public Object
 {
@@ -37,7 +38,7 @@ public:
 	Actor() = delete;
 	~Actor();
 
-	virtual void Update(float deltaTime);
+	virtual void Update(const float deltaTime);
 	virtual void BeginPlay();
 
 	inline Renderer::AnimSprite* GetAnimSprite() { return _anim_sprite; }
@@ -45,7 +46,6 @@ public:
 	inline glm::vec2 GetPosition() const { return _world_position; }
 	inline glm::vec2 GetRelativePosition() const { return _relative_position; }
 	inline float GetRotation() const { return _rotation; }
-	inline std::vector<std::shared_ptr<Actor>>::iterator GetIterator() { return _iterator; }
 	inline bool GetDeleteFlag() const { return _delete_flag; }
 
 
@@ -54,7 +54,6 @@ public:
 	void SetRotation(const float& new_rotation);
 	void SetRelativePosition(const glm::vec2& new_position);
 
-	void SetIterator(std::vector<std::shared_ptr<Actor>>::iterator iterator) { _iterator = iterator; }
 	void SetCollider(std::shared_ptr<Physics::Collider> collider) { _collider = collider; }
 
 	void AddWorldPosition(const glm::vec2& d_pos);
@@ -72,7 +71,7 @@ protected:
 	glm::vec2 _size;
 	float _rotation;
 
-	std::vector<std::shared_ptr<Actor>>::iterator _iterator;
+	std::vector<Component*> _components;
 
 	Renderer::AnimSprite* _anim_sprite;
 	std::shared_ptr<Physics::Collider> _collider;

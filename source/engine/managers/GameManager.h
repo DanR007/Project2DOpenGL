@@ -6,10 +6,9 @@
 
 #include <glm/vec2.hpp>
 
+#include "EngineManager.h"
 #include "ResourcesManager.h"
-#include "PhysicsManager.h"
-
-
+#include "MemoryManager.h"
 
 #include "../default_classes/Actor.h"
 
@@ -33,17 +32,17 @@ public:
 	
 
 	template<typename T>
-	std::shared_ptr<T> SpawnActor(const std::string& initSpriteName, const glm::vec2& actorPosition = glm::vec2(0.f), const glm::vec2& actorSize = glm::vec2(100.f, 100.f), const float actorRotation = 0.f)
+	std::shared_ptr<T> SpawnActor(const std::string& initSpriteName, const glm::vec2& actorPosition = glm::vec2(0.f),
+		const glm::vec2& actorSize = glm::vec2(100.f, 100.f), const float actorRotation = 0.f)
 	{
-		std::shared_ptr<T> new_actor = std::make_shared<T>(initSpriteName, actorPosition, actorSize, actorRotation); 
+		std::shared_ptr<T> new_actor = std::make_shared<T>(initSpriteName, actorPosition, actorSize, actorRotation);
 
 		int old_cap = _all_actors.capacity();
 
-		if(std::dynamic_pointer_cast<Actor>(new_actor))
-			std::dynamic_pointer_cast<Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
-		
-		if (_all_actors.capacity() != old_cap)
-			ChangeIterators();
+		if (std::dynamic_pointer_cast<Actor>(new_actor))
+			_all_actors.emplace(_all_actors.end(), new_actor);
+
+		GetEngine()->GetMemoryManager()->AddObject(std::dynamic_pointer_cast<Actor>(new_actor));
 
 		return new_actor;
 	}
@@ -52,16 +51,15 @@ public:
 	{
 		std::shared_ptr<T> new_actor = std::make_shared<T>(position);
 
+
 		int old_cap = _all_actors.capacity();
 
 		if (std::dynamic_pointer_cast<Actor>(new_actor))
-			std::dynamic_pointer_cast<Actor>(new_actor)->SetIterator(_all_actors.emplace(_all_actors.end(), new_actor));
+			_all_actors.emplace(_all_actors.end(), new_actor);
 
-		if (_all_actors.capacity() != old_cap)
-			ChangeIterators();
-
-
+		GetEngine()->GetMemoryManager()->AddObject(std::dynamic_pointer_cast<Actor>(new_actor));
 		return new_actor;
+
 	}
 
 	void MoveAllActors(const glm::vec2& offset);
@@ -93,22 +91,20 @@ public:
 	PlayerController* GetPlayerController(const unsigned short int& id) { return _controllers[id]; }
 
 	std::vector<std::shared_ptr<Actor>> GetActors() { return _all_actors; }
-	std::vector<std::shared_ptr<Actor>> GetActorsOfType();
+	std::vector<std::shared_ptr<Actor>>& GetRefActors() { return _all_actors; }
+	std::vector<Actor*> GetActorsOfType();
 
 	void ReadMap();
-private:
-	void ChangeIterators();
-	void ClearDeleteActors();
 
+	void Erase(std::shared_ptr<Actor> actor);
+private:
 	Physics::PhysicsManager* _physics_manager;
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
 
 	std::vector<std::shared_ptr<Actor>> _all_actors;
 
-	std::vector<std::vector<std::shared_ptr<Actor>>::iterator> _need_to_delete;
-
-	std::vector< PlayerController*> _controllers;
+	std::vector<PlayerController*> _controllers;
 	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _block_size, _offset;
 	glm::ivec2 _start_point_map, _size_map;
@@ -117,4 +113,3 @@ private:
 
 	friend class Physics::PhysicsManager;
 };
-

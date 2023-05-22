@@ -3,6 +3,9 @@
 
 #include "ResourcesManager.h"
 
+#include "MemoryManager.h"
+#include "MemoryManager.h"
+
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -29,8 +32,8 @@ public:
 		it = _all_images.find(initSpriteName);
 
 		std::shared_ptr<T> new_sprite = std::make_shared<T>(it->second, owner, position, size, rotation);
-
-		_all_sprites[it->second].push_back(new_sprite);
+		_all_sprites[it->second].push_back(new_sprite.get());
+		GetEngine()->GetMemoryManager()->AddObject(new_sprite);
 
 		return new_sprite.get();
 	}
@@ -39,8 +42,9 @@ public:
 
 	void Update(const float& deltaTime);
 
-	
+	void Erase(Renderer::Sprite* spr);
 private:
+	void GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img);
 	void ClearBuffer();
 	size_t GetCount(Renderer::RenderImage* img);
 	void Draw(Renderer::RenderImage* img);
@@ -48,5 +52,5 @@ private:
 	GLuint _buffer_matrix;
 
 	std::map<std::string, Renderer::RenderImage*> _all_images;
-	std::map<Renderer::RenderImage*, std::vector<std::shared_ptr<Renderer::Sprite>>> _all_sprites;
+	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>> _all_sprites;
 };

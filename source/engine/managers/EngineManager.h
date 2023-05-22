@@ -2,10 +2,15 @@
 
 #include <memory>
 
-#include "GameManager.h"
-#include "PhysicsManager.h"
-#include "MemoryManager.h"
-#include "RenderManager.h"
+
+
+class MemoryManager;
+class GameManager;
+namespace Physics
+{
+	class PhysicsManager;
+}
+class RenderManager;
 
 class EngineManager
 {
@@ -16,8 +21,10 @@ public:
 	void Begin();
 	void Update(const float& deltaTime);
 
-	GameManager* GetWorld() { return _game; }
-	RenderManager* GetRenderManager() { return _render; }
+	inline GameManager* GetWorld() { return _game; }
+	inline RenderManager* GetRenderManager() { return _render; }
+	inline MemoryManager* GetMemoryManager() { return _memory; }
+	inline Physics::PhysicsManager* GetPhysicsManager() { return _physics; }
 private:
 	void LoadResources(char** argv);
 

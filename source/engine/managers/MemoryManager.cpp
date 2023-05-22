@@ -1,6 +1,16 @@
 #include "MemoryManager.h"
+#include "EngineManager.h"
+#include "GameManager.h"
+#include "RenderManager.h"
 
 #include "../default_classes/Object.h"
+#include "../default_classes/Actor.h"
+
+#include "../renderer/AnimSprite.h"
+
+
+
+#include "../../main.h"
 
 void MemoryManager::Update()
 {
@@ -9,6 +19,14 @@ void MemoryManager::Update()
 	{
 		if ((*it)->GetNeedToDestroy())
 		{
+			if (std::dynamic_pointer_cast<Actor>(*it))
+			{
+				GetEngine()->GetWorld()->Erase(std::dynamic_pointer_cast<Actor>(*it));
+			}
+			if (dynamic_cast<Renderer::Sprite*>((*it).get()))
+			{
+				GetEngine()->GetRenderManager()->Erase(dynamic_cast<Renderer::Sprite*>((*it).get()));
+			}
 			it = _all_objects.erase(it);
 		}
 		else

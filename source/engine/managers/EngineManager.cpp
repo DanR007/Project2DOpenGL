@@ -1,6 +1,10 @@
 #include "EngineManager.h"
 
 #include "ResourcesManager.h"
+#include "GameManager.h"
+#include "PhysicsManager.h"
+#include "MemoryManager.h"
+#include "RenderManager.h"
 
 #include <thread>
 
@@ -45,9 +49,12 @@ void EngineManager::Begin()
 
 void EngineManager::Update(const float& deltaTime)
 {
-	std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
-	_render->Update(deltaTime);
-	t1.join();
+	{
+		std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
+		_render->Update(deltaTime);
+		t1.join();
+	}
+	_memory->Update();
 }
 
 void EngineManager::LoadResources(char** argv)

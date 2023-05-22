@@ -25,11 +25,11 @@ Goal::Goal(const glm::ivec2& position) :
 	std::cout << "Create Goal " << std::endl;
 }
 
-void Goal::Update(float deltaTime)
+void Goal::Update(const float deltaTime)
 {
-	if (_unit && _unit->GetIsSelected())
+	if (_unit)
 	{
-		_anim_sprite->Update(deltaTime);
+		_anim_sprite->SetNeedToRender(_unit->GetIsSelected());
 	}
 }
 

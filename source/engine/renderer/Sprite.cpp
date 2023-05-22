@@ -43,6 +43,7 @@ namespace Renderer
 		}
 	}
 
+
 	RenderImage::RenderImage(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader, const std::string& initialSubtextureName):
 		_texture(texture), _shader(shader), _subtexture_name(initialSubtextureName)
 	{
