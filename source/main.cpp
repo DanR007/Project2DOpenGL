@@ -131,7 +131,7 @@ int main(int argc, char** argv)
 		auto lastTime = std::chrono::high_resolution_clock::now();
 		while (!glfwWindowShouldClose(window))
 		{
-			//glClear(GL_COLOR_BUFFER_BIT);
+			glClear(GL_COLOR_BUFFER_BIT);
 
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
@@ -139,8 +139,8 @@ int main(int argc, char** argv)
 
 			engine->Update(duration);
 
-			//glfwSwapBuffers(window);
-			//glfwPollEvents();
+			glfwSwapBuffers(window);
+			glfwPollEvents();
 		}
 #endif // PLAY_IN_EDITOR
 	}

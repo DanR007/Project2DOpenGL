@@ -50,12 +50,11 @@ void EngineManager::Begin()
 void EngineManager::Update(const float& deltaTime)
 {
 	{
-		//_game->Update(deltaTime);
 		std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
-		//_render->Update(deltaTime);
+		_render->Update(deltaTime);
 		t1.join();
 	}
-	//_memory->Update();
+	_memory->Update();
 }
 
 void EngineManager::LoadResources(char** argv)
