@@ -27,7 +27,7 @@
 
 	void Pawn::Update(const float& deltaTime)
 	{
-		//_controller->Move(deltaTime);
+		_controller->Move(deltaTime);
 		Actor::Update(deltaTime);
 	}
 

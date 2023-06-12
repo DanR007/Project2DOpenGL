@@ -47,7 +47,7 @@ Unit::~Unit()
 void Unit::Update(const float& deltaTime)
 {
 	Pawn::Update(deltaTime);
-	//_selected_sprite->SetNeedToRender(_is_selected);
+	_selected_sprite->SetNeedToRender(_is_selected);
 }
 
 void Unit::Move(const glm::vec2& position)
