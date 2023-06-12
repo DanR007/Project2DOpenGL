@@ -72,7 +72,6 @@ public:
 	void SetBlockSize(const glm::dvec2& size) { _block_size = size; }
 	void SetOffset(const glm::dvec2& offset) { _offset = offset; }
 
-	Physics::PhysicsManager* GetPhysicsManager() const { return _physics_manager; }
 	NavMeshRTS* GetNavMesh() const { return _nav_mesh; }
 
 	void DeleteActor(std::vector<std::shared_ptr<Actor>>::iterator actor_iterator);
@@ -98,7 +97,6 @@ public:
 
 	void Erase(std::shared_ptr<Actor> actor);
 private:
-	Physics::PhysicsManager* _physics_manager;
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
 

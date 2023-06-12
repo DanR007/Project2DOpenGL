@@ -23,7 +23,7 @@ void MemoryManager::Update()
 			{
 				GetEngine()->GetWorld()->Erase(std::dynamic_pointer_cast<Actor>(*it));
 			}
-			if (dynamic_cast<Renderer::Sprite*>((*it).get()))
+			if (std::dynamic_pointer_cast<Renderer::Sprite>(*it))
 			{
 				GetEngine()->GetRenderManager()->Erase(dynamic_cast<Renderer::Sprite*>((*it).get()));
 			}

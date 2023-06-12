@@ -20,7 +20,7 @@ public:
 	Unit(Unit&& u) noexcept;
 	~Unit();
 
-	virtual void Update(const float deltaTime) override;
+	virtual void Update(const float& deltaTime) override;
 
 	bool GetIsSelected() const { return _is_selected; }
 	Goal* GetGoal() { return _goal; }

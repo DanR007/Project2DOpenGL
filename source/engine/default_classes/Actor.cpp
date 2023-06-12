@@ -39,7 +39,7 @@
 	}
 
 
-	void Actor::Update(float deltaTime)
+	void Actor::Update(const float& deltaTime)
 	{
 		
 	}

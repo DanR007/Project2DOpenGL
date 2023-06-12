@@ -38,7 +38,7 @@ public:
 	Actor() = delete;
 	~Actor();
 
-	virtual void Update(const float deltaTime);
+	virtual void Update(const float& deltaTime);
 	virtual void BeginPlay();
 
 	inline Renderer::AnimSprite* GetAnimSprite() { return _anim_sprite; }

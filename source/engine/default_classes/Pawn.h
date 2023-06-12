@@ -13,7 +13,7 @@ public:
 
 	Pawn() = delete;
 
-	void Update(const float deltaTime) override;
+	void Update(const float& deltaTime) override;
 
 	~Pawn();
 

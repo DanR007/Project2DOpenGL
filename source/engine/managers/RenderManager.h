@@ -51,6 +51,7 @@ private:
 
 	GLuint _buffer_matrix;
 
+	glm::mat4* _matrixes;
 	std::map<std::string, Renderer::RenderImage*> _all_images;
 	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>> _all_sprites;
 };

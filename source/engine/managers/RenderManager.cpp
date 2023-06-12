@@ -45,35 +45,29 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 
 	GetSpritesInView(_sprites, img);
 
-	size_t count = _sprites.size(), count_sprite;
-	count_sprite = count;
+	size_t count = _sprites.size();
 
 	matrixes = new glm::mat4[count];
 
 	for (auto it = _sprites.begin(); it != _sprites.end(); it++)
 	{
-		if ((*it)->GetRenderImage() == img)
-		{
-			glm::mat4 matrix(1.f);
+		glm::mat4 matrix(1.f);
 
-			glm::vec2 position = (*it)->GetPosition();
-			glm::vec2 size = (*it)->GetSize();
+		glm::vec2 position = (*it)->GetPosition();
+		glm::vec2 size = (*it)->GetSize();
 
-			matrix = glm::translate(matrix, glm::vec3(position, 0.f));
-			matrix = glm::translate(matrix, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.f));
-			matrix = glm::rotate(matrix, glm::radians((*it)->GetRotation()), glm::vec3(0.f, 0.f, 1.f));
-			matrix = glm::translate(matrix, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.f));
-			matrix = glm::scale(matrix, glm::vec3(size, 1.f));
+		matrix = glm::translate(matrix, glm::vec3(position, 0.f));
+		matrix = glm::translate(matrix, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.f));
+		matrix = glm::rotate(matrix, glm::radians((*it)->GetRotation()), glm::vec3(0.f, 0.f, 1.f));
+		matrix = glm::translate(matrix, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.f));
+		matrix = glm::scale(matrix, glm::vec3(size, 1.f));
 
-			matrixes[it - _sprites.begin()] = matrix;
-		}
+		matrixes[it - _sprites.begin()] = matrix;
 	}
-
-	ClearBuffer();
 
 	glGenBuffers(1, &_buffer_matrix);
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer_matrix);
-	glBufferData(GL_ARRAY_BUFFER, count_sprite * sizeof(glm::mat4), &matrixes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_STATIC_DRAW);
 
 	for (auto it = _sprites.begin(); it != _sprites.end(); it++)
 	{
@@ -102,15 +96,16 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 
 	for (auto it = _sprites.begin(); it != _sprites.end(); it++)
 	{
-
 		glBindVertexArray((*it)->GetRenderImage()->GetVAO());
-		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, count_sprite);
+		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, count);
 		glBindVertexArray(0);
 	}
 	
+	ClearBuffer();
 
 	delete[] matrixes;
 	matrixes = nullptr;
+	_sprites.clear();
 }
 
 void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img)

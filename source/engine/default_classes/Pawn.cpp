@@ -25,9 +25,9 @@
 		_controller = p._controller;
 	}
 
-	void Pawn::Update(float deltaTime)
+	void Pawn::Update(const float& deltaTime)
 	{
-		_controller->Move(deltaTime);
+		//_controller->Move(deltaTime);
 		Actor::Update(deltaTime);
 	}
 

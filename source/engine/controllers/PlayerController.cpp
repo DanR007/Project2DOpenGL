@@ -30,7 +30,7 @@ void PlayerController::Move(float deltaTime)
 
 	if (_move_value != glm::vec2(0.f, 0.f))
 	{
-		GetWorld()->MoveAllActors(-_move_value);
+		GetEngine()->GetWorld()->MoveAllActors(-_move_value);
 	}
 }
 
@@ -109,7 +109,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 				std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]._symbol << std::endl;
 
 			//find unit under cursor
-			Unit* unit = GetWorld()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
+			Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
 
 			if(_unit)
 				_unit->SetSelected(_unit == unit);

@@ -1,3 +1,8 @@
+#define __CRTDBG_MAP_ALLOC
+#include <crtdbg.h>
+#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
+#define new DEBUG_NEW
+
 #include "main.h"
 #include "AllTestCases.h"
 
@@ -126,7 +131,7 @@ int main(int argc, char** argv)
 		auto lastTime = std::chrono::high_resolution_clock::now();
 		while (!glfwWindowShouldClose(window))
 		{
-			glClear(GL_COLOR_BUFFER_BIT);
+			//glClear(GL_COLOR_BUFFER_BIT);
 
 			auto currentTime = std::chrono::high_resolution_clock::now();
 			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
@@ -134,16 +139,11 @@ int main(int argc, char** argv)
 
 			engine->Update(duration);
 
-			//world->Update(duration);
-			//std::thread physics_thread(&Physics::PhysicsManager::Update, world->GetPhysicsManager());
-
-			glfwSwapBuffers(window);
-			glfwPollEvents();
-
-			//physics_thread.join();
+			//glfwSwapBuffers(window);
+			//glfwPollEvents();
 		}
 #endif // PLAY_IN_EDITOR
 	}
-
+	
 	return 0;
 }

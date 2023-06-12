@@ -25,7 +25,7 @@ Goal::Goal(const glm::ivec2& position) :
 	std::cout << "Create Goal " << std::endl;
 }
 
-void Goal::Update(const float deltaTime)
+void Goal::Update(const float& deltaTime)
 {
 	if (_unit)
 	{

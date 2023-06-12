@@ -19,21 +19,14 @@
 
 GameManager::GameManager()
 {
-	_physics_manager = new Physics::PhysicsManager(this);
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(15);
+	_size_map = glm::ivec2(150);
 }
 
 GameManager::~GameManager()
 {
 	Clear();
-
-	if (_physics_manager)
-	{
-		delete _physics_manager;
-		_physics_manager = nullptr;
-	}
 	if (_nav_mesh)
 	{
 		delete _nav_mesh;
@@ -71,15 +64,15 @@ void GameManager::Update(const float& deltaTime)
 {
 	if (_is_game_over == false)
 	{
-		_player_controller->Move(deltaTime);
+		//_player_controller->Move(deltaTime);
 
 		auto it = _all_actors.begin();
 		
 		for (; it != _all_actors.end(); it++)
 		{
-			if (it->get())
+			if ((*it))
 			{
-				it->get()->Update(deltaTime);
+				(*it)->Update(deltaTime);
 			}
 		}
 	}
@@ -87,6 +80,9 @@ void GameManager::Update(const float& deltaTime)
 	{
 		//here add game over menu
 	}
+
+	//_CrtDumpMemoryLeaks();
+	return;
 }
 
 void GameManager::BeginPlay()
