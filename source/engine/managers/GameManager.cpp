@@ -72,6 +72,7 @@ void GameManager::Update(const float& deltaTime)
 		{
 			(*it)->Update(deltaTime);
 		}
+		_all_actors.back()->Destroy();
 	}
 	else
 	{

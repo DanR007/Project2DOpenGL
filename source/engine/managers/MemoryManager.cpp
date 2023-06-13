@@ -28,14 +28,16 @@ void MemoryManager::Update()
 	{
 		if ((*it)->GetNeedToDestroy())
 		{
-			if (static_cast<Actor*>(*it))
+			if (dynamic_cast<Actor*>(*it))
 			{
-				GetEngine()->GetWorld()->Erase(static_cast<Actor*>(*it));
+				GetEngine()->GetWorld()->Erase(dynamic_cast<Actor*>(*it));
 			}
-			if (static_cast<Renderer::Sprite*>(*it))
+			if (dynamic_cast<Renderer::Sprite*>(*it))
 			{
-				GetEngine()->GetRenderManager()->Erase(static_cast<Renderer::Sprite*>(*it));
+				GetEngine()->GetRenderManager()->Erase(dynamic_cast<Renderer::Sprite*>(*it));
 			}
+
+			delete (*it);
 			it = _all_objects.erase(it);
 		}
 		else

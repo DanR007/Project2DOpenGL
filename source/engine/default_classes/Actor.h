@@ -36,7 +36,7 @@ public:
 	Actor(Actor&& a) noexcept;
 
 	Actor() = delete;
-	~Actor();
+	virtual ~Actor();
 
 	virtual void Update(const float& deltaTime);
 	virtual void BeginPlay();

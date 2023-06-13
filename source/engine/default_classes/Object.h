@@ -4,7 +4,7 @@ class Object
 {
 public:
 	Object();
-	~Object();
+	virtual ~Object();
 
 	inline bool GetNeedToDestroy() const { return _need_to_destroy; }
 
