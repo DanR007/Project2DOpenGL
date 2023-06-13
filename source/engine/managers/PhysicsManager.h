@@ -25,6 +25,7 @@ namespace Physics
 		PhysicsManager(GameManager* world) : _world(world) {}
 
 		bool CanMove(Actor* checkActor, const glm::vec2& delta);
+		void CheckOverlapping(Physics::Collider* first_collider);
 		void CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider);
 
 		void Update();
@@ -36,11 +37,9 @@ namespace Physics
 	private:
 		bool IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider, const glm::vec2& pos_second_collider, const glm::vec2& size_second_collider);
 
-		bool IsOverlap(std::shared_ptr<Physics::Collider> first_collider,
-			std::shared_ptr<Physics::Collider> second_collider);
-		bool IsBlocking(const glm::vec2& delta_pos,
-			std::shared_ptr<Physics::Collider> first_collider,
-			std::shared_ptr<Physics::Collider> second_collider);
+		bool IsOverlap(Physics::Collider* first_collider, Physics::Collider* second_collider);
+
+		bool IsBlocking(const glm::vec2& delta_pos, Physics::Collider* first_collider, Physics::Collider* second_collider);
 
 		GameManager* _world;
 

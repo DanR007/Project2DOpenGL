@@ -12,20 +12,29 @@
 
 #include "../../main.h"
 
+MemoryManager::~MemoryManager()
+{
+	for (Object* obj : _all_objects)
+	{
+		delete obj;
+	}
+	_all_objects.clear();
+}
+
 void MemoryManager::Update()
 {
-	std::vector<std::shared_ptr<Object>>::iterator it = _all_objects.begin();
+	std::vector<Object*>::iterator it = _all_objects.begin();
 	for (; it != _all_objects.end();)
 	{
 		if ((*it)->GetNeedToDestroy())
 		{
-			if (std::dynamic_pointer_cast<Actor>(*it))
+			if (static_cast<Actor*>(*it))
 			{
-				GetEngine()->GetWorld()->Erase(std::dynamic_pointer_cast<Actor>(*it));
+				GetEngine()->GetWorld()->Erase(static_cast<Actor*>(*it));
 			}
-			if (std::dynamic_pointer_cast<Renderer::Sprite>(*it))
+			if (static_cast<Renderer::Sprite*>(*it))
 			{
-				GetEngine()->GetRenderManager()->Erase(dynamic_cast<Renderer::Sprite*>((*it).get()));
+				GetEngine()->GetRenderManager()->Erase(static_cast<Renderer::Sprite*>(*it));
 			}
 			it = _all_objects.erase(it);
 		}
@@ -34,7 +43,7 @@ void MemoryManager::Update()
 	}
 }
 
-void MemoryManager::AddObject(std::shared_ptr<Object> obj)
+void MemoryManager::AddObject(Object* obj)
 {
 	_all_objects.push_back(obj);
 }

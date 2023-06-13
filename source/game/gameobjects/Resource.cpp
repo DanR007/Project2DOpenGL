@@ -11,7 +11,7 @@ Resource::Resource(const std::string& init_sprite_name, const glm::ivec2& positi
 {
 	_resources_count = _max_resources_count;
 
-	_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_StaticObject, this, GetWorld()->ConvertToWindowSpace(position));
+	_collider = new Physics::Collider(EObjectTypes::EOT_StaticObject, this, GetWorld()->ConvertToWindowSpace(position));
 }
 
 Resource::~Resource()

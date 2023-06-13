@@ -46,7 +46,7 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 	_offset -= offset;
 	for (; it != _all_actors.end(); it++)
 	{
-		std::shared_ptr<Unit> u = std::dynamic_pointer_cast<Unit>(*it);
+		Unit* u = dynamic_cast<Unit*>(*it);
 
 		if (u)
 		{
@@ -55,7 +55,7 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 		}
 		else
 		{
-			it->get()->AddWorldPosition(offset);
+			(*it)->AddWorldPosition(offset);
 		}
 	}
 }
@@ -66,23 +66,17 @@ void GameManager::Update(const float& deltaTime)
 	{
 		//_player_controller->Move(deltaTime);
 
-		auto it = _all_actors.begin();
+		std::vector<Actor*>::iterator it = _all_actors.begin();
 		
 		for (; it != _all_actors.end(); it++)
 		{
-			if ((*it))
-			{
-				(*it)->Update(deltaTime);
-			}
+			(*it)->Update(deltaTime);
 		}
 	}
 	else
 	{
 		//here add game over menu
 	}
-
-	//_CrtDumpMemoryLeaks();
-	return;
 }
 
 void GameManager::BeginPlay()
@@ -171,7 +165,7 @@ void GameManager::ReadMap()
 	}
 }
 
-void GameManager::Erase(std::shared_ptr<Actor> actor)
+void GameManager::Erase(Actor* actor)
 {
 	auto it = std::find(_all_actors.begin(), _all_actors.end(), actor);
 	_all_actors.erase(it);

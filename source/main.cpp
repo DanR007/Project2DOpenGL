@@ -128,13 +128,12 @@ int main(int argc, char** argv)
 
 		glClearColor(0.9f, 0.9f, 0.9f, 1.f);
 
-		auto lastTime = std::chrono::high_resolution_clock::now();
+		auto lastTime = std::chrono::steady_clock::now();
 		while (!glfwWindowShouldClose(window))
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
-
-			auto currentTime = std::chrono::high_resolution_clock::now();
-			float duration = float(double(std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count()) / 1e9);
+			auto currentTime = std::chrono::steady_clock::now();
+			float duration = float(double(std::chrono::steady_clock::duration(currentTime - lastTime).count()) / 1e9);
 			lastTime = currentTime;
 
 			engine->Update(duration);

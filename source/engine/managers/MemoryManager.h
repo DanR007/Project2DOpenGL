@@ -8,9 +8,10 @@ class Object;
 class MemoryManager
 {
 public:
+	~MemoryManager();
 	void Update();
 
-	void AddObject(std::shared_ptr<Object> obj);
+	void AddObject(Object* obj);
 private:
-	std::vector<std::shared_ptr<Object>> _all_objects;
+	std::vector<Object*> _all_objects;
 };

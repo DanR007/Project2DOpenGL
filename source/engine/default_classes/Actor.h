@@ -42,7 +42,7 @@ public:
 	virtual void BeginPlay();
 
 	inline Renderer::AnimSprite* GetAnimSprite() { return _anim_sprite; }
-	inline std::shared_ptr<Physics::Collider> GetCollider() const { return _collider; }
+	inline Physics::Collider* GetCollider() const { return _collider; }
 	inline glm::vec2 GetPosition() const { return _world_position; }
 	inline glm::vec2 GetRelativePosition() const { return _relative_position; }
 	inline float GetRotation() const { return _rotation; }
@@ -54,7 +54,7 @@ public:
 	void SetRotation(const float& new_rotation);
 	void SetRelativePosition(const glm::vec2& new_position);
 
-	void SetCollider(std::shared_ptr<Physics::Collider> collider) { _collider = collider; }
+	void SetCollider(Physics::Collider* collider) { _collider = collider; }
 
 	void AddWorldPosition(const glm::vec2& d_pos);
 	void AddWorldRotation(const float& d_rot);
@@ -74,5 +74,5 @@ protected:
 	std::vector<Component*> _components;
 
 	Renderer::AnimSprite* _anim_sprite;
-	std::shared_ptr<Physics::Collider> _collider;
+	Physics::Collider* _collider;
 };

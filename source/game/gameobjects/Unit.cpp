@@ -27,7 +27,7 @@ Unit::Unit(const std::string& initSubtextureName,
 
 	_controller = new Controller(this, 0);
 	_controller->SetMoveSpeed(20.f);
-	_collider = std::make_shared<Physics::Collider>(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
+	_collider = new Physics::Collider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
 }
 
 Unit::Unit(Unit&& u) noexcept :

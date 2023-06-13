@@ -31,11 +31,11 @@ public:
 
 		it = _all_images.find(initSpriteName);
 
-		std::shared_ptr<T> new_sprite = std::make_shared<T>(it->second, owner, position, size, rotation);
-		_all_sprites[it->second].push_back(new_sprite.get());
+		T* new_sprite = new T(it->second, owner, position, size, rotation);
+		_all_sprites[it->second].push_back(new_sprite);
 		GetEngine()->GetMemoryManager()->AddObject(new_sprite);
 
-		return new_sprite.get();
+		return new_sprite;
 	}
 
 	Renderer::RenderImage* CreateNewImage(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr <Renderer::ShaderProgram> shader, const std::string& initialSubtextureName);

@@ -29,35 +29,35 @@ public:
 	~GameManager();
 
 	void Clear();
-	
+
 
 	template<typename T>
-	std::shared_ptr<T> SpawnActor(const std::string& initSpriteName, const glm::vec2& actorPosition = glm::vec2(0.f),
+	T* SpawnActor(const std::string& initSpriteName, const glm::vec2& actorPosition = glm::vec2(0.f),
 		const glm::vec2& actorSize = glm::vec2(100.f, 100.f), const float actorRotation = 0.f)
 	{
-		std::shared_ptr<T> new_actor = std::make_shared<T>(initSpriteName, actorPosition, actorSize, actorRotation);
+		T* new_actor = new T(initSpriteName, actorPosition, actorSize, actorRotation);
 
 		int old_cap = _all_actors.capacity();
 
-		if (std::dynamic_pointer_cast<Actor>(new_actor))
+		if (dynamic_cast<Actor*>(new_actor))
 			_all_actors.emplace(_all_actors.end(), new_actor);
 
-		GetEngine()->GetMemoryManager()->AddObject(std::dynamic_pointer_cast<Actor>(new_actor));
+		GetEngine()->GetMemoryManager()->AddObject(new_actor);
 
 		return new_actor;
 	}
 	template<typename T>
-	std::shared_ptr<T> SpawnActor(const glm::ivec2& position)
+	T* SpawnActor(const glm::ivec2& position)
 	{
-		std::shared_ptr<T> new_actor = std::make_shared<T>(position);
+		T* new_actor = new T(position);
 
 
 		int old_cap = _all_actors.capacity();
 
-		if (std::dynamic_pointer_cast<Actor>(new_actor))
+		if (dynamic_cast<Actor*>(new_actor))
 			_all_actors.emplace(_all_actors.end(), new_actor);
 
-		GetEngine()->GetMemoryManager()->AddObject(std::dynamic_pointer_cast<Actor>(new_actor));
+		GetEngine()->GetMemoryManager()->AddObject(new_actor);
 		return new_actor;
 
 	}
@@ -89,18 +89,17 @@ public:
 	PlayerController* GetPlayerController() { return _player_controller; }
 	PlayerController* GetPlayerController(const unsigned short int& id) { return _controllers[id]; }
 
-	std::vector<std::shared_ptr<Actor>> GetActors() { return _all_actors; }
-	std::vector<std::shared_ptr<Actor>>& GetRefActors() { return _all_actors; }
+	std::vector<Actor*> GetActors() { return _all_actors; }
 	std::vector<Actor*> GetActorsOfType();
 
 	void ReadMap();
 
-	void Erase(std::shared_ptr<Actor> actor);
+	void Erase(Actor* actor);
 private:
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
 
-	std::vector<std::shared_ptr<Actor>> _all_actors;
+	std::vector<Actor*> _all_actors;
 
 	std::vector<PlayerController*> _controllers;
 	//offset is map_coord (multiply by block_size) - window_coord

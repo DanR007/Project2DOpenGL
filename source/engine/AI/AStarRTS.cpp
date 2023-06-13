@@ -51,7 +51,7 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 		trully_target = FindNearestCell(target, start_cell._field_id);
 	}
 
-	std::shared_ptr<Goal> goal = GetWorld()->SpawnActor<Goal>(trully_target._position);
+	Goal* goal = GetWorld()->SpawnActor<Goal>(trully_target._position);
 
 	PathCell* c = new PathCell(start_cell);
 	c->SetDistance(trully_target._position);
@@ -115,7 +115,7 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, const Cell& target)
 
 	CollectPath(p_cur);
 
-	return goal.get();
+	return goal;
 }
 
 void AStarRTS::Clear()
