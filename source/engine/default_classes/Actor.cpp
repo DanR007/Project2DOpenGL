@@ -33,6 +33,9 @@
 
 	Actor::~Actor()
 	{
+		if (_collider)
+			delete _collider;
+		_collider = nullptr;
 #ifdef DEBUG
 		std::cout << "Destroy Actor" << std::endl;
 #endif
