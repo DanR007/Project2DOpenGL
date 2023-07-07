@@ -54,6 +54,7 @@ class RTSMapGenerator
 {
 public:
 	RTSMapGenerator(const glm::ivec2& size);
+	~RTSMapGenerator();
 
 	float Noise(const glm::ivec2& pos);
 	float FBM(const int& count, int x, int y);

@@ -22,16 +22,25 @@ Controller::Controller(const float moveSpeed)
 {
 	_controlled_pawn = nullptr;
 	_move_speed = moveSpeed;
+
+	_a_star = new AStarRTS();
 }
 
 Controller::Controller()
 {
 	_controlled_pawn = nullptr;
 	_move_speed = 0.f;
+
+	_a_star = new AStarRTS();
 }
 
 Controller::~Controller()
 {
+	if (_a_star)
+	{
+		delete _a_star;
+		_a_star = nullptr;
+	}
 #ifdef DEBUG
 	std::cout << "Destroy Controller" << std::endl;
 #endif

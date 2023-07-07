@@ -23,6 +23,11 @@ PlayerController::PlayerController()
 	_move_speed = 20.f;
 }
 
+PlayerController::~PlayerController()
+{
+	_choicing_units.~vector();
+}
+
 void PlayerController::Move(float deltaTime)
 {
 	_move_value = _move_vector * deltaTime * _move_speed;

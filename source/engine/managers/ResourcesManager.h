@@ -30,25 +30,25 @@ typedef std::map <std::string, std::shared_ptr<Renderer::Texture2D>> TexturesMap
 class ResourcesManager
 {
 public:
-	static std::shared_ptr<Renderer::ShaderProgram> LoadShaderPrograms(const std::string& shaderName, const std::string& fragmentPath, const std::string& vertexPath);
-	static std::shared_ptr<Renderer::ShaderProgram> GetShaderProgram(const std::string& shaderName);
+	ResourcesManager()
+	{
 
-	static std::shared_ptr<Renderer::Texture2D> LoadTexture(const std::string& textureName, const std::string& texturePath);
-	static std::shared_ptr<Renderer::Texture2D> GetTexture(const std::string& textureName);
-	static std::shared_ptr<Renderer::Texture2D> LoadTextureAtlas(const std::string& textureName, const std::string& texturePath,
+	}
+	~ResourcesManager();
+	 std::shared_ptr<Renderer::ShaderProgram> LoadShaderPrograms(const std::string& shaderName, const std::string& fragmentPath, const std::string& vertexPath);
+	 std::shared_ptr<Renderer::ShaderProgram> GetShaderProgram(const std::string& shaderName);
+
+	 std::shared_ptr<Renderer::Texture2D> LoadTexture(const std::string& textureName, const std::string& texturePath);
+	 std::shared_ptr<Renderer::Texture2D> GetTexture(const std::string& textureName);
+	 std::shared_ptr<Renderer::Texture2D> LoadTextureAtlas(const std::string& textureName, const std::string& texturePath,
 		const std::vector<std::string>& subTextureNamesArr,
 		const unsigned int width, const unsigned int height);
 	
-	static void LoadAll(const std::string& executablePath);
-private:
-	static std::string ReadShaderProgramFile(const std::string& path);
-	static std::string exe_path;
+	 void LoadAll(const std::string& executablePath);
+//private:
+	 std::string ReadShaderProgramFile(const std::string& path);
+	 std::string exe_path;
 
-	static ShaderProgramMap shader_program_map;
-	static TexturesMap textures_map;
+	 ShaderProgramMap shader_program_map;
+	 TexturesMap textures_map;
 };
-
-//ShaderProgramMap ResourcesManager::shader_program_map;
-//TexturesMap ResourcesManager::textures_map;
-//SpritesMap ResourcesManager::sprites_map;
-//AnimSpritesMap ResourcesManager::anim_sprites_map;

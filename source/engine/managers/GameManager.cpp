@@ -32,11 +32,23 @@ GameManager::~GameManager()
 		delete _nav_mesh;
 		_nav_mesh = nullptr;
 	}
+
+	if (_player_controller)
+	{
+		delete _player_controller;
+		_player_controller = nullptr;
+	}
 }
 
 void GameManager::Clear()
 {
+	for (Actor* a : _all_actors)
+	{
+		a->Destroy();
+		a = nullptr;
+	}
 	_all_actors.clear();
+	_all_actors.~vector();
 }
 
 
@@ -66,13 +78,12 @@ void GameManager::Update(const float& deltaTime)
 	{
 		//_player_controller->Move(deltaTime);
 
-		std::vector<Actor*>::iterator it = _all_actors.begin();
+		//std::vector<Actor*>::iterator it = _all_actors.begin();
 		
-		for (; it != _all_actors.end(); it++)
+		for (int i = 0; i < _all_actors.size(); i++)
 		{
-			(*it)->Update(deltaTime);
+			_all_actors[i]->Update(deltaTime);
 		}
-		_all_actors.back()->Destroy();
 	}
 	else
 	{
@@ -95,8 +106,9 @@ void GameManager::BeginPlay()
 	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
 	_nav_mesh->FillMap(generator->GenerateMap());
 
+
+	delete generator;
 	ReadMap();
-	//star->DevelopPath(Cell(glm::ivec2(0), 0, 1, '.', 2), Cell(glm::ivec2(4, 0), 0, 1, '.', 1));
 }
 
 

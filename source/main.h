@@ -9,6 +9,7 @@
 
 #include <iostream>
 
+#include <cstdio>
 #define DEBUG
 
 class Actor;

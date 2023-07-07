@@ -14,6 +14,7 @@ EngineManager::EngineManager(char **argv)
 	_physics = new Physics::PhysicsManager(_game);
 	_render = new RenderManager();
 	_memory = new MemoryManager();
+	_resources = new ResourcesManager();
 
 	LoadResources(argv);
 }
@@ -40,25 +41,32 @@ EngineManager::~EngineManager()
 		delete _memory;
 		_memory = nullptr;
 	}
+	if (_resources)
+	{
+		delete _resources;
+		_resources = nullptr;
+	}
 }
 
 void EngineManager::Begin()
 {
-	_game->BeginPlay();
+	if(_game)
+		_game->BeginPlay();
 }
 
 void EngineManager::Update(const float& deltaTime)
 {
 	{
-		//_game->Update(deltaTime);
-		std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
-		_render->Update(deltaTime);
-		t1.join();
+		_game->Update(deltaTime);
+
+		//std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
+		//_render->Update(deltaTime);
+		//t1.join();
 	}
-	_memory->Update();
+	//_memory->Update();
 }
 
 void EngineManager::LoadResources(char** argv)
 {
-	ResourcesManager::LoadAll(*argv);
+	_resources->LoadAll(*argv);
 }

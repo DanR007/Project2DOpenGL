@@ -16,6 +16,13 @@ RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 	_symbols = { GenSymbol(0.f, 0.6f, 0.f, 'W'), GenSymbol(0.3f, 0.6f, -0.1f, 'S')};
 }
 
+RTSMapGenerator::~RTSMapGenerator()
+{
+	_map.~vector();
+	_rand_vectors.~vector();
+	_symbols.~vector();
+}
+
 glm::vec2 RendomVector()
 {
 	int angle = std::rand() & 360;
@@ -140,13 +147,13 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 
 			_map[y][x] = Cell(glm::ivec2(x, y), 0, 1, GetSymbol(height_array[y][x], humidity_array[y][x], population_array[y][x]), 0);
 
-			std::cout << _map[y][x]._symbol;
+			//std::cout << _map[y][x]._symbol;
 
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 
 	}
-	std::cout <<"/////////////////" << std::endl;
+	//std::cout <<"/////////////////" << std::endl;
 	CellularAutomaton(4, _symbols[0]._symbol);
 	CellularAutomaton(3, _symbols[0]._symbol);
 
@@ -156,16 +163,16 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 	{
 		for (int x = 0; x < _size.x; x++)
 		{
-			std::cout << _map[y][x]._symbol;
+			//std::cout << _map[y][x]._symbol;
 			symbol_array[y][x] = _map[y][x]._symbol;
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 
 	}
-	std::cout << "/////////////////" << std::endl;
+	//std::cout << "/////////////////" << std::endl;
 	FillFieldID(symbol_array);
 
-	for (int y = _size.y - 1; y >= 0; y--)
+	/*for (int y = _size.y - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < _size.x; x++)
 		{
@@ -173,7 +180,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		}
 		std::cout << std::endl;
 
-	}
+	}*/
 
 	return _map;
 }

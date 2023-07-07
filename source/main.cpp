@@ -1,7 +1,14 @@
-#define __CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC
+#include <cstdlib>
 #include <crtdbg.h>
-#define DEBUG_NEW new(_NORMAL_BLOCK, __FILE__, __LINE__)
-#define new DEBUG_NEW
+
+#ifdef _DEBUG
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+// Replace _NORMAL_BLOCK with _CLIENT_BLOCK if you want the
+// allocations to be of _CLIENT_BLOCK type
+#else
+#define DBG_NEW new
+#endif
 
 #include "main.h"
 #include "AllTestCases.h"
@@ -12,6 +19,7 @@
 
 #include "engine/controllers/PlayerController.h"
 
+#include <cstdio>
 #include <iostream>
 #include <time.h>
 #include <chrono>
@@ -27,17 +35,66 @@
 //#define NAVMESH_TESTS
 #define PLAY_IN_EDITOR
 
-//uniform mat4 modelMat;
-
-std::string ResourcesManager::exe_path;
-
-ShaderProgramMap ResourcesManager::shader_program_map;
-TexturesMap ResourcesManager::textures_map;
-
 EngineManager* engine = nullptr;
 
 GameManager* GetWorld() { return engine->GetWorld(); }
 EngineManager* GetEngine() { return engine; }
+
+bool game_start = false;
+
+void* operator new(std::size_t size)
+{
+	void* n = malloc(size);
+	if (n)
+	{
+#ifdef DEBUG
+		if(game_start)
+			printf("Called new: %p\n", n);
+#endif
+		//std::cout << "Called new: " << n << std::endl;
+		return n;
+	}
+	else
+	{
+		std::bad_alloc ba;
+		std::cout << "Error memory alloc\n";
+		throw ba;
+	}
+}
+
+void* operator new[](std::size_t size)
+{
+	void* n = malloc(size);
+	if (n)
+	{
+#ifdef DEBUG
+		if (game_start)
+			printf("Called new[]: %p\n", n);
+#endif
+		//std::cout << "Called new: " << n << std::endl;
+		return n;
+	}
+	else
+	{
+		std::bad_alloc ba;
+		std::cout << "Error memory alloc\n";
+		throw ba;
+	}
+}
+void operator delete(void* ptr)
+{
+#ifdef DEBUG
+	if(game_start)
+		printf("Called deleted: %p\n", ptr);
+#endif
+	free(ptr);
+}
+void operator delete[](void* ptr)
+{
+	if (game_start)
+		printf("Called deleted[]: %p\n", ptr);
+	free(ptr);
+}
 
 void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 {
@@ -76,8 +133,8 @@ int main(int argc, char** argv)
 	is_debuging = true;
 
 #endif//DEBUG
-	GLFWwindow* window;
-	
+	GLFWwindow* window = nullptr;
+
 	if (!glfwInit())
 	{
 		std::cerr << "GLFW does not work correct or cant open idk" << std::endl;
@@ -128,9 +185,13 @@ int main(int argc, char** argv)
 
 		glClearColor(0.9f, 0.9f, 0.9f, 1.f);
 
+		game_start = true;
+
 		auto lastTime = std::chrono::steady_clock::now();
+
 		while (!glfwWindowShouldClose(window))
 		{
+
 			glClear(GL_COLOR_BUFFER_BIT);
 			auto currentTime = std::chrono::steady_clock::now();
 			float duration = float(double(std::chrono::steady_clock::duration(currentTime - lastTime).count()) / 1e9);
@@ -140,9 +201,13 @@ int main(int argc, char** argv)
 
 			glfwSwapBuffers(window);
 			glfwPollEvents();
+
 		}
 #endif // PLAY_IN_EDITOR
 	}
-	
+	//delete window;
+	delete engine;
+	glfwTerminate();
+	_CrtDumpMemoryLeaks();
 	return 0;
 }

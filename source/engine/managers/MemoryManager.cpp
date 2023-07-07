@@ -19,6 +19,8 @@ MemoryManager::~MemoryManager()
 		delete obj;
 	}
 	_all_objects.clear();
+
+	//GetEngine()->GetRenderManager()->Clear();
 }
 
 void MemoryManager::Update()

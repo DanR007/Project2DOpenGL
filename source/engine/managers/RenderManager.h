@@ -4,7 +4,6 @@
 #include "ResourcesManager.h"
 
 #include "MemoryManager.h"
-#include "MemoryManager.h"
 
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -26,7 +25,7 @@ public:
 			std::cout << "Can't find image with this init sprite name: " + initSpriteName << std::endl;
 			std::cout << "Create new" << std::endl;
 
-			CreateNewImage(ResourcesManager::GetTexture("textureAtlas"), ResourcesManager::GetShaderProgram("spriteShader"), initSpriteName);
+			CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture("textureAtlas"), GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName);
 		}
 
 		it = _all_images.find(initSpriteName);
@@ -51,7 +50,6 @@ private:
 
 	GLuint _buffer_matrix;
 
-	glm::mat4* _matrixes;
 	std::map<std::string, Renderer::RenderImage*> _all_images;
 	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>> _all_sprites;
 };

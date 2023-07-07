@@ -73,6 +73,6 @@ protected:
 
 	std::vector<Component*> _components;
 
-	Renderer::AnimSprite* _anim_sprite;
-	Physics::Collider* _collider;
+	Renderer::AnimSprite* _anim_sprite = nullptr;
+	Physics::Collider* _collider = nullptr;
 };

@@ -11,6 +11,13 @@
 #include <fstream>
 #include <iostream>
 
+ResourcesManager::~ResourcesManager()
+{
+	shader_program_map.clear();
+	textures_map.clear();
+	exe_path.~basic_string();
+}
+
 std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::LoadShaderPrograms(const std::string& shaderName, const std::string& fragmentPath, const std::string& vertexPath)
 {
 	std::string vertexSource = ReadShaderProgramFile(vertexPath);

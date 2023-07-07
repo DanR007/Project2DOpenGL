@@ -13,6 +13,8 @@ RenderManager::~RenderManager()
 	for (; it != _all_images.end(); )
 	{
 		_all_sprites[it->second].clear();
+		_all_sprites[it->second].~vector();
+
 		delete it->second;
 		it = _all_images.erase(it);
 	}
@@ -44,34 +46,32 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 	std::vector<Renderer::Sprite*> _sprites;
 
 	GetSpritesInView(_sprites, img);
-
 	size_t count = _sprites.size();
-
 	matrixes = new glm::mat4[count];
 
-	for (auto it = _sprites.begin(); it != _sprites.end(); it++)
+	for (int i = 0; i < _sprites.size(); i++)
 	{
 		glm::mat4 matrix(1.f);
 
-		glm::vec2 position = (*it)->GetPosition();
-		glm::vec2 size = (*it)->GetSize();
+		glm::vec2 position = _sprites[i]->GetPosition();
+		glm::vec2 size = _sprites[i]->GetSize();
 
 		matrix = glm::translate(matrix, glm::vec3(position, 0.f));
 		matrix = glm::translate(matrix, glm::vec3(0.5f * size.x, 0.5f * size.y, 0.f));
-		matrix = glm::rotate(matrix, glm::radians((*it)->GetRotation()), glm::vec3(0.f, 0.f, 1.f));
+		matrix = glm::rotate(matrix, glm::radians(_sprites[i]->GetRotation()), glm::vec3(0.f, 0.f, 1.f));
 		matrix = glm::translate(matrix, glm::vec3(-0.5f * size.x, -0.5f * size.y, 0.f));
 		matrix = glm::scale(matrix, glm::vec3(size, 1.f));
 
-		matrixes[it - _sprites.begin()] = matrix;
+		matrixes[i] = matrix;
 	}
 
 	glGenBuffers(1, &_buffer_matrix);
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer_matrix);
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_STATIC_DRAW);
 
-	for (auto it = _sprites.begin(); it != _sprites.end(); it++)
+	for (int i = 0; i < _sprites.size(); i++)
 	{
-		glBindVertexArray((*it)->GetRenderImage()->GetVAO());
+		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
 		glEnableVertexAttribArray(3);
 		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)0);
 		glEnableVertexAttribArray(4);
@@ -94,27 +94,32 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 	img->GetShader()->Use();
 	img->GetTexture()->Bind();
 
-	for (auto it = _sprites.begin(); it != _sprites.end(); it++)
+
+	for (int i = 0; i < _sprites.size(); i++)
 	{
-		glBindVertexArray((*it)->GetRenderImage()->GetVAO());
+		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
 		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, count);
 		glBindVertexArray(0);
 	}
-	
-	ClearBuffer();
+
+	glDeleteBuffers(1, &_buffer_matrix);
+	//ClearBuffer();
 
 	delete[] matrixes;
 	matrixes = nullptr;
+
 	_sprites.clear();
+
 }
 
 void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img)
 {
-	for (auto it = _all_sprites[img].begin(); it != _all_sprites[img].end(); it++)
+
+	for (int i = 0; i < _all_sprites[img].size(); i++)
 	{
-		if ((*it)->GetNeedToRender())
+		if (_all_sprites[img][i]->GetNeedToRender())
 		{
-			in_view.push_back((*it));
+			in_view.push_back(_all_sprites[img][i]);
 		}
 	}
 }
