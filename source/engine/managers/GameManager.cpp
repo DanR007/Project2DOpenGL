@@ -21,7 +21,7 @@ GameManager::GameManager()
 {
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(150);
+	_size_map = glm::ivec2(200);
 }
 
 GameManager::~GameManager()

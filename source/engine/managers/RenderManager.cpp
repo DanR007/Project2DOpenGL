@@ -18,6 +18,8 @@ RenderManager::~RenderManager()
 		delete it->second;
 		it = _all_images.erase(it);
 	}
+
+	ClearBuffer();
 }
 
 Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initialSubtextureName)
@@ -66,9 +68,9 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		matrixes[i] = matrix;
 	}
 
-	glGenBuffers(1, &_buffer_matrix);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer_matrix);
-	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_DYNAMIC_DRAW);
 
 	for (int i = 0; i < _sprites.size(); i++)
 	{
@@ -100,12 +102,7 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		glBindVertexArray(0);
 	}
 
-	
-	//ClearBuffer();
-
-	
-
-	for (int i = 0; i < _sprites.size(); i++)
+	/*for (int i = 0; i < _sprites.size(); i++)
 	{
 		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
 
@@ -115,10 +112,7 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		glDisableVertexAttribArray(6);
 
 		glBindVertexArray(0);
-	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDeleteBuffers(1, &_buffer_matrix);
+	}*/
 
 	delete[] matrixes;
 	matrixes = nullptr;
@@ -141,6 +135,7 @@ void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Re
 
 void RenderManager::ClearBuffer()
 {
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &_buffer_matrix);
 }
 
