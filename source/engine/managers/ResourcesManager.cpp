@@ -165,7 +165,8 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
 
-	std::vector<std::string> names = { "mush1", "mush2", "mush3", "wall","goal", "selected", "pistolBullet","tree","stone", "fullHeart", "emptyHeart"};
+	std::vector<std::string> names = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
+										"fullHeart", "emptyHeart", "lumber", "stoneWall", "quary"};
 
 	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
 

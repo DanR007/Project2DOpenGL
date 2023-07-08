@@ -101,7 +101,7 @@ void GameManager::BeginPlay()
 
 	_controllers.push_back(_player_controller);
 
-	SpawnActor<Unit>("mush1", ConvertToWindowSpace(0, 0), _block_size);
+	SpawnActor<Unit>(glm::ivec2(0));
 
 	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
 	_nav_mesh->FillMap(generator->GenerateMap());

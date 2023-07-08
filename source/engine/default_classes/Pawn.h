@@ -13,14 +13,27 @@ public:
 
 	Pawn() = delete;
 
-	void Update(const float& deltaTime) override;
+	virtual void Update(const float& deltaTime) override;
 
 	~Pawn();
 
+	glm::ivec2 GetMapPosition() const { return _map_position; }
 	Controller* GetController() { return _controller; }
+	bool GetIsSelected() const { return _is_selected; }
+
+	void SetSelected(bool is_selected) { _is_selected = is_selected; }
+	void SetMapPosition(const glm::ivec2& map_pos) { _map_position = map_pos; }
 protected:
 
 	Controller* _controller = nullptr;
+
+	bool _is_selected;
+
+	int _hp;
+
+	glm::ivec2 _map_position;
+
+	Renderer::Sprite* _selected_sprite = nullptr;
 private:
 
 };
