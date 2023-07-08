@@ -1,22 +1,18 @@
 #include "Actor.h"
 
-#include "../renderer/AnimSprite.h"
-#include "../renderer/TextureRender.h"
-#include "../renderer/ShaderRender.h"
-
-#include "../managers/ResourcesManager.h"
-#include "../managers/GameManager.h"
-#include "../managers/PhysicsManager.h"
+#include "../managers/EngineManager.h"
+#include "../managers/RenderManager.h"
 
 #include "../physics/Collider.h"
 
-namespace Game
-{
+#include "../../main.h"
+
 	Actor::Actor(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
-		_anim_sprite = std::make_unique<Renderer::AnimSprite>(std::move(ResourcesManager::GetTexture("textureAtlas")), std::move(ResourcesManager::GetShaderProgram("spriteShader")),
-			initSubtextureName, this, startPosition, startSize, startRotation);
+		_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, startPosition, startSize, initSubtextureName, startRotation);
+
+		_components.push_back(_anim_sprite);
 
 		_world_position = startPosition;
 		_rotation = startRotation;
@@ -32,26 +28,28 @@ namespace Game
 		_size = a._size;
 
 		_collider = a._collider;
-		_iterator = a._iterator;
 		_anim_sprite = std::move(a._anim_sprite);
 	}
 
 	Actor::~Actor()
 	{
-		
+		if (_collider)
+			delete _collider;
+		_collider = nullptr;
+#ifdef DEBUG
+		std::cout << "Destroy Actor" << std::endl;
+#endif
 	}
 
 
-	void Actor::Update(float deltaTime)
+	void Actor::Update(const float& deltaTime)
 	{
-		_anim_sprite->Update(deltaTime);
+		
 	}
 
 	void Actor::BeginPlay()
 	{
 	}
-
-	std::shared_ptr<Renderer::AnimSprite> Actor::GetAnimSprite() { return std::move(_anim_sprite); }
 
 	void Actor::SetPosition(const glm::vec2& new_position)
 	{
@@ -99,9 +97,11 @@ namespace Game
 	{
 		_anim_sprite->SetState(stateName);
 	}
-	void Actor::DestroyActor()
+	void Actor::Destroy()
 	{
-		_delete_flag = true;
-		GetWorld()->DeleteActor(_iterator);
+		Object::Destroy();
+		for (Component* c : _components)
+		{
+			c->Destroy();
+		}
 	}
-}

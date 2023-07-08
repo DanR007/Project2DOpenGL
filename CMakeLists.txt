@@ -15,9 +15,12 @@ source/engine/renderer/ShaderRender.h
 source/engine/renderer/TextureRender.h
 source/engine/renderer/Sprite.h
 source/engine/renderer/AnimSprite.h
+source/engine/managers/EngineManager.h
 source/engine/managers/ResourcesManager.h
 source/engine/managers/PhysicsManager.h
 source/engine/managers/GameManager.h
+source/engine/managers/RenderManager.h
+source/engine/managers/MemoryManager.h
 source/engine/AI/AStarRTS.h
 source/engine/AI/NavMesh.h
 source/engine/controllers/Controller.h
@@ -28,6 +31,7 @@ source/engine/physics/EPhysicsTypes.h
 source/engine/physics/Collider.h
 source/engine/physics/RaycastResult.h
 source/engine/physics/PhysicsBody.h
+source/engine/default_classes/Object.h
 source/engine/default_classes/Actor.h
 source/engine/default_classes/Pawn.h
 source/engine/default_classes/Component.h
@@ -39,9 +43,12 @@ source/engine/renderer/ShaderRender.cpp
 source/engine/renderer/TextureRender.cpp
 source/engine/renderer/Sprite.cpp
 source/engine/renderer/AnimSprite.cpp
+source/engine/managers/EngineManager.cpp
 source/engine/managers/ResourcesManager.cpp
 source/engine/managers/PhysicsManager.cpp
 source/engine/managers/GameManager.cpp
+source/engine/managers/RenderManager.cpp
+source/engine/managers/MemoryManager.cpp
 source/engine/AI/AStarRTS.cpp
 source/engine/AI/NavMesh.cpp
 source/engine/controllers/Controller.cpp
@@ -51,6 +58,7 @@ source/engine/generators/BSPMapGenerate.cpp
 source/engine/physics/Collider.cpp
 source/engine/physics/RaycastResult.cpp
 source/engine/physics/PhysicsBody.cpp
+source/engine/default_classes/Object.cpp
 source/engine/default_classes/Actor.cpp
 source/engine/default_classes/Pawn.cpp
 source/engine/default_classes/Component.cpp

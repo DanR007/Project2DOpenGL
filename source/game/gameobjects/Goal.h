@@ -3,7 +3,7 @@
 
 class Unit;
 
-class Goal : public Game::Actor
+class Goal : public Actor
 {
 public:
 	Goal(const std::string& initSubtextureName,
@@ -11,7 +11,7 @@ public:
 
 	Goal(const glm::ivec2& position);
 
-	virtual void Update(float deltaTime) override;
+	virtual void Update(const float& deltaTime) override;
 
 	void SetUnit(Unit* unit) { _unit = unit; }
 private:

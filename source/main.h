@@ -7,15 +7,18 @@
 #include <memory>
 #include <vector>
 
+#include <iostream>
+
+#include <cstdio>
 #define DEBUG
 
-namespace Game
-{
-	class Actor;
-	class Pawn;
-}
+class Actor;
+class Pawn;
+
+class EngineManager;
 class GameManager;
 
 GameManager* GetWorld();
+EngineManager* GetEngine();
 
 static glm::ivec2 window_size(1280, 720);

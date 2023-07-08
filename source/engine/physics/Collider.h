@@ -18,11 +18,13 @@ namespace Physics
 	{
 	public:
 
-		Collider(const EObjectTypes objectType, Game::Actor* owner, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f), const float& rotation = 0.f) 
+		Collider(const EObjectTypes objectType, Actor* owner, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f), const float& rotation = 0.f) 
 			: MovableComponent(owner, position, size, rotation)
 		{
 			_object_type = objectType;
 		}
+
+		virtual ~Collider();
 
 		void SetCollisionResponse(EObjectTypes objectType, EResponseType responseType);
 		void ClearOverlappingActors() { _overlapping_actors.clear(); }
@@ -30,9 +32,8 @@ namespace Physics
 		inline EResponseType GetResponseType(EObjectTypes objectType) { return objects_response_map[objectType]; }
 		inline EResponseType GetTraceResponseType(ERaycastTypes ray_type) { return ray_response_map[ray_type]; }
 		inline EObjectTypes GetObjectType() const { return _object_type; }
-		inline std::vector<Game::Actor*> GetOverlappingActors() 
+		inline std::vector<Actor*> GetOverlappingActors() 
 		{
-			std::lock_guard<std::mutex> lock(_mtx);
 			return _overlapping_actors;
 		}
 
@@ -42,7 +43,7 @@ namespace Physics
 			_delegate_overlap.Connect(own_class, method);
 		}
 
-		void Overlap(Game::Actor* actor);
+		void Overlap(Actor* actor);
 
 	protected:
 		std::map<EObjectTypes, EResponseType> objects_response_map =
@@ -64,9 +65,7 @@ namespace Physics
 		EObjectTypes _object_type;
 		Delegate _delegate_overlap;
 
-		std::vector<Game::Actor*> _overlapping_actors;
-
-		std::mutex _mtx;
+		std::vector<Actor*> _overlapping_actors;
 
 		friend void PhysicsManager::CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider);
 	};

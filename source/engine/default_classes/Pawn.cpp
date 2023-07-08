@@ -9,10 +9,7 @@
 
 #include "../controllers/Controller.h"
 
-#include "../../main.h"
 
-namespace Game
-{
 	Pawn::Pawn(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation):
 		Actor(initSubtextureName, startPosition, startSize, startRotation)
@@ -28,7 +25,7 @@ namespace Game
 		_controller = p._controller;
 	}
 
-	void Pawn::Update(float deltaTime)
+	void Pawn::Update(const float& deltaTime)
 	{
 		_controller->Move(deltaTime);
 		Actor::Update(deltaTime);
@@ -36,10 +33,12 @@ namespace Game
 
 	Pawn::~Pawn()
 	{
+#ifdef DEBUG
+		std::cout << "Destroy Pawn" << std::endl;
+#endif
 		if (_controller)
 		{
 			delete _controller;
 			_controller = nullptr;
 		}
 	}
-}

@@ -5,13 +5,11 @@
 #include "../AI/AStarRTS.h"
 #include "../AI/NavMesh.h"
 
-
 #include "../../main.h"
 
 #include "../../game/gameobjects/Unit.h"
 #include "../../game/gameobjects/Goal.h"
 
-#include <iostream>
 Controller::Controller(Unit* controlledPawn, const float moveSpeed)
 {
 	_controlled_pawn = controlledPawn;
@@ -24,12 +22,28 @@ Controller::Controller(const float moveSpeed)
 {
 	_controlled_pawn = nullptr;
 	_move_speed = moveSpeed;
+
+	_a_star = new AStarRTS();
 }
 
 Controller::Controller()
 {
 	_controlled_pawn = nullptr;
 	_move_speed = 0.f;
+
+	_a_star = new AStarRTS();
+}
+
+Controller::~Controller()
+{
+	if (_a_star)
+	{
+		delete _a_star;
+		_a_star = nullptr;
+	}
+#ifdef DEBUG
+	std::cout << "Destroy Controller" << std::endl;
+#endif
 }
 
 //move while path doesn't complete 

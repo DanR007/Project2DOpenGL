@@ -23,7 +23,7 @@ public:
 	//using Controller::Controller;
 	PlayerController();
 
-	~PlayerController() = default;
+	~PlayerController();
 
 	void Move(float deltaTime) override;
 	void ChangeMoveVector(glm::vec2 inputVector) override;

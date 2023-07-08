@@ -11,7 +11,7 @@ namespace Renderer
 	class Sprite;
 }
 
-class Unit : public Game::Pawn
+class Unit : public Pawn
 {
 public:
 	Unit(const std::string& initSubtextureName,
@@ -20,7 +20,7 @@ public:
 	Unit(Unit&& u) noexcept;
 	~Unit();
 
-	virtual void Update(const float deltaTime) override;
+	virtual void Update(const float& deltaTime) override;
 
 	bool GetIsSelected() const { return _is_selected; }
 	Goal* GetGoal() { return _goal; }
@@ -43,5 +43,5 @@ private:
 	glm::ivec2 _map_position;
 	Goal* _goal = nullptr;
 
-	std::unique_ptr<Renderer::Sprite> _selected_sprite;
+	Renderer::Sprite* _selected_sprite;
 };

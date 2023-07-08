@@ -11,6 +11,13 @@
 #include <fstream>
 #include <iostream>
 
+ResourcesManager::~ResourcesManager()
+{
+	shader_program_map.clear();
+	textures_map.clear();
+	exe_path.~basic_string();
+}
+
 std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::LoadShaderPrograms(const std::string& shaderName, const std::string& fragmentPath, const std::string& vertexPath)
 {
 	std::string vertexSource = ReadShaderProgramFile(vertexPath);
@@ -149,85 +156,6 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTextureAtlas(const st
 	return texture;
 }
 
-
-std::shared_ptr<Renderer::Sprite> ResourcesManager::LoadSprite(const std::string& spriteName,
-	const std::string& textureName,
-	const std::string& shaderName,
-	const unsigned int spriteWidth,
-	const unsigned int spriteHeight,
-	const std::string& subTextureName)
-{
-	auto l_texture = GetTexture(textureName);
-	if (!l_texture)
-	{
-		std::cerr << "Cant find texture (" + textureName + ")  for the sprite " + spriteName << std::endl;
-	}
-
-	auto l_shader = GetShaderProgram(shaderName);
-	if (!l_shader)
-	{
-		std::cerr << "Cant find shader (" + shaderName + ")  for the sprite " + spriteName << std::endl;
-	}
-
-	std::shared_ptr<Renderer::Sprite> newSprite = sprites_map.emplace(textureName, std::make_shared<Renderer::Sprite>(l_texture, l_shader, subTextureName, nullptr,
-		glm::vec2(0.f, 0.f),
-		glm::vec2(spriteWidth, spriteHeight))).first->second;
-
-	return newSprite;
-}
-
-std::shared_ptr<Renderer::Sprite> ResourcesManager::GetSprite(const std::string& spriteName)
-{
-	SpritesMap::const_iterator it = sprites_map.find(spriteName);
-
-	if (it == sprites_map.end())
-	{
-		std::cerr << "Cant find the sprite: " + spriteName << std::endl;
-		return nullptr;
-	}
-	
-	return it->second;
-}
-
-std::shared_ptr<Renderer::AnimSprite> ResourcesManager::LoadAnimSprite(const std::string& spriteName,
-	const std::string& textureName,
-	const std::string& shaderName,
-	const unsigned int spriteWidth,
-	const unsigned int spriteHeight,
-	const std::string& subTextureName)
-{
-	auto l_texture = GetTexture(textureName);
-	if (!l_texture)
-	{
-		std::cerr << "Cant find texture (" + textureName + ")  for the sprite " + spriteName << std::endl;
-	}
-
-	auto l_shader = GetShaderProgram(shaderName);
-	if (!l_shader)
-	{
-		std::cerr << "Cant find shader (" + shaderName + ")  for the sprite " + spriteName << std::endl;
-	}
-
-	std::shared_ptr<Renderer::AnimSprite> newSprite = anim_sprites_map.emplace(spriteName, std::make_shared<Renderer::AnimSprite>(l_texture, l_shader, subTextureName, nullptr,
-		glm::vec2(0.f, 0.f),
-		glm::vec2(spriteWidth, spriteHeight))).first->second;
-
-	return newSprite;
-}
-
-std::shared_ptr<Renderer::AnimSprite> ResourcesManager::GetAnimSprite(const std::string& animSpriteName)
-{
-	AnimSpritesMap::const_iterator it = anim_sprites_map.find(animSpriteName);
-
-	if (it == anim_sprites_map.end())
-	{
-		std::cerr << "Cant find the anim sprite: " + animSpriteName << std::endl;
-		return nullptr;
-	}
-
-	return it->second;
-}
-
 void ResourcesManager::LoadAll(const std::string& executablePath)
 {
 	std::size_t find = executablePath.find_last_of("/\\");
@@ -239,10 +167,10 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 
 	std::vector<std::string> names = { "mush1", "mush2", "mush3", "wall","goal", "selected", "pistolBullet","tree","stone", "fullHeart", "emptyHeart"};
 
-	ResourcesManager::LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
+	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
 
 	glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
-	ResourcesManager::GetShaderProgram("spriteShader")->Use();
-	ResourcesManager::GetShaderProgram("spriteShader")->SetIn("tex", 0);
-	ResourcesManager::GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
+	GetShaderProgram("spriteShader")->Use();
+	GetShaderProgram("spriteShader")->SetIn("tex", 0);
+	GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
 }

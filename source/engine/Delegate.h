@@ -1,9 +1,8 @@
 #pragma once
 
-namespace Game
-{
-	class Actor;
-}
+
+class Actor;
+
 
 
 struct NIL {};

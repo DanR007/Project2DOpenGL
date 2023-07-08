@@ -1,10 +1,9 @@
 #include "GameManager.h"
+#include "EngineManager.h"
 
 #include "../physics/Collider.h"
 
 #include "../controllers/PlayerController.h"
-
-#include <iostream>
 
 #include "../AI/AStarRTS.h"
 
@@ -16,32 +15,40 @@
 #include "../../game/gameobjects/static/Stone.h"
 #include "../../game/gameobjects/static/Wood.h"
 
+#include <numeric>
 
 GameManager::GameManager()
 {
-	_physics_manager = new Physics::PhysicsManager(this);
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(100);
+	_size_map = glm::ivec2(150);
 }
 
 GameManager::~GameManager()
 {
-	if (_physics_manager)
-	{
-		delete _physics_manager;
-		_physics_manager = nullptr;
-	}
+	Clear();
 	if (_nav_mesh)
 	{
 		delete _nav_mesh;
 		_nav_mesh = nullptr;
 	}
+
+	if (_player_controller)
+	{
+		delete _player_controller;
+		_player_controller = nullptr;
+	}
 }
 
 void GameManager::Clear()
 {
+	for (Actor* a : _all_actors)
+	{
+		a->Destroy();
+		a = nullptr;
+	}
 	_all_actors.clear();
+	_all_actors.~vector();
 }
 
 
@@ -51,7 +58,7 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 	_offset -= offset;
 	for (; it != _all_actors.end(); it++)
 	{
-		std::shared_ptr<Unit> u = std::dynamic_pointer_cast<Unit>(*it);
+		Unit* u = dynamic_cast<Unit*>(*it);
 
 		if (u)
 		{
@@ -60,28 +67,23 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 		}
 		else
 		{
-			it->get()->AddWorldPosition(offset);
+			(*it)->AddWorldPosition(offset);
 		}
 	}
 }
 
 void GameManager::Update(const float& deltaTime)
 {
-	if (_is_game_over == false)
+	if (!_is_game_over)
 	{
 		_player_controller->Move(deltaTime);
 
-		auto it = _all_actors.begin();
+		std::vector<Actor*>::iterator it = _all_actors.begin();
 		
 		for (; it != _all_actors.end(); it++)
 		{
-			if (it->get())
-			{
-				it->get()->Update(deltaTime);
-			}
+			(*it)->Update(deltaTime);
 		}
-
-		ClearDeleteActors();
 	}
 	else
 	{
@@ -104,15 +106,11 @@ void GameManager::BeginPlay()
 	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
 	_nav_mesh->FillMap(generator->GenerateMap());
 
+
+	delete generator;
 	ReadMap();
-	//star->DevelopPath(Cell(glm::ivec2(0), 0, 1, '.', 2), Cell(glm::ivec2(4, 0), 0, 1, '.', 1));
 }
 
-void GameManager::DeleteActor(std::vector<std::shared_ptr<Game::Actor>>::iterator actor_iterator)
-{
-	_need_to_delete.push_back(actor_iterator);
-	//clear map here
-}
 
 glm::vec2 GameManager::ConvertToWindowSpace(const glm::ivec2& position_in_map)
 {
@@ -180,34 +178,9 @@ void GameManager::ReadMap()
 	}
 }
 
-void GameManager::ChangeIterators()
+void GameManager::Erase(Actor* actor)
 {
-	_need_to_delete.clear();
-
-	auto it = _all_actors.begin();
-
-	for (; it != _all_actors.end(); it++)
-	{
-		if ((*it)->GetDeleteFlag())
-			_need_to_delete.push_back(it);
-
-		(*it)->SetIterator(it);
-	}
+	auto it = std::find(_all_actors.begin(), _all_actors.end(), actor);
+	_all_actors.erase(it);
 }
 
-void GameManager::ClearDeleteActors()
-{
-	if (_need_to_delete.empty() == false)
-	{
-		auto it = _all_actors.begin();
-		for (; it != _all_actors.end();)
-		{
-			if ((*it)->GetDeleteFlag())
-				it = _all_actors.erase(it);
-			else
-				it++;
-		}
-
-		_need_to_delete.clear();
-	}
-}
