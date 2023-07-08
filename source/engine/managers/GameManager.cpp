@@ -74,15 +74,15 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 
 void GameManager::Update(const float& deltaTime)
 {
-	if (_is_game_over == false)
+	if (!_is_game_over)
 	{
-		//_player_controller->Move(deltaTime);
+		_player_controller->Move(deltaTime);
 
-		//std::vector<Actor*>::iterator it = _all_actors.begin();
+		std::vector<Actor*>::iterator it = _all_actors.begin();
 		
-		for (int i = 0; i < _all_actors.size(); i++)
+		for (; it != _all_actors.end(); it++)
 		{
-			_all_actors[i]->Update(deltaTime);
+			(*it)->Update(deltaTime);
 		}
 	}
 	else

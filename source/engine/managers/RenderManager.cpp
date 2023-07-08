@@ -27,6 +27,7 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 
 void RenderManager::Update(const float& deltaTime)
 {
+
 	for (auto it = _all_images.begin(); it != _all_images.end(); it++)
 	{
 		Draw(it->second);
@@ -89,11 +90,8 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		glBindVertexArray(0);
 	}
 
-	glActiveTexture(GL_TEXTURE0);
-
 	img->GetShader()->Use();
 	img->GetTexture()->Bind();
-
 
 	for (int i = 0; i < _sprites.size(); i++)
 	{
@@ -102,19 +100,36 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		glBindVertexArray(0);
 	}
 
-	glDeleteBuffers(1, &_buffer_matrix);
+	
 	//ClearBuffer();
+
+	
+
+	for (int i = 0; i < _sprites.size(); i++)
+	{
+		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
+
+		glDisableVertexAttribArray(3);
+		glDisableVertexAttribArray(4);
+		glDisableVertexAttribArray(5);
+		glDisableVertexAttribArray(6);
+
+		glBindVertexArray(0);
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glDeleteBuffers(1, &_buffer_matrix);
 
 	delete[] matrixes;
 	matrixes = nullptr;
 
 	_sprites.clear();
 
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img)
 {
-
 	for (int i = 0; i < _all_sprites[img].size(); i++)
 	{
 		if (_all_sprites[img][i]->GetNeedToRender())
