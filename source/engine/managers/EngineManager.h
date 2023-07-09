@@ -28,6 +28,9 @@ public:
 	inline Physics::PhysicsManager* GetPhysicsManager() { return _physics; }
 	inline ResourcesManager* GetResourcesManager() { return _resources; }
 private:
+	const float c_tick_before_check_physics = 0.2f;
+	float _tick_check_physics = 0.f;
+
 	void LoadResources(char** argv);
 
 	GameManager* _game = nullptr;

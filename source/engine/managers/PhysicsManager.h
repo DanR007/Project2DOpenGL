@@ -39,6 +39,8 @@ namespace Physics
 
 		void Erase(Collider* collider);
 	private:
+		void Multithreading(int start, int end);
+
 		bool IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider, const glm::vec2& pos_second_collider, const glm::vec2& size_second_collider);
 
 		bool IsOverlap(Physics::Collider* first_collider, Physics::Collider* second_collider);

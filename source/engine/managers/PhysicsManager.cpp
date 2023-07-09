@@ -55,7 +55,7 @@ namespace Physics
 		auto it = _all_colliders.begin();
 		for (; it != _all_colliders.end(); it++)
 		{
-			if (IsOverlap(first_collider, (*it)))
+			if ((*it) != first_collider && IsOverlap(first_collider, (*it)))
 			{
 				//Call Delegate
 				first_collider->Overlap((*it)->GetOwner());
@@ -65,13 +65,23 @@ namespace Physics
 		}
 	}
 
+	void PhysicsManager::Multithreading(int start, int end)
+	{
+		for (int i = start; i < end; i++)
+		{
+			CheckOverlapping(_all_colliders[i]);
+		}
+	}
+
 	void PhysicsManager::Update()
 	{
-		auto it = _all_colliders.begin();
-		for (; it != _all_colliders.end(); it++)
-		{
-			CheckOverlapping((*it));
-		}
+		std::thread t1 = std::thread(&Physics::PhysicsManager::Multithreading, this, 0, _all_colliders.size() / 3);
+		std::thread t2 = std::thread(&Physics::PhysicsManager::Multithreading, this, _all_colliders.size() / 3, 2 * _all_colliders.size() / 3);
+		std::thread t3 = std::thread(&Physics::PhysicsManager::Multithreading, this, 2 * _all_colliders.size() / 3, _all_colliders.size());
+
+		t1.join();
+		t2.join();
+		t3.join();
 	}
 
 	bool PhysicsManager::Raycast(RaycastResult& result, const glm::vec2& start, const glm::vec2& end, const ERaycastTypes& raycast_type, Actor* self, bool ignore_self)
@@ -171,6 +181,8 @@ namespace Physics
 	{
 		_all_colliders.erase(std::find(_all_colliders.begin(), _all_colliders.end(), collider));
 	}
+
+	
 
 	bool PhysicsManager::IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider,
 		const glm::vec2& pos_second_collider, const glm::vec2& size_second_collider)
