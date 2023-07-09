@@ -21,7 +21,7 @@ NavMeshRTS::~NavMeshRTS()
 {
 }
 
-void NavMeshRTS::FillMap(std::vector<std::vector<Cell>>& map)
+void NavMeshRTS::FillMap(const std::vector<std::vector<Cell>>& map)
 {
 	_map = map;
 }

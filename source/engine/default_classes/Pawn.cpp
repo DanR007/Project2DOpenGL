@@ -18,7 +18,6 @@
 		Actor(initSubtextureName, startPosition, startSize, startRotation)
 	{
 		_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(this, startPosition, startSize, "selected");
-
 		_components.push_back(_selected_sprite);
 
 		_map_position = GetWorld()->ConvertToMapSpace(startPosition);
@@ -42,7 +41,8 @@
 
 	void Pawn::Update(const float& deltaTime)
 	{
-		_controller->Move(deltaTime);
+		if(_controller)
+			_controller->Move(deltaTime);
 		Actor::Update(deltaTime);
 	}
 
@@ -55,10 +55,5 @@
 		{
 			delete _controller;
 			_controller = nullptr;
-		}
-		if (_selected_sprite)
-		{
-			_selected_sprite->Destroy();
-			_selected_sprite = nullptr;
 		}
 	}

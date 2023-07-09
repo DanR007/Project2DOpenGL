@@ -18,6 +18,16 @@
 
 namespace Physics
 {
+	Collider* Physics::PhysicsManager::CreateCollider(const EObjectTypes& type, Actor* owner, const glm::ivec2 position, const glm::vec2& size)
+	{
+		Collider* collider = new Collider(type, owner, GetWorld()->ConvertToWindowSpace(position), size);
+
+		GetEngine()->GetMemoryManager()->AddObject(collider);
+		_all_colliders.emplace_back(collider);
+
+		return collider;
+	}
+
 	bool PhysicsManager::CanMove(Actor* firstActor, const glm::vec2& delta)
 	{
 		Physics::Collider* first_collider = firstActor->GetCollider();
@@ -42,15 +52,13 @@ namespace Physics
 	{
 		first_collider->ClearOverlappingActors();
 
-		auto it = _world->_all_actors.begin();
-		for (; it != _world->_all_actors.end(); it++)
+		auto it = _all_colliders.begin();
+		for (; it != _all_colliders.end(); it++)
 		{
-			Physics::Collider* second_collider = (*it)->GetCollider();
-
-			if (IsOverlap(first_collider, second_collider))
+			if (IsOverlap(first_collider, (*it)))
 			{
 				//Call Delegate
-				first_collider->Overlap(*it);
+				first_collider->Overlap((*it)->GetOwner());
 				break;
 			}
 
@@ -59,12 +67,10 @@ namespace Physics
 
 	void PhysicsManager::Update()
 	{
-		auto it = _world->_all_actors.begin();
-		for (; it != _world->_all_actors.end(); it++)
+		auto it = _all_colliders.begin();
+		for (; it != _all_colliders.end(); it++)
 		{
-			Physics::Collider* collider = (*it)->GetCollider();
-
-			CheckOverlapping(collider);
+			CheckOverlapping((*it));
 		}
 	}
 
@@ -159,6 +165,11 @@ namespace Physics
 #endif
 
 		return nullptr;
+	}
+
+	void PhysicsManager::Erase(Collider* collider)
+	{
+		_all_colliders.erase(std::find(_all_colliders.begin(), _all_colliders.end(), collider));
 	}
 
 	bool PhysicsManager::IsIntersection(const glm::vec2& pos_first_collider, const glm::vec2& size_first_collider,

@@ -1,7 +1,8 @@
+#include <map>
+
 #include "../../../engine/default_classes/Pawn.h"
 
 #include "BuildingTypes.h"
-
 
 class Building : public Pawn
 {
@@ -10,6 +11,13 @@ public:
 	~Building();
 
 	void Replace() { _replace = true; }
+
+	bool GetIsReplaced() const { return _replace; }
+	glm::ivec2 GetBuildingSize() const { return _building_size;	}
+
+	bool CanReplace();
+
+	virtual void Update(const float& deltaTime) override;
 protected:
 	Building(const std::string& initSubtextureName, const glm::vec2& startPosition = glm::vec2(0.f),
 		const glm::vec2& startSize = glm::vec2(1.f), const float& rotation = 0.f);

@@ -14,7 +14,7 @@ public:
 
 	~NavMeshRTS();
 
-	void FillMap(std::vector<std::vector<Cell>>& map);
+	void FillMap(const std::vector<std::vector<Cell>>& map);
 	
 	std::vector<std::vector<Cell>> GetMap();
 

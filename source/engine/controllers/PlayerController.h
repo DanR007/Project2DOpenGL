@@ -16,6 +16,7 @@ namespace Game
 }
 
 class Unit;
+class Building;
 
 class PlayerController : public Controller
 {
@@ -67,6 +68,8 @@ protected:
 	glm::vec2 _offset;
 
 	Unit* _unit = nullptr;
+	Building* _building = nullptr;
+
 
 	std::map<std::string, Delegate> _delegates_functions;
 

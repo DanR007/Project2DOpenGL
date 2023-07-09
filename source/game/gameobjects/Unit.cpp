@@ -20,7 +20,10 @@ Unit::Unit(const std::string& initSubtextureName,
 
 	_controller = new Controller(this, 0);
 	_controller->SetMoveSpeed(20.f);
-	_collider = new Physics::Collider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
+
+	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
+
+	_components.push_back(_collider);
 }
 
 Unit::Unit(const glm::ivec2& position)

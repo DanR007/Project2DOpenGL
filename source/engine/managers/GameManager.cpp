@@ -104,7 +104,8 @@ void GameManager::BeginPlay()
 	SpawnActor<Unit>(glm::ivec2(0));
 
 	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
-	_nav_mesh->FillMap(generator->GenerateMap());
+	_map = generator->GenerateMap();
+	_nav_mesh->FillMap(_map);
 
 
 	delete generator;

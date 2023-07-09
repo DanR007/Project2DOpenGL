@@ -10,9 +10,16 @@
 	Actor::Actor(const std::string& initSubtextureName,
 		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	{
-		_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, startPosition, startSize, initSubtextureName, startRotation);
-
-		_components.push_back(_anim_sprite);
+		if (!initSubtextureName.empty())
+		{
+			_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, startPosition, startSize, initSubtextureName, startRotation);
+			_components.push_back(_anim_sprite);
+		}
+		else
+		{
+			Destroy();
+		}
+		
 
 		_world_position = startPosition;
 		_rotation = startRotation;
@@ -33,9 +40,6 @@
 
 	Actor::~Actor()
 	{
-		if (_collider)
-			delete _collider;
-		_collider = nullptr;
 #ifdef DEBUG
 		std::cout << "Destroy Actor" << std::endl;
 #endif
@@ -102,6 +106,7 @@
 		Object::Destroy();
 		for (Component* c : _components)
 		{
-			c->Destroy();
+			if(c)
+				c->Destroy();
 		}
 	}
