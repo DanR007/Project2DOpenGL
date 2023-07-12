@@ -17,8 +17,9 @@ public:
 		return 1; 
 	}
 
-
+	void SetCell(Cell* cell) { _cell = cell; }
 protected:
+	Cell* _cell;
 
 	EResorceTypes _resource_type;
 

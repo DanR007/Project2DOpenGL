@@ -4,6 +4,8 @@
 #include <vector>
 #include <string>
 
+class Resource;
+
 struct Cell
 {
 	Cell(const glm::ivec2& position, const short int& height = 0, const short int& cost = 1, const char& symbol = '.', const unsigned short int& field_id = 0):
@@ -33,6 +35,8 @@ struct Cell
 	short int _height, _cost;
 	unsigned short int _field_id;
 	char _symbol;
+
+	Resource* _resources = nullptr;
 };
 
 struct GenSymbol
@@ -59,7 +63,7 @@ public:
 	float Noise(const glm::ivec2& pos);
 	float FBM(const int& count, int x, int y);
 
-	std::vector<std::vector<Cell>> GenerateMap();
+	std::vector<std::vector<Cell*>> GenerateMap();
 
 	float FBM(const glm::ivec2& pos, const int& count);
 private:
@@ -77,7 +81,7 @@ private:
 
 	glm::ivec2 _size;
 
-	std::vector<std::vector<Cell>> _map;
+	std::vector<std::vector<Cell*>> _map;
 
 	std::vector<std::vector<glm::vec2>> _rand_vectors;
 

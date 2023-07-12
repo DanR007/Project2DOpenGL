@@ -105,11 +105,11 @@ void GameManager::BeginPlay()
 
 	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
 	_map = generator->GenerateMap();
+	ReadMap();
+
 	_nav_mesh->FillMap(_map);
 
-
 	delete generator;
-	ReadMap();
 }
 
 
@@ -161,7 +161,7 @@ void GameManager::ReadMap()
 		for (int x = 0; x < _size_map.x; x++)
 		{
 
-			char symbol = GetNavMesh()->GetMap()[y][x]._symbol;
+			char symbol = _map[y][x]._symbol;
 			switch (symbol)
 			{
 			case 'W':
@@ -170,11 +170,13 @@ void GameManager::ReadMap()
 			case 'S':
 				SpawnActor<Stone>(glm::ivec2(x, y));
 				break;
-			case 'B':
-				SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
-				break;
 			}
 
+			_map[y][x]._resources = dynamic_cast<Resource*>(_all_actors.back());
+			if (_map[y][x]._resources)
+			{
+				_map[y][x]._resources->SetCell(_map[y][x]);
+			}
 		}
 	}
 }
