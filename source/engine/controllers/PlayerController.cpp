@@ -120,7 +120,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			{
 				//Print map symbol by coordinates
 				if (map_coord.y >= 0 && map_coord.x >= 0)
-					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]._symbol << std::endl;
+					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]->_symbol << std::endl;
 
 				//find unit under cursor
 				Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));

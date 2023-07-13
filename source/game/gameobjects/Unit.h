@@ -31,7 +31,7 @@ public:
 	
 	void SetGoal(Goal* goal) { _goal = goal; }
 
-	void MoveTo(const Cell& cell);
+	void MoveTo(Cell* cell);
 
 	void PathComplete();
 protected:

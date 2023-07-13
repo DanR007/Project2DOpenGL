@@ -58,7 +58,7 @@ void Unit::Move(const glm::vec2& position)
 	_selected_sprite->SetPosition(_world_position);
 }
 
-void Unit::MoveTo(const Cell& cell)
+void Unit::MoveTo(Cell* cell)
 {
 	if (GetController() && GetController()->GetPathComplete())
 	{

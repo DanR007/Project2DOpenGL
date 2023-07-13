@@ -10,6 +10,8 @@
 #include <iostream>
 
 #include <cstdio>
+
+//#define DEBUG_MEMORY
 #define DEBUG
 
 class Actor;

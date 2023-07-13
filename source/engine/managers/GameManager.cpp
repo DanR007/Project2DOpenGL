@@ -49,6 +49,16 @@ void GameManager::Clear()
 	}
 	_all_actors.clear();
 	_all_actors.~vector();
+
+	for (size_t y = 0; y < _map.size(); y++)
+	{
+		for (size_t x = 0; x < _map[y].size(); x++)
+		{
+			delete _map[y][x];
+		}
+		_map[y].clear();
+	}
+	_map.clear();
 }
 
 
@@ -100,8 +110,6 @@ void GameManager::BeginPlay()
 	_player_controller = new PlayerController();
 
 	_controllers.push_back(_player_controller);
-
-	SpawnActor<Unit>(glm::ivec2(0));
 
 	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
 	_map = generator->GenerateMap();
@@ -161,21 +169,15 @@ void GameManager::ReadMap()
 		for (int x = 0; x < _size_map.x; x++)
 		{
 
-			char symbol = _map[y][x]._symbol;
+			char symbol = _map[y][x]->_symbol;
 			switch (symbol)
 			{
 			case 'W':
-				SpawnActor<Wood>(glm::ivec2(x, y));
+				FillCell<Wood>(_map[y][x], EResourceTypes::ERT_Wood);
 				break;
 			case 'S':
-				SpawnActor<Stone>(glm::ivec2(x, y));
+				FillCell<Stone>(_map[y][x], EResourceTypes::ERT_Stone);
 				break;
-			}
-
-			_map[y][x]._resources = dynamic_cast<Resource*>(_all_actors.back());
-			if (_map[y][x]._resources)
-			{
-				_map[y][x]._resources->SetCell(_map[y][x]);
 			}
 		}
 	}

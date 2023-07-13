@@ -36,7 +36,7 @@ struct Cell
 	unsigned short int _field_id;
 	char _symbol;
 
-	Resource* _resources = nullptr;
+	Resource* _resource = nullptr;
 };
 
 struct GenSymbol

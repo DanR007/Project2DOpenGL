@@ -67,7 +67,7 @@ float RTSMapGenerator::Noise(const glm::ivec2& pos)
 
 }
 
-std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
+std::vector<std::vector<Cell*>> RTSMapGenerator::GenerateMap()
 {
 	std::vector<std::vector<float>> humidity_array;
 	std::vector<std::vector<float>> height_array;
@@ -145,7 +145,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 			//humidity_array[y][x] = (humidity_array[y][x] - min_humidity) / (max_humidity - min_humidity);
 			population_array[y][x] = (population_array[y][x] - min_population) / (max_population - min_population);
 
-			_map[y][x] = Cell(glm::ivec2(x, y), 0, 1, GetSymbol(height_array[y][x], humidity_array[y][x], population_array[y][x]), 0);
+			_map[y][x] = new Cell(glm::ivec2(x, y), 0, 1, GetSymbol(height_array[y][x], humidity_array[y][x], population_array[y][x]), 0);
 
 			//std::cout << _map[y][x]._symbol;
 
@@ -164,7 +164,7 @@ std::vector<std::vector<Cell>> RTSMapGenerator::GenerateMap()
 		for (int x = 0; x < _size.x; x++)
 		{
 			//std::cout << _map[y][x]._symbol;
-			symbol_array[y][x] = _map[y][x]._symbol;
+			symbol_array[y][x] = _map[y][x]->_symbol;
 		}
 		//std::cout << std::endl;
 
@@ -213,11 +213,11 @@ void RTSMapGenerator::CellularAutomaton(const int& count_life_cells_need, const 
 
 		for (int x = 0; x < _size.x; x++)
 		{
-			if (_map[y][x]._symbol == symbol)
+			if (_map[y][x]->_symbol == symbol)
 			{
-				if (GetLifeCell(glm::ivec2(x, y), _map[y][x]._symbol) >= count_life_cells_need)
+				if (GetLifeCell(glm::ivec2(x, y), _map[y][x]->_symbol) >= count_life_cells_need)
 				{
-					cell_condition[y][x] = _map[y][x]._symbol;
+					cell_condition[y][x] = _map[y][x]->_symbol;
 				}
 				else
 				{
@@ -226,7 +226,7 @@ void RTSMapGenerator::CellularAutomaton(const int& count_life_cells_need, const 
 			}
 			else
 			{
-				cell_condition[y][x] = _map[y][x]._symbol;
+				cell_condition[y][x] = _map[y][x]->_symbol;
 			}
 		}
 	}
@@ -235,7 +235,7 @@ void RTSMapGenerator::CellularAutomaton(const int& count_life_cells_need, const 
 	{
 		for (int x = 0; x < _size.x; x++)
 		{
-			_map[y][x]._symbol = cell_condition[y][x];
+			_map[y][x]->_symbol = cell_condition[y][x];
 		}
 	}
 }
@@ -263,7 +263,7 @@ void RTSMapGenerator::BFS(const glm::ivec2& start, std::vector<std::vector<char>
 	q.push(start);
 
 	map[start.y][start.x] = '.';
-	_map[start.y][start.x]._field_id = id;
+	_map[start.y][start.x]->_field_id = id;
 
 	std::vector<glm::ivec2> neighbours =
 	{
@@ -286,7 +286,7 @@ void RTSMapGenerator::BFS(const glm::ivec2& start, std::vector<std::vector<char>
 			{
 				q.push(neighbour);
 				map[neighbour.y][neighbour.x] = '.';
-				_map[neighbour.y][neighbour.x]._field_id = id;
+				_map[neighbour.y][neighbour.x]->_field_id = id;
 			}
 
 		}
@@ -317,7 +317,7 @@ size_t RTSMapGenerator::GetLifeCell(const glm::ivec2& pos, const char& life_symb
 
 		if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < _size.x && neighbour.y < _size.y)
 		{
-			count += _map[neighbour.y][neighbour.x]._symbol == life_symbol ? 1 : 0;
+			count += _map[neighbour.y][neighbour.x]->_symbol == life_symbol ? 1 : 0;
 		}
 
 	}

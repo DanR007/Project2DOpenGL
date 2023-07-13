@@ -32,7 +32,7 @@ bool Building::CanReplace()
 	{
 		for (int j = 0; j < _building_size.x; j++)
 		{
-			if (GetEngine()->GetWorld()->GetMap()[_map_position.y + i][_map_position.x + j]._symbol != ' ')
+			if (GetEngine()->GetWorld()->GetMap()[_map_position.y + i][_map_position.x + j]->_symbol != ' ')
 			{
 				return false;
 			}
@@ -57,4 +57,9 @@ Building::Building(const std::string& initSubtextureName, const glm::vec2& start
 Building::~Building()
 {
 	
+}
+
+void Building::Replace()
+{
+	_replace = true;
 }

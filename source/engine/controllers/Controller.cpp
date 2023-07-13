@@ -51,11 +51,11 @@ void Controller::Move(float deltaTime)
 {
 	if (!_complete_path)
 	{
-		float distance = std::sqrt(std::pow(_goal.x - _controlled_pawn->GetPosition().x, 2) + std::pow(_goal.y - _controlled_pawn->GetPosition().y, 2));
+		float distance = std::sqrtf(std::powf(_goal.x - _controlled_pawn->GetPosition().x, 2) + std::powf(_goal.y - _controlled_pawn->GetPosition().y, 2));
 		_move_vector = (_goal - _controlled_pawn->GetPosition()) / distance;
 		if (_move_vector != glm::vec2(0.f, 0.f))
 		{
-			float cost = GetWorld()->GetNavMesh()->GetMap()[_goal_int.y][_goal_int.x]._cost;
+			float cost = GetWorld()->GetNavMesh()->GetMap()[_goal_int.y][_goal_int.x]->_cost;
 			
 			if (deltaTime * _move_speed / cost > distance)
 			{
@@ -83,7 +83,7 @@ void Controller::ChangeMoveVector(glm::vec2 inputVector)
 	_move_vector += inputVector;
 }
 
-void Controller::MakePathForGoal(const Cell& goal, const glm::ivec2& move_from)
+void Controller::MakePathForGoal(Cell* goal, const glm::ivec2& move_from)
 {
 	_goal_int = _controlled_pawn->GetMapPosition();
 

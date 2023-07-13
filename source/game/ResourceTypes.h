@@ -1,7 +1,7 @@
 #pragma once
 
 
-enum class EResorceTypes
+enum class EResourceTypes
 {
 	ERT_Stone, ERT_Wood, ERT_Gold
 };
