@@ -8,7 +8,7 @@
 
 #include "../renderer/AnimSprite.h"
 
-
+#include "../physics/Collider.h"
 
 #include "../../main.h"
 
@@ -37,6 +37,10 @@ void MemoryManager::Update()
 			if (dynamic_cast<Renderer::Sprite*>(*it))
 			{
 				GetEngine()->GetRenderManager()->Erase(dynamic_cast<Renderer::Sprite*>(*it));
+			}
+			if (dynamic_cast<Physics::Collider*>(*it))
+			{
+				GetEngine()->GetPhysicsManager()->Erase(dynamic_cast<Physics::Collider*>(*it));
 			}
 
 			delete (*it);

@@ -47,7 +47,7 @@ void* operator new(std::size_t size)
 	void* n = malloc(size);
 	if (n)
 	{
-#ifdef DEBUG
+#ifdef DEBUG_MEMORY
 		if(game_start)
 			printf("Called new: %p\n", n);
 #endif
@@ -67,7 +67,7 @@ void* operator new[](std::size_t size)
 	void* n = malloc(size);
 	if (n)
 	{
-#ifdef DEBUG
+#ifdef DEBUG_MEMORY
 		if (game_start)
 			printf("Called new[]: %p\n", n);
 #endif
@@ -83,7 +83,7 @@ void* operator new[](std::size_t size)
 }
 void operator delete(void* ptr)
 {
-#ifdef DEBUG
+#ifdef DEBUG_MEMORY
 	if(game_start)
 		printf("Called deleted: %p\n", ptr);
 #endif
@@ -91,8 +91,10 @@ void operator delete(void* ptr)
 }
 void operator delete[](void* ptr)
 {
+#ifdef DEBUG_MEMORY
 	if (game_start)
 		printf("Called deleted[]: %p\n", ptr);
+#endif
 	free(ptr);
 }
 

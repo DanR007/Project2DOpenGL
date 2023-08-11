@@ -6,12 +6,18 @@
 
 #include "../../main.h"
 
+#include "../../engine/generators/RTSMapGenerator.h"
+
 Resource::Resource(const std::string& init_sprite_name, const glm::ivec2& position, const glm::vec2& size, const float& rotation):
 	Actor(init_sprite_name, GetWorld()->ConvertToWindowSpace(position), size, rotation)
 {
 	_resources_count = _max_resources_count;
 
-	_collider = new Physics::Collider(EObjectTypes::EOT_StaticObject, this, GetWorld()->ConvertToWindowSpace(position));
+	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_StaticObject, this, GetWorld()->ConvertToWindowSpace(position), size);
+
+	_components.push_back(_collider);
+
+	_cell = GetEngine()->GetWorld()->GetMap()[position.y][position.x];
 }
 
 Resource::~Resource()
@@ -19,4 +25,9 @@ Resource::~Resource()
 #ifdef DEBUG
 	std::cout << "Destroy Resources" << std::endl;
 #endif
+}
+
+void Resource::SetCell(Cell* cell)
+{
+	_cell = cell;
 }

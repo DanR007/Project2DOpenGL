@@ -10,6 +10,7 @@
 
 namespace Renderer
 {
+	class Sprite;
 	class AnimSprite;
 	class Texture2D;
 	class ShaderProgram;

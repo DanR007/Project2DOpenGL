@@ -12,18 +12,18 @@ class NavMeshRTS;
 class Goal;
 
 
-float GetLengthTurn(const glm::ivec2& dir, const Cell& cell);
+float GetLengthTurn(const glm::ivec2& dir, Cell* cell);
 
 struct PathCell
 {
-	PathCell(PathCell* prev, const Cell& cell)
+	PathCell(PathCell* prev, Cell* cell)
 	{
 		_cell = cell;
 		_prev = prev;
-		_dir = prev->_cell._position - cell._position;
+		_dir = prev->_cell->_position - cell->_position;
 		_length = prev->GetLength() + GetLengthTurn(_dir, cell);
 	}
-	PathCell(const Cell& cell)
+	PathCell(Cell* cell)
 	{
 		_cell = cell;
 		_prev = nullptr;
@@ -45,7 +45,7 @@ struct PathCell
 	}
 	bool operator!= (PathCell& c)
 	{
-		return c._cell != _cell;
+		return *(c._cell) != *_cell;
 	}
 	bool operator> (PathCell& c)
 	{
@@ -66,20 +66,20 @@ struct PathCell
 
 	inline float GetCost() const { return _cost; }
 	inline float GetLength() const { return _length; }
-	inline Cell GetCell() const { return _cell; }
+	inline Cell* GetCell() const { return _cell; }
 	inline PathCell* GetPrev() { return _prev; }
 
-	void SetCell(const Cell& c) { _cell = c; }
+	void SetCell(Cell* c) { _cell = c; }
 	void SetCost(const float& c) { _cost = c; }
 	void SetLength(const float& l) { _length = l; }
 	void SetPrev(PathCell* c) { _prev = std::move(c); }
-	void SetDistance(const glm::ivec2& point) { _distance = std::sqrtf(std::powf(point.x - _cell._position.x, 2) + std::powf(point.y - _cell._position.y, 2)); }
+	void SetDistance(const glm::ivec2& point) { _distance = std::sqrtf(std::powf(float(point.x - _cell->_position.x), 2) + std::powf(float(point.y - _cell->_position.y), 2)); }
 	void SetDirection(const glm::ivec2& dir) { _dir = dir; }
 
 	void CalculateCost() { _cost = _length + _distance; }
 private:
 	PathCell* _prev;
-	Cell _cell;
+	Cell* _cell;
 	float _cost, _length, _distance;
 
 	glm::ivec2 _dir;
@@ -91,7 +91,7 @@ public:
 	AStarRTS();
 	~AStarRTS();
 
-	Goal* DevelopPath(const glm::ivec2& start, const Cell& target);
+	Goal* DevelopPath(const glm::ivec2& start, Cell* target);
 
 	void Clear();
 
@@ -100,11 +100,11 @@ private:
 	void CollectPath(PathCell* cell);
 	bool LocateInMap(const glm::ivec2& pos);
 
-	Cell FindNearestCell(const Cell& target, unsigned short need_id);
+	Cell* FindNearestCell(Cell* target, unsigned short need_id);
 
 	PathCell* GetMinCostCell();
 
-	bool CanStepInto(const glm::ivec2& move, const Cell& next_cell, const Cell& cur_cell);
+	bool CanStepInto(const glm::ivec2& move, Cell* next_cell, Cell* cur_cell);
 
 	static const short unsigned int _count_move_dir = 8;
 

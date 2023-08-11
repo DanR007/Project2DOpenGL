@@ -11,7 +11,10 @@
 class RenderManager
 {
 public:
-	RenderManager() {}
+	RenderManager() 
+	{
+		glGenBuffers(1, &_buffer_matrix);
+	}
 	~RenderManager();
 
 	template<typename T>

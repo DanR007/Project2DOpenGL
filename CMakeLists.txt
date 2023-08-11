@@ -74,6 +74,11 @@ source/game/gameobjects/Wall.h
 source/game/gameobjects/Resource.h
 source/game/gameobjects/static/Stone.h
 source/game/gameobjects/static/Wood.h
+source/game/gameobjects/buildings/BuildingTypes.h
+source/game/gameobjects/buildings/Building.h
+source/game/gameobjects/buildings/Lumber.h
+source/game/gameobjects/units/Worker.h
+source/game/gameobjects/units/Lumberjack.h
 )
 
 set(GAME_CPP
@@ -83,6 +88,10 @@ source/game/gameobjects/Wall.cpp
 source/game/gameobjects/Resource.cpp
 source/game/gameobjects/static/Stone.cpp
 source/game/gameobjects/static/Wood.cpp
+source/game/gameobjects/buildings/Building.cpp
+source/game/gameobjects/buildings/Lumber.cpp
+source/game/gameobjects/units/Worker.cpp
+source/game/gameobjects/units/Lumberjack.cpp
 )
 
 add_executable(${PROJECT_NAME} 

@@ -12,6 +12,9 @@
 
 #include "../default_classes/Actor.h"
 
+#include "../generators/RTSMapGenerator.h"
+#include "../../game/gameobjects/Resource.h"
+
 namespace Renderer
 {
 	class Texture2D;
@@ -37,8 +40,6 @@ public:
 	{
 		T* new_actor = new T(initSpriteName, actorPosition, actorSize, actorRotation);
 
-		int old_cap = _all_actors.capacity();
-
 		if (dynamic_cast<Actor*>(new_actor))
 			_all_actors.emplace(_all_actors.end(), new_actor);
 
@@ -51,15 +52,21 @@ public:
 	{
 		T* new_actor = new T(position);
 
-
-		int old_cap = _all_actors.capacity();
-
 		if (dynamic_cast<Actor*>(new_actor))
 			_all_actors.emplace(_all_actors.end(), new_actor);
 
 		GetEngine()->GetMemoryManager()->AddObject(new_actor);
 		return new_actor;
 
+	}
+
+	template<typename T>
+	void FillCell(Cell* cell, const EResourceTypes& type)
+	{
+		SpawnActor<T>(cell->_position);
+		cell->_resource = dynamic_cast<T*>(_all_actors.back());
+		cell->_resource->SetCell(cell);
+		cell->_resource->SetResource(type);
 	}
 
 	void MoveAllActors(const glm::vec2& offset);
@@ -80,6 +87,7 @@ public:
 	//offset is map_coord - window_coord
 	glm::vec2 GetOffset() const { return _offset; }
 	glm::ivec2 GetSizeMap() const { return _size_map; }
+	std::vector<std::vector<Cell*>> GetMap() const { return _map; }
 
 	glm::vec2 ConvertToWindowSpace(const glm::ivec2& position_in_map);
 	glm::vec2 ConvertToWindowSpace(const int& x, const int& y);
@@ -100,6 +108,8 @@ private:
 	PlayerController* _player_controller = nullptr;
 
 	std::vector<Actor*> _all_actors;
+
+	std::vector<std::vector<Cell*>> _map;
 
 	std::vector<PlayerController*> _controllers;
 	//offset is map_coord (multiply by block_size) - window_coord

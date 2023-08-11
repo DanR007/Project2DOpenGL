@@ -21,7 +21,7 @@ GameManager::GameManager()
 {
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(150);
+	_size_map = glm::ivec2(200);
 }
 
 GameManager::~GameManager()
@@ -49,6 +49,16 @@ void GameManager::Clear()
 	}
 	_all_actors.clear();
 	_all_actors.~vector();
+
+	for (size_t y = 0; y < _map.size(); y++)
+	{
+		for (size_t x = 0; x < _map[y].size(); x++)
+		{
+			delete _map[y][x];
+		}
+		_map[y].clear();
+	}
+	_map.clear();
 }
 
 
@@ -101,14 +111,13 @@ void GameManager::BeginPlay()
 
 	_controllers.push_back(_player_controller);
 
-	SpawnActor<Unit>("mush1", ConvertToWindowSpace(0, 0), _block_size);
-
 	RTSMapGenerator* generator = new RTSMapGenerator(_size_map);
-	_nav_mesh->FillMap(generator->GenerateMap());
+	_map = generator->GenerateMap();
+	ReadMap();
 
+	_nav_mesh->FillMap(_map);
 
 	delete generator;
-	ReadMap();
 }
 
 
@@ -160,20 +169,16 @@ void GameManager::ReadMap()
 		for (int x = 0; x < _size_map.x; x++)
 		{
 
-			char symbol = GetNavMesh()->GetMap()[y][x]._symbol;
+			char symbol = _map[y][x]->_symbol;
 			switch (symbol)
 			{
 			case 'W':
-				SpawnActor<Wood>(glm::ivec2(x, y));
+				FillCell<Wood>(_map[y][x], EResourceTypes::ERT_Wood);
 				break;
 			case 'S':
-				SpawnActor<Stone>(glm::ivec2(x, y));
-				break;
-			case 'B':
-				SpawnActor<Wall>("wall", ConvertToWindowSpace(x, y), _block_size);
+				FillCell<Stone>(_map[y][x], EResourceTypes::ERT_Stone);
 				break;
 			}
-
 		}
 	}
 }

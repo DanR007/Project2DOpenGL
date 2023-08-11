@@ -8,6 +8,8 @@
 #include "../../game/gameobjects/Unit.h"
 #include "../../game/gameobjects/Goal.h"
 
+#include "../../game/gameobjects/buildings/Lumber.h"
+
 PlayerController::PlayerController()
 { 
 	SetupDefaultFunctions();
@@ -55,7 +57,12 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 			glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
 			break;
 		case GLFW_KEY_W:
-			
+			double xPos, yPos;
+			glfwGetCursorPos(currentWindow, &xPos, &yPos);
+
+			yPos = window_size.y - yPos;
+			glm::ivec2 pivot_pos = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(yPos));
+			_building = GetEngine()->GetWorld()->SpawnActor<Lumber>(pivot_pos);
 			break;
 		case GLFW_KEY_S:
 			
@@ -109,20 +116,35 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			//Print map coordinates
 			std::cout << "ASCII Map coordinates (x, y): " << map_coord.x << " " << map_coord.y << std::endl;
 
-			//Print map symbol by coordinates
-			if(map_coord.y >= 0 && map_coord.x >= 0)
-				std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]._symbol << std::endl;
-
-			//find unit under cursor
-			Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
-
-			if(_unit)
-				_unit->SetSelected(_unit == unit);
-
-			if (unit)
+			if (_building == nullptr)
 			{
-				_unit = unit;
-				_unit->SetSelected(true);
+				//Print map symbol by coordinates
+				if (map_coord.y >= 0 && map_coord.x >= 0)
+					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]->_symbol << std::endl;
+
+				//find unit under cursor
+				Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
+
+				if (_unit)
+					_unit->SetSelected(_unit == unit);
+
+				if (unit)
+				{
+					_unit = unit;
+					_unit->SetSelected(true);
+				}
+			}
+			else
+			{
+				if (_building->CanReplace())
+				{
+					_building->Replace();
+					_building = nullptr;
+				}
+				else
+				{
+					std::cout << "Building can not replacement here" << std::endl;
+				}
 			}
 			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
@@ -133,17 +155,24 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
 
 			yPos = window_size.y - yPos;
-			glm::ivec2 map_coord = GetWorld()->ConvertToMapSpace(xPos, yPos);
+			glm::ivec2 map_coord = GetWorld()->ConvertToMapSpace(float(xPos), float(yPos));
 
 			//Print map coordinates
 			std::cout << "ASCII Map coordinates (x, y): " << map_coord.x << " " << map_coord.y << std::endl;
 
-			//Print map symbol by coordinates
-			if (_unit && map_coord.y >= 0 && map_coord.x >= 0)
+			if (_building == nullptr)
 			{
-				_unit->MoveTo(GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]);
+				//Print map symbol by coordinates
+				if (_unit && map_coord.y >= 0 && map_coord.x >= 0)
+				{
+					_unit->MoveTo(GetWorld()->GetMap()[map_coord.y][map_coord.x]);
+				}
 			}
-			
+			else
+			{
+				_building->Destroy();
+				_building = nullptr;
+			}
 			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;
@@ -174,6 +203,18 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 
 void PlayerController::CursorMove(GLFWwindow* currentWindow, double xPos, double yPos)
 {
+	if (_building && !_building->GetIsReplaced())
+	{
+		glm::ivec2 map_space = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(window_size.y - yPos)) -
+			glm::ivec2(_building->GetBuildingSize().x - 1, 0);
+
+		_building->SetMapPosition(map_space);
+
+		glm::vec2 window_space = GetEngine()->GetWorld()->ConvertToWindowSpace(_building->GetMapPosition());
+
+		_building->SetPosition(window_space);
+	}
+
 	glm::vec2 up = glm::vec2(0, 1), right = glm::vec2(1, 0);
 	_move_vector = glm::vec2(0);
 	if ((double)window_size.x - xPos < 5)

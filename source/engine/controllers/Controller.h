@@ -36,7 +36,7 @@ public:
 
 	bool GetPathComplete() { return _complete_path; }
 
-	void MakePathForGoal(const Cell& goal, const glm::ivec2& move_from);
+	void MakePathForGoal(Cell* goal, const glm::ivec2& move_from);
 protected:
 	bool is_pause = false;
 	bool _complete_path = true;

@@ -18,6 +18,8 @@ RenderManager::~RenderManager()
 		delete it->second;
 		it = _all_images.erase(it);
 	}
+
+	ClearBuffer();
 }
 
 Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initialSubtextureName)
@@ -50,7 +52,7 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 	size_t count = _sprites.size();
 	matrixes = new glm::mat4[count];
 
-	for (int i = 0; i < _sprites.size(); i++)
+	for (int i = 0; i < count; i++)
 	{
 		glm::mat4 matrix(1.f);
 
@@ -66,11 +68,11 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		matrixes[i] = matrix;
 	}
 
-	glGenBuffers(1, &_buffer_matrix);
+	
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer_matrix);
-	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_DYNAMIC_DRAW);
 
-	for (int i = 0; i < _sprites.size(); i++)
+	for (int i = 0; i < count; i++)
 	{
 		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
 		glEnableVertexAttribArray(3);
@@ -93,19 +95,14 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 	img->GetShader()->Use();
 	img->GetTexture()->Bind();
 
-	for (int i = 0; i < _sprites.size(); i++)
+	for (int i = 0; i < count; i++)
 	{
 		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
 		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, count);
 		glBindVertexArray(0);
 	}
 
-	
-	//ClearBuffer();
-
-	
-
-	for (int i = 0; i < _sprites.size(); i++)
+	/*for (int i = 0; i < _sprites.size(); i++)
 	{
 		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
 
@@ -115,10 +112,7 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		glDisableVertexAttribArray(6);
 
 		glBindVertexArray(0);
-	}
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glDeleteBuffers(1, &_buffer_matrix);
+	}*/
 
 	delete[] matrixes;
 	matrixes = nullptr;
@@ -130,7 +124,8 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 
 void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img)
 {
-	for (int i = 0; i < _all_sprites[img].size(); i++)
+	size_t size = _all_sprites[img].size();
+	for (size_t i = 0; i < size; i++)
 	{
 		if (_all_sprites[img][i]->GetNeedToRender())
 		{
@@ -141,6 +136,7 @@ void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Re
 
 void RenderManager::ClearBuffer()
 {
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &_buffer_matrix);
 }
 
