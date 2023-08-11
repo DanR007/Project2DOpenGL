@@ -165,13 +165,28 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
 
-	std::vector<std::string> names = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
+	std::vector<std::string> names_texture_atlas = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
 										"fullHeart", "emptyHeart", "lumber", "stoneWall", "quary"};
 
-	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names, 16, 16);
+	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names_texture_atlas, 16, 16);
 
 	glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
 	GetShaderProgram("spriteShader")->Use();
 	GetShaderProgram("spriteShader")->SetIn("tex", 0);
 	GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
+
+	std::vector<std::string> font_names;
+	for (int i = 0; i < 26; i++)
+	{
+		std::string s = "a";
+		s[0] += i;
+		font_names.push_back(s);
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		std::string s = "0";
+		s[0] += i;
+		font_names.push_back(s);
+	}
+	LoadTextureAtlas("fontAtlas", "resources/textures/font.png", font_names, 8, 8);
 }
