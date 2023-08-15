@@ -29,6 +29,9 @@
 #include "engine/renderer/ShaderRender.h"
 #include "engine/renderer/TextureRender.h"
 
+#include "engine/UI/Widget.h"
+#include "engine/UI/Text.h"
+
 //#define TEST_CASES
 #define PHYSIC_TESTS
 #define GAMEPLAY_TESTS
@@ -183,11 +186,15 @@ int main(int argc, char** argv)
 #ifdef PLAY_IN_EDITOR
 		engine->Begin();
 
-		glClearColor(0.9f, 0.9f, 0.9f, 1.f);
+		glClearColor(0.5f, 0.5f, 0.5f, 1.f);
 
 		game_start = true;
 
 		auto lastTime = std::chrono::steady_clock::now();
+
+		Widget* wdg = new Widget();
+		Text* t = wdg->AddElement<Text>(glm::vec2(0), glm::vec2(35.f));
+		t->SetText("Darling " + std::to_string(10));
 
 		while (!glfwWindowShouldClose(window))
 		{

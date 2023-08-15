@@ -8,6 +8,8 @@
 Object::Object()
 {
 	_need_to_destroy = false;
+
+	GetEngine()->GetMemoryManager()->AddObject(this);
 }
 
 Object::~Object()

@@ -22,7 +22,6 @@ namespace Physics
 	{
 		Collider* collider = new Collider(type, owner, GetWorld()->ConvertToWindowSpace(position), size);
 
-		GetEngine()->GetMemoryManager()->AddObject(collider);
 		_all_colliders.emplace_back(collider);
 
 		return collider;

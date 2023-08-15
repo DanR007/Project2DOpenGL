@@ -13,6 +13,7 @@
 #define TEXTURE_FRAGMENT_SHADER_PATH "resources/shaders/textureFragmentShader.txt"
 #define SPRITE_VERTEX_SHADER_PATH "resources/shaders/spriteVertexShader.txt"
 #define SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/spriteFragmentShader.txt"
+#define NEW_SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/newSpriteFragmentShader.txt"
 
 namespace Renderer
 {
@@ -42,10 +43,11 @@ public:
 	 std::shared_ptr<Renderer::Texture2D> GetTexture(const std::string& textureName);
 	 std::shared_ptr<Renderer::Texture2D> LoadTextureAtlas(const std::string& textureName, const std::string& texturePath,
 		const std::vector<std::string>& subTextureNamesArr,
-		const unsigned int width, const unsigned int height);
+		 const std::vector<uint8_t>& subTextureSizeArr);
 	
 	 void LoadAll(const std::string& executablePath);
-//private:
+
+private:
 	 std::string ReadShaderProgramFile(const std::string& path);
 	 std::string exe_path;
 

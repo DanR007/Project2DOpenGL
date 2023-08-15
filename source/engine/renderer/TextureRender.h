@@ -33,7 +33,7 @@ namespace Renderer
 
 		Texture2D(const unsigned char* imageData, const GLuint width, 
 			const GLuint height, const GLuint channel = 4,
-			GLenum wMode = GL_CLAMP_TO_EDGE, const GLenum filter = GL_NEAREST);
+			GLenum wMode = GL_CLAMP_TO_EDGE, const GLenum filter = GL_NEAREST, const GLuint layer = 0);
 
 		Texture2D() = delete;
 		Texture2D& operator=(Texture2D&) = delete;

@@ -15,7 +15,7 @@ public:
 
 	virtual void Update(const float& deltaTime) override;
 
-	~Pawn();
+	virtual ~Pawn();
 
 	glm::ivec2 GetMapPosition() const { return _map_position; }
 	Controller* GetController() { return _controller; }

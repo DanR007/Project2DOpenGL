@@ -8,7 +8,7 @@ class Stone : public Resource
 public:
 	Stone(const glm::ivec2& position);
 
-	~Stone();
+	virtual ~Stone();
 
 private:
 

@@ -18,7 +18,7 @@ public:
 	~RenderManager();
 
 	template<typename T>
-	T* CreateSprite(Actor* owner, const glm::vec2& position, const glm::vec2& size, const std::string& initSpriteName, const float& rotation = 0.f)
+	T* CreateSprite(Actor* owner, const glm::vec2& position, const glm::vec2& size, const std::string& initSpriteName, const std::string& texture_atlas_name = "textureAtlas", const float& rotation = 0.f)
 	{
 		std::map<std::string, Renderer::RenderImage*>::const_iterator it = _all_images.find(initSpriteName);
 
@@ -28,14 +28,13 @@ public:
 			std::cout << "Can't find image with this init sprite name: " + initSpriteName << std::endl;
 			std::cout << "Create new" << std::endl;
 
-			CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture("textureAtlas"), GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName);
+			CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name), GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName);
 		}
 
 		it = _all_images.find(initSpriteName);
 
 		T* new_sprite = new T(it->second, owner, position, size, rotation);
 		_all_sprites[it->second].push_back(new_sprite);
-		GetEngine()->GetMemoryManager()->AddObject(new_sprite);
 
 		return new_sprite;
 	}

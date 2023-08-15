@@ -70,12 +70,12 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::st
 	std::string path = exe_path + "/" + texturePath;
 
 	unsigned char* imageData = stbi_load(path.c_str(), &width, &height, &channels, 0);
+
+	std::shared_ptr<Renderer::Texture2D> texture = textures_map.emplace(textureName, std::make_shared<Renderer::Texture2D>(Renderer::Texture2D(imageData,
+			width,
+			height / 2,
+			channels, GL_REPEAT, GL_NEAREST))).first->second;
 	
-	std::shared_ptr<Renderer::Texture2D> texture = 
-		textures_map.emplace(textureName, std::make_shared<Renderer::Texture2D>(Renderer::Texture2D(imageData,
-																									width,
-																									height,
-																									channels, GL_REPEAT))).first->second;
 
 	if (!texture)
 	{
@@ -126,7 +126,7 @@ std::string ResourcesManager::ReadShaderProgramFile(const std::string& path)
 
 std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTextureAtlas(const std::string& textureName, const std::string& texturePath,
 	const std::vector<std::string>& subTextureNamesArr,
-	const unsigned int width, const unsigned int height)
+	const std::vector<uint8_t>& subTextureSizeArr)
 {
 
 	auto texture = LoadTexture(textureName, texturePath);
@@ -137,18 +137,18 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTextureAtlas(const st
 		const unsigned int textureHeight = texture->GetHeight();
 		unsigned int offsetX = 0;
 		unsigned int offsetY = textureHeight;
-		for (auto& currentSubTextureName : subTextureNamesArr)
+		for (int i = 0; i < subTextureNamesArr.size(); i++)
 		{
-			glm::vec2 leftBottomUV(static_cast<float>((float)offsetX / (float)textureWidth), static_cast<float>((float)(offsetY - height) / (float)textureHeight));
-			glm::vec2 rightTopUV(static_cast<float>((float)(offsetX + width) / (float)textureWidth), static_cast<float>((float)offsetY / (float)textureHeight));
+			glm::vec2 leftBottomUV(static_cast<float>((float)offsetX / (float)textureWidth), static_cast<float>((float)(offsetY - subTextureSizeArr[i]) / (float)textureHeight));
+			glm::vec2 rightTopUV(static_cast<float>((float)(offsetX + subTextureSizeArr[i]) / (float)textureWidth), static_cast<float>((float)offsetY / (float)textureHeight));
 
-			texture->AddSubTexture(currentSubTextureName, leftBottomUV, rightTopUV);
+			texture->AddSubTexture(subTextureNamesArr[i], leftBottomUV, rightTopUV);
 
-			offsetX += width;
+			offsetX += subTextureSizeArr[i];
 			if (offsetX >= textureWidth)
 			{
 				offsetX = 0;
-				offsetY -= height;
+				offsetY -= subTextureSizeArr[i];
 			}
 
 		}
@@ -163,30 +163,47 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	exe_path = executablePath.substr(0, find);
 
 	LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
+
+#ifdef OLD_VERSION
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
+#else
+	LoadShaderPrograms("spriteShader", NEW_SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
+#endif
 
-	std::vector<std::string> names_texture_atlas = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
-										"fullHeart", "emptyHeart", "lumber", "stoneWall", "quary"};
-
-	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names_texture_atlas, 16, 16);
+	
 
 	glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);
+
 	GetShaderProgram("spriteShader")->Use();
 	GetShaderProgram("spriteShader")->SetIn("tex", 0);
 	GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
-
+	std::vector<std::string> names_texture_atlas = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
+										"fullHeart", "emptyHeart", "lumber", "stoneWall", "quary", "smth", "idk"};
 	std::vector<std::string> font_names;
 	for (int i = 0; i < 26; i++)
 	{
 		std::string s = "a";
 		s[0] += i;
-		font_names.push_back(s);
+		names_texture_atlas.push_back(s);
 	}
 	for (int i = 0; i < 10; i++)
 	{
 		std::string s = "0";
 		s[0] += i;
-		font_names.push_back(s);
+		names_texture_atlas.push_back(s);
 	}
-	LoadTextureAtlas("fontAtlas", "resources/textures/font.png", font_names, 8, 8);
+	names_texture_atlas.push_back("background");
+	names_texture_atlas.push_back(" ");
+	std::vector<uint8_t> sprites_size;
+
+	for (int i = 0; i < 16; i++)
+	{
+		sprites_size.push_back(16);
+	}
+	for (int i = 0; i < 64; i++)
+	{
+		sprites_size.push_back(8);
+	}
+
+	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names_texture_atlas, sprites_size);
 }

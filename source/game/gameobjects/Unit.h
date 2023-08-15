@@ -20,7 +20,7 @@ public:
 	Unit(const glm::ivec2& position);
 
 	Unit(Unit&& u) noexcept;
-	~Unit();
+	virtual ~Unit();
 
 	virtual void Update(const float& deltaTime) override;
 

@@ -13,6 +13,7 @@
 
 //#define DEBUG_MEMORY
 #define DEBUG
+//#define OLD_VERSION
 
 class Actor;
 class Pawn;

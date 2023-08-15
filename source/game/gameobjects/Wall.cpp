@@ -9,7 +9,7 @@ Wall::Wall(const std::string& initSubtextureName,
 	const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	:Actor(initSubtextureName, startPosition, startSize, startRotation)
 {
-	_collider = new Physics::Collider(EObjectTypes::EOT_InteractiveObject, this, startPosition, startSize);
+	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_InteractiveObject, this, startPosition, startSize);
 }
 
 Wall::~Wall()

@@ -1,0 +1,18 @@
+#version 460
+
+in vec2 texPos;
+
+out vec4 frag_color;
+
+uniform sampler2DArray tex;
+uniform uint diffuse_layer;
+
+float getCoord(uint capacity, uint layer)
+{
+	return max(0, min(float(capacity - 1), floor(float(layer) + 0.5)));
+}
+
+void main()
+{
+	frag_color = texture(tex, vec3(texPos, getCoord(2, diffuse_layer)));
+};

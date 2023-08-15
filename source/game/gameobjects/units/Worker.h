@@ -7,7 +7,7 @@ class Worker : public Unit
 {
 public:
 	Worker(const glm::ivec2& position, const EResourceTypes& type);
-	~Worker();
+	virtual ~Worker();
 
 	virtual void Update(const float& deltaTime) override;
 

@@ -24,7 +24,7 @@ public:
 	//using Controller::Controller;
 	PlayerController();
 
-	~PlayerController();
+	virtual ~PlayerController();
 
 	void Move(float deltaTime) override;
 	void ChangeMoveVector(glm::vec2 inputVector) override;

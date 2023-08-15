@@ -23,6 +23,9 @@ source/engine/managers/RenderManager.h
 source/engine/managers/MemoryManager.h
 source/engine/AI/AStarRTS.h
 source/engine/AI/NavMesh.h
+source/engine/UI/Widget.h
+source/engine/UI/UIElement.h
+source/engine/UI/Text.h
 source/engine/controllers/Controller.h
 source/engine/controllers/PlayerController.h
 source/engine/generators/RTSMapGenerator.h
@@ -51,6 +54,9 @@ source/engine/managers/RenderManager.cpp
 source/engine/managers/MemoryManager.cpp
 source/engine/AI/AStarRTS.cpp
 source/engine/AI/NavMesh.cpp
+source/engine/UI/Widget.cpp
+source/engine/UI/UIElement.cpp
+source/engine/UI/Text.cpp
 source/engine/controllers/Controller.cpp
 source/engine/controllers/PlayerController.cpp
 source/engine/generators/RTSMapGenerator.cpp

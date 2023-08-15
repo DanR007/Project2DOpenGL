@@ -14,7 +14,7 @@ public:
 	{
 		_owner = owner;
 	}
-	~Component();
+	virtual ~Component();
 
 	inline Actor* GetOwner() const { return _owner; }
 
@@ -38,7 +38,7 @@ public:
 
 		Rotate();
 	}
-	~MovableComponent();
+	virtual ~MovableComponent();
 
 	void Attach(Actor* owner) override;
 

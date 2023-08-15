@@ -1,5 +1,6 @@
 #include "RenderManager.h"
 
+#include "EngineManager.h"
 
 #include "../renderer/TextureRender.h"
 #include "../renderer/ShaderRender.h"
@@ -32,7 +33,20 @@ void RenderManager::Update(const float& deltaTime)
 
 	for (auto it = _all_images.begin(); it != _all_images.end(); it++)
 	{
+#ifndef OLD_VERSION
+		if (GetEngine()->GetResourcesManager()->GetTexture("textureAtlas").get() == it->second->GetTexture())
+		{
+			GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader")->SetIn("diffuse_layer", 0);
+		}
+		else
+		{
+			GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader")->SetIn("diffuse_layer", 1);
+		}
+#endif // !OLD_VERSION
+
+		
 		Draw(it->second);
+
 	}
 }
 
