@@ -25,6 +25,7 @@ namespace Renderer
 		bool IsCompiled() const { return is_compiled; }
 		void Use();
 		void SetIn(const std::string& name, const GLint value);
+		void SetUInt(const std::string& name, const GLuint value);
 		void SetMatrix4(const std::string& name, const glm::mat4& matrix);
 
 		GLuint GetID() const { return ID; }

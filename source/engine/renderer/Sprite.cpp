@@ -121,5 +121,10 @@ namespace Renderer
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(textureCoords), &textureCoords);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
+	GLuint RenderImage::GetDiffuseLayer() const
+	{
+		return _texture->GetSubTexture(_subtexture_name)._layer; 
+	}
+	
 }
 

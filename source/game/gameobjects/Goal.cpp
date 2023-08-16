@@ -15,7 +15,7 @@ Goal::Goal(const std::string& initSubtextureName,
 	const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
 	:Actor(initSubtextureName, startPosition, startSize, startRotation)
 {
-	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_InteractiveObject, this, startPosition, startSize);
+	
 }
 Goal::Goal(const glm::ivec2& position) :
 	Goal("goal", GetWorld()->ConvertToWindowSpace(position), GetWorld()->GetBlockSize(), 0)

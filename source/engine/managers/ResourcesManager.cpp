@@ -61,7 +61,7 @@ std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::GetShaderProgram(cons
 	return it->second;
 }
 
-std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::string& textureName, const std::string& texturePath)
+std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::string& textureName, const std::string& texturePath, const GLuint& layer_count)
 {
 	int height, width, channels = 0;
 
@@ -73,8 +73,8 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTexture(const std::st
 
 	std::shared_ptr<Renderer::Texture2D> texture = textures_map.emplace(textureName, std::make_shared<Renderer::Texture2D>(Renderer::Texture2D(imageData,
 			width,
-			height / 2,
-			channels, GL_REPEAT, GL_NEAREST))).first->second;
+			height / layer_count,
+			channels, GL_REPEAT, GL_NEAREST, layer_count))).first->second;
 	
 
 	if (!texture)
@@ -126,29 +126,37 @@ std::string ResourcesManager::ReadShaderProgramFile(const std::string& path)
 
 std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTextureAtlas(const std::string& textureName, const std::string& texturePath,
 	const std::vector<std::string>& subTextureNamesArr,
-	const std::vector<uint8_t>& subTextureSizeArr)
+	const std::vector<uint8_t>& subTextureSizeArr, const GLuint& layer_count)
 {
 
-	auto texture = LoadTexture(textureName, texturePath);
+	auto texture = LoadTexture(textureName, texturePath, layer_count);
 
 	if (texture)
 	{
 		const unsigned int textureWidth = texture->GetWidth();
 		const unsigned int textureHeight = texture->GetHeight();
 		unsigned int offsetX = 0;
-		unsigned int offsetY = textureHeight;
+		int offsetY = textureHeight;
+		GLuint cur_layer = layer_count;
 		for (int i = 0; i < subTextureNamesArr.size(); i++)
 		{
+			if (i > 0 && subTextureSizeArr[i] != subTextureSizeArr[i - 1])
+			{
+				cur_layer--;
+			}
+
 			glm::vec2 leftBottomUV(static_cast<float>((float)offsetX / (float)textureWidth), static_cast<float>((float)(offsetY - subTextureSizeArr[i]) / (float)textureHeight));
 			glm::vec2 rightTopUV(static_cast<float>((float)(offsetX + subTextureSizeArr[i]) / (float)textureWidth), static_cast<float>((float)offsetY / (float)textureHeight));
 
-			texture->AddSubTexture(subTextureNamesArr[i], leftBottomUV, rightTopUV);
+			texture->AddSubTexture(subTextureNamesArr[i], leftBottomUV, rightTopUV, cur_layer);
 
 			offsetX += subTextureSizeArr[i];
 			if (offsetX >= textureWidth)
 			{
 				offsetX = 0;
 				offsetY -= subTextureSizeArr[i];
+				if (offsetY < 0)
+					offsetY = textureHeight;
 			}
 
 		}
@@ -205,5 +213,5 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 		sprites_size.push_back(8);
 	}
 
-	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names_texture_atlas, sprites_size);
+	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names_texture_atlas, sprites_size, GLuint(2));
 }

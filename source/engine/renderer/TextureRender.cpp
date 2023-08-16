@@ -30,7 +30,10 @@ namespace Renderer
 		}
 
 		glTexImage2D(GL_TEXTURE_2D, 0, format, tex_width, tex_height, 0, format, GL_UNSIGNED_BYTE, imageData);
-
+		for (int i = 0; i < height * width; i++)
+		{
+			std::cout << (int)imageData[i];
+		}
 		
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_mode);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_mode);
@@ -60,15 +63,19 @@ namespace Renderer
 		default:
 			format = GL_RGBA;
 		}
-		glTexStorage3D(GL_TEXTURE_2D_ARRAY, 0, format, width, height, 2);
-		for (int i = 0; i < 2; i++)
-		{
-			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, i, width, height, 1, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
-		}
+
+		glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width, height, 2);
+
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, wrap_mode);
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, wrap_mode);
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, tex_filter);
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, tex_filter);
+
+		for (int i = 0; i < 2; i++)
+		{
+			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, height * i, width, height, 2, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+		}
+		
 		
 
 		glEnable(GL_BLEND);
@@ -117,9 +124,9 @@ namespace Renderer
 #endif
 	}
 
-	void Texture2D::AddSubTexture(const std::string& name, const glm::vec2& posLeftBottomUV, const glm::vec2& posRightUpperUV)
+	void Texture2D::AddSubTexture(const std::string& name, const glm::vec2& posLeftBottomUV, const glm::vec2& posRightUpperUV, const GLuint& diffuse_layer)
 	{
-		sub_textures_map.emplace(name, SubTexture(posLeftBottomUV, posRightUpperUV));
+		sub_textures_map.emplace(name, SubTexture(posLeftBottomUV, posRightUpperUV, diffuse_layer));
 	}
 
 	const Texture2D::SubTexture& Texture2D::GetSubTexture(const std::string& name)

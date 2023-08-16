@@ -39,11 +39,11 @@ public:
 	 std::shared_ptr<Renderer::ShaderProgram> LoadShaderPrograms(const std::string& shaderName, const std::string& fragmentPath, const std::string& vertexPath);
 	 std::shared_ptr<Renderer::ShaderProgram> GetShaderProgram(const std::string& shaderName);
 
-	 std::shared_ptr<Renderer::Texture2D> LoadTexture(const std::string& textureName, const std::string& texturePath);
+	 std::shared_ptr<Renderer::Texture2D> LoadTexture(const std::string& textureName, const std::string& texturePath, const GLuint& layer_count);
 	 std::shared_ptr<Renderer::Texture2D> GetTexture(const std::string& textureName);
 	 std::shared_ptr<Renderer::Texture2D> LoadTextureAtlas(const std::string& textureName, const std::string& texturePath,
 		const std::vector<std::string>& subTextureNamesArr,
-		 const std::vector<uint8_t>& subTextureSizeArr);
+		 const std::vector<uint8_t>& subTextureSizeArr, const GLuint& layer_count);
 	
 	 void LoadAll(const std::string& executablePath);
 

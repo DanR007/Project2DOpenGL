@@ -30,23 +30,13 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 
 void RenderManager::Update(const float& deltaTime)
 {
-
 	for (auto it = _all_images.begin(); it != _all_images.end(); it++)
-	{
-#ifndef OLD_VERSION
-		if (GetEngine()->GetResourcesManager()->GetTexture("textureAtlas").get() == it->second->GetTexture())
-		{
-			GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader")->SetIn("diffuse_layer", 0);
-		}
-		else
-		{
-			GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader")->SetIn("diffuse_layer", 1);
-		}
-#endif // !OLD_VERSION
+	{	
+		it->second->GetShader()->Use();
+		it->second->GetShader()->SetUInt("diffuse_layer", it->second->GetDiffuseLayer());
+		it->second->GetTexture()->Bind();
 
-		
 		Draw(it->second);
-
 	}
 }
 
@@ -82,7 +72,6 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		matrixes[i] = matrix;
 	}
 
-	
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer_matrix);
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_DYNAMIC_DRAW);
 
@@ -105,10 +94,7 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 
 		glBindVertexArray(0);
 	}
-
-	img->GetShader()->Use();
-	img->GetTexture()->Bind();
-
+	
 	for (int i = 0; i < count; i++)
 	{
 		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());

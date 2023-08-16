@@ -11,6 +11,8 @@
 
 #include "../../../engine/AI/NavMesh.h"
 
+#include "../units/Worker.h"
+
 std::map<EBuildingType, std::string> _building_sprite_name = {
 	{EBuildingType::EBT_Lumber, "lumber"},
 	{EBuildingType::EBT_Quary, "quary"},
@@ -56,7 +58,10 @@ Building::Building(const std::string& initSubtextureName, const glm::vec2& start
 
 Building::~Building()
 {
-	
+	if (_worker)
+	{
+		_worker->Destroy();
+	}
 }
 
 void Building::Replace()

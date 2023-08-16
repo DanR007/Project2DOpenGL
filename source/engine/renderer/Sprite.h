@@ -26,6 +26,8 @@ namespace Renderer
 		inline GLuint GetVAO() { return _vertex_array_object; };
 		Texture2D* GetTexture() { return _texture.get(); }
 		ShaderProgram* GetShader() { return _shader.get(); }
+
+		GLuint GetDiffuseLayer() const;
 	private:
 		std::shared_ptr<Texture2D> _texture;
 		std::shared_ptr<ShaderProgram> _shader;

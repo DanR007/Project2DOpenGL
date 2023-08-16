@@ -57,6 +57,12 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 			glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
 			break;
 		case GLFW_KEY_W:
+			if (_building)
+			{
+				_building->Destroy();
+				_building = nullptr;
+			}
+
 			double xPos, yPos;
 			glfwGetCursorPos(currentWindow, &xPos, &yPos);
 

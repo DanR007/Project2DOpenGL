@@ -194,7 +194,7 @@ int main(int argc, char** argv)
 
 		Widget* wdg = new Widget();
 		Text* t = wdg->AddElement<Text>(glm::vec2(0), glm::vec2(35.f));
-		t->SetText("Darling " + std::to_string(10));
+		t->SetText("ab " + std::to_string(10));
 
 		while (!glfwWindowShouldClose(window))
 		{

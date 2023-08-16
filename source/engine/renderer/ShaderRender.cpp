@@ -105,6 +105,11 @@ namespace Renderer
         glUniform1i(glGetUniformLocation(ID, name.c_str()), value);
     }
 
+    void ShaderProgram::SetUInt(const std::string& name, const GLuint value)
+    {
+        glUniform1ui(glGetUniformLocation(ID, name.c_str()), value);
+    }
+
     void ShaderProgram::SetMatrix4(const std::string& name, const glm::mat4& value)
     {
         glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));

@@ -106,7 +106,10 @@
 		Object::Destroy();
 		for (Component* c : _components)
 		{
-			if(c)
+			if (c)
+			{
 				c->Destroy();
+				c = nullptr;
+			}
 		}
 	}

@@ -23,11 +23,13 @@ namespace Renderer
 
 			}
 
-			SubTexture(const glm::vec2& leftBottomUV, const glm::vec2& rightUpperUV)
-				:left_bottom_UV(leftBottomUV), right_upper_UV(rightUpperUV)
+			SubTexture(const glm::vec2& leftBottomUV, const glm::vec2& rightUpperUV, const uint8_t& layer)
+				:left_bottom_UV(leftBottomUV), right_upper_UV(rightUpperUV), _layer(layer)
 			{
 
 			}
+
+			uint8_t _layer;
 		};
 
 
@@ -48,7 +50,8 @@ namespace Renderer
 		GLuint GetHeight() const { return tex_height; }
 		GLuint GetWidth() const { return tex_width; }
 
-		void AddSubTexture(const std::string& name, const glm::vec2& posLeftBottom, const glm::vec2& posRightUpper);
+		void AddSubTexture(const std::string& name, const glm::vec2& posLeftBottom,
+			const glm::vec2& posRightUpper, const GLuint& diffuse_layer);
 		const SubTexture& GetSubTexture(const std::string& name);
 
 	protected:
