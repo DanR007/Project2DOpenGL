@@ -6,7 +6,7 @@
 namespace Renderer
 {
 	Texture2D::Texture2D(const unsigned char* imageData, const GLuint width, const GLuint height,
-		const GLuint channel, const GLenum wMode, const GLenum filter, const GLuint layer)
+		const GLuint channel, const GLenum wMode, const GLenum filter, const GLuint layer_count)
 		: tex_width(width), tex_height(height), wrap_mode(wMode), tex_filter(filter)
 	{
 #ifdef OLD_VERSION
@@ -64,16 +64,16 @@ namespace Renderer
 			format = GL_RGBA;
 		}
 
-		glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width, height, 2);
+		glTexStorage3D(GL_TEXTURE_2D_ARRAY, 1, GL_RGBA8, width, height, layer_count);
 
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_S, wrap_mode);
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_WRAP_T, wrap_mode);
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MIN_FILTER, tex_filter);
 		glTexParameteri(GL_TEXTURE_2D_ARRAY, GL_TEXTURE_MAG_FILTER, tex_filter);
 
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < layer_count; i++)
 		{
-			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, 0, height * i, width, height, 2, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
+			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, height * i, 0, width, height, layer_count, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 		}
 		
 		
