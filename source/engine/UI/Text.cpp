@@ -36,7 +36,7 @@ void Text::UpdateText()
 	for (int i = 0; i < _text_string.size(); i++)
 	{
 		glm::vec2 position = _world_position + glm::vec2(_symbol_size.x * float(i), 0.f) + glm::vec2(float(i) * 2.f, 0.f);
-		Renderer::Sprite* spr = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, position, _symbol_size, _text_string.substr(i, 1), "textureAtlas");
+		Renderer::Sprite* spr = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, position, _symbol_size, _text_string.substr(i, 1), "textureAtlas", _layer);
 		_symbol_sprites.push_back(spr);
 	}
 

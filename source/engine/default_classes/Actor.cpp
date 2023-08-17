@@ -12,7 +12,7 @@
 	{
 		if (!initSubtextureName.empty())
 		{
-			_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, startPosition, startSize, initSubtextureName, "textureAtlas", startRotation);
+			_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, startPosition, startSize, initSubtextureName, "textureAtlas", 0, startRotation);
 			_components.push_back(_anim_sprite);
 		}
 		else

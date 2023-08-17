@@ -192,13 +192,8 @@ int main(int argc, char** argv)
 
 		auto lastTime = std::chrono::steady_clock::now();
 
-		Widget* wdg = new Widget();
-		Text* t = wdg->AddElement<Text>(glm::vec2(0), glm::vec2(35.f));
-		t->SetText("ab " + std::to_string(10));
-
 		while (!glfwWindowShouldClose(window))
 		{
-
 			glClear(GL_COLOR_BUFFER_BIT);
 			auto currentTime = std::chrono::steady_clock::now();
 			float duration = float(double(std::chrono::steady_clock::duration(currentTime - lastTime).count()) / 1e9);
@@ -212,7 +207,7 @@ int main(int argc, char** argv)
 		}
 #endif // PLAY_IN_EDITOR
 	}
-	//delete window;
+
 	delete engine;
 	glfwTerminate();
 	_CrtDumpMemoryLeaks();

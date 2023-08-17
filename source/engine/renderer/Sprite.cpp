@@ -44,15 +44,17 @@ namespace Renderer
 	}
 
 
-	RenderImage::RenderImage(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader, const std::string& initialSubtextureName):
-		_texture(texture), _shader(shader), _subtexture_name(initialSubtextureName)
+	RenderImage::RenderImage(std::shared_ptr<Texture2D> texture, std::shared_ptr<ShaderProgram> shader, const std::string& initialSubtextureName, const uint8_t& render_layer):
+		_texture(texture), _shader(shader), _subtexture_name(initialSubtextureName), _render_layer(render_layer)
 	{
+		auto subTexture = texture->GetSubTexture(initialSubtextureName);
+
 		GLfloat vertex_buffer[] =
 		{
-			0.f, 0.f,//left bottom
-			0.f, 1.f,//left top
-			1.f, 0.f,//right bottom
-			1.f, 1.f,//right top
+			0.f, 0.f, //left bottom
+			0.f, 1.f, //left top
+			1.f, 0.f, //right bottom
+			1.f, 1.f, //right top
 		};
 
 		GLuint element_buffer[] =
@@ -60,8 +62,7 @@ namespace Renderer
 			0, 1, 3,//first triangle
 			0, 2, 3//second triangle
 		};
-
-		auto subTexture = texture->GetSubTexture(initialSubtextureName);
+		
 		//coordinates that will be use in sprite 
 		//if > 1.f textures will repeat otherwise it will be crop
 		GLfloat tex_buffer[] =

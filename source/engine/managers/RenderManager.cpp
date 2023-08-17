@@ -7,36 +7,42 @@
 
 #include <algorithm>
 
+bool cmp(Renderer::RenderImage* a, Renderer::RenderImage* b)
+{
+	return a->GetRenderLayer() < b->GetRenderLayer();
+}
+
 RenderManager::~RenderManager()
 {
 	//clear all dynamic memoru which we add to images
-	auto it = _all_images.begin();
-	for (; it != _all_images.end(); )
+	auto it = _map_all_images.begin();
+	for (; it != _map_all_images.end(); )
 	{
 		_all_sprites[it->second].clear();
 		_all_sprites[it->second].~vector();
 
 		delete it->second;
-		it = _all_images.erase(it);
+		it = _map_all_images.erase(it);
 	}
 
 	ClearBuffer();
 }
 
-Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initialSubtextureName)
+Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::Texture2D> texture,
+	std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initialSubtextureName, const uint8_t& render_layer)
 {
-	return _all_images.emplace(std::make_pair(initialSubtextureName, new Renderer::RenderImage(texture, shader, initialSubtextureName))).first->second;
+	return _map_all_images.emplace(std::make_pair(initialSubtextureName, new Renderer::RenderImage(texture, shader, initialSubtextureName, render_layer))).first->second;
 }
 
 void RenderManager::Update(const float& deltaTime)
 {
 	for (auto it = _all_images.begin(); it != _all_images.end(); it++)
 	{	
-		it->second->GetShader()->Use();
-		it->second->GetShader()->SetUInt("diffuse_layer", it->second->GetDiffuseLayer());
-		it->second->GetTexture()->Bind();
+		(*it)->GetShader()->Use();
+		(*it)->GetShader()->SetUInt("diffuse_layer", (*it)->GetDiffuseLayer());
+		(*it)->GetTexture()->Bind();
 
-		Draw(it->second);
+		Draw(*it);
 	}
 }
 
@@ -120,6 +126,11 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 	_sprites.clear();
 
 	glActiveTexture(GL_TEXTURE0);
+}
+
+void RenderManager::SortImages()
+{
+	std::sort(_all_images.begin(), _all_images.end(), cmp);
 }
 
 void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img)

@@ -18,14 +18,17 @@ namespace Renderer
 	class RenderImage
 	{
 	public:
-		RenderImage(std::shared_ptr<Texture2D> texture, std::shared_ptr <ShaderProgram> shader, const std::string& initialSubtextureName);
+		/*render_layer for game actors is 0, for UI background is 1, for text and images 2*/
+		RenderImage(std::shared_ptr<Texture2D> texture, std::shared_ptr <ShaderProgram> shader, 
+			const std::string& initialSubtextureName, const uint8_t& render_layer);
 		~RenderImage();
 
 		void SetNewImage(const std::string& newSubtextureName);
 
 		inline GLuint GetVAO() { return _vertex_array_object; };
-		Texture2D* GetTexture() { return _texture.get(); }
-		ShaderProgram* GetShader() { return _shader.get(); }
+		inline Texture2D* GetTexture() { return _texture.get(); }
+		inline ShaderProgram* GetShader() { return _shader.get(); }
+		inline uint8_t GetRenderLayer() const { return _render_layer; }
 
 		GLuint GetDiffuseLayer() const;
 	private:
@@ -35,6 +38,8 @@ namespace Renderer
 		std::string _subtexture_name;
 	public:
 		GLuint _vertex_array_object, _texture_buffer_object, _vertex_buffer_object, _element_buffer_object;
+
+		uint8_t _render_layer;
 	};
 
 	class Sprite : public MovableComponent

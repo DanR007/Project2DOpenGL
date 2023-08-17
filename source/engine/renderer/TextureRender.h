@@ -18,7 +18,7 @@ namespace Renderer
 			glm::vec2 left_bottom_UV, right_upper_UV;
 
 			SubTexture()
-				: left_bottom_UV(0.f), right_upper_UV(1.f)
+				: left_bottom_UV(0.f), right_upper_UV(1.f), _layer(0)
 			{
 
 			}
