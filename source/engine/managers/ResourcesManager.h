@@ -13,7 +13,6 @@
 #define TEXTURE_FRAGMENT_SHADER_PATH "resources/shaders/textureFragmentShader.txt"
 #define SPRITE_VERTEX_SHADER_PATH "resources/shaders/spriteVertexShader.txt"
 #define SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/spriteFragmentShader.txt"
-#define NEW_SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/newSpriteFragmentShader.txt"
 
 namespace Renderer
 {
