@@ -169,12 +169,8 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	exe_path = executablePath.substr(0, find);
 
 	LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
-
-#ifdef OLD_VERSION
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
-#else
-	LoadShaderPrograms("spriteShader", NEW_SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
-#endif
+
 
 	
 
