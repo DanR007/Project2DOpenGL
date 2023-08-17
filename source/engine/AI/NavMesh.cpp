@@ -74,7 +74,7 @@ Resource* NavMeshRTS::GetNearestResource(const glm::ivec2& position, const EReso
 	std::queue<Cell*> q;
 
 	std::vector<Cell*> cells;
-	q.push(_map[position.y][position.x]);
+	q.push(start);
 	Cell* current;
 
 	cells.push_back(current);

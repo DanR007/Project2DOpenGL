@@ -43,8 +43,6 @@ public:
 		if (dynamic_cast<Actor*>(new_actor))
 			_all_actors.emplace(_all_actors.end(), new_actor);
 
-		GetEngine()->GetMemoryManager()->AddObject(new_actor);
-
 		return new_actor;
 	}
 	template<typename T>
@@ -55,7 +53,6 @@ public:
 		if (dynamic_cast<Actor*>(new_actor))
 			_all_actors.emplace(_all_actors.end(), new_actor);
 
-		GetEngine()->GetMemoryManager()->AddObject(new_actor);
 		return new_actor;
 
 	}

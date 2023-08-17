@@ -112,4 +112,5 @@
 				c = nullptr;
 			}
 		}
+		_components.clear();
 	}

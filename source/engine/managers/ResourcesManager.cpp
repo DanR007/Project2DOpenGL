@@ -183,9 +183,9 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	GetShaderProgram("spriteShader")->Use();
 	GetShaderProgram("spriteShader")->SetIn("tex", 0);
 	GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
-	std::vector<std::string> names_texture_atlas_not_font = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
+	std::vector<std::string> names_texture_atlas = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
 										"fullHeart", "emptyHeart", "lumber", "stoneWall", "quary", "smth", "idk"};
-	std::vector<std::string> names_texture_atlas;
+
 	std::vector<std::string> font_names;
 	for (int i = 0; i < 26; i++)
 	{
@@ -202,27 +202,22 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	names_texture_atlas.push_back("background");
 	names_texture_atlas.push_back(" ");
 
-	while (names_texture_atlas.size() != 64)
+	while (names_texture_atlas.size() != 80)
 	{
 		names_texture_atlas.push_back("");
 	}
 
-	for (int i = 0; i < names_texture_atlas_not_font.size(); i++)
-	{
-		names_texture_atlas.push_back(names_texture_atlas_not_font[i]);
-	}
-
 	std::vector<uint8_t> sprites_size;
 
-	for (int i = 0; i < 64; i++)
-	{
-		sprites_size.push_back(8);
-	}
+	
 	for (int i = 0; i < 16; i++)
 	{
 		sprites_size.push_back(16);
 	}
-	
+	for (int i = 0; i < 64; i++)
+	{
+		sprites_size.push_back(8);
+	}
 
 	LoadTextureAtlas("textureAtlas", "resources/textures/mushroom.png", names_texture_atlas, sprites_size, GLuint(2));
 }
