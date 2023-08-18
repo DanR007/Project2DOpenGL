@@ -7,6 +7,7 @@
 
 #include "../../../engine/AI/NavMesh.h"
 #include "../../../engine/controllers/Controller.h"
+#include "../../../engine/controllers/PlayerController.h"
 
 Worker::Worker(const glm::ivec2& position, const EResourceTypes& type):
 	Unit(position)
@@ -41,6 +42,8 @@ void Worker::Work(const float& deltaTime)
 #ifdef DEBUG
 			std::cout << "Worker is brought 10 resources" << std::endl;
 #endif
+			GetEngine()->GetWorld()->GetPlayerController(_player_id)->AddResource(_collectable_type, _resource_count);
+
 			_returning = false;
 			_resource_count = 0;
 

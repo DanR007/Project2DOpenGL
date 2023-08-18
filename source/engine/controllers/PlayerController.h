@@ -6,6 +6,8 @@
 
 #include "../Delegate.h"
 
+#include "../../game/ResourceTypes.h"
+
 #include <string>
 #include <map>
 #include <iostream>
@@ -18,11 +20,37 @@ namespace Game
 class Unit;
 class Building;
 
+class Widget;
+class Text;
+
+struct ResourceStock
+{
+	ResourceStock(Text* text, const size_t& count, const EResourceTypes& type):
+		_text(text), _count(count), _type(type)
+	{
+		
+	}
+
+	bool operator==(const ResourceStock& res)
+	{
+		return _type == res._type;
+	}
+	bool operator==(const EResourceTypes& res)
+	{
+		return _type == res;
+	}
+
+	Text* _text;
+	size_t _count;
+	EResourceTypes _type;
+};
+
 class PlayerController : public Controller
 {
 public:
 	//using Controller::Controller;
-	PlayerController();
+	PlayerController(uint8_t id);
+	PlayerController(uint8_t id, Widget* widget);
 
 	virtual ~PlayerController();
 
@@ -34,6 +62,10 @@ public:
 	void CursorMove(GLFWwindow* currentWindow, double xPos, double yPos);
 
 	void SetupDefaultFunctions();
+
+	void SetWidget(Widget* widget);
+
+	inline Widget* GetWidget() { return _widget; }
 
 	template<class C, class M>
 	void SetAction(const std::string& name, C* own_class, M method)
@@ -63,15 +95,26 @@ public:
 
 		it->second(argument);
 	}
+
+	void AddResource(const EResourceTypes& type, const size_t& count);
+	void MinusResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
+	
 protected:
+	bool EnoughResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
+
 	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _offset;
 
 	Unit* _unit = nullptr;
 	Building* _building = nullptr;
 
+	uint8_t _id;
 
 	std::map<std::string, Delegate> _delegates_functions;
 
 	std::vector<Unit*> _choicing_units;
+
+	std::vector<ResourceStock> _resource_stocks;
+
+	Widget* _widget;
 };

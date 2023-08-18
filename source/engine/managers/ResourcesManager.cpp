@@ -1,4 +1,6 @@
 #include "ResourcesManager.h"
+#include "RenderManager.h"
+#include "EngineManager.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STBI_ONLY_PNG
@@ -156,7 +158,6 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTextureAtlas(const st
 				offsetX = 0;
 				offsetY -= subTextureSizeArr[i];
 			}
-
 		}
 	}
 	return texture;
@@ -170,8 +171,6 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 
 	LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
-
-
 	
 
 	glm::mat4 projectionMatrix = glm::ortho(0.f, static_cast<float>(window_size.x), 0.f, static_cast<float>(window_size.y), -100.f, 100.f);

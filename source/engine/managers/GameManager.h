@@ -91,7 +91,7 @@ public:
 	glm::ivec2 ConvertToMapSpace(const glm::vec2& position_in_window);
 	glm::ivec2 ConvertToMapSpace(const float& x, const float& y);
 
-	PlayerController* GetPlayerController() { return _player_controller; }
+	PlayerController* GetFirstPlayerController() { return _player_controller; }
 	PlayerController* GetPlayerController(const unsigned short int& id) { return _controllers[id]; }
 
 	std::vector<Actor*> GetActors() { return _all_actors; }

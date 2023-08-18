@@ -17,6 +17,7 @@ public:
 	}
 	~RenderManager();
 
+	/*render_layer for game actors is 0, for UI background is 1, for text and images 2*/
 	template<typename T>
 	T* CreateSprite(Actor* owner, const glm::vec2& position, const glm::vec2& size, const std::string& initSpriteName, 
 		const std::string& texture_atlas_name = "textureAtlas", const uint8_t& layer = 0, const float& rotation = 0.f)
@@ -28,9 +29,9 @@ public:
 		{
 			std::cout << "Can't find image with this init sprite name: " + initSpriteName << std::endl;
 			std::cout << "Create new" << std::endl;
-
-			_all_images.push_back(CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name), 
-				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, layer));
+			Renderer::RenderImage* img = CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
+				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, layer);
+			_all_images.push_back(img);
 			SortImages();
 		}
 

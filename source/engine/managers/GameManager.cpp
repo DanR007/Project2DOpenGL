@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "EngineManager.h"
+#include "HUDManager.h"
 
 #include "../physics/Collider.h"
 
@@ -15,13 +16,17 @@
 #include "../../game/gameobjects/static/Stone.h"
 #include "../../game/gameobjects/static/Wood.h"
 
+#include "../UI/Widget.h"
+#include "../UI/Text.h"
+#include "../UI/Panel.h"
+
 #include <numeric>
 
 GameManager::GameManager()
 {
 	_nav_mesh = new NavMeshRTS();
 
-	_size_map = glm::ivec2(200);
+	_size_map = glm::ivec2(10);
 }
 
 GameManager::~GameManager()
@@ -107,7 +112,9 @@ void GameManager::BeginPlay()
 
 	_block_size = glm::vec2(45.f);
 
-	_player_controller = new PlayerController();
+	Widget* wdg = GetEngine()->GetHUDManager()->CreateWidget();
+
+	_player_controller = new PlayerController(0, wdg);
 
 	_controllers.push_back(_player_controller);
 

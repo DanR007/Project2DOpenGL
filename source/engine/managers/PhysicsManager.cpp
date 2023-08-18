@@ -74,13 +74,13 @@ namespace Physics
 
 	void PhysicsManager::Update()
 	{
-		std::thread t1 = std::thread(&Physics::PhysicsManager::Multithreading, this, 0, _all_colliders.size() / 3);
+		/*std::thread t1 = std::thread(&Physics::PhysicsManager::Multithreading, this, 0, _all_colliders.size() / 3);
 		std::thread t2 = std::thread(&Physics::PhysicsManager::Multithreading, this, _all_colliders.size() / 3, 2 * _all_colliders.size() / 3);
 		std::thread t3 = std::thread(&Physics::PhysicsManager::Multithreading, this, 2 * _all_colliders.size() / 3, _all_colliders.size());
 
 		t1.join();
 		t2.join();
-		t3.join();
+		t3.join();*/
 	}
 
 	bool PhysicsManager::Raycast(RaycastResult& result, const glm::vec2& start, const glm::vec2& end, const ERaycastTypes& raycast_type, Actor* self, bool ignore_self)

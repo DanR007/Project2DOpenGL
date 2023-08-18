@@ -31,7 +31,10 @@ RenderManager::~RenderManager()
 Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::Texture2D> texture,
 	std::shared_ptr<Renderer::ShaderProgram> shader, const std::string& initialSubtextureName, const uint8_t& render_layer)
 {
-	return _map_all_images.emplace(std::make_pair(initialSubtextureName, new Renderer::RenderImage(texture, shader, initialSubtextureName, render_layer))).first->second;
+	Renderer::RenderImage* img = new Renderer::RenderImage(texture, shader, initialSubtextureName, render_layer);
+	_map_all_images.emplace(std::make_pair(initialSubtextureName, img)).first->second;
+
+	return img;
 }
 
 void RenderManager::Update(const float& deltaTime)

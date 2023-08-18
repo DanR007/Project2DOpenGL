@@ -12,6 +12,7 @@ namespace Physics
 }
 class RenderManager;
 class ResourcesManager;
+class HUDManager;
 
 class EngineManager
 {
@@ -27,6 +28,7 @@ public:
 	inline MemoryManager* GetMemoryManager() { return _memory; }
 	inline Physics::PhysicsManager* GetPhysicsManager() { return _physics; }
 	inline ResourcesManager* GetResourcesManager() { return _resources; }
+	inline HUDManager* GetHUDManager() { return _hud; }
 private:
 	const float c_tick_before_check_physics = 0.2f;
 	float _tick_check_physics = 0.f;
@@ -38,4 +40,5 @@ private:
 	Physics::PhysicsManager* _physics = nullptr;
 	RenderManager* _render = nullptr;
 	ResourcesManager* _resources = nullptr;
+	HUDManager* _hud = nullptr;
 };

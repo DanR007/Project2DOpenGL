@@ -2,6 +2,7 @@
 
 #include "../managers/PhysicsManager.h"
 #include "../managers/GameManager.h"
+#include "../managers/HUDManager.h"
 
 #include "../AI/NavMesh.h"
 
@@ -10,7 +11,18 @@
 
 #include "../../game/gameobjects/buildings/Lumber.h"
 
-PlayerController::PlayerController()
+#include "../UI/Widget.h"
+#include "../UI/Text.h"
+#include "../UI/Panel.h"
+
+std::map<EResourceTypes, std::string> _resource_names =
+{
+	{EResourceTypes::ERT_Wood, "Wood"},
+	{EResourceTypes::ERT_Stone, "Stone"},
+	{EResourceTypes::ERT_Gold, "Gold"}
+};
+
+PlayerController::PlayerController(uint8_t id) : _id(id)
 { 
 	SetupDefaultFunctions();
 
@@ -23,6 +35,47 @@ PlayerController::PlayerController()
 	GetWorld()->SetOffset(_offset);
 
 	_move_speed = 20.f;
+
+	_widget = GetEngine()->GetHUDManager()->CreateWidget();
+
+	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 5.f));
+
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(20.f), glm::vec2(35.f)), 10, EResourceTypes::ERT_Wood)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Wood] + " " + std::to_string(10));
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(35.f * 12, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Stone)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Stone] + " " + std::to_string(0));
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(35.f * 24, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Gold)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
+}
+
+PlayerController::PlayerController(uint8_t id, Widget* widget): _widget(widget), _id(id)
+{
+	SetupDefaultFunctions();
+
+	glm::ivec2 size = GetWorld()->GetSizeMap();
+	glm::vec2 block_size = GetWorld()->GetBlockSize();
+
+	//offset is map_coord (multiply by block_size) - window_coord
+	_offset = glm::vec2(float(size.x) / 2 * block_size.x, float(size.y) / 2 * block_size.y) - glm::vec2(window_size / 2);
+
+	GetWorld()->SetOffset(_offset);
+
+	_move_speed = 20.f;
+
+	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 5.f));
+
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(20.f), glm::vec2(35.f)), 10, EResourceTypes::ERT_Wood)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Wood] + " " + std::to_string(10));
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(35.f * 12, 20.f), glm::vec2(35.f)), 20, EResourceTypes::ERT_Stone)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Stone] + " " + std::to_string(20));
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(35.f * 24, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Gold)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
 }
 
 PlayerController::~PlayerController()
@@ -69,6 +122,8 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 			yPos = window_size.y - yPos;
 			glm::ivec2 pivot_pos = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(yPos));
 			_building = GetEngine()->GetWorld()->SpawnActor<Lumber>(pivot_pos);
+			_building->SetPlayerID(_id);
+
 			break;
 		case GLFW_KEY_S:
 			
@@ -134,7 +189,7 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 				if (_unit)
 					_unit->SetSelected(_unit == unit);
 
-				if (unit)
+				if (unit && unit->GetID() == _id)
 				{
 					_unit = unit;
 					_unit->SetSelected(true);
@@ -142,8 +197,9 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			}
 			else
 			{
-				if (_building->CanReplace())
+				if (EnoughResources(_building->GetCost()) && _building->CanReplace())
 				{
+					MinusResources(_building->GetCost());
 					_building->Replace();
 					_building = nullptr;
 				}
@@ -236,5 +292,46 @@ void PlayerController::CursorMove(GLFWwindow* currentWindow, double xPos, double
 void PlayerController::SetupDefaultFunctions()
 {
 	//SetAction("MoveForward", this, &PlayerController::ChangeMoveVector);
+}
+
+void PlayerController::SetWidget(Widget* widget)
+{
+	_widget = widget;
+}
+
+void PlayerController::AddResource(const EResourceTypes& type, const size_t& count)
+{
+	auto it = std::find(_resource_stocks.begin(), _resource_stocks.end(), ResourceStock(nullptr, count, type));
+	it->_count += count;
+	it->_text->SetText(_resource_names[type] + " " + std::to_string(it->_count));
+}
+
+void PlayerController::MinusResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources)
+{
+	for (ResourceStock& res : _resource_stocks)
+	{
+		for (std::pair<EResourceTypes, size_t> resource : resources)
+		{
+			if (res == resource.first)
+			{
+				res._count -= resource.second;
+				res._text->SetText(_resource_names[res._type] + " " + std::to_string(res._count));
+			}
+		}
+	}
+}
+
+bool PlayerController::EnoughResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources)
+{
+	for (ResourceStock res : _resource_stocks)
+	{
+		for (std::pair<EResourceTypes, size_t> resource : resources)
+		{
+			if(res == resource.first && res._count < resource.second)
+				return false;
+		}
+	}
+
+	return true;
 }
 

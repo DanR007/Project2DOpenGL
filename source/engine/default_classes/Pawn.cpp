@@ -57,3 +57,10 @@
 			_controller = nullptr;
 		}
 	}
+
+	std::vector<std::pair<EResourceTypes, size_t>> Pawn::GetCost() const
+	{
+		if (_cost.empty())
+			std::cout << "Cost is empty\n";
+		return _cost;
+	}

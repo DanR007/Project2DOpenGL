@@ -110,21 +110,21 @@ void glfwWindowSizeCallback(GLFWwindow* currentWindow, int size_x, int size_y)
 
 void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
 {
-	PlayerController* controller = GetWorld()->GetPlayerController();
+	PlayerController* controller = GetWorld()->GetFirstPlayerController();
 	if(controller)
 		controller->InputKeyboard(currentWindow, key, scancode, action, mode);
 }
 
 void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode)
 {
-	PlayerController* controller = GetWorld()->GetPlayerController();
+	PlayerController* controller = GetWorld()->GetFirstPlayerController();
 	if(controller)
 		controller->InputMouse(currentWindow, button, action, mode);
 }
 
 void glfwCursorPosCallback(GLFWwindow* currentWindow, double xPos, double yPos)
 {
-	PlayerController* controller = GetWorld()->GetPlayerController();
+	PlayerController* controller = GetWorld()->GetFirstPlayerController();
 	if (controller)
 		controller->CursorMove(currentWindow, xPos, yPos);
 }

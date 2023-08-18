@@ -2,7 +2,7 @@
 
 #include "UIElement.h"
 
-Widget::Widget()
+Widget::Widget():Component()
 {
 }
 

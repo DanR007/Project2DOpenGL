@@ -31,6 +31,7 @@ public:
 		return _ui_elements[index];
 	}
 
+	UIElement* GetElement(int index) { return _ui_elements[index]; }
 private:
 	std::vector<UIElement*> _ui_elements;
 };

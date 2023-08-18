@@ -2,6 +2,7 @@
 #include "EngineManager.h"
 #include "GameManager.h"
 #include "RenderManager.h"
+#include "HUDManager.h"
 
 #include "../default_classes/Object.h"
 #include "../default_classes/Actor.h"
@@ -11,6 +12,8 @@
 #include "../physics/Collider.h"
 
 #include "../../main.h"
+
+#include "../UI/Widget.h"
 
 MemoryManager::~MemoryManager()
 {
@@ -41,6 +44,10 @@ void MemoryManager::Update()
 			if (dynamic_cast<Physics::Collider*>(*it))
 			{
 				GetEngine()->GetPhysicsManager()->Erase(dynamic_cast<Physics::Collider*>(*it));
+			}
+			if (dynamic_cast<Widget*>(*it))
+			{
+				GetEngine()->GetHUDManager()->Erase(dynamic_cast<Widget*>(*it));
 			}
 
 			delete (*it);

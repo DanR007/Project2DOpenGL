@@ -5,6 +5,7 @@
 #include "PhysicsManager.h"
 #include "MemoryManager.h"
 #include "RenderManager.h"
+#include "HUDManager.h"
 
 #include <thread>
 
@@ -15,6 +16,7 @@ EngineManager::EngineManager(char **argv)
 	_render = new RenderManager();
 	_memory = new MemoryManager();
 	_resources = new ResourcesManager();
+	_hud = new HUDManager();
 
 	LoadResources(argv);
 }
@@ -46,6 +48,11 @@ EngineManager::~EngineManager()
 		delete _resources;
 		_resources = nullptr;
 	}
+	if (_hud)
+	{
+		delete _hud;
+		_hud = nullptr;
+	}
 }
 
 void EngineManager::Begin()
@@ -60,8 +67,9 @@ void EngineManager::Update(const float& deltaTime)
 
 	{
 		_render->Update(deltaTime);
-		std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
-		t1.join();
+		_game->Update(deltaTime);
+		/*std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
+		t1.join();*/
 	}
 	_memory->Update();
 }
