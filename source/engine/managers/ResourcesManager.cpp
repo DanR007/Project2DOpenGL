@@ -42,7 +42,6 @@ std::shared_ptr<Renderer::ShaderProgram> ResourcesManager::LoadShaderPrograms(co
 
 	if (shaderProgram->IsCompiled())
 	{
-
 		return shaderProgram;
 	}
 
@@ -165,11 +164,17 @@ std::shared_ptr<Renderer::Texture2D> ResourcesManager::LoadTextureAtlas(const st
 
 void ResourcesManager::LoadAll(const std::string& executablePath)
 {
-	std::size_t find = executablePath.find_last_of("/\\");
+	std::size_t find;
+	#ifndef __linux__
+	find = executablePath.find_last_of("/\\");
+	#else
+	find = executablePath.find_last_of("/");
 
+	#endif // ifndef __linux__
 	exe_path = executablePath.substr(0, find);
+	std::cout << exe_path << std::endl;
 
-	LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
+	//LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
 	
 

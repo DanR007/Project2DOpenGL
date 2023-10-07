@@ -73,7 +73,8 @@ struct PathCell
 	void SetCost(const float& c) { _cost = c; }
 	void SetLength(const float& l) { _length = l; }
 	void SetPrev(PathCell* c) { _prev = std::move(c); }
-	void SetDistance(const glm::ivec2& point) { _distance = std::sqrtf(std::powf(float(point.x - _cell->_position.x), 2) + std::powf(float(point.y - _cell->_position.y), 2)); }
+	void SetDistance(const glm::ivec2& point) { _distance = std::sqrt(std::pow(float(point.x - _cell->_position.x), 2) 
+	+ std::pow(float(point.y - _cell->_position.y), 2)); }
 	void SetDirection(const glm::ivec2& dir) { _dir = dir; }
 
 	void CalculateCost() { _cost = _length + _distance; }

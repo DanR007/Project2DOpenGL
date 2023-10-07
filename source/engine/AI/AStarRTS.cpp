@@ -11,6 +11,11 @@
 #include <iostream>
 #include <queue>
 
+#ifdef __linux__
+#include <algorithm>
+#include <float.h>
+#endif //__linux__
+
 AStarRTS::AStarRTS()
 {
 	_nav_mesh = GetWorld()->GetNavMesh();
@@ -38,7 +43,7 @@ std::vector<PathCell*>::iterator Find(std::vector<PathCell*>::iterator s, std::v
 
 float GetLengthTurn(const glm::ivec2& dir, Cell* cell)
 {
-	return std::sqrtf(std::powf(cell->_cost, 2) * std::fabs(dir.x) + std::powf(cell->_cost, 2) * std::fabs(dir.y));
+	return std::sqrt(std::pow(cell->_cost, 2) * std::abs(dir.x) + std::pow(cell->_cost, 2) * std::abs(dir.y));
 }
 
 Goal* AStarRTS::DevelopPath(const glm::ivec2& start, Cell* target)

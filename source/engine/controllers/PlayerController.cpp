@@ -15,6 +15,10 @@
 #include "../UI/Text.h"
 #include "../UI/Panel.h"
 
+#ifdef __linux__
+#include <algorithm>
+#endif
+
 std::map<EResourceTypes, std::string> _resource_names =
 {
 	{EResourceTypes::ERT_Wood, "Wood"},
@@ -104,10 +108,13 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 	switch (action)
 	{
 	case GLFW_PRESS:
+	{
 		switch (key)
 		{
 		case GLFW_KEY_ESCAPE:
-			glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
+			{
+				glfwSetWindowShouldClose(currentWindow, GLFW_TRUE);
+			}
 			break;
 		case GLFW_KEY_W:
 			if (_building)
@@ -125,36 +132,21 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 			_building->SetPlayerID(_id);
 
 			break;
-		case GLFW_KEY_S:
-			
-			break;
-		case GLFW_KEY_D:
-			
-			break;
-		case GLFW_KEY_A:
-			
-			break;
 		}
-		break;
+	}
+	break;
 	case GLFW_RELEASE:
+	{
 		switch (key)
 		{
-		case GLFW_KEY_W:
-			
-			break;
-		case GLFW_KEY_S:
-			
-			break;
-		case GLFW_KEY_D:
-		
-			break;
-		case GLFW_KEY_A:
-			
-			break;
-		}
-		break;
-	case GLFW_REPEAT:
 
+		}
+	}
+	break;
+	case GLFW_REPEAT:
+		{
+
+		}
 		break;
 	}
 }

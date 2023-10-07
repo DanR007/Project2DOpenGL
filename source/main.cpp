@@ -1,3 +1,4 @@
+#ifndef __linux__
 #define _CRTDBG_MAP_ALLOC
 #include <cstdlib>
 #include <crtdbg.h>
@@ -9,7 +10,7 @@
 #else
 #define DBG_NEW new
 #endif
-
+#endif //__linux__
 #include "main.h"
 #include "AllTestCases.h"
 
@@ -210,6 +211,8 @@ int main(int argc, char** argv)
 
 	delete engine;
 	glfwTerminate();
+#ifndef __linux__
 	_CrtDumpMemoryLeaks();
+#endif //__linux__
 	return 0;
 }

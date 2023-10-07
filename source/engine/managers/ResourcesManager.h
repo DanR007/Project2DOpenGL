@@ -11,9 +11,13 @@
 #define DEFAULT_FRAGMENT_SHADER_PATH "resources/shaders/defFragmentShader.txt"
 #define TEXTURE_VERTEX_SHADER_PATH "resources/shaders/textureVertexShader.txt"
 #define TEXTURE_FRAGMENT_SHADER_PATH "resources/shaders/textureFragmentShader.txt"
+#ifndef __linux__
 #define SPRITE_VERTEX_SHADER_PATH "resources/shaders/spriteVertexShader.txt"
 #define SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/spriteFragmentShader.txt"
-
+#else
+#define SPRITE_VERTEX_SHADER_PATH "resources/shaders/linux/spriteVertexShader"
+#define SPRITE_FRAGMENT_SHADER_PATH "resources/shaders/linux/spriteFragmentShader"
+#endif
 namespace Renderer
 {
 	class ShaderProgram;

@@ -16,11 +16,11 @@ public: Arguments(T1 i_arg1) :
 public: T1 arg1;
 };
 
-//  Контейнер для хранения указателя на метод.
+//  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ.
 class IContainer { public: virtual void Call(IArguments*) = 0; };
 template< class Obj, class M > class Container : public IContainer {};
 
-//  Специализация для метода без аргументов.
+//  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 template< class Obj >
 class Container< Obj, void (Obj::*)(void) > : public IContainer
 {
@@ -52,7 +52,7 @@ private:
 	M _method;
 	Obj* _object;
 };
-//  Собственно делегат.
+//  пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 class Delegate
 {
 public:
@@ -68,13 +68,27 @@ m_container = new Container< T, U >(i_class, i_method);
 void operator()()
 {
 	if (m_container)
-m_container->Call(&Arguments<>());
+	{
+#ifdef __linux__
+		auto arg = Arguments<>();
+		m_container->Call(&arg);
+#else //__linux__
+		m_container->Call(&Arguments<>());
+#endif//__linux__
+	}
 }
 
 template< class T1 > void operator()(T1 i_arg1)
 {
 	if(m_container)
-m_container->Call(&Arguments< T1 >(i_arg1));
+	{
+#ifdef __linux__
+		auto arg = Arguments<T1>(i_arg1);
+		m_container->Call(&arg);
+#else //__linux__
+		m_container->Call(&Arguments< T1 >(i_arg1));
+#endif//__linux__
+	}
 }
 
 private:

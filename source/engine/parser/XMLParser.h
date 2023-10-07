@@ -48,6 +48,7 @@ class XMLAttribute
 {
 public:
     XMLAttribute(const std::string& attribute);
+    XMLAttribute() { _attribute_data = ""; }
 
     std::string GetData() const { return _attribute_data; }
 private:

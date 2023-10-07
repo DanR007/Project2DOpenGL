@@ -15,6 +15,10 @@
 
 #include "../../game/gameobjects/Unit.h"
 
+#ifdef __linux__
+#include <float.h>
+#include <algorithm>
+#endif //__linux__
 
 namespace Physics
 {

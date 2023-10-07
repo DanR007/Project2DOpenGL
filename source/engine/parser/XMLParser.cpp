@@ -66,7 +66,7 @@ XMLAttribute XMLElement::GetAttribute(const std::string& attribute_name)
 	if (it == attribute_map.end())
 	{
 		std::cerr << "Can not find attribute with name: " + attribute_name << std::endl;
-		return NULL;
+		return XMLAttribute();
 	}
 
 	return it->second;

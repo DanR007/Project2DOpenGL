@@ -7,6 +7,10 @@
 #include <queue>
 #include <iostream>
 
+#ifdef __linux__
+#include <algorithm>
+#endif //__linux__
+
 #include "../../game/ResourceTypes.h"
 #include "../../game/gameobjects/Resource.h"
 

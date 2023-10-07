@@ -1,5 +1,11 @@
 #pragma once
 
+#ifndef __linux__
+	#define FLT_MAX FLT_MAX
+#else
+	#define FLT_MAX __FLT_MAX__
+#endif
+
 #include <glm/vec2.hpp>
 
 class Actor;

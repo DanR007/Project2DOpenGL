@@ -8,6 +8,10 @@
 #include <iomanip>
 #include <queue>
 
+#ifdef __linux__
+#define FLT_MAX __FLT_MAX__
+#define FLT_MIN __FLT_MIN__
+#endif //__linux__
 
 RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 {

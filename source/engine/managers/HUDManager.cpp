@@ -2,6 +2,11 @@
 
 #include "../UI/Widget.h"
 
+#ifdef __linux__
+#include <algorithm>
+#endif //__linux__
+
+
 HUDManager::HUDManager()
 {
 }

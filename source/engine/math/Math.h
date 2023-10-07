@@ -16,6 +16,6 @@ public:
 	}
 	static float Length(const glm::vec2& a)
 	{
-		return std::sqrtf(std::powf(a.x, 2) + std::powf(a.y, 2));
+		return std::sqrt(std::pow(a.x, 2) + std::pow(a.y, 2));
 	}
 };

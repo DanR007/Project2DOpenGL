@@ -22,6 +22,10 @@
 
 #include <numeric>
 
+#ifdef __linux__
+#include <algorithm>
+#endif //__linux__
+
 GameManager::GameManager()
 {
 	_nav_mesh = new NavMeshRTS();

@@ -9,10 +9,10 @@ uniform uint diffuse_layer;
 
 float getCoord(uint capacity, uint layer)
 {
-	return max(0, min(float(capacity - 1), floor(float(layer) + 0.5)));
+    return max(0, min(float(capacity - 1), floor(float(layer) + 0.5)));
 }
 
 void main()
 {
-	draw_texture = texture(tex, vec3(texPos, getCoord(2, diffuse_layer)));
-};
+    draw_texture = texture(tex, vec3(texPos, getCoord(2, diffuse_layer)));
+}
