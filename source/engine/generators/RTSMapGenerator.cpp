@@ -22,9 +22,7 @@ RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 
 RTSMapGenerator::~RTSMapGenerator()
 {
-	_map.~vector();
-	_rand_vectors.~vector();
-	_symbols.~vector();
+	
 }
 
 glm::vec2 RendomVector()

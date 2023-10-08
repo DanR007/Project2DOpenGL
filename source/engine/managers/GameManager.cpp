@@ -57,7 +57,6 @@ void GameManager::Clear()
 		a = nullptr;
 	}
 	_all_actors.clear();
-	_all_actors.~vector();
 
 	for (size_t y = 0; y < _map.size(); y++)
 	{

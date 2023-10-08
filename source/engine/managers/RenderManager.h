@@ -2,7 +2,7 @@
 #include "../renderer/AnimSprite.h"
 
 #include "ResourcesManager.h"
-
+#include "EngineManager.h"
 #include "MemoryManager.h"
 
 #include <glm/matrix.hpp>
@@ -28,7 +28,7 @@ public:
 		if (it == _map_all_images.end())
 		{
 			std::cout << "Can't find image with this init sprite name: " + initSpriteName << std::endl;
-			std::cout << "Create new" << std::endl;
+			std::cout << "Create new image with sprite: " + initSpriteName << std::endl;
 			Renderer::RenderImage* img = CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
 				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, layer);
 			_all_images.push_back(img);

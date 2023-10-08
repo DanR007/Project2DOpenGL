@@ -1,0 +1,3 @@
+/home/danr0/Documents/Project2DOpenGL/external/glad/CMakeFiles/glad.dir
+/home/danr0/Documents/Project2DOpenGL/external/glad/CMakeFiles/edit_cache.dir
+/home/danr0/Documents/Project2DOpenGL/external/glad/CMakeFiles/rebuild_cache.dir
