@@ -37,5 +37,5 @@ protected:
 
 	glm::vec2 _symbol_size;
 
-	uint8_t _layer = 2;
+	uint8_t _layer = 3;
 };

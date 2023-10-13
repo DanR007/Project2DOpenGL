@@ -31,9 +31,14 @@ public:
 	/// <param name="initSubtextureName">Subtexture name of animation sprite</param>
 	/// <param name="startPosition">Position of actor. </param>
 	/// <param name="startSize">Size of actor, collider, sprite</param>
+	/// <param name="render_layer">ZERO for static and ONE for dynamic </param>
 	/// <param name="startRotation">Rotation of actor, collider, sprite</param>
-	Actor(const std::string& initSubtextureName,
-		const glm::vec2& startPosition/*lower left point*/, const glm::vec2& startSize = glm::vec2(1.f), const float startRotation = 0.f);
+	Actor(const std::string& initSubtextureName
+		, const glm::vec2& startPosition/*lower left point*/
+		, const glm::vec2& startSize = glm::vec2(1.f)
+		, const uint8_t& render_layer = 0
+		, const float startRotation = 0.f
+		);
 	Actor(Actor&& a) noexcept;
 
 	Actor() = delete;

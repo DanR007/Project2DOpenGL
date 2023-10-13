@@ -11,7 +11,6 @@
 #include "../AI/NavMesh.h"
 
 #include "../../game/gameobjects/Unit.h"
-#include "../../game/gameobjects/Wall.h"
 
 #include "../../game/gameobjects/static/Stone.h"
 #include "../../game/gameobjects/static/Wood.h"

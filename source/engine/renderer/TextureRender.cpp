@@ -24,8 +24,6 @@ namespace Renderer
 		{
 			glTexSubImage3D(GL_TEXTURE_2D_ARRAY, 0, 0, height * i, 0, width, height, layer_count, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 		}
-		
-		
 
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

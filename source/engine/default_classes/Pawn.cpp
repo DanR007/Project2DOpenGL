@@ -13,9 +13,12 @@
 #include "../controllers/Controller.h"
 
 
-	Pawn::Pawn(const std::string& initSubtextureName,
-		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation):
-		Actor(initSubtextureName, startPosition, startSize, startRotation)
+	Pawn::Pawn(const std::string& initSubtextureName
+		, const glm::vec2& startPosition
+		, const glm::vec2& startSize
+		, const uint8_t& render_layer
+		, const float startRotation) : 
+		Actor(initSubtextureName, startPosition, startSize, render_layer, startRotation)
 	{
 		_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(this, startPosition, startSize, "selected");
 		_components.push_back(_selected_sprite);

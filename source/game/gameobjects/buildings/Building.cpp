@@ -20,9 +20,11 @@ std::map<EBuildingType, std::string> _building_sprite_name = {
 };
 
 Building::Building(const glm::ivec2& pivot_position, const glm::ivec2& size, const EBuildingType& type)
-	:Building(_building_sprite_name[type], GetEngine()->GetWorld()->ConvertToWindowSpace(pivot_position) - glm::vec2((GetEngine()->GetWorld()->GetBlockSize().x - 1) * size.x, 0),
-		glm::vec2(GetEngine()->GetWorld()->GetBlockSize().x * size.x, 
-			GetEngine()->GetWorld()->GetBlockSize().y * size.y))
+	:Building(
+	_building_sprite_name[type]
+	, GetEngine()->GetWorld()->ConvertToWindowSpace(pivot_position) - glm::vec2((GetEngine()->GetWorld()->GetBlockSize().x - 1) * size.x, 0)
+	, glm::vec2(GetEngine()->GetWorld()->GetBlockSize().x * size.x, GetEngine()->GetWorld()->GetBlockSize().y * size.y)
+	)
 {
 	_building_size = size;
 	_type = type;
@@ -50,9 +52,12 @@ void Building::Update(const float& deltaTime)
 	_selected_sprite->SetNeedToRender(_is_selected);
 }
 
-Building::Building(const std::string& initSubtextureName, const glm::vec2& startPosition,
-	const glm::vec2& startSize, const float& rotation)
-	:Pawn(initSubtextureName, startPosition, startSize, rotation)
+Building::Building(const std::string& initSubtextureName
+		, const glm::vec2& startPosition
+		, const glm::vec2& startSize
+		, const uint8_t& render_layer
+		, const float startRotation)
+	:Pawn(initSubtextureName, startPosition, startSize, render_layer, startRotation)
 {
 	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
 }

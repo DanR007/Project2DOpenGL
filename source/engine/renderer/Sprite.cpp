@@ -126,6 +126,5 @@ namespace Renderer
 	{
 		return _texture->GetSubTexture(_subtexture_name)._layer; 
 	}
-	
 }
 

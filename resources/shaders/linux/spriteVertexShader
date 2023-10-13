@@ -2,7 +2,7 @@
 
 layout(location = 0) in vec2 vertex_pos;
 layout(location = 1) in vec2 texture_pos;
-layout(location = 2) in mat4 instance_matrix;
+layout(location = 3) in mat4 instance_matrix;
 
 out vec2 texPos;
 

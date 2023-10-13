@@ -11,9 +11,12 @@
 
 #include <iostream>
 
-Goal::Goal(const std::string& initSubtextureName,
-	const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
-	:Actor(initSubtextureName, startPosition, startSize, startRotation)
+Goal::Goal(const std::string& initSubtextureName
+		, const glm::vec2& startPosition
+		, const glm::vec2& startSize
+		, const uint8_t& render_layer
+		, const float startRotation)
+	:Actor(initSubtextureName, startPosition, startSize, render_layer, startRotation)
 {
 	
 }

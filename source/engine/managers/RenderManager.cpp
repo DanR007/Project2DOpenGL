@@ -19,7 +19,6 @@ RenderManager::~RenderManager()
 	for (; it != _map_all_images.end(); )
 	{
 		_all_sprites[it->second].clear();
-		_all_sprites[it->second].~vector();
 
 		delete it->second;
 		it = _map_all_images.erase(it);
@@ -39,13 +38,13 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 
 void RenderManager::Update(const float& deltaTime)
 {
-	for (auto it = _all_images.begin(); it != _all_images.end(); it++)
+	for (auto it = _all_sprites.begin(); it != _all_sprites.end(); ++it)
 	{	
-		(*it)->GetShader()->Use();
-		(*it)->GetShader()->SetUInt("diffuse_layer", (*it)->GetDiffuseLayer());
-		(*it)->GetTexture()->Bind();
+		(it->first)->GetShader()->Use();
+		(it->first)->GetShader()->SetUInt("diffuse_layer", (it->first)->GetDiffuseLayer());
+		(it->first)->GetTexture()->Bind();
 
-		Draw(*it);
+		Draw(it->first);
 	}
 }
 
@@ -110,18 +109,6 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, count);
 		glBindVertexArray(0);
 	}
-
-	/*for (int i = 0; i < _sprites.size(); i++)
-	{
-		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
-
-		glDisableVertexAttribArray(3);
-		glDisableVertexAttribArray(4);
-		glDisableVertexAttribArray(5);
-		glDisableVertexAttribArray(6);
-
-		glBindVertexArray(0);
-	}*/
 
 	delete[] matrixes;
 	matrixes = nullptr;

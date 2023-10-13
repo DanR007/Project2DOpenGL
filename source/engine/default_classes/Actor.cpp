@@ -8,11 +8,12 @@
 #include "../../main.h"
 
 	Actor::Actor(const std::string& initSubtextureName,
-		const glm::vec2& startPosition, const glm::vec2& startSize, const float startRotation)
+		const glm::vec2& startPosition, const glm::vec2& startSize, const uint8_t& render_layer, const float startRotation)
 	{
 		if (!initSubtextureName.empty())
 		{
-			_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, startPosition, startSize, initSubtextureName, "textureAtlas", 0, startRotation);
+			_anim_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::AnimSprite>(this, 
+			startPosition, startSize, initSubtextureName, "textureAtlas", render_layer, startRotation);
 			_components.push_back(_anim_sprite);
 		}
 		else

@@ -12,9 +12,12 @@
 
 #include <iostream>
 
-Unit::Unit(const std::string& initSubtextureName, 
-	const glm::vec2& startPosition, const glm::vec2& startSize, const float& startRotation)
-	:Pawn(initSubtextureName, startPosition, startSize, startRotation)
+Unit::Unit(const std::string& initSubtextureName
+		, const glm::vec2& startPosition
+		, const glm::vec2& startSize
+		, const uint8_t& render_layer
+		, const float startRotation)
+	:Pawn(initSubtextureName, startPosition, startSize, render_layer, startRotation)
 {
 	_hp = 100;
 

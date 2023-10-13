@@ -174,7 +174,6 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	exe_path = executablePath.substr(0, find);
 	std::cout << exe_path << std::endl;
 
-	//LoadShaderPrograms("texture", TEXTURE_FRAGMENT_SHADER_PATH, TEXTURE_VERTEX_SHADER_PATH);
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
 	
 
@@ -208,7 +207,6 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	}
 
 	std::vector<uint8_t> sprites_size;
-
 	
 	for (int i = 0; i < 16; i++)
 	{

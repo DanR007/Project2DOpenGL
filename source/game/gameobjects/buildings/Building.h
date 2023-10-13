@@ -21,8 +21,11 @@ public:
 
 	virtual void Update(const float& deltaTime) override;
 protected:
-	Building(const std::string& initSubtextureName, const glm::vec2& startPosition = glm::vec2(0.f),
-		const glm::vec2& startSize = glm::vec2(1.f), const float& rotation = 0.f);
+	Building(const std::string& initSubtextureName
+		, const glm::vec2& startPosition/*lower left point*/
+		, const glm::vec2& startSize = glm::vec2(1.f)
+		, const uint8_t& render_layer = 0
+		, const float startRotation = 0.f);
 
 	Worker* _worker = nullptr;
 

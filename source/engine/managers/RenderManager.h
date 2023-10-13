@@ -17,10 +17,10 @@ public:
 	}
 	~RenderManager();
 
-	/*render_layer for game actors is 0, for UI background is 1, for text and images 2*/
+	/*render_layer for static game actors is 0, for dynamic 1, for UI background is 2, for text and images 3*/
 	template<typename T>
 	T* CreateSprite(Actor* owner, const glm::vec2& position, const glm::vec2& size, const std::string& initSpriteName, 
-		const std::string& texture_atlas_name = "textureAtlas", const uint8_t& layer = 0, const float& rotation = 0.f)
+		const std::string& texture_atlas_name = "textureAtlas", const uint8_t& render_layer = 0, const float& rotation = 0.f)
 	{
 		std::map<std::string, Renderer::RenderImage*>::const_iterator it = _map_all_images.find(initSpriteName);
 
@@ -30,9 +30,8 @@ public:
 			std::cout << "Can't find image with this init sprite name: " + initSpriteName << std::endl;
 			std::cout << "Create new image with sprite: " + initSpriteName << std::endl;
 			Renderer::RenderImage* img = CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
-				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, layer);
+				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, render_layer);
 			_all_images.push_back(img);
-			SortImages();
 		}
 
 		it = _map_all_images.find(initSpriteName);
@@ -61,5 +60,5 @@ private:
 	std::vector<Renderer::RenderImage*> _all_images;
 
 	std::map<std::string, Renderer::RenderImage*> _map_all_images;
-	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>> _all_sprites;
+	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>,  std::less<Renderer::RenderImage*>> _all_sprites;
 };

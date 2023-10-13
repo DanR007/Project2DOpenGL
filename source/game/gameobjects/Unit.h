@@ -14,8 +14,11 @@ namespace Renderer
 class Unit : public Pawn
 {
 protected:
-	Unit(const std::string& initSubtextureName,
-		const glm::vec2& startPosition = glm::vec2(0.f), const glm::vec2& startSize = glm::vec2(1.f), const float& rotation = 0.f);
+	Unit(const std::string& initSubtextureName
+		, const glm::vec2& startPosition/*lower left point*/
+		, const glm::vec2& startSize = glm::vec2(1.f)
+		, const uint8_t& render_layer = 1
+		, const float startRotation = 0.f);
 public:
 	Unit(const glm::ivec2& position);
 

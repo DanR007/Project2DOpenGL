@@ -13,7 +13,7 @@ Panel::Panel(const glm::vec2& position, const glm::vec2& size, Renderer::Sprite*
 Panel::Panel(const glm::vec2& position, const glm::vec2& size):
 	UIElement(position, size)
 {
-	_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, position, size, "background", "textureAtlas", 1);
+	_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, position, size, "background", "textureAtlas", 2);
 }
 
 Panel::~Panel()

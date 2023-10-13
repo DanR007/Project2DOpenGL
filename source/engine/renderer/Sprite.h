@@ -18,7 +18,7 @@ namespace Renderer
 	class RenderImage
 	{
 	public:
-		/*render_layer for game actors is 0, for UI background is 1, for text and images 2*/
+		/*render_layer for static game actors is 0, for dynamic 1, for UI background is 2, for text and images 3*/
 		RenderImage(std::shared_ptr<Texture2D> texture, std::shared_ptr <ShaderProgram> shader, 
 			const std::string& initialSubtextureName, const uint8_t& render_layer);
 		~RenderImage();
@@ -31,6 +31,15 @@ namespace Renderer
 		inline uint8_t GetRenderLayer() const { return _render_layer; }
 
 		GLuint GetDiffuseLayer() const;
+
+		bool operator<(RenderImage* right) const
+		{
+			return GetRenderLayer() < right->GetRenderLayer();
+		}
+		bool operator>(RenderImage* right) const
+		{
+			return GetRenderLayer() > right->GetRenderLayer();
+		}
 	private:
 		std::shared_ptr<Texture2D> _texture;
 		std::shared_ptr<ShaderProgram> _shader;
@@ -41,6 +50,8 @@ namespace Renderer
 
 		uint8_t _render_layer;
 	};
+
+	
 
 	class Sprite : public MovableComponent
 	{
@@ -72,3 +83,4 @@ namespace Renderer
 		std::string _subtexture_name;
 	};
 }
+
