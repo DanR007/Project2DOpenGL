@@ -38,13 +38,13 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 
 void RenderManager::Update(const float& deltaTime)
 {
-	for (auto it = _all_sprites.begin(); it != _all_sprites.end(); ++it)
+	for (auto it = _all_images.begin(); it != _all_images.end(); ++it)
 	{	
-		(it->first)->GetShader()->Use();
-		(it->first)->GetShader()->SetUInt("diffuse_layer", (it->first)->GetDiffuseLayer());
-		(it->first)->GetTexture()->Bind();
+		(*it)->GetShader()->Use();
+		(*it)->GetShader()->SetUInt("diffuse_layer", (*it)->GetDiffuseLayer());
+		(*it)->GetTexture()->Bind();
 
-		Draw(it->first);
+		Draw(*it);
 	}
 }
 

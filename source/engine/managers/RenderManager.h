@@ -8,6 +8,14 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+struct CMP
+{
+	bool operator()(const Renderer::RenderImage* a, const Renderer::RenderImage* b)
+	{
+		return a->GetRenderLayer() < b->GetRenderLayer();
+	}
+};
+
 class RenderManager
 {
 public:
@@ -32,6 +40,8 @@ public:
 			Renderer::RenderImage* img = CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
 				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, render_layer);
 			_all_images.push_back(img);
+
+			SortImages();
 		}
 
 		it = _map_all_images.find(initSpriteName);
@@ -50,7 +60,7 @@ public:
 	void Erase(Renderer::Sprite* spr);
 private:
 	void SortImages();
-
+	
 	void GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img);
 	void ClearBuffer();
 	size_t GetCount(Renderer::RenderImage* img);
@@ -60,5 +70,5 @@ private:
 	std::vector<Renderer::RenderImage*> _all_images;
 
 	std::map<std::string, Renderer::RenderImage*> _map_all_images;
-	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>,  std::less<Renderer::RenderImage*>> _all_sprites;
+	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>> _all_sprites;
 };

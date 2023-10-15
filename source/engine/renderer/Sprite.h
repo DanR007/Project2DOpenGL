@@ -1,5 +1,7 @@
 #pragma once
 
+#include <stdio.h>
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -32,13 +34,15 @@ namespace Renderer
 
 		GLuint GetDiffuseLayer() const;
 
-		bool operator<(RenderImage* right) const
+		bool operator()(const RenderImage*&right)
 		{
+			puts("operator()");
 			return GetRenderLayer() < right->GetRenderLayer();
 		}
-		bool operator>(RenderImage* right) const
+		bool operator<(const RenderImage*& right) const
 		{
-			return GetRenderLayer() > right->GetRenderLayer();
+			puts("operator<");
+			return GetRenderLayer() < right->GetRenderLayer();
 		}
 	private:
 		std::shared_ptr<Texture2D> _texture;

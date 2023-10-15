@@ -31,7 +31,7 @@ Unit::Unit(const std::string& initSubtextureName
 
 Unit::Unit(const glm::ivec2& position)
 	: Unit("mush1", GetEngine()->GetWorld()->ConvertToWindowSpace(position),
-		GetEngine()->GetWorld()->GetBlockSize(), 0.f)
+		GetEngine()->GetWorld()->GetBlockSize(), 1, 0.f)
 {
 }
 
