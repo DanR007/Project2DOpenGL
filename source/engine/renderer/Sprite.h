@@ -31,18 +31,21 @@ namespace Renderer
 		inline Texture2D* GetTexture() { return _texture.get(); }
 		inline ShaderProgram* GetShader() { return _shader.get(); }
 		inline uint8_t GetRenderLayer() const { return _render_layer; }
+		inline std::string GetSpriteName() const { return _subtexture_name; }
+
 
 		GLuint GetDiffuseLayer() const;
-
-		bool operator()(const RenderImage*&right)
+		bool operator==(const RenderImage& right) 
 		{
-			puts("operator()");
-			return GetRenderLayer() < right->GetRenderLayer();
+			return _subtexture_name == right._subtexture_name;
 		}
-		bool operator<(const RenderImage*& right) const
+		bool operator!=(const RenderImage& right) 
 		{
-			puts("operator<");
-			return GetRenderLayer() < right->GetRenderLayer();
+			return _subtexture_name != right._subtexture_name;
+		}
+		bool operator<(const RenderImage& right) 
+		{
+			return GetRenderLayer() < right.GetRenderLayer();
 		}
 	private:
 		std::shared_ptr<Texture2D> _texture;

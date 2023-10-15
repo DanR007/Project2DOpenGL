@@ -7,11 +7,6 @@
 
 #include <algorithm>
 
-bool cmp(Renderer::RenderImage* a, Renderer::RenderImage* b)
-{
-	return a->GetRenderLayer() < b->GetRenderLayer();
-}
-
 RenderManager::~RenderManager()
 {
 	//clear all dynamic memoru which we add to images
@@ -32,19 +27,20 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 {
 	Renderer::RenderImage* img = new Renderer::RenderImage(texture, shader, initialSubtextureName, render_layer);
 	_map_all_images.emplace(std::make_pair(initialSubtextureName, img)).first->second;
-
+	
 	return img;
 }
 
 void RenderManager::Update(const float& deltaTime)
 {
-	for (auto it = _all_images.begin(); it != _all_images.end(); ++it)
+	std::cout << _all_sprites.size() << std::endl;
+	for (auto it = _all_sprites.begin(); it != _all_sprites.end(); ++it)
 	{	
-		(*it)->GetShader()->Use();
-		(*it)->GetShader()->SetUInt("diffuse_layer", (*it)->GetDiffuseLayer());
-		(*it)->GetTexture()->Bind();
+		(it->first)->GetShader()->Use();
+		(it->first)->GetShader()->SetUInt("diffuse_layer", (it->first)->GetDiffuseLayer());
+		(it->first)->GetTexture()->Bind();
 
-		Draw(*it);
+		Draw(it->first);
 	}
 }
 
@@ -116,11 +112,6 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 	_sprites.clear();
 
 	glActiveTexture(GL_TEXTURE0);
-}
-
-void RenderManager::SortImages()
-{
-	std::sort(_all_images.begin(), _all_images.end(), cmp);
 }
 
 void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img)
