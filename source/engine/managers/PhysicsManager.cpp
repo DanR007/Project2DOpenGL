@@ -163,13 +163,18 @@ namespace Physics
 
 	Unit* PhysicsManager::GetUnitUnderCursor(const glm::vec2& cursor_pos)
 	{
-		for (Actor* actor : _world->_all_actors)
+		for (Collider* collider : _all_colliders)
 		{
-			if (IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), actor->GetPosition(), actor->GetCollider()->GetSize()))
+			if (IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), collider->GetPosition(), collider->GetSize()))
 			{
-				Unit* u = static_cast<Unit*>(actor);
+				Unit* u = static_cast<Unit*>(collider->GetOwner());
 				if (u)
+				{
+#ifdef DEBUG
+						std::cout << "Find unit\n";
+#endif //DEBUG
 					return u;
+				}			
 			}
 		}
 

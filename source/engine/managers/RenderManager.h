@@ -44,10 +44,10 @@ public:
 			std::cout << "Create new image with sprite: " + initSpriteName << std::endl;
 			Renderer::RenderImage* img = CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
 				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, render_layer);
+
+			it = _map_all_images.find(initSpriteName);
 		}
-
-		it = _map_all_images.find(initSpriteName);
-
+		
 		T* new_sprite = new T(it->second, owner, position, size, rotation);
 		_all_sprites[it->second].push_back(new_sprite);
 

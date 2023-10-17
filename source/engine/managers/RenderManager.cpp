@@ -33,7 +33,6 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 
 void RenderManager::Update(const float& deltaTime)
 {
-	std::cout << _all_sprites.size() << std::endl;
 	for (auto it = _all_sprites.begin(); it != _all_sprites.end(); ++it)
 	{	
 		(it->first)->GetShader()->Use();

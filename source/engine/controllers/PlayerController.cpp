@@ -172,19 +172,38 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			if (_building == nullptr)
 			{
 				//Print map symbol by coordinates
-				if (map_coord.y >= 0 && map_coord.x >= 0)
-					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]->_symbol << std::endl;
-
-				//find unit under cursor
-				Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
-
-				if (_unit)
-					_unit->SetSelected(_unit == unit);
-
-				if (unit && unit->GetID() == _id)
+				if (GetWorld()->GetNavMesh()->InMap(map_coord))
 				{
-					_unit = unit;
-					_unit->SetSelected(true);
+#ifdef DEBUG
+	std::cout << "world is init\n";
+#endif //DEBUG
+					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]->_symbol << std::endl;
+#ifdef DEBUG
+	std::cout << "Cell is init\n";
+#endif //DEBUG
+					//find unit under cursor
+					Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
+#ifdef DEBUG
+	std::cout << "PhysicsManager is init and unit gets\n";
+#endif //DEBUG
+					if (_unit)
+						_unit->SetSelected(_unit == unit);
+
+					if (unit)
+					{
+						if(unit->GetID() == _id)
+						{
+#ifdef DEBUG
+	std::cout << "unit is init\n";
+#endif //DEBUG
+							_unit = unit;
+							_unit->SetSelected(true);
+						}
+					}
+					else
+					{
+						_unit = nullptr;
+					}
 				}
 			}
 			else
@@ -200,7 +219,6 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 					std::cout << "Building can not replacement here" << std::endl;
 				}
 			}
-			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;
 		case GLFW_MOUSE_BUTTON_2:
@@ -217,9 +235,13 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 			if (_building == nullptr)
 			{
 				//Print map symbol by coordinates
-				if (_unit && map_coord.y >= 0 && map_coord.x >= 0)
+				if (_unit && GetWorld()->GetNavMesh()->InMap(map_coord))
 				{
 					_unit->MoveTo(GetWorld()->GetMap()[map_coord.y][map_coord.x]);
+				}
+				else
+				{
+
 				}
 			}
 			else
@@ -227,7 +249,6 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 				_building->Destroy();
 				_building = nullptr;
 			}
-			//CallFunction("Attack", glm::vec2(float(xPos), float(yPos)));
 		}
 		break;
 		}
