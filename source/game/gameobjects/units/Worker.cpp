@@ -12,13 +12,12 @@
 Worker::Worker(const glm::ivec2& position, const EResourceTypes& type):
 	Unit(position)
 {
-	_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(position, type);
+	_collectable_type = type;
+	_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(position, _collectable_type);
 	_home_cell = GetEngine()->GetWorld()->GetMap()[position.y][position.x];
 
 	if (_resource)
 	{
-		_collectable_type = _resource->GetResourceType();
-
 		MoveTo(_resource->GetCell());
 	}
 }

@@ -91,16 +91,17 @@ class AStarRTS
 public:
 	AStarRTS();
 	~AStarRTS();
-
+	//разрабатываем путь до цели используя AStar
 	Goal* DevelopPath(const glm::ivec2& start, Cell* target);
 
 	void Clear();
 
-	glm::ivec2 GetNextMapGoal();
+	glm::ivec2 GetNextNode();
 private:
 	void CollectPath(PathCell* cell);
+	//проверка находится ли клетка в координатах на карте
 	bool LocateInMap(const glm::ivec2& pos);
-
+	//поиск самой ближайшей точки на нашем "острове"
 	Cell* FindNearestCell(Cell* target, unsigned short need_id);
 
 	PathCell* GetMinCostCell();

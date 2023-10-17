@@ -29,14 +29,14 @@ public:
 
 	Goal* GetGoal() { return _goal; }
 
-	
+	//set sprite and unit position
 	void Move(const glm::vec2& position);
 	
 	void SetGoal(Goal* goal) { _goal = goal; }
-
+	//developing path to cell
 	void MoveTo(Cell* cell);
-
-	void PathComplete();
+	//destroy goal
+	void MakePathComplete();
 protected:
 	Goal* _goal = nullptr;
 };

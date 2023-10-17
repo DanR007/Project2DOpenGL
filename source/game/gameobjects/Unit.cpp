@@ -33,6 +33,7 @@ Unit::Unit(const glm::ivec2& position)
 	: Unit("mush1", GetEngine()->GetWorld()->ConvertToWindowSpace(position),
 		GetEngine()->GetWorld()->GetBlockSize(), 1, 0.f)
 {
+	_map_position = position;
 }
 
 Unit::Unit(Unit&& u) noexcept :
@@ -63,17 +64,20 @@ void Unit::Move(const glm::vec2& position)
 
 void Unit::MoveTo(Cell* cell)
 {
-	if (GetController() && GetController()->GetPathComplete())
+	if (GetController())
 	{
-		GetController()->MakePathForGoal(cell, _map_position);
-	}
-	else
-	{
-		GetController()->MakePathForGoal(cell, GetController()->GetMapGoal());
+		if (GetController()->GetPathComplete())
+		{
+			GetController()->MakePathForGoal(cell, _map_position);
+		}
+		else
+		{
+			GetController()->MakePathForGoal(cell, GetController()->GetMapNode());
+		}
 	}
 }
 
-void Unit::PathComplete()
+void Unit::MakePathComplete()
 {
 	_goal->Destroy();
 	_goal = nullptr;
