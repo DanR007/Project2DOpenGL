@@ -175,30 +175,17 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 				if (GetWorld()->GetNavMesh()->InMap(map_coord))
 				{
 #ifdef DEBUG
-	std::cout << "world is init\n";
-#endif //DEBUG
 					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]->_symbol << std::endl;
-#ifdef DEBUG
-	std::cout << "Cell is init\n";
 #endif //DEBUG
 					//find unit under cursor
 					Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
-#ifdef DEBUG
-	std::cout << "PhysicsManager is init and unit gets\n";
-#endif //DEBUG
 					if (_unit)
 						_unit->SetSelected(_unit == unit);
 
-					if (unit)
+					if (unit && unit->GetID() == _id)
 					{
-						if(unit->GetID() == _id)
-						{
-#ifdef DEBUG
-	std::cout << "unit is init\n";
-#endif //DEBUG
-							_unit = unit;
-							_unit->SetSelected(true);
-						}
+						_unit = unit;
+						_unit->SetSelected(true);
 					}
 					else
 					{
