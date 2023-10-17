@@ -80,7 +80,7 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 		if (u)
 		{
 			u->Move(u->GetPosition() + offset);
-			u->GetController()->ChangeGoalPositionWindow(offset);
+			u->GetController()->ChangeNodePositionWindow(offset);
 		}
 		else
 		{

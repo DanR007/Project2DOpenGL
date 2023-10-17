@@ -23,8 +23,6 @@
 		_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(this, startPosition, startSize, "selected");
 		_components.push_back(_selected_sprite);
 
-		_map_position = GetWorld()->ConvertToMapSpace(startPosition);
-
 		_is_selected = false;
 
 		_hp = 1;

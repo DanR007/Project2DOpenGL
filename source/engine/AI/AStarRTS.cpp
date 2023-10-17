@@ -50,12 +50,15 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, Cell* target)
 {
 	Cell* trully_target = target;
 	Cell* start_cell = _nav_mesh->_map[start.y][start.x];
+	//если нужна нам точка находится не на одном острове с нашей
+	//текущей позицией, то находим ближайшую к нашей цели, которая находится 
+	//на нашем острове
 	if (start_cell->_field_id != target->_field_id
 || target->_cost == -1 || target->_symbol != ' ')
 	{
 		trully_target = FindNearestCell(target, start_cell->_field_id);
 	}
-
+	//создаем отображение цели
 	Goal* goal = GetWorld()->SpawnActor<Goal>(trully_target->_position);
 
 	PathCell* c = new PathCell(start_cell);
@@ -65,7 +68,7 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, Cell* target)
 	PathCell* p_cur = c;
 
 	_close_cells.push_back(c);
-
+	//бегаем по циклу пока не достигнем нужной нам цели
 	while (p_cur->GetCell() != trully_target)
 	{
 		p_cur = _close_cells.back();
@@ -86,11 +89,14 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, Cell* target)
 					auto c_it = Find(_close_cells.begin(), _close_cells.end(), new_cell);
 					float length = p_cur->GetLength() + GetLengthTurn(_move_dir[i], next);
 
-
+					//смотрим посетили ли мы текущую точку
 					if (c_it == _close_cells.end())
 					{
+						//есть ли в еще не посещенных точках текущая
 						if (it != _open_cells.end())
 						{
+							//если до ещё не посещенной точки можем добраться быстрее, то меняем 
+							//всё на текущий путь
 							if ((*it)->GetLength() > length)
 							{
 								(*it)->SetPrev(p_cur);
@@ -138,7 +144,7 @@ void AStarRTS::Clear()
 	_open_cells.clear();
 }
 
-glm::ivec2 AStarRTS::GetNextMapGoal()
+glm::ivec2 AStarRTS::GetNextNode()
 {
 	if (_path.empty())
 	{
@@ -155,8 +161,11 @@ glm::ivec2 AStarRTS::GetNextMapGoal()
 
 void AStarRTS::CollectPath(PathCell* end_cell)
 {
+	//начинаем собирать наш путь
 	_path.clear();
-
+	//пока предыдущая клетка есть мы добавляем её в путь
+	//потому что текущая клетка на которой стоит наш персонаж 
+	//не имеет предыдущей клетки
 	PathCell* cell = end_cell;
 	while (cell->GetPrev())
 	{
