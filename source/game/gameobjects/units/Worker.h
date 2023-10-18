@@ -15,6 +15,8 @@ public:
 
 	void Returning();
 protected:
+	void FindNewResource();
+
 	uint8_t _resource_count = 0;
 	uint8_t _max_resource_count = 10;
 
@@ -24,6 +26,8 @@ protected:
 	float _work_time_need_to_earn = 1.f;
 
 	Resource* _resource;
+
+	glm::ivec2 _resource_position;
 
 	Cell* _home_cell;
 

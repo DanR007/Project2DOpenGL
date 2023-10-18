@@ -8,6 +8,7 @@
 #include <iomanip>
 #include <queue>
 
+
 #ifdef __linux__
 #define FLT_MAX __FLT_MAX__
 #define FLT_MIN __FLT_MIN__
@@ -172,13 +173,12 @@ std::vector<std::vector<Cell*>> RTSMapGenerator::GenerateMap()
 
 	}
 	//std::cout << "/////////////////" << std::endl;
-	FillFieldID(symbol_array);
 
 	/*for (int y = _size.y - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < _size.x; x++)
 		{
-			std::cout << _map[y][x]._field_id;
+			std::cout << _map[y][x]->_field_id;
 		}
 		std::cout << std::endl;
 
@@ -223,7 +223,7 @@ void RTSMapGenerator::CellularAutomaton(const int& count_life_cells_need, const 
 				}
 				else
 				{
-					cell_condition[y][x] = ' ';
+					cell_condition[y][x] = _free_cell_symbol;
 				}
 			}
 			else
@@ -250,21 +250,21 @@ void RTSMapGenerator::FillFieldID(std::vector<std::vector<char>>& map)
 	{
 		for (int j = 0; j < _size.x; j++)
 		{
-			if (map[i][j] == ' ')
+			if (map[i][j] == _free_cell_symbol)
 			{
-				BFS(glm::ivec2(j, i), map, num++);
+				FillAllInBreath(glm::ivec2(j, i), map, num++);
 			}
 		}
 	}
 }
 
-void RTSMapGenerator::BFS(const glm::ivec2& start, std::vector<std::vector<char>>& map, unsigned short int id)
+void RTSMapGenerator::FillAllInBreath(const glm::ivec2& start, std::vector<std::vector<char>>& map, unsigned short int id)
 {
 	std::queue<glm::ivec2> q;
 
 	q.push(start);
 
-	map[start.y][start.x] = '.';
+	map[start.y][start.x] = _free_cell_symbol;
 	_map[start.y][start.x]->_field_id = id;
 
 	std::vector<glm::ivec2> neighbours =
@@ -284,10 +284,10 @@ void RTSMapGenerator::BFS(const glm::ivec2& start, std::vector<std::vector<char>
 		{
 			glm::ivec2 neighbour = cur + neighbours[i];
 
-			if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < _size.x && neighbour.y < _size.y && map[neighbour.y][neighbour.x] == ' ')
+			if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < _size.x && neighbour.y < _size.y && map[neighbour.y][neighbour.x] == _free_cell_symbol)
 			{
 				q.push(neighbour);
-				map[neighbour.y][neighbour.x] = '.';
+				map[neighbour.y][neighbour.x] = _free_cell_symbol;
 				_map[neighbour.y][neighbour.x]->_field_id = id;
 			}
 
@@ -335,7 +335,7 @@ char RTSMapGenerator::GetSymbol(const float& height, const float& humidity, cons
 			return _symbols[i]._symbol;
 	}
 
-	return ' ';
+	return _free_cell_symbol;
 }
 
 

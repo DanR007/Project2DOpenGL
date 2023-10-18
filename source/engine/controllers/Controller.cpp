@@ -51,26 +51,26 @@ void Controller::Move(float deltaTime)
 {
 	if(!_controlled_pawn)
 	{
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 	std::cout << "_controlled_pawn is nullptr" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_MOVEMENT
 	return;
 	}
 
 	if (!_complete_path)
 	{
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 	std::cout << "path is not complete" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_MOVEMENT
 		float distance = std::sqrt(std::pow(_node_coord.x - _controlled_pawn->GetPosition().x, 2) + std::pow(_node_coord.y - _controlled_pawn->GetPosition().y, 2));
 		_move_vector = (_node_coord - _controlled_pawn->GetPosition()) / distance;
 		
 		//если двигаться некуда, то говорим что путь закончен
 		if (_move_vector != glm::vec2(0.f, 0.f))
 		{
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 	std::cout << "_move_vector is not zero vector" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_MOVEMENT
 			if(GetEngine()->GetWorld()->GetNavMesh()->InMap(_node_in_map_coord))
 			{
 				float cost = GetWorld()->GetNavMesh()->GetMap()[_node_in_map_coord.y][_node_in_map_coord.x]->_cost;
@@ -79,33 +79,33 @@ void Controller::Move(float deltaTime)
 				//else move to movement + position
 				if (deltaTime * _move_speed / cost > distance)
 				{
-	#ifdef DEBUG
+	#ifdef DEBUG_MOVEMENT
 		std::cout << "movement is greater than distance" << std::endl;
-	#endif //DEBUG
+	#endif //DEBUG_MOVEMENT
 					_controlled_pawn->Move(_node_coord);
 
 					SetNewNode(_a_star->GetNextNode());
 				}
 				else
 				{
-	#ifdef DEBUG
+	#ifdef DEBUG_MOVEMENT
 		std::cout << "movement is less than distance" << std::endl;
-	#endif //DEBUG
+	#endif //DEBUG_MOVEMENT
 					_controlled_pawn->Move(_controlled_pawn->GetPosition() + movement);
 				}
 			}
 			else
 			{
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 		std::cout << "Node does not contain in map" << std::endl;
-#endif //DEBUG				
+#endif //DEBUG_MOVEMENT				
 			}
 		}
 		else
 		{
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 	std::cout << "_move_vector is zero vector" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_MOVEMENT
 			//если двигаться некуда, то говорим что путь закончен
 			_complete_path = true;
 			if (_controlled_pawn)
@@ -143,9 +143,9 @@ void Controller::MakePathForGoal(Cell* goal, const glm::ivec2& move_from)
 		{
 			_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
 		}
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 	std::cout << "path is ok" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_MOVEMENT
 		//привязываем отображение нашего пути к текущему юниту
 		if(_controlled_pawn->GetGoal())
 		{
@@ -153,18 +153,18 @@ void Controller::MakePathForGoal(Cell* goal, const glm::ivec2& move_from)
 		}
 		else
 		{
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 	std::cout << "goal is nullptr" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_MOVEMENT
 		}
 		SetNewNode(_node_in_map_coord);
 
 	}
 	else
 	{
-#ifdef DEBUG
+#ifdef DEBUG_MOVEMENT
 	std::cout << "AStar in controller is empty" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_MOVEMENT
 	}
 }
 

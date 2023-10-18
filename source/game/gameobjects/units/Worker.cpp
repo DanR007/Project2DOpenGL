@@ -14,10 +14,20 @@ Worker::Worker(const glm::ivec2& position, const EResourceTypes& type):
 {
 	_collectable_type = type;
 	_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(position, _collectable_type);
+
 	_home_cell = GetEngine()->GetWorld()->GetMap()[position.y][position.x];
 
 	if (_resource)
 	{
+		#ifdef DEBUG
+std::cout << "Find position is: " 
+<< _resource->GetCell()->_position.x
+<< " " 
+<< _resource->GetCell()->_position.y
+<< " "
+<< _resource->GetCell()->_symbol
+<< std::endl;
+				#endif
 		MoveTo(_resource->GetCell());
 	}
 }
@@ -52,9 +62,7 @@ void Worker::Work(const float& deltaTime)
 			}
 			else
 			{
-				_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(_map_position, _collectable_type);
-				if(_resource)
-					MoveTo(_resource->GetCell());
+				FindNewResource();
 			}
 		}
 		else
@@ -77,10 +85,7 @@ void Worker::Work(const float& deltaTime)
 				{
 					if (!_resource)
 					{
-						_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(_map_position, _collectable_type);
-						
-						if(_resource)
-							MoveTo(_resource->GetCell());
+						FindNewResource();
 					}
 				}
 				else
@@ -93,6 +98,26 @@ void Worker::Work(const float& deltaTime)
 		}
 	}
 }
+
+void Worker::FindNewResource()
+{
+#ifdef DEBUG
+	std::cout << "Finding new resource " << std::endl;
+#endif
+	_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(_map_position, _collectable_type);
+						#ifdef DEBUG
+std::cout << "Find position is: " 
+<< _resource->GetCell()->_position.x
+<< " " 
+<< _resource->GetCell()->_position.y
+<< " "
+<< _resource->GetCell()->_symbol
+<< std::endl;
+				#endif
+	if(_resource)
+		MoveTo(_resource->GetCell());
+}
+
 
 void Worker::Returning()
 {

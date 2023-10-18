@@ -270,11 +270,20 @@ void PlayerController::CursorMove(GLFWwindow* currentWindow, double xPos, double
 		glm::ivec2 map_space = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(window_size.y - yPos)) -
 			glm::ivec2(_building->GetBuildingSize().x - 1, 0);
 
-		_building->SetMapPosition(map_space);
+		if(GetEngine()->GetWorld()->GetNavMesh()->InMap(map_space))
+		{
+			_building->SetMapPosition(map_space);
 
-		glm::vec2 window_space = GetEngine()->GetWorld()->ConvertToWindowSpace(_building->GetMapPosition());
+			glm::vec2 window_space = GetEngine()->GetWorld()->ConvertToWindowSpace(_building->GetMapPosition());
 
-		_building->SetPosition(window_space);
+			_building->SetPosition(window_space);
+		}
+		else
+		{
+#ifdef DEBUG
+	std::cout << "Cursor not in map space" << std::endl;
+#endif
+		}
 	}
 
 	glm::vec2 up = glm::vec2(0, 1), right = glm::vec2(1, 0);
