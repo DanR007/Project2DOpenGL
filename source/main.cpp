@@ -113,21 +113,45 @@ void glfwKeyCallback(GLFWwindow* currentWindow, int key, int scancode, int actio
 {
 	PlayerController* controller = GetWorld()->GetFirstPlayerController();
 	if(controller)
+	{
 		controller->InputKeyboard(currentWindow, key, scancode, action, mode);
+	}
+	else
+	{
+#ifdef DEBUG
+	std::cout << "PlayerController is nullptr" << std::endl;
+#endif
+	}
 }
 
 void glfwMouseButtonCallback(GLFWwindow* currentWindow, int button, int action, int mode)
 {
 	PlayerController* controller = GetWorld()->GetFirstPlayerController();
 	if(controller)
+	{
 		controller->InputMouse(currentWindow, button, action, mode);
+	}
+	else
+	{
+#ifdef DEBUG
+	std::cout << "PlayerController is nullptr" << std::endl;
+#endif
+	}
 }
 
 void glfwCursorPosCallback(GLFWwindow* currentWindow, double xPos, double yPos)
 {
 	PlayerController* controller = GetWorld()->GetFirstPlayerController();
 	if (controller)
+	{
 		controller->CursorMove(currentWindow, xPos, yPos);
+	}
+	else
+	{
+#ifdef DEBUG
+	std::cout << "PlayerController is nullptr" << std::endl;
+#endif
+	}
 }
 
 int main(int argc, char** argv)

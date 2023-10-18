@@ -118,9 +118,24 @@ void RenderManager::GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Re
 	size_t size = _all_sprites[img].size();
 	for (size_t i = 0; i < size; i++)
 	{
-		if (_all_sprites[img][i]->GetNeedToRender())
+		if (_all_sprites[img][i])
 		{
-			in_view.push_back(_all_sprites[img][i]);
+			if(_all_sprites[img][i]->GetNeedToRender())
+			{
+				in_view.push_back(_all_sprites[img][i]);
+			}
+			else
+			{
+#ifdef DEBUG_RENDER
+			std::cout << "Sprite doesnt need to render" << std::endl;
+#endif //DEBUG_RENDER
+			}
+		}
+		else
+		{
+#ifdef DEBUG_RENDER
+			std::cout << "Sprite is nullptr in GetSpritesInView" << std::endl;
+#endif //DEBUG_RENDER
 		}
 	}
 }

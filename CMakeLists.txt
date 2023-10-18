@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD 17)
 
 set(ENGINE_HEADERS 
 source/engine/math/Math.h
+source/engine/math/Algorithm.h
 source/engine/tests/PhysicsTests.h
 source/engine/renderer/stb_image.h
 source/engine/Delegate.h

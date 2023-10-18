@@ -73,14 +73,23 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 {
 	auto it = _all_actors.begin();
 	_offset -= offset;
-	for (; it != _all_actors.end(); it++)
+	for (; it != _all_actors.end(); ++it)
 	{
 		Unit* u = dynamic_cast<Unit*>(*it);
 
 		if (u)
 		{
 			u->Move(u->GetPosition() + offset);
-			u->GetController()->ChangeNodePositionWindow(offset);
+			if(u->GetController())
+			{
+				u->GetController()->ChangeNodePositionWindow(offset);
+			}
+			else
+			{
+#ifdef DEBUG
+	std::cout << "Controller is nullptr in MoveAllActors" << std::endl;
+#endif
+			}
 		}
 		else
 		{
@@ -97,7 +106,7 @@ void GameManager::Update(const float& deltaTime)
 
 		std::vector<Actor*>::iterator it = _all_actors.begin();
 		
-		for (; it != _all_actors.end(); it++)
+		for (; it != _all_actors.end(); ++it)
 		{
 			(*it)->Update(deltaTime);
 		}

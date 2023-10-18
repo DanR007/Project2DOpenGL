@@ -24,7 +24,7 @@ public:
 		_resources_count--;
 		if (IsEmpty())
 		{
-			Empty();
+			SetEmpty();
 		}
 		return 1; 
 	}
@@ -36,7 +36,9 @@ public:
 	void SetCell(Cell* cell);
 	void SetResource(const EResourceTypes& type) { _resource_type = type; }
 
-	void Empty() { Destroy(); }
+	void SetEmpty();
+
+
 protected:
 	Cell* _cell = nullptr;
 

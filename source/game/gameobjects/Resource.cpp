@@ -4,6 +4,8 @@
 
 #include "../../engine/managers/GameManager.h"
 
+#include "../../engine/AI/NavMesh.h"
+
 #include "../../main.h"
 
 #include "../../engine/generators/RTSMapGenerator.h"
@@ -37,4 +39,19 @@ Resource::~Resource()
 void Resource::SetCell(Cell* cell)
 {
 	_cell = cell;
+}
+
+void Resource::SetEmpty()
+{
+	if(_cell)
+	{
+		GetEngine()->GetWorld()->GetNavMesh()->ClearMapCell(_cell->_position);
+	}
+	else
+	{
+#ifdef DEBUG
+		std::cout << "_cell is nullptr" << std::endl;
+#endif // DEBUG
+	}
+	Destroy();
 }

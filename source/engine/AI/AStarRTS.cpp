@@ -1,5 +1,4 @@
 #include "AStarRTS.h"
-
 #include "NavMesh.h"
 
 #include "../managers/GameManager.h"
@@ -8,6 +7,8 @@
 
 #include "../../game/gameobjects/Goal.h"
 
+#include "../math/Algorithm.h"
+
 #include <iostream>
 #include <queue>
 
@@ -15,6 +16,11 @@
 #include <algorithm>
 #include <float.h>
 #endif //__linux__
+
+bool CheckEqualIslandID(const unsigned short& id, Cell* cell)
+{
+	return cell->_field_id == id;
+}
 
 AStarRTS::AStarRTS()
 {
@@ -157,8 +163,6 @@ glm::ivec2 AStarRTS::GetNextNode()
 	return goal;
 }
 
-
-
 void AStarRTS::CollectPath(PathCell* end_cell)
 {
 	//начинаем собирать наш путь
@@ -183,6 +187,16 @@ bool AStarRTS::LocateInMap(const glm::ivec2& pos)
 
 Cell* AStarRTS::FindNearestCell(Cell* target, unsigned short need_id)
 {
+	glm::ivec2 nearest_coordinates = Algorithm::BFS(_nav_mesh->_map, target->_position, need_id, CheckEqualIslandID);
+
+	if(nearest_coordinates == glm::ivec2(-1, -1))
+	{
+#ifdef DEBUG_PATH_SEARCHING
+		std::cout << "There're zero cells with this id: " << need_id << std::endl;
+#endif //DEBUG
+		return nullptr;
+	}
+/*
 	std::queue<glm::ivec2> q;
 	std::vector<glm::ivec2> close;
 	q.push(target->_position);
@@ -214,11 +228,8 @@ Cell* AStarRTS::FindNearestCell(Cell* target, unsigned short need_id)
 
 		}
 	}
-
-#ifdef DEBUG
-	std::cout << "There're zero cells with this id: " << need_id << std::endl;
-#endif //DEBUG
-	return nullptr;
+*/
+	return _nav_mesh->_map[nearest_coordinates.y][nearest_coordinates.x];
 }
 
 PathCell* AStarRTS::GetMinCostCell()
@@ -245,7 +256,7 @@ bool AStarRTS::CanStepInto(const glm::ivec2& move, Cell* next_cell, Cell* cur_ce
 	glm::ivec2 f = cur_cell->_position + glm::ivec2(move.x, 0);
 	glm::ivec2 s = cur_cell->_position + glm::ivec2(0, move.y);
 	
-	return next_cell->_symbol == ' ' 
+	return _nav_mesh->IsFreeCell(next_cell->_position)
 		//this condition mean that unit can't step diagonal if this split wall
-		&& LocateInMap(f) && LocateInMap(s) && (_nav_mesh->_map[f.y][f.x]->_symbol == ' ' || _nav_mesh->_map[s.y][s.x]->_symbol == ' ');
+		&& LocateInMap(f) && LocateInMap(s) && (_nav_mesh->IsFreeCell(f) || _nav_mesh->IsFreeCell(s));
 }

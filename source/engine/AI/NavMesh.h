@@ -29,7 +29,16 @@ public:
 	bool InMap(const glm::ivec2& pos);
 
 	Resource* GetNearestResource(const glm::ivec2& position, const EResourceTypes& type);
+
+	bool IsFreeCell(const glm::ivec2& pos) { return _map[pos.y][pos.x]->_symbol == _free_cell; }
+
+	void RefillAllID();
 private:
+	void RefillIDInBreadth(const glm::ivec2& start, unsigned short int id);
+
+	const char _free_cell = '.'; 
+
+
 	std::vector<std::vector<Cell*>> _map;
 
 	friend class AStarRTS;

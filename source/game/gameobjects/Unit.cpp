@@ -53,7 +53,16 @@ Unit::~Unit()
 void Unit::Update(const float& deltaTime)
 {
 	Pawn::Update(deltaTime);
-	_selected_sprite->SetNeedToRender(_is_selected);
+	if(_selected_sprite)
+	{
+		_selected_sprite->SetNeedToRender(_is_selected);
+	}
+	else
+	{
+#ifdef DEBUG_RENDER
+		std::cout << "selected_sprite is nullptr" << std::endl;
+#endif
+	}
 }
 
 void Unit::Move(const glm::vec2& position)
@@ -64,6 +73,9 @@ void Unit::Move(const glm::vec2& position)
 
 void Unit::MoveTo(Cell* cell)
 {
+#ifdef DEBUG_PATH_SEARCHING
+	std::cout << "Call MoveTo" << std::endl;
+#endif //DEBUG
 	if (GetController())
 	{
 		if (GetController()->GetPathComplete())

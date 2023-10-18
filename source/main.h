@@ -12,6 +12,9 @@
 #include <cstdio>
 
 //#define DEBUG_MEMORY
+//#define DEBUG_RENDER
+#define DEBUG_PATH_SEARCHING
+//#define DEBUG_MOVEMENT
 #define DEBUG
 
 class Actor;
