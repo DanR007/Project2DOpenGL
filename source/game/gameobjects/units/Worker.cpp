@@ -13,23 +13,10 @@ Worker::Worker(const glm::ivec2& position, const EResourceTypes& type):
 	Unit(position)
 {
 	_collectable_type = type;
-	_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(position, _collectable_type);
 
 	_home_cell = GetEngine()->GetWorld()->GetMap()[position.y][position.x];
 
-	if (_resource)
-	{
-		#ifdef DEBUG
-std::cout << "Find position is: " 
-<< _resource->GetCell()->_position.x
-<< " " 
-<< _resource->GetCell()->_position.y
-<< " "
-<< _resource->GetCell()->_symbol
-<< std::endl;
-				#endif
-		MoveTo(_resource->GetCell());
-	}
+	FindNewResource();
 }
 
 Worker::~Worker()
@@ -76,27 +63,21 @@ void Worker::Work(const float& deltaTime)
 #ifdef DEBUG
 				std::cout << "Earn one resource" << std::endl;
 #endif
-				if (_resource->IsEmpty())
-				{
-					_resource = nullptr;
-				}
-
-				if (_resource_count < _max_resource_count)
-				{
-					if (!_resource)
-					{
-						FindNewResource();
-					}
-				}
-				else
+				if (_resource_count >= _max_resource_count)
 				{
 					Returning();
 				}
-
 				
 			}
 		}
 	}
+}
+
+void Worker::SetEmptyResource()
+{
+	_resource = nullptr;
+	_work_time = 0.f;
+	FindNewResource();
 }
 
 void Worker::FindNewResource()
@@ -115,7 +96,10 @@ std::cout << "Find position is: "
 << std::endl;
 				#endif
 	if(_resource)
+	{
+		_resource->NewWorker(this);
 		MoveTo(_resource->GetCell());
+	}
 }
 
 

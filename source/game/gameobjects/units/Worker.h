@@ -14,6 +14,8 @@ public:
 	void Work(const float& deltaTime);
 
 	void Returning();
+
+	void SetEmptyResource();
 protected:
 	void FindNewResource();
 

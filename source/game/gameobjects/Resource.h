@@ -5,6 +5,7 @@
 #include "../ResourceTypes.h"
 
 struct Cell;
+class Worker;
 
 class Resource : public Actor 
 {
@@ -38,8 +39,10 @@ public:
 
 	void SetEmpty();
 
-
+	void NewWorker(Worker* worker);
 protected:
+	std::vector<Worker*> _worker_on_this_resource;
+
 	Cell* _cell = nullptr;
 
 	EResourceTypes _resource_type;

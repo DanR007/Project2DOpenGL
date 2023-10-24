@@ -66,8 +66,9 @@ void NavMeshRTS::ClearMapCell(const glm::ivec2& position)
 	_map[position.y][position.x]->_resource = nullptr;
 
 	RefillAllID();
-
+#ifdef DEBUG
 	PrintMap();
+#endif //DEBUG
 }
 
 void NavMeshRTS::OccupiedMapCell(const glm::ivec2& position)
