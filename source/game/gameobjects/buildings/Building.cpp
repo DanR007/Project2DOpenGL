@@ -22,34 +22,12 @@ std::map<EBuildingType, std::string> _building_sprite_name = {
 Building::Building(const glm::ivec2& pivot_position, const glm::ivec2& size, const EBuildingType& type)
 	:Building(
 	_building_sprite_name[type]
-	, GetEngine()->GetWorld()->ConvertToWindowSpace(pivot_position) - glm::vec2((GetEngine()->GetWorld()->GetBlockSize().x - 1) * size.x, 0)
+	, GetEngine()->GetWorld()->ConvertToWindowSpace(pivot_position) - glm::vec2((GetEngine()->GetWorld()->GetBlockSize().x) * (size.x - 1), 0)
 	, glm::vec2(GetEngine()->GetWorld()->GetBlockSize().x * size.x, GetEngine()->GetWorld()->GetBlockSize().y * size.y)
 	)
 {
 	_building_size = size;
 	_type = type;
-}
-
-bool Building::CanReplace()
-{
-	for (int i = 0; i < _building_size.y; i++)
-	{
-		for (int j = 0; j < _building_size.x; j++)
-		{
-			glm::ivec2 check_pos = glm::ivec2(_map_position.y + i, _map_position.x + j);
-			if (!GetEngine()->GetWorld()->GetNavMesh()->InMap(check_pos) || !GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(check_pos))
-			{
-				return false;
-			}
-		}
-	}
-	return true;
-}
-
-void Building::Update(const float& deltaTime)
-{
-	Pawn::Update(deltaTime);
-	_selected_sprite->SetNeedToRender(_is_selected);
 }
 
 Building::Building(const std::string& initSubtextureName
@@ -68,6 +46,28 @@ Building::~Building()
 	{
 		_worker->Destroy();
 	}
+}
+
+bool Building::CanReplace()
+{
+	for (int i = 0; i < _building_size.y; i++)
+	{
+		for (int j = 0; j < _building_size.x; j++)
+		{
+			glm::ivec2 check_pos = glm::ivec2(_map_position.x + j, _map_position.y + i);
+			if (!(GetEngine()->GetWorld()->GetNavMesh()->InMap(check_pos) && GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(check_pos)))
+			{
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+void Building::Update(const float& deltaTime)
+{
+	Pawn::Update(deltaTime);
+	_selected_sprite->SetNeedToRender(_is_selected);
 }
 
 void Building::Replace()

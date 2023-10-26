@@ -10,6 +10,8 @@
 
 #include "../../engine/generators/RTSMapGenerator.h"
 
+#include "units/Worker.h"
+
 Resource::Resource(const std::string& init_sprite_name
 		, const glm::vec2& startPosition
 		, const glm::vec2& startSize
@@ -31,6 +33,7 @@ Resource::Resource(const std::string& init_sprite_name, const glm::ivec2& positi
 
 Resource::~Resource()
 {
+	_worker_on_this_resource.clear();
 #ifdef DEBUG
 	std::cout << "Destroy Resources" << std::endl;
 #endif
@@ -46,6 +49,14 @@ void Resource::SetEmpty()
 	if(_cell)
 	{
 		GetEngine()->GetWorld()->GetNavMesh()->ClearMapCell(_cell->_position);
+		std::vector<Worker*>::iterator it = _worker_on_this_resource.begin();
+
+		for(; it != _worker_on_this_resource.end(); ++it)
+		{
+			std::cout << "Set empty" << std::endl;
+			(*it)->SetEmptyResource();
+			
+		}
 	}
 	else
 	{
@@ -54,4 +65,9 @@ void Resource::SetEmpty()
 #endif // DEBUG
 	}
 	Destroy();
+}
+
+void Resource::NewWorker(Worker* worker)
+{
+	_worker_on_this_resource.push_back(worker);
 }

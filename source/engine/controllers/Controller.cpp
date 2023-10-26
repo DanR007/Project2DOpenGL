@@ -142,22 +142,23 @@ void Controller::MakePathForGoal(Cell* goal, const glm::ivec2& move_from)
 		if (_controlled_pawn)
 		{
 			_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
-		}
+			//привязываем отображение нашего пути к текущему юниту
+			if(_controlled_pawn->GetGoal())
+			{
+				_controlled_pawn->GetGoal()->SetUnit(_controlled_pawn);
 #ifdef DEBUG_MOVEMENT
 	std::cout << "path is ok" << std::endl;
 #endif //DEBUG_MOVEMENT
-		//привязываем отображение нашего пути к текущему юниту
-		if(_controlled_pawn->GetGoal())
-		{
-			_controlled_pawn->GetGoal()->SetUnit(_controlled_pawn);
+			}
+			else
+			{
+	#ifdef DEBUG_MOVEMENT
+		std::cout << "goal is nullptr" << std::endl;
+	#endif //DEBUG_MOVEMENT
+			}
+
+			SetNewNode(_node_in_map_coord);
 		}
-		else
-		{
-#ifdef DEBUG_MOVEMENT
-	std::cout << "goal is nullptr" << std::endl;
-#endif //DEBUG_MOVEMENT
-		}
-		SetNewNode(_node_in_map_coord);
 
 	}
 	else

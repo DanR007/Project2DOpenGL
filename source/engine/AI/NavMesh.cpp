@@ -66,8 +66,9 @@ void NavMeshRTS::ClearMapCell(const glm::ivec2& position)
 	_map[position.y][position.x]->_resource = nullptr;
 
 	RefillAllID();
-
+#ifdef DEBUG
 	PrintMap();
+#endif //DEBUG
 }
 
 void NavMeshRTS::OccupiedMapCell(const glm::ivec2& position)
@@ -107,52 +108,7 @@ Resource* NavMeshRTS::GetNearestResource(const glm::ivec2& position, const EReso
 	{
 		return nullptr;
 	}
-/*
-	Cell* start = _map[position.y][position.x];
-	std::queue<Cell*> q;
 
-	std::vector<Cell*> cells;
-	q.push(start);
-	Cell* current;
-
-	cells.push_back(current);
-
-	while (!q.empty())
-	{
-		current = q.front();
-		q.pop();
-		
-		std::vector<glm::ivec2> move =
-		{
-			glm::ivec2(0, 1), glm::ivec2(0, -1),
-			glm::ivec2(1, 0), glm::ivec2(-1, 0)
-		};
-
-		for (int i = 0; i < 4; i++)
-		{
-			glm::ivec2 next = current->_position + move[i];
-			if (InMap(next))
-			{
-				if (_map[next.y][next.x]->_resource && 
-					_map[next.y][next.x]->_resource->GetResourceType() == type &&
-					!_map[next.y][next.x]->_resource->IsEmpty())
-				{
-					return _map[next.y][next.x]->_resource;
-				}
-				else
-				{
-					std::vector<Cell*>::iterator it = std::find(cells.begin(), cells.end(), _map[next.y][next.x]);
-					if (it == cells.end())
-					{
-						q.push(_map[next.y][next.x]);
-						cells.push_back(_map[next.y][next.x]);
-					}
-				}
-			}
-		}
-
-	}
-*/
 	return _map[nearest_resource_coordinates.y][nearest_resource_coordinates.x]->_resource;
 }
 

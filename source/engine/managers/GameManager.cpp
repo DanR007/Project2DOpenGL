@@ -104,7 +104,7 @@ void GameManager::Update(const float& deltaTime)
 	{
 		_player_controller->Move(deltaTime);
 
-		std::vector<Actor*>::iterator it = _all_actors.begin();
+		std::vector<Actor*>::const_iterator it = _all_actors.begin();
 		
 		for (; it != _all_actors.end(); ++it)
 		{
