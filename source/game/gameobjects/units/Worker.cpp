@@ -43,7 +43,7 @@ void Worker::Work(const float& deltaTime)
 			_returning = false;
 			_resource_count = 0;
 
-			if (_resource && !_resource->IsEmpty())
+			if (_resource)
 			{
 				MoveTo(_resource->GetCell());
 			}
@@ -57,17 +57,23 @@ void Worker::Work(const float& deltaTime)
 			_work_time += deltaTime;
 			if (_work_time >= _work_time_need_to_earn)
 			{
-				_work_time = 0.f;
-				_resource_count += _resource->EarnResources();
+				if(_resource)
+				{
+					_work_time = 0.f;
+					_resource_count += _resource->EarnResources();
 
 #ifdef DEBUG
-				std::cout << "Earn one resource" << std::endl;
+					std::cout << "Earn one resource" << std::endl;
 #endif
-				if (_resource_count >= _max_resource_count)
-				{
-					Returning();
+					if (_resource_count >= _max_resource_count)
+					{
+						Returning();
+					}
 				}
-				
+				else
+				{
+					FindNewResource();
+				}
 			}
 		}
 	}
@@ -77,26 +83,27 @@ void Worker::SetEmptyResource()
 {
 	_resource = nullptr;
 	_work_time = 0.f;
-	FindNewResource();
+	//FindNewResource();
 }
 
 void Worker::FindNewResource()
 {
 #ifdef DEBUG
-	std::cout << "Finding new resource " << std::endl;
+	std::cout << "Searching new resource " << std::endl;
 #endif
 	_resource = GetEngine()->GetWorld()->GetNavMesh()->GetNearestResource(_map_position, _collectable_type);
-						#ifdef DEBUG
-std::cout << "Find position is: " 
-<< _resource->GetCell()->_position.x
-<< " " 
-<< _resource->GetCell()->_position.y
-<< " "
-<< _resource->GetCell()->_symbol
-<< std::endl;
-				#endif
+						
 	if(_resource)
 	{
+#ifdef DEBUG
+		std::cout << "Find position is: " 
+		<< _resource->GetCell()->_position.x
+		<< " " 
+		<< _resource->GetCell()->_position.y
+		<< " "
+		<< _resource->GetCell()->_symbol
+		<< std::endl;
+#endif
 		_resource->NewWorker(this);
 		MoveTo(_resource->GetCell());
 	}

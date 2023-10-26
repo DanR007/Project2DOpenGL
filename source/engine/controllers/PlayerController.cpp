@@ -117,20 +117,25 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 			}
 			break;
 		case GLFW_KEY_W:
-			if (_building)
 			{
-				_building->Destroy();
-				_building = nullptr;
+				if (_building)
+				{
+					_building->Destroy();
+					_building = nullptr;
+				}
+
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+
+				yPos = window_size.y - yPos;
+				glm::ivec2 pivot_pos = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(yPos))/*чтобы здание появилось четко под курсором*/;
+				_building = GetEngine()->GetWorld()->SpawnActor<Lumber>(pivot_pos);
+				_building->SetPlayerID(_id);
+				_building->SetMapPosition(pivot_pos -
+				glm::ivec2(_building->GetBuildingSize().x - 1, 0));
+				glm::vec2 window_space = GetEngine()->GetWorld()->ConvertToWindowSpace(_building->GetMapPosition());
+				_building->SetPosition(window_space);
 			}
-
-			double xPos, yPos;
-			glfwGetCursorPos(currentWindow, &xPos, &yPos);
-
-			yPos = window_size.y - yPos;
-			glm::ivec2 pivot_pos = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(yPos));
-			_building = GetEngine()->GetWorld()->SpawnActor<Lumber>(pivot_pos);
-			_building->SetPlayerID(_id);
-
 			break;
 		}
 	}
@@ -268,7 +273,8 @@ void PlayerController::CursorMove(GLFWwindow* currentWindow, double xPos, double
 	if (_building && !_building->GetIsReplaced())
 	{
 		glm::ivec2 map_space = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(window_size.y - yPos)) -
-			glm::ivec2(_building->GetBuildingSize().x - 1, 0);
+		glm::ivec2(_building->GetBuildingSize().x - 1, 0);
+			/*отнимаем один чтобы позиция на карте была чётко под курсором, а не левее*/
 
 		if(GetEngine()->GetWorld()->GetNavMesh()->InMap(map_space))
 		{
