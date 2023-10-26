@@ -9,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 template< typename T >
-class pointer_comparator : public std::binary_function< T, T, bool >
+class pointer_comparator
 {
 public :
     bool operator()( T x, T y ) const 
