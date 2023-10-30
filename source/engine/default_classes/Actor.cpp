@@ -60,39 +60,63 @@
 	{
 		_world_position = new_position;
 		_anim_sprite->SetPosition(new_position);
-		_collider->SetPosition(new_position);
+		if (_collider)
+		{
+			_collider->SetPosition(new_position);
+		}
 	}
 	void Actor::SetSize(const glm::vec2& new_size)
 	{
 		_size = new_size;
 		_anim_sprite->SetSize(new_size);
-		_collider->SetSize(new_size);
+		if (_collider)
+		{
+			_collider->SetSize(new_size);
+		}
 	}
 	void Actor::SetRotation(const float& new_rotation)
 	{
 		_rotation = new_rotation;
 		_anim_sprite->SetRotation(new_rotation);
-		_collider->SetRotation(new_rotation);
+		if (_collider)
+		{
+			_collider->SetRotation(new_rotation);
+		}
 	}
 	void Actor::SetRelativePosition(const glm::vec2& new_position)
 	{
 		glm::vec2 d_pos = new_position - _relative_position;
 
 		_relative_position = new_position;
-		_anim_sprite->AddWorldPosition(d_pos);
-		_collider->AddWorldPosition(d_pos);
+		if (_anim_sprite)
+		{
+			_anim_sprite->AddWorldPosition(d_pos);
+		}
+		if (_collider)
+		{
+			_collider->AddWorldPosition(d_pos);
+		}
 	}
 	void Actor::AddWorldPosition(const glm::vec2& d_pos)
 	{
 		_world_position += d_pos;
-		_anim_sprite->AddWorldPosition(d_pos);
-		_collider->AddWorldPosition(d_pos);
+		if (_anim_sprite)
+		{
+			_anim_sprite->AddWorldPosition(d_pos);
+		}
+		if (_collider)
+		{
+			_collider->AddWorldPosition(d_pos);
+		}
 	}
 	void Actor::AddWorldRotation(const float& d_rot)
 	{
 		_rotation += d_rot;
 		_anim_sprite->AddWorldRotation(d_rot);
-		_collider->AddWorldRotation(d_rot);
+		if (_collider)
+		{
+			_collider->AddWorldRotation(d_rot);
+		}
 	}
 	void Actor::AddAnimState(const std::string& stateName, std::vector<std::pair<std::string, float>> subTextureDuration)
 	{

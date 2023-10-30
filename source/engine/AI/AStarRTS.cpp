@@ -78,7 +78,17 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, Cell* target)
 	while (p_cur->GetCell() != trully_target)
 	{
 		p_cur = _close_cells.back();
-		Cell* cur = p_cur->GetCell();
+		Cell* cur;
+
+		if (p_cur)
+		{
+			cur = p_cur->GetCell();
+		}
+		else
+		{
+			std::cout << "Get null p_cur in AStarRTS::DevelopPath" << std::endl;
+			break;
+		}
 
 		for (short unsigned int i = 0; i < _count_move_dir; i++)
 		{
@@ -171,7 +181,7 @@ void AStarRTS::CollectPath(PathCell* end_cell)
 	//потому что текущая клетка на которой стоит наш персонаж 
 	//не имеет предыдущей клетки
 	PathCell* cell = end_cell;
-	while (cell->GetPrev())
+	while (cell && cell->GetPrev())
 	{
 		_path.emplace(_path.begin(), cell->GetCell()->_position);
 		cell = cell->GetPrev();
@@ -196,46 +206,14 @@ Cell* AStarRTS::FindNearestCell(Cell* target, unsigned short need_id)
 #endif //DEBUG
 		return nullptr;
 	}
-/*
-	std::queue<glm::ivec2> q;
-	std::vector<glm::ivec2> close;
-	q.push(target->_position);
-	while (!q.empty())
-	{
-		glm::ivec2 current = q.back();
-		glm::ivec2 next;
-		close.push_back(current);
-		q.pop();
-		for (unsigned short int i = 0; i < _count_move_dir; i++)
-		{
-			next = current + _move_dir[i];
 
-			if (LocateInMap(next))
-			{
-				if (_nav_mesh->_map[next.y][next.x]->_field_id == need_id && _nav_mesh->_map[next.y][next.x]->_symbol == ' ')
-				{
-					return _nav_mesh->_map[next.y][next.x];
-				}
-				else
-				{
-					std::vector<glm::ivec2>::iterator it = std::find(close.begin(), close.end(), next);
-					if (it == close.end())
-					{
-						q.push(next);
-					}
-				}
-			}
-
-		}
-	}
-*/
 	return _nav_mesh->_map[nearest_coordinates.y][nearest_coordinates.x];
 }
 
 PathCell* AStarRTS::GetMinCostCell()
 {
 	float min = FLT_MAX;
-	std::vector<PathCell*>::const_iterator min_it;
+	std::vector<PathCell*>::const_iterator min_it = _open_cells.begin();
 	for (std::vector<PathCell*>::const_iterator it = _open_cells.begin(); it != _open_cells.end(); it++)
 	{
 		if ((*it)->GetCost() < min)
@@ -244,9 +222,13 @@ PathCell* AStarRTS::GetMinCostCell()
 			min_it = it;
 		}
 	}
+	PathCell* min_p = nullptr;
 
-	PathCell* min_p = (*min_it);
-	_open_cells.erase(min_it);
+	if (min_it != _open_cells.end())
+	{
+		min_p = *min_it;
+		_open_cells.erase(min_it);
+	}
 
 	return min_p;
 }
