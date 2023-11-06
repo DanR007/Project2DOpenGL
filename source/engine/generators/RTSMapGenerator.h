@@ -30,12 +30,18 @@ struct Cell
 	{
 		return c._position == _position;
 	}
+
+    void SetID(unsigned short int id)
+	{
+		_field_id = id;
+	}
+
 	glm::ivec2 _position;
 
 	short int _height, _cost;
 	unsigned short int _field_id;
 	char _symbol;
-
+	
 	Resource* _resource = nullptr;
 };
 
