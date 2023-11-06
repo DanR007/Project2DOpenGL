@@ -15,7 +15,8 @@ Worker::Worker(const glm::ivec2& position, const EResourceTypes& type):
 	_collectable_type = type;
 
 	_home_cell = GetEngine()->GetWorld()->GetMap()[position.y][position.x];
-
+	std::cout << position.x << " " << position.y << std::endl;
+	std::cout << _home_cell->_position.x << " " << _home_cell->_position.y << std::endl;
 	FindNewResource();
 }
 

@@ -55,7 +55,8 @@ bool Building::CanReplace()
 		for (int j = 0; j < _building_size.x; j++)
 		{
 			glm::ivec2 check_pos = glm::ivec2(_map_position.x + j, _map_position.y + i);
-			if (!(GetEngine()->GetWorld()->GetNavMesh()->InMap(check_pos) && GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(check_pos)))
+			if (!(GetEngine()->GetWorld()->GetNavMesh()->InMap(check_pos) 
+			&& GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(check_pos)))
 			{
 				return false;
 			}
