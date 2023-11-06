@@ -60,7 +60,7 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, Cell* target)
 	//текущей позицией, то находим ближайшую к нашей цели, которая находится 
 	//на нашем острове
 	if (start_cell->_field_id != target->_field_id
-|| target->_cost == -1 || target->_symbol != ' ')
+|| target->_cost == -1 || _nav_mesh->IsFreeCell(target->_position) == false)
 	{
 		trully_target = FindNearestCell(target, start_cell->_field_id);
 	}
