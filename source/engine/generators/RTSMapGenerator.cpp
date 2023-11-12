@@ -172,6 +172,7 @@ std::vector<std::vector<Cell*>> RTSMapGenerator::GenerateMap()
 		//std::cout << std::endl;
 
 	}
+	FillFieldID(symbol_array);
 	//std::cout << "/////////////////" << std::endl;
 
 	/*for (int y = _size.y - 1; y >= 0; y--)
@@ -244,13 +245,14 @@ void RTSMapGenerator::CellularAutomaton(const int& count_life_cells_need, const 
 
 void RTSMapGenerator::FillFieldID(std::vector<std::vector<char>>& map)
 {
-	unsigned short int num = 0;
+	unsigned short int num = 1;
 
-	for (int i = 0; i < _size.y; i++)
+	for (int i = 0; i < _size.y; ++i)
 	{
-		for (int j = 0; j < _size.x; j++)
+		for (int j = 0; j < _size.x; ++j)
 		{
-			if (map[i][j] == _free_cell_symbol)
+			if (map[i][j] == _free_cell_symbol 
+			&& _map[i][j]->_field_id == 0)
 			{
 				FillAllInBreath(glm::ivec2(j, i), map, num++);
 			}
@@ -265,7 +267,7 @@ void RTSMapGenerator::FillAllInBreath(const glm::ivec2& start, std::vector<std::
 	q.push(start);
 
 	map[start.y][start.x] = _free_cell_symbol;
-	_map[start.y][start.x]->_field_id = id;
+	_map[start.y][start.x]->SetID(id);
 
 	std::vector<glm::ivec2> neighbours =
 	{
@@ -280,15 +282,15 @@ void RTSMapGenerator::FillAllInBreath(const glm::ivec2& start, std::vector<std::
 		glm::ivec2 cur = q.front();
 		q.pop();
 
-		for (int i = 0; i < neighbours.size(); i++)
+		for (int i = 0; i < neighbours.size(); ++i)
 		{
 			glm::ivec2 neighbour = cur + neighbours[i];
 
-			if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < _size.x && neighbour.y < _size.y && map[neighbour.y][neighbour.x] == _free_cell_symbol)
+			if (neighbour.x >= 0 && neighbour.y >= 0 && neighbour.x < _size.x && neighbour.y < _size.y 
+			&& map[neighbour.y][neighbour.x] == _free_cell_symbol && _map[neighbour.y][neighbour.x]->_field_id == 0)
 			{
 				q.push(neighbour);
-				map[neighbour.y][neighbour.x] = _free_cell_symbol;
-				_map[neighbour.y][neighbour.x]->_field_id = id;
+				_map[neighbour.y][neighbour.x]->SetID(id);
 			}
 
 		}

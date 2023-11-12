@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 
 #include "../../../engine/default_classes/Pawn.h"

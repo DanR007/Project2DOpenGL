@@ -15,7 +15,7 @@
 
 std::map<EBuildingType, std::string> _building_sprite_name = {
 	{EBuildingType::EBT_Lumber, "lumber"},
-	{EBuildingType::EBT_Quary, "quary"},
+	{EBuildingType::EBT_Quarry, "quarry"},
 	{EBuildingType::EBT_None, ""}
 };
 

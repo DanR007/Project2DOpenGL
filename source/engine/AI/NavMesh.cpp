@@ -62,7 +62,7 @@ std::vector<std::vector<Cell*>> NavMeshRTS::GetMap()
 
 void NavMeshRTS::ClearMapCell(const glm::ivec2& position)
 {
-	_map[position.y][position.x]->_symbol = '.';
+	_map[position.y][position.x]->_symbol = _free_cell;
 	_map[position.y][position.x]->_resource = nullptr;
 
 	RefillAllID();
@@ -114,16 +114,19 @@ Resource* NavMeshRTS::GetNearestResource(const glm::ivec2& position, const EReso
 
 void NavMeshRTS::RefillAllID()
 {
-	unsigned short int num = 0;
+	ResetMapID();
 
-	for (int i = 0; i < _map.size(); i++)
+	unsigned short int id = 1;
+
+	for (int y = 0; y < _map.size(); ++y)
 	{
-		for (int j = 0; j < _map[i].size(); j++)
+		for (int x = 0; x < _map[y].size(); ++x)
 		{
-			if (IsFreeCell(glm::ivec2(j, i))
-			&& _map[i][j]->_field_id != num)
+			if (IsFreeCell(glm::ivec2(x, y))
+			&& _map[y][x]->_field_id == 0
+			&& _map[y][x]->_field_id != id)
 			{
-				RefillIDInBreadth(glm::ivec2(j, i), num++);
+				RefillIDInBreadth(glm::ivec2(x, y), id++);
 			}
 		}
 	}
@@ -135,7 +138,7 @@ void NavMeshRTS::RefillIDInBreadth(const glm::ivec2& start, unsigned short int i
 
 	q.push(start);
 
-	_map[start.y][start.x]->_field_id = id;
+	_map[start.y][start.x]->SetID(id);
 
 	std::vector<glm::ivec2> neighbours =
 	{
@@ -154,12 +157,23 @@ void NavMeshRTS::RefillIDInBreadth(const glm::ivec2& start, unsigned short int i
 		{
 			glm::ivec2 neighbour = cur + neighbours[i];
 
-			if (InMap(neighbour) && IsFreeCell(neighbour))
+			if (InMap(neighbour) && IsFreeCell(neighbour) &&
+			_map[neighbour.y][neighbour.x]->_field_id == 0)
 			{
 				q.push(neighbour);
-				_map[neighbour.y][neighbour.x]->_field_id = id;
+				_map[neighbour.y][neighbour.x]->SetID(id);
 			}
+		}
+	}
+}
 
+void NavMeshRTS::ResetMapID()
+{
+	for (int y = 0; y < _map.size(); ++y)
+	{
+		for (int x = 0; x < _map[y].size(); ++x)
+		{
+			_map[y][x]->_field_id = 0;
 		}
 	}
 }
