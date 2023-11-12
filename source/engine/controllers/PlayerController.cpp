@@ -43,17 +43,7 @@ PlayerController::PlayerController(uint8_t id) : _id(id)
 
 	_widget = GetEngine()->GetHUDManager()->CreateWidget();
 
-	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 5.f));
-
-	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(20.f), glm::vec2(35.f)), 10, EResourceTypes::ERT_Wood)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Wood] + " " + std::to_string(10));
-	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(35.f * 12, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Stone)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Stone] + " " + std::to_string(0));
-	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(35.f * 24, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Gold)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
+	ConfigureUI();
 }
 
 PlayerController::PlayerController(uint8_t id, Widget* widget): _widget(widget), _id(id)
@@ -70,17 +60,7 @@ PlayerController::PlayerController(uint8_t id, Widget* widget): _widget(widget),
 
 	_move_speed = 20.f;
 
-	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 5.f));
-
-	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(20.f), glm::vec2(35.f)), 10, EResourceTypes::ERT_Wood)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Wood] + " " + std::to_string(10));
-	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(35.f * 12, 20.f), glm::vec2(35.f)), 20, EResourceTypes::ERT_Stone)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Stone] + " " + std::to_string(20));
-	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(35.f * 24, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Gold)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
+	ConfigureUI();
 }
 
 PlayerController::~PlayerController()
@@ -202,26 +182,13 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 
 			if (_building == nullptr)
 			{
-				//Print map symbol by coordinates
 				if (GetWorld()->GetNavMesh()->InMap(map_coord))
 				{
 #ifdef DEBUG
+				//Print map symbol by coordinates
 					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]->_symbol << std::endl;
 #endif //DEBUG
-					//find unit under cursor
-					Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(glm::vec2((float)xPos, (float)yPos));
-					if (_unit)
-						_unit->SetSelected(_unit == unit);
-
-					if (unit && unit->GetID() == _id)
-					{
-						_unit = unit;
-						_unit->SetSelected(true);
-					}
-					else
-					{
-						_unit = nullptr;
-					}
+					ChooseUnit(glm::vec2(xPos, yPos));
 				}
 			}
 			else
@@ -377,3 +344,37 @@ bool PlayerController::EnoughResources(const std::vector<std::pair<EResourceType
 	return true;
 }
 
+void PlayerController::ConfigureUI()
+{
+	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 5.f));
+
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(20.f), glm::vec2(35.f)), 10, EResourceTypes::ERT_Wood)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Wood] + " " + std::to_string(10));
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(35.f * 12, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Stone)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Stone] + " " + std::to_string(0));
+	_resource_stocks.emplace_back(ResourceStock(
+		_widget->AddElement<Text>(glm::vec2(35.f * 24, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Gold)
+	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
+}
+
+void PlayerController::ChooseUnit(const glm::vec2 &mouse_pos)
+{
+	//find unit under cursor
+	Unit* unit = GetEngine()->GetPhysicsManager()->GetUnitUnderCursor(mouse_pos);
+	if (_unit)
+	{
+		_unit->SetSelected(_unit == unit);
+	}
+
+	if (unit && unit->GetID() == _id)
+	{
+		_unit = unit;
+		_unit->SetSelected(true);
+	}
+	else
+	{
+		_unit = nullptr;
+	}
+}
