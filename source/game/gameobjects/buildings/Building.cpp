@@ -74,4 +74,6 @@ void Building::Update(const float& deltaTime)
 void Building::Replace()
 {
 	_replace = true;
+
+	_selected_sprite->SetPosition(GetAnimSprite()->GetPosition());
 }

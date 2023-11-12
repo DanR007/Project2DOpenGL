@@ -71,14 +71,15 @@ public:
 	void Destroy() override;
 
 protected:
+	std::vector<Component*> _components;
+
+	Physics::Collider* _collider = nullptr;
+private:
 	bool _delete_flag = false;
 
 	glm::vec2 _world_position, _relative_position;
 	glm::vec2 _size;
 	float _rotation;
 
-	std::vector<Component*> _components;
-
 	Renderer::AnimSprite* _anim_sprite = nullptr;
-	Physics::Collider* _collider = nullptr;
 };

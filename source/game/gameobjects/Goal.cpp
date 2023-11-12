@@ -30,7 +30,7 @@ void Goal::Update(const float& deltaTime)
 {
 	if (_unit)
 	{
-		_anim_sprite->SetNeedToRender(_unit->GetIsSelected());
+		GetAnimSprite()->SetNeedToRender(_unit->GetIsSelected());
 	}
 }
 
