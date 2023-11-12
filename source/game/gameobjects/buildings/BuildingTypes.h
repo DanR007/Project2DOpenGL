@@ -1,3 +1,5 @@
+#pragma once
+
 #include <map>
 #include <string>
 
@@ -5,7 +7,7 @@
 enum class EBuildingType
 {
 	EBT_Lumber,
-	EBT_Quary,
+	EBT_Quarry,
 	EBT_None
 };
 /// @brief словарь который хранит имена строений и их тип

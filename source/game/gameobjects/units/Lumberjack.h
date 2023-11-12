@@ -1,3 +1,5 @@
+#pragma once
+
 #include "Worker.h"
 
 class Lumberjack : public Worker

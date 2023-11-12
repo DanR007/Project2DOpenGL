@@ -102,6 +102,8 @@ public:
 protected:
 	bool EnoughResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
 
+	template<typename T>
+	void CreateBuilding(const glm::vec2& position);
 	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _offset;
 

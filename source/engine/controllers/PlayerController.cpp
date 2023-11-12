@@ -10,6 +10,7 @@
 #include "../../game/gameobjects/Goal.h"
 
 #include "../../game/gameobjects/buildings/Lumber.h"
+#include "../../game/gameobjects/buildings/Quarry.h"
 
 #include "../UI/Widget.h"
 #include "../UI/Text.h"
@@ -87,6 +88,18 @@ PlayerController::~PlayerController()
 	_choicing_units.~vector();
 }
 
+template<typename T>
+void PlayerController::CreateBuilding(const glm::vec2& position)
+{
+	glm::ivec2 pivot_pos = GetEngine()->GetWorld()->ConvertToMapSpace(position)/*чтобы здание появилось четко под курсором*/;
+	_building = GetEngine()->GetWorld()->SpawnActor<T>(pivot_pos);
+	_building->SetPlayerID(_id);
+	_building->SetMapPosition(pivot_pos -
+	glm::ivec2(_building->GetBuildingSize().x - 1, 0));
+	glm::vec2 window_space = GetEngine()->GetWorld()->ConvertToWindowSpace(_building->GetMapPosition());
+	_building->SetPosition(window_space);
+}
+
 void PlayerController::Move(float deltaTime)
 {
 	_move_value = _move_vector * deltaTime * _move_speed;
@@ -103,7 +116,11 @@ void PlayerController::ChangeMoveVector(glm::vec2 inputVector)
 	_move_vector += inputVector;
 }
 
-void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode)
+void PlayerController::InputKeyboard(GLFWwindow* currentWindow
+									, int key
+									, int scancode
+									, int action
+									, int mode)
 {
 	switch (action)
 	{
@@ -128,13 +145,22 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow, int key, int sca
 				glfwGetCursorPos(currentWindow, &xPos, &yPos);
 
 				yPos = window_size.y - yPos;
-				glm::ivec2 pivot_pos = GetEngine()->GetWorld()->ConvertToMapSpace(float(xPos), float(yPos))/*чтобы здание появилось четко под курсором*/;
-				_building = GetEngine()->GetWorld()->SpawnActor<Lumber>(pivot_pos);
-				_building->SetPlayerID(_id);
-				_building->SetMapPosition(pivot_pos -
-				glm::ivec2(_building->GetBuildingSize().x - 1, 0));
-				glm::vec2 window_space = GetEngine()->GetWorld()->ConvertToWindowSpace(_building->GetMapPosition());
-				_building->SetPosition(window_space);
+				CreateBuilding<Lumber>(glm::vec2(xPos, yPos));
+			}
+			break;
+		case GLFW_KEY_S:
+			{
+				if (_building)
+				{
+					_building->Destroy();
+					_building = nullptr;
+				}
+
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+
+				yPos = window_size.y - yPos;
+				CreateBuilding<Quarry>(glm::vec2(xPos, yPos));
 			}
 			break;
 		}
@@ -327,6 +353,7 @@ void PlayerController::MinusResources(const std::vector<std::pair<EResourceTypes
 	{
 		for (std::pair<EResourceTypes, size_t> resource : resources)
 		{
+			//
 			if (res == resource.first)
 			{
 				res._count -= resource.second;

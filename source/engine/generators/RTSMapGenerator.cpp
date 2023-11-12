@@ -247,9 +247,9 @@ void RTSMapGenerator::FillFieldID(std::vector<std::vector<char>>& map)
 {
 	unsigned short int num = 1;
 
-	for (int i = 0; i < _size.y; i++)
+	for (int i = 0; i < _size.y; ++i)
 	{
-		for (int j = 0; j < _size.x; j++)
+		for (int j = 0; j < _size.x; ++j)
 		{
 			if (map[i][j] == _free_cell_symbol 
 			&& _map[i][j]->_field_id == 0)
