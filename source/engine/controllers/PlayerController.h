@@ -54,13 +54,33 @@ public:
 
 	virtual ~PlayerController();
 
+	/// @brief перемещение камеры (курсором)
+	/// @param deltaTime 
 	void Move(float deltaTime) override;
+	/// @brief изменение вектора перемещения камеры
+	/// @param inputVector 
 	void ChangeMoveVector(glm::vec2 inputVector) override;
 
+	/// @brief ввод с клавиатуры
+	/// @param currentWindow текущее окно, из которого был вызов
+	/// @param key клавиша
+	/// @param scancode 
+	/// @param action действие (зажатие, отпускание или клик)
+	/// @param mode 
 	void InputKeyboard(GLFWwindow* currentWindow, int key, int scancode, int action, int mode);
+	/// @brief ввод с мыши
+	/// @param currentWindow 
+	/// @param button 
+	/// @param action 
+	/// @param mode 
 	void InputMouse(GLFWwindow* currentWindow, int button, int action, int mode);
+	/// @brief движение курсора
+	/// @param currentWindow 
+	/// @param xPos 
+	/// @param yPos 
 	void CursorMove(GLFWwindow* currentWindow, double xPos, double yPos);
 
+	/// @brief выставление стандартных делегатов
 	void SetupDefaultFunctions();
 
 	void SetWidget(Widget* widget);
@@ -100,10 +120,22 @@ public:
 	void MinusResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
 	
 protected:
+	/// @brief достаточно ли ресурсов на действие
+	/// @param resources 
+	/// @return 
 	bool EnoughResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
 
+	/// @brief создание здания
+	/// @tparam T тип здания
+	/// @param position позиция курсора в окне
 	template<typename T>
 	void CreateBuilding(const glm::vec2& position);
+	/// @brief загрузка интерфейса
+	void ConfigureUI();
+	/// @brief выбор юнита
+	/// @param mouse_pos позиция курсора мыши
+	void ChooseUnit(const glm::vec2& mouse_pos);
+
 	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _offset;
 

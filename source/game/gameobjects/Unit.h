@@ -37,6 +37,12 @@ public:
 	void MoveTo(Cell* cell);
 	//destroy goal
 	void MakePathComplete();
+	/// @brief может ли игрок контролировать юнит
+	/// @return 
+	bool CanControlling() const {return _controlling;}
 protected:
+	/// @brief может ли игрок контролировать его или нет
+	bool _controlling = false;
+	/// @brief цель куда движется юнит
 	Goal* _goal = nullptr;
 };

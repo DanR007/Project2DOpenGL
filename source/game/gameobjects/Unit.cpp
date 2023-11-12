@@ -68,7 +68,7 @@ void Unit::Update(const float& deltaTime)
 void Unit::Move(const glm::vec2& position)
 {
 	SetPosition(position);
-	_selected_sprite->SetPosition(_world_position);
+	_selected_sprite->SetPosition(GetPosition());
 }
 
 void Unit::MoveTo(Cell* cell)
