@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Resource.h"
+#include "Resource.h"
 
 
 class Stone : public Resource

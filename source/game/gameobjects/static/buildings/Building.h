@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "../../../engine/default_classes/Pawn.h"
+#include "../../../../engine/default_classes/Pawn.h"
 
 #include "BuildingTypes.h"
 

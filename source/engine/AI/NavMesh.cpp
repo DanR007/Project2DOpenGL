@@ -11,8 +11,8 @@
 #include <algorithm>
 #endif //__linux__
 
-#include "../../game/ResourceTypes.h"
-#include "../../game/gameobjects/Resource.h"
+#include "../../game/gameobjects/static/resources/ResourceTypes.h"
+#include "../../game/gameobjects/static/resources/Resource.h"
 
 #include "../math/Algorithm.h"
 

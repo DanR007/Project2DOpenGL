@@ -13,7 +13,7 @@
 #include "../default_classes/Actor.h"
 
 #include "../generators/RTSMapGenerator.h"
-#include "../../game/gameobjects/Resource.h"
+#include "../../game/gameobjects/static/resources/Resource.h"
 
 namespace Renderer
 {

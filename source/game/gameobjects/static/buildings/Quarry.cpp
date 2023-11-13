@@ -1,11 +1,11 @@
 #include "Quarry.h"
 
-#include "../units/Bricklayer.h"
+#include "../../units/Bricklayer.h"
 
-#include "../../../main.h"
+#include "../../../../main.h"
 
-#include "../../../engine/managers/EngineManager.h"
-#include "../../../engine/managers/GameManager.h"
+#include "../../../../engine/managers/EngineManager.h"
+#include "../../../../engine/managers/GameManager.h"
 
 Quarry::Quarry(const glm::ivec2& position):
 	Building(position, glm::ivec2(2), EBuildingType::EBT_Quarry)

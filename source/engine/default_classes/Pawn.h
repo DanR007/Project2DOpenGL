@@ -2,7 +2,7 @@
 
 #include "Actor.h"
 
-#include "../../game/ResourceTypes.h"
+#include "../../game/gameobjects/static/resources/ResourceTypes.h"
 
 class Controller;
 

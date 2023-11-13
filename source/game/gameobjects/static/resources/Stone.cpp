@@ -1,8 +1,8 @@
 #include "Stone.h"
 
-#include "../../../main.h"
+#include "../../../../main.h"
 
-#include "../../../engine/managers/GameManager.h"
+#include "../../../../engine/managers/GameManager.h"
 
 Stone::Stone(const glm::ivec2& position):
 	Resource("stone", position, GetWorld()->GetBlockSize(), 0.f)

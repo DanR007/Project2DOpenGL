@@ -78,30 +78,30 @@ source/engine/parser/XMLParser.cpp
 
 
 set(GAME_HEADERS
-source/game/ResourceTypes.h
-source/game/gameobjects/Unit.h
 source/game/gameobjects/Goal.h
-source/game/gameobjects/Resource.h
-source/game/gameobjects/static/Stone.h
-source/game/gameobjects/static/Wood.h
-source/game/gameobjects/buildings/BuildingTypes.h
-source/game/gameobjects/buildings/Building.h
-source/game/gameobjects/buildings/Lumber.h
-source/game/gameobjects/buildings/Quarry.h
+source/game/gameobjects/static/resources/ResourceTypes.h
+source/game/gameobjects/static/resources/Resource.h
+source/game/gameobjects/static/resources/Stone.h
+source/game/gameobjects/static/resources/Wood.h
+source/game/gameobjects/static/buildings/BuildingTypes.h
+source/game/gameobjects/static/buildings/Building.h
+source/game/gameobjects/static/buildings/Lumber.h
+source/game/gameobjects/static/buildings/Quarry.h
+source/game/gameobjects/units/Unit.h
 source/game/gameobjects/units/Worker.h
 source/game/gameobjects/units/Lumberjack.h
 source/game/gameobjects/units/Bricklayer.h
 )
 
 set(GAME_CPP
-source/game/gameobjects/Unit.cpp
 source/game/gameobjects/Goal.cpp
-source/game/gameobjects/Resource.cpp
-source/game/gameobjects/static/Stone.cpp
-source/game/gameobjects/static/Wood.cpp
-source/game/gameobjects/buildings/Building.cpp
-source/game/gameobjects/buildings/Lumber.cpp
-source/game/gameobjects/buildings/Quarry.cpp
+source/game/gameobjects/static/resources/Resource.cpp
+source/game/gameobjects/static/resources/Stone.cpp
+source/game/gameobjects/static/resources/Wood.cpp
+source/game/gameobjects/static/buildings/Building.cpp
+source/game/gameobjects/static/buildings/Lumber.cpp
+source/game/gameobjects/static/buildings/Quarry.cpp
+source/game/gameobjects/units/Unit.cpp
 source/game/gameobjects/units/Worker.cpp
 source/game/gameobjects/units/Lumberjack.cpp
 source/game/gameobjects/units/Bricklayer.cpp

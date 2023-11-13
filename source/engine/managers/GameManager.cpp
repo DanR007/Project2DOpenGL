@@ -10,10 +10,10 @@
 
 #include "../AI/NavMesh.h"
 
-#include "../../game/gameobjects/Unit.h"
+#include "../../game/gameobjects/units/Unit.h"
 
-#include "../../game/gameobjects/static/Stone.h"
-#include "../../game/gameobjects/static/Wood.h"
+#include "../../game/gameobjects/static/resources/Stone.h"
+#include "../../game/gameobjects/static/resources/Wood.h"
 
 #include "../UI/Widget.h"
 #include "../UI/Text.h"

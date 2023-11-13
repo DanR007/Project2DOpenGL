@@ -6,7 +6,7 @@
 
 #include "../Delegate.h"
 
-#include "../../game/ResourceTypes.h"
+#include "../../game/gameobjects/static/resources/ResourceTypes.h"
 
 #include <string>
 #include <map>

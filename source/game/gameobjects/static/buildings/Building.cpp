@@ -1,17 +1,17 @@
 #include "Building.h"
 
-#include "../../../main.h"
+#include "../../../../main.h"
 
-#include "../../../engine/managers/EngineManager.h"
-#include "../../../engine/managers/GameManager.h"
-#include "../../../engine/managers/PhysicsManager.h"
-#include "../../../engine/managers/RenderManager.h"
+#include "../../../../engine/managers/EngineManager.h"
+#include "../../../../engine/managers/GameManager.h"
+#include "../../../../engine/managers/PhysicsManager.h"
+#include "../../../../engine/managers/RenderManager.h"
 
-#include "../../../engine/physics/Collider.h"
+#include "../../../../engine/physics/Collider.h"
 
-#include "../../../engine/AI/NavMesh.h"
+#include "../../../../engine/AI/NavMesh.h"
 
-#include "../units/Worker.h"
+#include "../../units/Worker.h"
 
 std::map<EBuildingType, std::string> _building_sprite_name = {
 	{EBuildingType::EBT_Lumber, "lumber"},

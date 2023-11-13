@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../Resource.h"
+#include "Resource.h"
 
 class Wood : public Resource
 {
