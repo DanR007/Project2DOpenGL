@@ -1,7 +1,7 @@
 #pragma once
-#include "../Unit.h"
+#include "Unit.h"
 
-#include "../Resource.h"
+#include "../static/resources/Resource.h"
 
 
 class Worker : public Unit

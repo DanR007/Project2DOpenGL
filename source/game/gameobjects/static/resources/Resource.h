@@ -1,8 +1,8 @@
 #pragma once
 
-#include "../../engine/default_classes/Actor.h"
+#include "../../../../engine/default_classes/Actor.h"
 
-#include "../ResourceTypes.h"
+#include "ResourceTypes.h"
 
 struct Cell;
 class Worker;

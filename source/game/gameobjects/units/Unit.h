@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../../engine/default_classes/Pawn.h"
+#include "../../../engine/default_classes/Pawn.h"
 
 struct Cell;
 

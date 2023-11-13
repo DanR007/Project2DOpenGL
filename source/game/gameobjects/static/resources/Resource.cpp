@@ -1,16 +1,16 @@
 #include "Resource.h"
 
-#include "../../engine/physics/Collider.h"
+#include "../../../../engine/physics/Collider.h"
 
-#include "../../engine/managers/GameManager.h"
+#include "../../../../engine/managers/GameManager.h"
 
-#include "../../engine/AI/NavMesh.h"
+#include "../../../../engine/AI/NavMesh.h"
 
-#include "../../main.h"
+#include "../../../../main.h"
 
-#include "../../engine/generators/RTSMapGenerator.h"
+#include "../../../../engine/generators/RTSMapGenerator.h"
 
-#include "units/Worker.h"
+#include "../../units/Worker.h"
 
 Resource::Resource(const std::string& init_sprite_name
 		, const glm::vec2& startPosition

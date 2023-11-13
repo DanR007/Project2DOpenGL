@@ -6,11 +6,11 @@
 
 #include "../AI/NavMesh.h"
 
-#include "../../game/gameobjects/Unit.h"
+#include "../../game/gameobjects/units/Unit.h"
 #include "../../game/gameobjects/Goal.h"
 
-#include "../../game/gameobjects/buildings/Lumber.h"
-#include "../../game/gameobjects/buildings/Quarry.h"
+#include "../../game/gameobjects/static/buildings/Lumber.h"
+#include "../../game/gameobjects/static/buildings/Quarry.h"
 
 #include "../UI/Widget.h"
 #include "../UI/Text.h"

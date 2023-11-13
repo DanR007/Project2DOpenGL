@@ -7,7 +7,7 @@
 
 #include "../../main.h"
 
-#include "../../game/gameobjects/Unit.h"
+#include "../../game/gameobjects/units/Unit.h"
 #include "../../game/gameobjects/Goal.h"
 
 Controller::Controller(Unit* controlledPawn, const float moveSpeed)
