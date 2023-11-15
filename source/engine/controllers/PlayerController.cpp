@@ -362,11 +362,11 @@ void PlayerController::ConfigureUI()
 	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
 
 
-	Button* button = _widget->AddElement<Button>(glm::vec2(0), glm::vec2(0));
+	/*Button* button = _widget->AddElement<Button>(glm::vec2(0), glm::vec2(0));
 	Image* img = _widget->AddElement<Image>(glm::vec2(0), glm::vec2(80, 20));
 	img->SetSprite(GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, glm::vec2(0), glm::vec2(80, 20), "wall", "textureAtlas", TEXT_IMAGES));
 	button->SetFilling(img);
-	button->ChangePosition(glm::vec2(10));
+	button->ChangePosition(glm::vec2(10));*/
 }
 
 void PlayerController::ChooseUnit(const glm::vec2 &mouse_pos)
