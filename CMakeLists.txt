@@ -29,6 +29,8 @@ source/engine/UI/Widget.h
 source/engine/UI/UIElement.h
 source/engine/UI/Text.h
 source/engine/UI/Panel.h
+source/engine/UI/Button.h
+source/engine/UI/Image.h
 source/engine/controllers/Controller.h
 source/engine/controllers/PlayerController.h
 source/engine/generators/RTSMapGenerator.h
@@ -62,6 +64,8 @@ source/engine/UI/Widget.cpp
 source/engine/UI/UIElement.cpp
 source/engine/UI/Text.cpp
 source/engine/UI/Panel.cpp
+source/engine/UI/Button.cpp
+source/engine/UI/Image.cpp
 source/engine/controllers/Controller.cpp
 source/engine/controllers/PlayerController.cpp
 source/engine/generators/RTSMapGenerator.cpp

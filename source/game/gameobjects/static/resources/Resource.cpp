@@ -3,6 +3,7 @@
 #include "../../../../engine/physics/Collider.h"
 
 #include "../../../../engine/managers/GameManager.h"
+#include "../../../../engine/managers/RenderManager.h"
 
 #include "../../../../engine/AI/NavMesh.h"
 
@@ -17,7 +18,7 @@ Resource::Resource(const std::string& init_sprite_name
 		, const glm::vec2& startSize
 		, const uint8_t& render_layer
 		, const float startRotation):
-		Actor(init_sprite_name, startPosition, startSize, render_layer, startRotation)
+		Actor(init_sprite_name, startPosition, startSize, STATIC, startRotation)
 {
 	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_StaticObject, this, startPosition, startSize);
 	_components.push_back(_collider);

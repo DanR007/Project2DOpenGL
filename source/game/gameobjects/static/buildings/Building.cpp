@@ -24,6 +24,7 @@ Building::Building(const glm::ivec2& pivot_position, const glm::ivec2& size, con
 	_building_sprite_name[type]
 	, GetEngine()->GetWorld()->ConvertToWindowSpace(pivot_position) - glm::vec2((GetEngine()->GetWorld()->GetBlockSize().x) * (size.x - 1), 0)
 	, glm::vec2(GetEngine()->GetWorld()->GetBlockSize().x * size.x, GetEngine()->GetWorld()->GetBlockSize().y * size.y)
+	, STATIC
 	)
 {
 	_building_size = size;

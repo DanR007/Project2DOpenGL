@@ -24,7 +24,7 @@ protected:
 	Actor* _owner;
 };
 
-class MovableComponent:public Component
+class MovableComponent : public Component
 {
 public:
 	MovableComponent(Actor* owner = nullptr,

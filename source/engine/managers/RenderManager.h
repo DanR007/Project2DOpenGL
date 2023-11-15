@@ -8,6 +8,14 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+
+#define STATIC 0
+#define DYNAMIC 1
+#define BACKGROUND 2
+#define BUTTON 3
+#define TEXT_IMAGES 4
+
+
 template< typename T >
 class pointer_comparator
 {
@@ -30,10 +38,10 @@ public:
 	}
 	~RenderManager();
 
-	/*render_layer for static game actors is 0, for dynamic 1, for UI background is 2, for text and images 3*/
+	/*render_layer for static game actors is STATIC, for dynamic DYNAMIC, for UI background is BACKGROUND, for button use BUTTON and for text and images TEXT_IMAGES*/
 	template<typename T>
 	T* CreateSprite(Actor* owner, const glm::vec2& position, const glm::vec2& size, const std::string& initSpriteName, 
-		const std::string& texture_atlas_name = "textureAtlas", const uint8_t& render_layer = 0, const float& rotation = 0.f)
+		const std::string& texture_atlas_name = "textureAtlas", const uint8_t& render_layer = STATIC, const float& rotation = 0.f)
 	{
 		std::map<std::string, Renderer::RenderImage*>::const_iterator it = _map_all_images.find(initSpriteName);
 
