@@ -61,7 +61,12 @@ public:
 
 		return new_sprite;
 	}
-
+	/// @brief создание новой картинки (не UI)
+	/// @param texture текстура которая будет использоваться
+	/// @param shader шейдер
+	/// @param initialSubtextureName имя подтекстуры для картинки
+	/// @param render_layer слой рендера (0 - самый первый)
+	/// @return сама картинка
 	Renderer::RenderImage* CreateNewImage(std::shared_ptr<Renderer::Texture2D> texture, std::shared_ptr <Renderer::ShaderProgram> shader,
 		const std::string& initialSubtextureName, const uint8_t& render_layer);
 
@@ -69,13 +74,19 @@ public:
 
 	void Erase(Renderer::Sprite* spr);
 private:
+	/// @brief заполняем массив видимыми в пределах экрана, и подлежащих отрисовки, спрайтами
+	/// @param in_view массив нужных для рендера спрайтов
+	/// @param img картинка на которой основаны эти спрайты
 	void GetSpritesInView(std::vector<Renderer::Sprite*>& in_view, Renderer::RenderImage* img);
+	/// @brief очистка буффера матриц
 	void ClearBuffer();
-	size_t GetCount(Renderer::RenderImage* img);
+	/// @brief отрисовка спрайтов основанных на текстуре (Image)
+	/// @param img текстура на которой основаны все спрайты, которые сейчас обрабатываются
 	void Draw(Renderer::RenderImage* img);
 
 	GLuint _buffer_matrix;
-
+	/// @brief словарь всех имён созданных текстур
 	std::map<std::string, Renderer::RenderImage*> _map_all_images;
+	/// @brief словарь хранящий в порядке убывания по важности рендера (от 0 до N) текстур которые являются ключом к спрайтам
 	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>, pointer_comparator<Renderer::RenderImage*>> _all_sprites;
 };

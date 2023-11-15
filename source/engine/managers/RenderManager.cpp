@@ -145,18 +145,3 @@ void RenderManager::ClearBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glDeleteBuffers(1, &_buffer_matrix);
 }
-
-size_t RenderManager::GetCount(Renderer::RenderImage* img)
-{
-	size_t count = 0;
-	
-	for (auto it = _all_sprites[img].begin(); it != _all_sprites[img].end(); it++)
-	{
-		if ((*it)->GetNeedToRender())
-		{
-			count++;
-		}
-	}
-
-	return count;
-}

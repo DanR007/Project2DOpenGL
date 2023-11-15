@@ -2,6 +2,7 @@
 
 #include "../../engine/managers/ResourcesManager.h"
 #include "../../engine/managers/GameManager.h"
+#include "../../engine/managers/RenderManager.h"
 
 #include "../../engine/renderer/AnimSprite.h"
 
@@ -14,14 +15,13 @@
 Goal::Goal(const std::string& initSubtextureName
 		, const glm::vec2& startPosition
 		, const glm::vec2& startSize
-		, const uint8_t& render_layer
 		, const float startRotation)
-	:Actor(initSubtextureName, startPosition, startSize, render_layer, startRotation)
+	:Actor(initSubtextureName, startPosition, startSize, STATIC, startRotation)
 {
 	
 }
 Goal::Goal(const glm::ivec2& position) :
-	Goal("goal", GetWorld()->ConvertToWindowSpace(position), GetWorld()->GetBlockSize(), 0)
+	Goal("goal", GetWorld()->ConvertToWindowSpace(position), GetWorld()->GetBlockSize())
 {
 	std::cout << "Create Goal " << std::endl;
 }
