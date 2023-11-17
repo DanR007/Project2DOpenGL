@@ -2,7 +2,6 @@
 #include "UIElement.h"
 
 #include <string>
-#include <vector>
 
 namespace Renderer
 {

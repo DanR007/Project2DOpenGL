@@ -16,11 +16,11 @@ public: Arguments(T1 i_arg1) :
 public: T1 arg1;
 };
 
-//  ��������� ��� �������� ��������� �� �����.
+
 class IContainer { public: virtual void Call(IArguments*) = 0; };
 template< class Obj, class M > class Container : public IContainer {};
 
-//  ������������� ��� ������ ��� ����������.
+//  контейнер, хранящий функцию и вызывающий её.
 template< class Obj >
 class Container< Obj, void (Obj::*)(void) > : public IContainer
 {
@@ -52,7 +52,7 @@ private:
 	M _method;
 	Obj* _object;
 };
-//  ���������� �������.
+//  класс делегата.
 class Delegate
 {
 public:
@@ -72,7 +72,7 @@ void operator()()
 #ifdef __linux__
 		auto arg = Arguments<>();
 		m_container->Call(&arg);
-#else //__linux__
+#else //not __linux__
 		m_container->Call(&Arguments<>());
 #endif//__linux__
 	}
@@ -85,7 +85,7 @@ template< class T1 > void operator()(T1 i_arg1)
 #ifdef __linux__
 		auto arg = Arguments<T1>(i_arg1);
 		m_container->Call(&arg);
-#else //__linux__
+#else //not __linux__
 		m_container->Call(&Arguments< T1 >(i_arg1));
 #endif//__linux__
 	}

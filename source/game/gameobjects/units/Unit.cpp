@@ -23,10 +23,6 @@ Unit::Unit(const std::string& initSubtextureName
 
 	_controller = new Controller(this, 0);
 	_controller->SetMoveSpeed(20.f);
-
-	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
-
-	_components.push_back(_collider);
 }
 
 Unit::Unit(const glm::ivec2& position)
@@ -56,6 +52,7 @@ void Unit::Update(const float& deltaTime)
 	if(_selected_sprite)
 	{
 		_selected_sprite->SetNeedToRender(_is_selected);
+		Attach(_selected_sprite);
 	}
 	else
 	{

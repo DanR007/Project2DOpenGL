@@ -39,7 +39,6 @@ public:
 		, const uint8_t& render_layer = 0
 		, const float startRotation = 0.f
 		);
-	Actor(Actor&& a) noexcept;
 
 	Actor() = delete;
 	virtual ~Actor();
@@ -51,24 +50,8 @@ public:
 	/// @return 
 	inline Renderer::AnimSprite* GetAnimSprite() { return _anim_sprite; } 
 	inline Physics::Collider* GetCollider() const { return _collider; }
-	inline glm::vec2 GetPosition() const { return _world_position; }
-	inline glm::vec2 GetRelativePosition() const { return _relative_position; }
-	inline float GetRotation() const { return _rotation; }
-	inline bool GetDeleteFlag() const { return _delete_flag; }
-
-	/// @brief выставить позицию в относительно размеров окна
-	/// @param new_position 
-	void SetPosition(const glm::vec2& new_position);
-	/// @brief выставление размеров Actor
-	/// @param new_size 
-	void SetSize(const glm::vec2& new_size);
-	void SetRotation(const float& new_rotation);
-	void SetRelativePosition(const glm::vec2& new_position);
 
 	void SetCollider(Physics::Collider* collider) { _collider = collider; }
-
-	void AddWorldPosition(const glm::vec2& d_pos);
-	void AddWorldRotation(const float& d_rot);
 
 	/// @brief добавление анимаций
 	/// @param stateName название анимации
@@ -77,20 +60,10 @@ public:
 	/// @brief проигрывание ранее добавленной анимации
 	/// @param stateName название анимации
 	void PlayAnim(const std::string& stateName);
-
-	void Destroy() override;
-
 protected:
-	/// @brief компоненты которые привязаны к Actor
-	std::vector<Component*> _components;
 
 	Physics::Collider* _collider = nullptr;
 private:
-	bool _delete_flag = false;
-
-	glm::vec2 _world_position, _relative_position;
-	glm::vec2 _size;
-	float _rotation;
 
 	/// @brief спрайт хранящий все анимации
 	Renderer::AnimSprite* _anim_sprite = nullptr;

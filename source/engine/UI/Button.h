@@ -1,6 +1,10 @@
 #pragma once
 
+#include <iostream>
+
 #include "UIElement.h"
+
+#include "../Delegate.h"
 
 namespace Physics
 {
@@ -34,9 +38,26 @@ public:
     /// @param background 
     void SetBackground(Renderer::Sprite* background);
 
-    /// @brief Используется чтобы поменять не только свою позицию, но и зависимого элемента(-ов)
-    /// @param position 
-    virtual void ChangePosition(const glm::vec2& position) override;
+    /// @brief на кнопку нажали
+    void Click();
+
+    /// @brief выставляем (если потребуется) событие клика на кнопку
+    /// @tparam C класс, который будет использовать этот делегат
+    /// @tparam M метод внутри переданного класса, который будет обрабатывать
+    /// @param own_class 
+    /// @param method 
+    template<class C, class M>
+	void SetOnClickEvent(C* own_class, M method)
+	{
+		if (own_class)
+		{
+			_on_click_event.Connect(own_class, method);
+		}
+		else
+		{
+			std::cerr << "Own class by function not valid" << std::endl;
+		}
+	}
 private:
     /// @brief наполнение может быть как текстом, так и просто картинкой
     UIElement* _filling = nullptr;
@@ -44,4 +65,6 @@ private:
     Renderer::Sprite* _background = nullptr;
     /// @brief коллайдер, считывающий нажатие на кнопку
     Physics::Collider* _collider = nullptr;
+    /// @brief событие клика
+    Delegate _on_click_event;
 };

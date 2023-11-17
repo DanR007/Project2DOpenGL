@@ -14,12 +14,12 @@
 
 namespace Physics
 {
-	class Collider : public MovableComponent
+	class Collider : public Component
 	{
 	public:
 
-		Collider(const EObjectTypes objectType, Actor* owner, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f), const float& rotation = 0.f) 
-			: MovableComponent(owner, position, size, rotation)
+		Collider(const EObjectTypes objectType, Object* owner, const glm::vec2& position, const glm::vec2& size = glm::vec2(100.f, 100.f), const float& rotation = 0.f) 
+			: Component(owner, position, size, rotation)
 		{
 			_object_type = objectType;
 		}

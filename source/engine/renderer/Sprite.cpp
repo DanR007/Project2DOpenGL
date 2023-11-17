@@ -9,8 +9,8 @@
 
 namespace Renderer
 {
-	Sprite::Sprite(Renderer::RenderImage* image, Actor* owner, const glm::vec2& position, const glm::vec2& size, const float rotation)
-		: MovableComponent(owner, position, size, rotation)
+	Sprite::Sprite(Renderer::RenderImage* image, Object* owner, const glm::vec2& position, const glm::vec2& size, const float rotation)
+		: Component(owner, position, size, rotation)
 	{
 		_image = image;
 	}
