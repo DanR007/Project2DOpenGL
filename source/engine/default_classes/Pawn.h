@@ -14,7 +14,6 @@ public:
 		, const glm::vec2& startSize = glm::vec2(1.f)
 		, const uint8_t& render_layer = 0
 		, const float startRotation = 0.f);
-	Pawn(Pawn&& p) noexcept;
 
 	Pawn() = delete;
 

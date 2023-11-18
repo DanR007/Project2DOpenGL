@@ -15,7 +15,11 @@ public:
 
 	virtual void Update(const float& deltaTime) override;
 
-	void SetUnit(Unit* unit) { _unit = unit; }
+	void SetUnit(Unit* unit) 
+	{ 
+		_unit = unit;
+		//AttachTo(_unit);
+	}
 private:
 	Unit* _unit = nullptr;
 

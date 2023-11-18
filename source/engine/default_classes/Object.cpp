@@ -83,6 +83,7 @@ void Object::SetRelativePosition(const glm::vec2& new_position)
 void Object::AddWorldPosition(const glm::vec2& d_pos)
 {
 	_world_position += d_pos;
+
 	for (Object* obj : _attached_objects)
 	{
 		if(obj)

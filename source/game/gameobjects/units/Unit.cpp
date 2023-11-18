@@ -49,23 +49,6 @@ Unit::~Unit()
 void Unit::Update(const float& deltaTime)
 {
 	Pawn::Update(deltaTime);
-	if(_selected_sprite)
-	{
-		_selected_sprite->SetNeedToRender(_is_selected);
-		Attach(_selected_sprite);
-	}
-	else
-	{
-#ifdef DEBUG_RENDER
-		std::cout << "selected_sprite is nullptr" << std::endl;
-#endif
-	}
-}
-
-void Unit::Move(const glm::vec2& position)
-{
-	SetPosition(position);
-	_selected_sprite->SetPosition(GetPosition());
 }
 
 void Unit::MoveTo(Cell* cell)

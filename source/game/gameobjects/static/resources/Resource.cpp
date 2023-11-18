@@ -52,7 +52,6 @@ void Resource::SetEmpty()
 		{
 			std::cout << "Set empty" << std::endl;
 			(*it)->SetEmptyResource();
-			
 		}
 	}
 	else

@@ -82,7 +82,7 @@ void Controller::Move(float deltaTime)
 	#ifdef DEBUG_MOVEMENT
 		std::cout << "movement is greater than distance" << std::endl;
 	#endif //DEBUG_MOVEMENT
-					_controlled_pawn->Move(_node_coord);
+					_controlled_pawn->SetPosition(_node_coord);
 
 					SetNewNode(_a_star->GetNextNode());
 				}
@@ -91,7 +91,7 @@ void Controller::Move(float deltaTime)
 	#ifdef DEBUG_MOVEMENT
 		std::cout << "movement is less than distance" << std::endl;
 	#endif //DEBUG_MOVEMENT
-					_controlled_pawn->Move(_controlled_pawn->GetPosition() + movement);
+					_controlled_pawn->AddWorldPosition(movement);
 				}
 			}
 			else

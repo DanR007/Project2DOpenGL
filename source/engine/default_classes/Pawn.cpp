@@ -23,34 +23,14 @@
 	{
 		_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
 		Attach(_collider);
+		
 		_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, startPosition, startSize, "selected", "textureAtlas", DYNAMIC);
-		if(_selected_sprite)
-		{
-			_selected_sprite->SetNeedToRender(_is_selected);
-			Attach(_selected_sprite);
-		}
-		else
-		{
-	#ifdef DEBUG_RENDER
-			std::cout << "selected_sprite is nullptr" << std::endl;
-	#endif
-		}
+		_selected_sprite->SetNeedToRender(_is_selected);
+		Attach(_selected_sprite);
 
 		_is_selected = false;
 
 		_hp = 1;
-	}
-
-	Pawn::Pawn(Pawn&& p) noexcept
-		:Actor(std::move(p))
-	{
-		if(_controller)
-			delete _controller;
-
-		_controller = p._controller;
-		_is_selected = p._is_selected;
-		_map_position = p._map_position;
-		_hp = p._hp;
 	}
 
 	void Pawn::Update(const float& deltaTime)
@@ -58,6 +38,10 @@
 		if(_controller)
 		{
 			_controller->Move(deltaTime);
+		}
+		if(_selected_sprite)
+		{
+			_selected_sprite->SetNeedToRender(GetIsSelected());
 		}
 		Actor::Update(deltaTime);
 	}

@@ -79,7 +79,6 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 
 		if (u)
 		{
-			u->Move(u->GetPosition() + offset);
 			if(u->GetController())
 			{
 				u->GetController()->ChangeNodePositionWindow(offset);
@@ -91,10 +90,8 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 #endif
 			}
 		}
-		else
-		{
-			(*it)->AddWorldPosition(offset);
-		}
+
+		(*it)->AddWorldPosition(offset);
 	}
 }
 

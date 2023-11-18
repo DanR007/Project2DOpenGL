@@ -16,9 +16,11 @@ public:
 	Object(const glm::vec2& startPosition/*lower left point*/
 		, const glm::vec2& startSize = glm::vec2(1.f)
 		, const float startRotation = 0.f
-		) : _world_position(startPosition), _size(startSize), _rotation(startRotation)
+		) : Object()
 		{
-
+			_world_position = startPosition;
+			_size = startSize;
+			_rotation = startRotation;
 		}
 
 	virtual ~Object();

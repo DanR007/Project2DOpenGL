@@ -6,8 +6,6 @@
 
 #include "../../engine/renderer/AnimSprite.h"
 
-#include "../../engine/physics/Collider.h"
-
 #include "units/Unit.h"
 
 #include <iostream>
