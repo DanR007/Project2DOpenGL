@@ -91,7 +91,7 @@ void Controller::Move(float deltaTime)
 	#ifdef DEBUG_MOVEMENT
 		std::cout << "movement is less than distance" << std::endl;
 	#endif //DEBUG_MOVEMENT
-					_controlled_pawn->AddWorldPosition(movement);
+					_controlled_pawn->SetPosition(_controlled_pawn->GetPosition() + movement);
 				}
 			}
 			else
