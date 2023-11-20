@@ -92,10 +92,6 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 #endif
 			}
 		}
-		else
-		{
-			std::cout << "Bla bla" << std::endl;
-		}
 
 		(*it)->SetPosition((*it)->GetPosition() + offset);
 	}
