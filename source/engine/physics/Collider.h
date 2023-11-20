@@ -51,9 +51,8 @@ namespace Physics
 			{EObjectTypes::EOT_Pawn, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_Character, EResponseType::ERT_Block},
 			{EObjectTypes::EOT_StaticObject, EResponseType::ERT_Block},
-			{EObjectTypes::EOT_Projectile, EResponseType::ERT_Overlap},
 			{EObjectTypes::EOT_DynamicObject, EResponseType::ERT_Block},
-			{EObjectTypes::EOT_InteractiveObject, EResponseType::ERT_Ignore}
+			{EObjectTypes::EOT_UI, EResponseType::ERT_Ignore}
 		};
 		std::map<ERaycastTypes, EResponseType> ray_response_map =
 		{
@@ -66,7 +65,5 @@ namespace Physics
 		Delegate _delegate_overlap;
 
 		std::vector<Actor*> _overlapping_actors;
-
-		friend void PhysicsManager::CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider);
 	};
 }

@@ -191,8 +191,9 @@ void PlayerController::InputMouse(GLFWwindow* currentWindow, int button, int act
 				//Print map symbol by coordinates
 					std::cout << GetWorld()->GetNavMesh()->GetMap()[map_coord.y][map_coord.x]->_symbol << std::endl;
 #endif //DEBUG
-					ChooseUnit(glm::vec2(xPos, yPos));
 				}
+
+				Click(glm::vec2(xPos, yPos));
 			}
 			else
 			{
@@ -366,7 +367,7 @@ void PlayerController::ConfigureUI()
 	Image* img = _widget->AddElement<Image>(glm::vec2(0), glm::vec2(80, 20));
 	img->SetSprite(GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, glm::vec2(0), glm::vec2(80, 20), "wall", "textureAtlas", TEXT_IMAGES));
 	button->SetFilling(img);
-	button->ChangePosition(glm::vec2(10));*/
+	button->SetPosition(glm::vec2(10));*/
 }
 
 void PlayerController::ChooseUnit(const glm::vec2 &mouse_pos)
@@ -387,4 +388,16 @@ void PlayerController::ChooseUnit(const glm::vec2 &mouse_pos)
 	{
 		_unit = nullptr;
 	}
+}
+
+void PlayerController::ClickButton(const glm::vec2 &mouse_pos)
+{
+	//find button under cursor
+	GetEngine()->GetPhysicsManager()->CheckClickButton(mouse_pos);
+}
+
+void PlayerController::Click(const glm::vec2 &mouse_pos)
+{
+	ChooseUnit(mouse_pos);
+	ClickButton(mouse_pos);
 }

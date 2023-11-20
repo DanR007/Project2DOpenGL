@@ -135,6 +135,12 @@ protected:
 	/// @brief выбор юнита
 	/// @param mouse_pos позиция курсора мыши
 	void ChooseUnit(const glm::vec2& mouse_pos);
+	/// @brief Нажатие на кнопку
+	/// @param mouse_pos позиция курсора
+	void ClickButton(const glm::vec2& mouse_pos);
+	/// @brief Нажатие на мышь
+	/// @param mouse_pos позиция курсора
+	void Click(const glm::vec2& mouse_pos);
 
 	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _offset;

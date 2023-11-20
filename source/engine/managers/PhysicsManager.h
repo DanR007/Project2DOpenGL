@@ -8,12 +8,15 @@
 #include "../physics/EPhysicsTypes.h"
 #include "../physics/RaycastResult.h"
 
+class Object;
 class Actor;
 
 class GameManager;
 class PhysicsTests;
 
 class Unit;
+
+class Button;
 
 namespace Physics 
 {
@@ -26,9 +29,8 @@ namespace Physics
 
 		bool CanMove(Actor* checkActor, const glm::vec2& delta);
 		void CheckOverlapping(Physics::Collider* first_collider);
-		void CheckOverlapping(std::shared_ptr<Physics::Collider> first_collider);
 
-		Collider* CreateCollider(const EObjectTypes& type, Actor* owner, const glm::ivec2 position, const glm::vec2& size);
+		Collider* CreateCollider(const EObjectTypes& type, Object* owner, const glm::ivec2 position, const glm::vec2& size);
 
 		void Update();
 
@@ -36,6 +38,7 @@ namespace Physics
 			Actor* self = nullptr, bool ignore_self = true);
 
 		Unit* GetUnitUnderCursor(const glm::vec2& cursor_pos);
+		void CheckClickButton(const glm::vec2& cursor_pos);
 
 		void Erase(Collider* collider);
 	private:
