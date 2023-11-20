@@ -5,7 +5,7 @@
 
 namespace Renderer
 {
-	AnimSprite::AnimSprite(RenderImage* image, Actor* owner, const glm::vec2& position,
+	AnimSprite::AnimSprite(RenderImage* image, Object* owner, const glm::vec2& position,
 		const glm::vec2& size, const float rotation)
 		:Sprite(image,
 			owner,

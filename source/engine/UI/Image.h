@@ -20,10 +20,6 @@ public:
     ~Image();
 
     void SetSprite(Renderer::Sprite* sprite);
-
-    /// @brief Используется чтобы поменять не только свою позицию, но и зависимого элемента(-ов)
-    /// @param position 
-    virtual void ChangePosition(const glm::vec2& position) override;
 private:
     Renderer::Sprite* _sprite;
 };

@@ -13,7 +13,6 @@ protected:
 	Resource(const std::string& init_sprite_name
 		, const glm::vec2& startPosition/*lower left point*/
 		, const glm::vec2& startSize = glm::vec2(1.f)
-		, const uint8_t& render_layer = 0
 		, const float startRotation = 0.f);
 public:
 	Resource(const std::string& init_sprite_name, const glm::ivec2& position, const glm::vec2& size = glm::vec2(45.f), const float& rotation = 0.f);

@@ -7,6 +7,7 @@ Image::Image(const glm::vec2& position, const glm::vec2& size, Renderer::Sprite*
     UIElement(position, size)
 {
     _sprite = sprite;
+    Attach(_sprite);
 }
 
 Image::Image(const glm::vec2& position, const glm::vec2& size) :
@@ -26,10 +27,4 @@ Image::~Image()
 void Image::SetSprite(Renderer::Sprite *sprite)
 {
     _sprite = sprite;
-}
-
-void Image::ChangePosition(const glm::vec2 &position)
-{
-    SetPosition(position);
-    _sprite->SetPosition(position);
 }

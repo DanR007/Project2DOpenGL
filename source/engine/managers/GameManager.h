@@ -78,8 +78,6 @@ public:
 
 	NavMeshRTS* GetNavMesh() const { return _nav_mesh; }
 
-	void DeleteActor(std::vector<std::shared_ptr<Actor>>::iterator actor_iterator);
-
 	glm::vec2 GetBlockSize() const { return _block_size; }
 	//offset is map_coord - window_coord
 	glm::vec2 GetOffset() const { return _offset; }

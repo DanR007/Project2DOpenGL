@@ -16,13 +16,9 @@
 Resource::Resource(const std::string& init_sprite_name
 		, const glm::vec2& startPosition
 		, const glm::vec2& startSize
-		, const uint8_t& render_layer
 		, const float startRotation):
 		Actor(init_sprite_name, startPosition, startSize, STATIC, startRotation)
 {
-	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_StaticObject, this, startPosition, startSize);
-	_components.push_back(_collider);
-
 	_resources_count = _max_resources_count;
 }
 
@@ -56,7 +52,6 @@ void Resource::SetEmpty()
 		{
 			std::cout << "Set empty" << std::endl;
 			(*it)->SetEmptyResource();
-			
 		}
 	}
 	else

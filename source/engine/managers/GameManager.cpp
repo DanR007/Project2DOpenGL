@@ -19,6 +19,8 @@
 #include "../UI/Text.h"
 #include "../UI/Panel.h"
 
+#include "../renderer/AnimSprite.h"
+
 #include <numeric>
 
 #ifdef __linux__
@@ -79,7 +81,6 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 
 		if (u)
 		{
-			u->Move(u->GetPosition() + offset);
 			if(u->GetController())
 			{
 				u->GetController()->ChangeNodePositionWindow(offset);
@@ -93,8 +94,10 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 		}
 		else
 		{
-			(*it)->AddWorldPosition(offset);
+			std::cout << "Bla bla" << std::endl;
 		}
+
+		(*it)->SetPosition((*it)->GetPosition() + offset);
 	}
 }
 

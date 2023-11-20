@@ -15,6 +15,8 @@
 
 #include "../../game/gameobjects/units/Unit.h"
 
+#include "../UI/Button.h"
+
 #ifdef __linux__
 #include <float.h>
 #include <algorithm>
@@ -61,7 +63,7 @@ namespace Physics
 			if ((*it) != first_collider && IsOverlap(first_collider, (*it)))
 			{
 				//Call Delegate
-				first_collider->Overlap((*it)->GetOwner());
+				first_collider->Overlap(dynamic_cast<Actor*>((*it)->GetOwner()));
 				break;
 			}
 
@@ -163,18 +165,39 @@ namespace Physics
 
 	Unit* PhysicsManager::GetUnitUnderCursor(const glm::vec2& cursor_pos)
 	{
-		for (Collider* collider : _all_colliders)
+		if(InUI(cursor_pos))
 		{
-			if (IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), collider->GetPosition(), collider->GetSize()))
+			for (Collider* collider : _all_colliders)
 			{
-				Unit* u = static_cast<Unit*>(collider->GetOwner());
-				if (u)
+				if(IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), collider->GetPosition(), collider->GetSize()))
 				{
+					Button* u = static_cast<Button*>(collider->GetOwner());
+					if (u)
+					{
+						u->Click();
+						return nullptr;
+					}
+				}
+			}
+			return nullptr;
+		}
+		else
+		{
+			for (Collider* collider : _all_colliders)
+			{
+				if (IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), collider->GetPosition(), collider->GetSize()))
+				{
+					Unit* u = static_cast<Unit*>(collider->GetOwner());
+					if (u)
+					{
 #ifdef DEBUG
 						std::cout << "Find unit\n";
 #endif //DEBUG
-					return u;
-				}			
+						return u;
+					}
+
+							
+				}
 			}
 		}
 
@@ -222,5 +245,10 @@ namespace Physics
 	{
 		return IsIntersection(first_collider->GetPosition() + delta_pos, first_collider->GetSize(), second_collider->GetPosition(), second_collider->GetSize())
 			&& first_collider->GetResponseType(second_collider->GetObjectType()) == EResponseType::ERT_Block;
+	}
+
+	bool PhysicsManager::InUI(const glm::vec2& cursor_pos)
+	{
+		return IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), glm::vec2(0), glm::vec2(window_size.x, window_size.y / 5.f));
 	}
 }

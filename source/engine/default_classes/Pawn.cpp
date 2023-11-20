@@ -5,13 +5,14 @@
 #include "../managers/PhysicsManager.h"
 #include "../managers/GameManager.h"
 #include "../managers/RenderManager.h"
+#include "../managers/PhysicsManager.h"
 
 #include "../renderer/AnimSprite.h"
 #include "../renderer/ShaderRender.h"
 #include "../renderer/TextureRender.h"
 
 #include "../controllers/Controller.h"
-
+#include "../physics/Collider.h"
 
 	Pawn::Pawn(const std::string& initSubtextureName
 		, const glm::vec2& startPosition
@@ -20,30 +21,28 @@
 		, const float startRotation) : 
 		Actor(initSubtextureName, startPosition, startSize, render_layer, startRotation)
 	{
-		_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(this, startPosition, startSize, "selected");
-		_components.push_back(_selected_sprite);
+		_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
+		Attach(_collider);
+		
+		_selected_sprite = GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, startPosition, startSize, "selected", "textureAtlas", DYNAMIC);
+		_selected_sprite->SetNeedToRender(_is_selected);
+		Attach(_selected_sprite);
 
 		_is_selected = false;
 
 		_hp = 1;
 	}
 
-	Pawn::Pawn(Pawn&& p) noexcept
-		:Actor(std::move(p))
-	{
-		if(_controller)
-			delete _controller;
-
-		_controller = p._controller;
-		_is_selected = p._is_selected;
-		_map_position = p._map_position;
-		_hp = p._hp;
-	}
-
 	void Pawn::Update(const float& deltaTime)
 	{
 		if(_controller)
+		{
 			_controller->Move(deltaTime);
+		}
+		if(_selected_sprite)
+		{
+			_selected_sprite->SetNeedToRender(GetIsSelected());
+		}
 		Actor::Update(deltaTime);
 	}
 
@@ -62,6 +61,8 @@
 	std::vector<std::pair<EResourceTypes, size_t>> Pawn::GetCost() const
 	{
 		if (_cost.empty())
+		{
 			std::cout << "Cost is empty\n";
+		}
 		return _cost;
 	}

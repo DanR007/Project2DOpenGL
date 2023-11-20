@@ -40,7 +40,7 @@ public:
 
 	/*render_layer for static game actors is STATIC, for dynamic DYNAMIC, for UI background is BACKGROUND, for button use BUTTON and for text and images TEXT_IMAGES*/
 	template<typename T>
-	T* CreateSprite(Actor* owner, const glm::vec2& position, const glm::vec2& size, const std::string& initSpriteName, 
+	T* CreateSprite(Object* owner, const glm::vec2& position, const glm::vec2& size, const std::string& initSpriteName, 
 		const std::string& texture_atlas_name = "textureAtlas", const uint8_t& render_layer = STATIC, const float& rotation = 0.f)
 	{
 		std::map<std::string, Renderer::RenderImage*>::const_iterator it = _map_all_images.find(initSpriteName);

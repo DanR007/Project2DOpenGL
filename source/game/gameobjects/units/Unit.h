@@ -28,9 +28,6 @@ public:
 	virtual void Update(const float& deltaTime) override;
 
 	Goal* GetGoal() { return _goal; }
-
-	//set sprite and unit position
-	void Move(const glm::vec2& position);
 	
 	void SetGoal(Goal* goal) { _goal = goal; }
 	//developing path to cell

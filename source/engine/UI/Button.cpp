@@ -12,6 +12,9 @@ Button::Button(const glm::vec2 &position, const glm::vec2 &size, Renderer::Sprit
     _background = background;
     _filling = filling;
 
+    Attach(_background);
+    Attach(_filling);
+
     glm::vec2 offset = glm::vec2(20);
     //размер кнопки должен быть больше чем наполнение
     SetSize(glm::vec2(_filling->GetSize()) + offset);
@@ -26,18 +29,7 @@ Button::Button(const glm::vec2 &position, const glm::vec2 &size) : UIElement(pos
 
 Button::~Button()
 {
-    if(_filling)
-    {
-        _filling->Destroy();
-    }
-    if(_background)
-    {
-        _background->Destroy();
-    }
-    if(_collider)
-    {
-        _collider->Destroy();
-    }
+
 }
 
 void Button::SetFilling(UIElement *filling)
@@ -53,7 +45,7 @@ void Button::SetFilling(UIElement *filling)
     //размер кнопки должен быть больше чем наполнение
     SetSize(glm::vec2(_filling->GetSize()) + offset);
     //сдвигаем на половину размера относительно увеличенного размера
-    _filling->ChangePosition(GetPosition() + offset /2.f);
+    _filling->SetPosition(GetPosition() + offset /2.f);
     
 }
 
@@ -68,6 +60,8 @@ void Button::SetCollider(Physics::Collider *collider)
 
     _collider->SetPosition(GetPosition());
     _collider->SetSize(GetSize());
+
+    Attach(_collider);
 }
 
 void Button::SetBackground(Renderer::Sprite *background)
@@ -81,21 +75,14 @@ void Button::SetBackground(Renderer::Sprite *background)
 
     _background->SetPosition(GetPosition());
     _background->SetSize(GetSize());
+
+    Attach(_background);
 }
 
-void Button::ChangePosition(const glm::vec2 &position)
+void Button::Click()
 {
-    SetPosition(position);
-    if(_collider)
-    {
-        _filling->SetPosition(position);
-    }
-    if(_collider)
-    {
-        _collider->SetPosition(position);
-    }
-    if(_background)
-    {
-        _background->SetPosition(position);
-    }
+#ifdef DEBUG
+    std::cout << "Click event" << std::endl;
+#endif
+    _on_click_event();
 }

@@ -7,8 +7,6 @@
 #include "../../../../engine/managers/PhysicsManager.h"
 #include "../../../../engine/managers/RenderManager.h"
 
-#include "../../../../engine/physics/Collider.h"
-
 #include "../../../../engine/AI/NavMesh.h"
 
 #include "../../units/Worker.h"
@@ -38,7 +36,7 @@ Building::Building(const std::string& initSubtextureName
 		, const float startRotation)
 	:Pawn(initSubtextureName, startPosition, startSize, render_layer, startRotation)
 {
-	_collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_Pawn, this, startPosition, startSize);
+	
 }
 
 Building::~Building()
