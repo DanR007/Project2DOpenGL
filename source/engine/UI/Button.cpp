@@ -6,6 +6,10 @@
 
 #include "../physics/Collider.h"
 
+#include "../managers/EngineManager.h"
+#include "../managers/PhysicsManager.h"
+#include "../../main.h"
+
 Button::Button(const glm::vec2 &position, const glm::vec2 &size, Renderer::Sprite* background, UIElement *filling)
 : UIElement(position, size)
 {
@@ -24,7 +28,8 @@ Button::Button(const glm::vec2 &position, const glm::vec2 &size, Renderer::Sprit
 
 Button::Button(const glm::vec2 &position, const glm::vec2 &size) : UIElement(position, size)
 {
-
+    _collider = GetEngine()->GetPhysicsManager()->CreateCollider(EObjectTypes::EOT_Pawn, this, position, size);
+	Attach(_collider);
 }
 
 Button::~Button()
@@ -46,7 +51,7 @@ void Button::SetFilling(UIElement *filling)
     SetSize(glm::vec2(_filling->GetSize()) + offset);
     //сдвигаем на половину размера относительно увеличенного размера
     _filling->SetPosition(GetPosition() + offset /2.f);
-    
+    Attach(_filling);
 }
 
 void Button::SetCollider(Physics::Collider *collider)

@@ -24,7 +24,7 @@
 
 namespace Physics
 {
-	Collider* Physics::PhysicsManager::CreateCollider(const EObjectTypes& type, Actor* owner, const glm::ivec2 position, const glm::vec2& size)
+	Collider* Physics::PhysicsManager::CreateCollider(const EObjectTypes& type, Object* owner, const glm::ivec2 position, const glm::vec2& size)
 	{
 		Collider* collider = new Collider(type, owner, GetWorld()->ConvertToWindowSpace(position), size);
 
@@ -165,23 +165,7 @@ namespace Physics
 
 	Unit* PhysicsManager::GetUnitUnderCursor(const glm::vec2& cursor_pos)
 	{
-		if(InUI(cursor_pos))
-		{
-			for (Collider* collider : _all_colliders)
-			{
-				if(IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), collider->GetPosition(), collider->GetSize()))
-				{
-					Button* u = static_cast<Button*>(collider->GetOwner());
-					if (u)
-					{
-						u->Click();
-						return nullptr;
-					}
-				}
-			}
-			return nullptr;
-		}
-		else
+		if(InUI(cursor_pos) == false)
 		{
 			for (Collider* collider : _all_colliders)
 			{
@@ -195,7 +179,12 @@ namespace Physics
 #endif //DEBUG
 						return u;
 					}
-
+					else
+					{
+#ifdef DEBUG
+						std::cout << "This is not unit" << std::endl;
+#endif //DEBUG
+					}
 							
 				}
 			}
@@ -206,6 +195,31 @@ namespace Physics
 #endif
 
 		return nullptr;
+	}
+
+	void PhysicsManager::CheckClickButton(const glm::vec2& cursor_pos)
+	{
+		for (Collider* collider : _all_colliders)
+		{
+			if(IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), collider->GetPosition(), collider->GetSize()))
+			{
+				Button* b = static_cast<Button*>(collider->GetOwner());
+				if (b)
+				{
+#ifdef DEBUG
+					std::cout << "Click button" << std::endl;
+#endif //DEBUG
+					b->Click();
+					break;
+				}
+				else
+				{
+#ifdef DEBUG
+					std::cout << "Click on UI but not on one button" << std::endl;
+#endif //DEBUG						
+				}
+			}
+		}
 	}
 
 	void PhysicsManager::Erase(Collider* collider)

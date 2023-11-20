@@ -64,6 +64,7 @@ public:
 	inline void Attach(Object* obj) 
 	{
 		_attached_objects.push_back(obj);
+		obj->_owner = this;
 	}
 
 	/// @brief Привязка объекта
