@@ -18,6 +18,7 @@
 #include "../UI/Panel.h"
 #include "../UI/Button.h"
 #include "../UI/Image.h"
+#include "../UI/ProgressBar.h"
 
 #ifdef __linux__
 #include <algorithm>
@@ -363,11 +364,16 @@ void PlayerController::ConfigureUI()
 	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
 
 
-	/*Button* button = _widget->AddElement<Button>(glm::vec2(0), glm::vec2(0));
-	Image* img = _widget->AddElement<Image>(glm::vec2(0), glm::vec2(80, 20));
-	img->SetSprite(GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, glm::vec2(0), glm::vec2(80, 20), "wall", "textureAtlas", TEXT_IMAGES));
-	button->SetFilling(img);
-	button->SetPosition(glm::vec2(10));*/
+	//Button* button = _widget->AddElement<Button>(glm::vec2(0), glm::vec2(0));
+	//Image* img = _widget->AddElement<Image>(glm::vec2(0), glm::vec2(80, 20));
+	//img->SetSprite(GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, glm::vec2(0), glm::vec2(80, 20), "wall", "textureAtlas", TEXT_IMAGES));
+	//button->SetFilling(img);
+	//button->SetPosition(glm::vec2(10));
+
+	//ProgressBar* progress_bar = _widget->AddElement<ProgressBar>(glm::vec2(0), glm::vec2(200, 50));
+	//progress_bar->SetPercentage(0.5f);
+	//progress_bar->SetEmptySpriteByName("emptyProgressBar");
+	//progress_bar->SetFullSpriteByName("fullProgressBar");
 }
 
 void PlayerController::ChooseUnit(const glm::vec2 &mouse_pos)

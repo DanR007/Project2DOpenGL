@@ -5,7 +5,6 @@
 #include "../managers/PhysicsManager.h"
 #include "../managers/GameManager.h"
 #include "../managers/RenderManager.h"
-#include "../managers/PhysicsManager.h"
 
 #include "../renderer/AnimSprite.h"
 #include "../renderer/ShaderRender.h"
