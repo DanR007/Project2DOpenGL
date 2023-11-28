@@ -26,7 +26,7 @@ public:
 	bool GetIsSelected() const { return _is_selected; }
 	inline uint8_t GetID() const { return _player_id; }
 
-	inline void SetSelected(bool is_selected) { _is_selected = is_selected; }
+	void SetSelected(bool is_selected);
 	inline void SetMapPosition(const glm::ivec2& map_pos) { _map_position = map_pos; }
 	inline void SetPlayerID(const uint8_t& id) { _player_id = id; }
 
@@ -39,7 +39,8 @@ protected:
 	bool _is_selected;
 
 	int _hp;
-
+	int _max_hp;
+	
 	glm::ivec2 _map_position;
 
 	Renderer::Sprite* _selected_sprite = nullptr;

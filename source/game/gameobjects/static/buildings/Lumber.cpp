@@ -10,8 +10,6 @@
 Lumber::Lumber(const glm::ivec2& position):
 	Building(position, glm::ivec2(2), EBuildingType::EBT_Lumber)
 {
-	_hp = 100;
-
 	_cost.push_back(std::make_pair(EResourceTypes::ERT_Wood, 10));
 	_cost.push_back(std::make_pair(EResourceTypes::ERT_Gold, 0));
 	_cost.push_back(std::make_pair(EResourceTypes::ERT_Stone, 0));

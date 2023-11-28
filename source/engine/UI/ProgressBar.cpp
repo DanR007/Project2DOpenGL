@@ -76,6 +76,8 @@ void ProgressBar::SetFullSpriteByName(const std::string& full_name)
                                                                                     , full_name
                                                                                     , "textureAtlas"
                                                                                     , TEXT_IMAGES);
+
+
 }
 
 void ProgressBar::SetEmptySpriteByName(const std::string& empty_name)
@@ -91,4 +93,30 @@ void ProgressBar::SetEmptySpriteByName(const std::string& empty_name)
                                                                                     , empty_name
                                                                                     , "textureAtlas"
                                                                                     , TEXT_IMAGES);
+}
+
+
+void ProgressBar::SetRender(bool need_to_render)
+{
+    if(_empty_sprite)
+    {
+        _empty_sprite->SetNeedToRender(need_to_render);
+    }
+    else
+    {
+#ifdef DEBUG
+        std::cout << "Empty sprite is null" << std::endl;
+#endif // DEBUG
+    }
+
+    if(_full_sprite)
+    {
+        _full_sprite->SetNeedToRender(need_to_render);
+    }
+    else
+    {
+#ifdef DEBUG
+        std::cout << "Full sprite is null" << std::endl;
+#endif // DEBUG
+    }
 }

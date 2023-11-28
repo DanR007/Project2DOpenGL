@@ -19,8 +19,6 @@ Unit::Unit(const std::string& initSubtextureName
 		, const float startRotation)
 	:Pawn(initSubtextureName, startPosition, startSize, render_layer, startRotation)
 {
-	_hp = 100;
-
 	_controller = new Controller(this, 0);
 	_controller->SetMoveSpeed(20.f);
 }
