@@ -18,6 +18,7 @@
 #include "../UI/Panel.h"
 #include "../UI/Button.h"
 #include "../UI/Image.h"
+#include "../UI/ProgressBar.h"
 
 #ifdef __linux__
 #include <algorithm>
@@ -350,24 +351,38 @@ bool PlayerController::EnoughResources(const std::vector<std::pair<EResourceType
 
 void PlayerController::ConfigureUI()
 {
-	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 5.f));
 
+	/*блок отображения ресурсов*/
+	_widget->AddElement<Panel>(glm::vec2(0, window_size.y / 6.f * 5.f), glm::vec2(window_size.x, window_size.y / 6.f));
+
+	glm::vec2 position = glm::vec2(20.f, window_size.y - 45.f);
+	glm::vec2 size_symbol(25.f);
+	int start_wood = 10, start_stone = 0, start_gold = 0;
 	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(20.f), glm::vec2(35.f)), 10, EResourceTypes::ERT_Wood)
+		_widget->AddElement<Text>(position, size_symbol), start_wood, EResourceTypes::ERT_Wood)
 	)._text->SetText(_resource_names[EResourceTypes::ERT_Wood] + " " + std::to_string(10));
 	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(35.f * 12, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Stone)
+		_widget->AddElement<Text>(glm::vec2(position.x * 12, position.y), size_symbol), start_stone, EResourceTypes::ERT_Stone)
 	)._text->SetText(_resource_names[EResourceTypes::ERT_Stone] + " " + std::to_string(0));
 	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(35.f * 24, 20.f), glm::vec2(35.f)), 0, EResourceTypes::ERT_Gold)
+		_widget->AddElement<Text>(glm::vec2(position.x * 24, position.y), size_symbol), start_gold, EResourceTypes::ERT_Gold)
 	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
+	/*конец инициализации отображения ресурсов */
 
 
-	/*Button* button = _widget->AddElement<Button>(glm::vec2(0), glm::vec2(0));
-	Image* img = _widget->AddElement<Image>(glm::vec2(0), glm::vec2(80, 20));
-	img->SetSprite(GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, glm::vec2(0), glm::vec2(80, 20), "wall", "textureAtlas", TEXT_IMAGES));
-	button->SetFilling(img);
-	button->SetPosition(glm::vec2(10));*/
+	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 6.f));
+
+	//Button* button = _widget->AddElement<Button>(glm::vec2(0), glm::vec2(0));
+	//Image* img = _widget->AddElement<Image>(glm::vec2(0), glm::vec2(80, 20));
+	//img->SetSprite(GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, glm::vec2(0), glm::vec2(80, 20), "wall", "textureAtlas", TEXT_IMAGES));
+	//button->SetFilling(img);
+	//button->SetPosition(glm::vec2(10));
+
+	ProgressBar* progress_bar = _widget->AddElement<ProgressBar>(glm::vec2(20.f), glm::vec2(400, 50));
+	progress_bar->SetEmptySpriteByName("emptyProgressBar");
+	progress_bar->SetFullSpriteByName("fullProgressBar");
+	progress_bar->SetPercentage(0.5f);
+	progress_bar->SetRender(false);
 }
 
 void PlayerController::ChooseUnit(const glm::vec2 &mouse_pos)

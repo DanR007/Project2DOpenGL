@@ -1,7 +1,5 @@
 #include "Widget.h"
 
-#include "UIElement.h"
-
 Widget::Widget():Component()
 {
 }

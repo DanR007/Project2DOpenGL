@@ -48,7 +48,6 @@ struct ResourceStock
 class PlayerController : public Controller
 {
 public:
-	//using Controller::Controller;
 	PlayerController(uint8_t id);
 	PlayerController(uint8_t id, Widget* widget);
 
@@ -116,7 +115,12 @@ public:
 		it->second(argument);
 	}
 
+	/// @brief Добавление ресурсов, которые хранятся у игрока
+	/// @param type тип ресурса
+	/// @param count 
 	void AddResource(const EResourceTypes& type, const size_t& count);
+	/// @brief убирание ресурсов, которые расходует игрок
+	/// @param resources весь список ресурсов
 	void MinusResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
 	
 protected:
@@ -144,8 +148,9 @@ protected:
 
 	//offset is map_coord (multiply by block_size) - window_coord
 	glm::vec2 _offset;
-
+	/// @brief выбранный игроком юнит
 	Unit* _unit = nullptr;
+	/// @brief строение, которое хочет построить игрок
 	Building* _building = nullptr;
 
 	uint8_t _id;
@@ -155,6 +160,6 @@ protected:
 	std::vector<Unit*> _choicing_units;
 
 	std::vector<ResourceStock> _resource_stocks;
-
+	/// @brief основной виджет игрока. Здесь находится весь UI
 	Widget* _widget;
 };

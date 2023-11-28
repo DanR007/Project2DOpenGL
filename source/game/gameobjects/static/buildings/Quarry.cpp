@@ -10,8 +10,6 @@
 Quarry::Quarry(const glm::ivec2& position):
 	Building(position, glm::ivec2(2), EBuildingType::EBT_Quarry)
 {
-	_hp = 100;
-
 	_cost.push_back(std::make_pair(EResourceTypes::ERT_Wood, 20));
 	_cost.push_back(std::make_pair(EResourceTypes::ERT_Gold, 0));
 	_cost.push_back(std::make_pair(EResourceTypes::ERT_Stone, 0));

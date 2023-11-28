@@ -5,13 +5,17 @@
 #include "../managers/PhysicsManager.h"
 #include "../managers/GameManager.h"
 #include "../managers/RenderManager.h"
-#include "../managers/PhysicsManager.h"
 
 #include "../renderer/AnimSprite.h"
 #include "../renderer/ShaderRender.h"
 #include "../renderer/TextureRender.h"
 
 #include "../controllers/Controller.h"
+#include "../controllers/PlayerController.h"
+
+#include "../UI/Widget.h"
+#include "../UI/ProgressBar.h"
+
 #include "../physics/Collider.h"
 
 	Pawn::Pawn(const std::string& initSubtextureName
@@ -30,7 +34,8 @@
 
 		_is_selected = false;
 
-		_hp = 1;
+		_hp = 5;
+		_max_hp = 10;
 	}
 
 	void Pawn::Update(const float& deltaTime)
@@ -66,3 +71,23 @@
 		}
 		return _cost;
 	}
+
+void Pawn::SetSelected(bool is_selected)
+{
+	_is_selected = is_selected;
+
+	float perc_hp = float(_hp) / _max_hp;
+
+	ProgressBar* progress_bar = GetEngine()->GetWorld()->GetPlayerController(_player_id)->GetWidget()->FindElementByClass<ProgressBar>();
+	if(progress_bar)
+	{
+		progress_bar->SetPercentage(perc_hp);
+		progress_bar->SetRender(_is_selected);
+	}
+	else
+	{
+#ifdef DEBUG
+		std::cout << "progress bar is null" << std::endl;
+#endif // DEBUG
+	}
+}

@@ -32,6 +32,20 @@ public:
 	}
 
 	UIElement* GetElement(int index) { return _ui_elements[index]; }
+
+	template<typename T>
+	T* FindElementByClass()
+	{
+		for(UIElement* elem : _ui_elements)
+		{
+			if(dynamic_cast<T*>(elem))
+			{
+				return dynamic_cast<T*>(elem);
+			}
+		}
+
+		return nullptr;
+	}
 private:
 	std::vector<UIElement*> _ui_elements;
 };
