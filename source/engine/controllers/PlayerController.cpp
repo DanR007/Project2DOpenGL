@@ -24,6 +24,8 @@
 #include <algorithm>
 #endif
 
+#define RESOURCE_FORMAT(res, count) (res + ":" + count)
+
 std::map<EResourceTypes, std::string> _resource_names =
 {
 	{EResourceTypes::ERT_Wood, "Wood"},
@@ -316,7 +318,7 @@ void PlayerController::AddResource(const EResourceTypes& type, const size_t& cou
 {
 	auto it = std::find(_resource_stocks.begin(), _resource_stocks.end(), ResourceStock(nullptr, count, type));
 	it->_count += count;
-	it->_text->SetText(_resource_names[type] + " " + std::to_string(it->_count));
+	it->_text->SetText(RESOURCE_FORMAT(_resource_names[type], std::to_string(it->_count)));
 }
 
 void PlayerController::MinusResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources)
@@ -329,7 +331,7 @@ void PlayerController::MinusResources(const std::vector<std::pair<EResourceTypes
 			if (res == resource.first)
 			{
 				res._count -= resource.second;
-				res._text->SetText(_resource_names[res._type] + " " + std::to_string(res._count));
+				res._text->SetText(RESOURCE_FORMAT(_resource_names[res._type], std::to_string(res._count)));
 			}
 		}
 	}
@@ -360,13 +362,13 @@ void PlayerController::ConfigureUI()
 	int start_wood = 10, start_stone = 0, start_gold = 0;
 	_resource_stocks.emplace_back(ResourceStock(
 		_widget->AddElement<Text>(position, size_symbol), start_wood, EResourceTypes::ERT_Wood)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Wood] + " " + std::to_string(10));
+	)._text->SetText(RESOURCE_FORMAT(_resource_names[EResourceTypes::ERT_Wood], std::to_string(10)));
 	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(position.x * 12, position.y), size_symbol), start_stone, EResourceTypes::ERT_Stone)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Stone] + " " + std::to_string(0));
+		_widget->AddElement<Text>(glm::vec2(position.x * 20, position.y), size_symbol), start_stone, EResourceTypes::ERT_Stone)
+	)._text->SetText(RESOURCE_FORMAT(_resource_names[EResourceTypes::ERT_Stone], std::to_string(0)));
 	_resource_stocks.emplace_back(ResourceStock(
-		_widget->AddElement<Text>(glm::vec2(position.x * 24, position.y), size_symbol), start_gold, EResourceTypes::ERT_Gold)
-	)._text->SetText(_resource_names[EResourceTypes::ERT_Gold] + " " + std::to_string(0));
+		_widget->AddElement<Text>(glm::vec2(position.x, position.y - size_symbol.y * 2.f), size_symbol), start_gold, EResourceTypes::ERT_Gold)
+	)._text->SetText(RESOURCE_FORMAT(_resource_names[EResourceTypes::ERT_Gold], std::to_string(0)));
 	/*конец инициализации отображения ресурсов */
 
 
