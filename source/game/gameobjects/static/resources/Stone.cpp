@@ -12,7 +12,7 @@ Stone::Stone(const glm::ivec2& position):
 
 Stone::~Stone()
 {
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Stone" << std::endl;
 #endif
 }

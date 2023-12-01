@@ -17,7 +17,7 @@ Object::Object()
 
 Object::~Object()
 {
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Object" << std::endl;
 #endif
 }

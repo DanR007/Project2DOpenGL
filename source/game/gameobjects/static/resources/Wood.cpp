@@ -11,7 +11,7 @@ Wood::Wood(const glm::ivec2& position):
 
 Wood::~Wood()
 {
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Wood" << std::endl;
 #endif
 }

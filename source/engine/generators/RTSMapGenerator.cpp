@@ -18,7 +18,7 @@ RTSMapGenerator::RTSMapGenerator(const glm::ivec2& size)
 {
 	_size = size;
 	//height population (normalize) humidity
-	_symbols = { GenSymbol(0.f, 0.6f, 0.f, 'W'), GenSymbol(0.3f, 0.6f, -0.1f, 'S')};
+	_symbols = { GenSymbol(0.f, 0.6f, 0.f, 'T'), GenSymbol(0.3f, 0.6f, -0.1f, 'S')};
 }
 
 RTSMapGenerator::~RTSMapGenerator()

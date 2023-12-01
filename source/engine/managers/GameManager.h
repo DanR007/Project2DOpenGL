@@ -57,6 +57,10 @@ public:
 
 	}
 
+	/// @brief заполнение клетки и создание объекта, который находится в клетке
+	/// @tparam T 
+	/// @param cell клетка на карте
+	/// @param type тип клетки
 	template<typename T>
 	void FillCell(Cell* cell, const EResourceTypes& type)
 	{
@@ -66,8 +70,11 @@ public:
 		cell->_resource->SetResource(type);
 	}
 
+	/// @brief перемещение всех Actor создавая ощущение перемещения камеры 
+	/// @param offset смещение Actor
 	void MoveAllActors(const glm::vec2& offset);
-
+	/// @brief Вызывается каждый кадр
+	/// @param deltaTime время с последнего таймера
 	void Update(const float& deltaTime);
 	void BeginPlay();
 
@@ -99,18 +106,35 @@ public:
 
 	void Erase(Actor* actor);
 private:
+
+	/// @brief Update если включен в main.h многопоток
+	/// @param deltaTime 
+	/// @param begin начало обработки массива _all_actors в этом потоке
+	/// @param end конец обработки массива в потоке
+	void UpdateMultithreading(const float& deltaTime, size_t begin, size_t end);
+	/// @brief MoveAllActors если включен в main.h многопоток
+	/// @param offset 
+	/// @param begin начало обработки массива _all_actors в этом потоке
+	/// @param end конец обработки массива в потоке
+	void MoveAllActorsMultithreading(const glm::vec2& offset, size_t begin, size_t end);
+	
+	/// @brief навигационная "сетка" отвечает за перемещение юнитов по карте
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
 
 	std::vector<Actor*> _all_actors;
-
+	/// @brief карта игры
 	std::vector<std::vector<Cell*>> _map;
-
+	/// @brief контроллеры игроков
 	std::vector<PlayerController*> _controllers;
-	//offset is map_coord (multiply by block_size) - window_coord
-	glm::vec2 _block_size, _offset;
-	glm::ivec2 _start_point_map, _size_map;
-
+	/// @brief размер клетки на экране
+	glm::vec2 _block_size;
+	/// @brief offset is map_coord (multiply by block_size) - window_coord
+	glm::vec2 _offset;
+	glm::ivec2 _start_point_map;
+	/// @brief размер карты
+	glm::ivec2 _size_map;
+	/// @brief переменная отвечающая за окончание игры
 	bool _is_game_over;
 
 	friend class Physics::PhysicsManager;

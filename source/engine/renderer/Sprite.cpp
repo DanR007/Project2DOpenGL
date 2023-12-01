@@ -17,7 +17,7 @@ namespace Renderer
 
 	Sprite::~Sprite()
 	{
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 		std::cout << "Destroy Sprite" << std::endl;
 #endif
 

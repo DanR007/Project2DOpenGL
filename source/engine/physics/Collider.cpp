@@ -8,7 +8,7 @@ namespace Physics
 {
 	Collider::~Collider()
 	{
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 		std::cout << "Destroy Collider" << std::endl;
 #endif
 	}

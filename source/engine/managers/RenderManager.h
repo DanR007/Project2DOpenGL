@@ -9,11 +9,12 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-#define STATIC 0
-#define DYNAMIC 1
-#define BACKGROUND 2
-#define BUTTON 3
-#define TEXT_IMAGES 4
+#define MAP_CELL 0
+#define STATIC 1
+#define DYNAMIC 2
+#define BACKGROUND 3
+#define BUTTON 4
+#define TEXT_IMAGES 5
 
 
 template< typename T >

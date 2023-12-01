@@ -41,7 +41,7 @@ Controller::~Controller()
 		delete _a_star;
 		_a_star = nullptr;
 	}
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Controller" << std::endl;
 #endif
 }
