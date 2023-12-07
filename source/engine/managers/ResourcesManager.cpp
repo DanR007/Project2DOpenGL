@@ -172,7 +172,6 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 
 	#endif // ifndef __linux__
 	exe_path = executablePath.substr(0, find);
-	std::cout << exe_path << std::endl;
 
 	LoadShaderPrograms("spriteShader", SPRITE_FRAGMENT_SHADER_PATH, SPRITE_VERTEX_SHADER_PATH);
 	
@@ -183,7 +182,7 @@ void ResourcesManager::LoadAll(const std::string& executablePath)
 	GetShaderProgram("spriteShader")->SetIn("tex", 0);
 	GetShaderProgram("spriteShader")->SetMatrix4("projectionMat", projectionMatrix);
 	std::vector<std::string> names_texture_atlas = { "mush1", "mush2", "mush3", "wall", "goal", "selected", "pistolBullet", "tree", "stone",
-										"ground", "water", "lumber", "stoneWall", "quarry", "emptyProgressBar", "fullProgressBar"};
+										"ground", "water", "lumber", "barracks", "quarry", "emptyProgressBar", "fullProgressBar"};
 
 	std::vector<std::string> font_names;
 	for (int i = 0; i < 26; i++)

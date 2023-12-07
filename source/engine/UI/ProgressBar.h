@@ -44,7 +44,7 @@ public:
 
     /// @brief Будем ли мы отображать шкалу прогресса
     /// @param need_to_render булевая переменная отображения
-    void SetRender(bool need_to_render);
+    virtual void SetRender(bool need_to_render) override;
 private:
     /// @brief заполненность шкалы от 0 до 1
     float _percentage = 0.f;

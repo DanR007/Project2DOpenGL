@@ -21,7 +21,6 @@ Lumber::~Lumber()
 
 void Lumber::Replace()
 {
-	Building::Replace();
 	_worker = GetEngine()->GetWorld()->SpawnActor<Lumberjack>(_map_position);
-	_worker->SetPlayerID(_player_id);
+	Building::Replace();
 }

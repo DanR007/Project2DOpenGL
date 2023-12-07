@@ -46,6 +46,8 @@ public:
 
 		return nullptr;
 	}
+
+	size_t GetUIElementsCount() { return _ui_elements.size(); }
 private:
 	std::vector<UIElement*> _ui_elements;
 };

@@ -2,7 +2,7 @@
 
 #include "Building.h"
 
-
+/// @brief Каменоломня
 class Quarry : public Building
 {
 public:

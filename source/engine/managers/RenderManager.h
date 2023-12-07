@@ -62,6 +62,13 @@ public:
 
 		return new_sprite;
 	}
+	/*render_layer for static game actors is STATIC, for dynamic DYNAMIC, for UI background is BACKGROUND, for button use BUTTON and for text and images TEXT_IMAGES*/
+	template<typename T>
+	T* CreateSprite(Object* owner, const glm::vec2& position, const glm::vec2& size
+	, const std::string& initSpriteName, const uint8_t& render_layer = STATIC, const float& rotation = 0.f)
+	{
+		return CreateSprite<T>(owner, position, size, initSpriteName, "textureAtlas", render_layer, rotation);
+	}
 	/// @brief создание новой картинки (не UI)
 	/// @param texture текстура которая будет использоваться
 	/// @param shader шейдер

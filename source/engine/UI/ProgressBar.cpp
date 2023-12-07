@@ -98,9 +98,11 @@ void ProgressBar::SetEmptySpriteByName(const std::string& empty_name)
 
 void ProgressBar::SetRender(bool need_to_render)
 {
+    UIElement::SetRender(need_to_render);
+
     if(_empty_sprite)
     {
-        _empty_sprite->SetNeedToRender(need_to_render);
+        _empty_sprite->SetNeedToRender(_need_to_render);
     }
     else
     {
@@ -111,7 +113,7 @@ void ProgressBar::SetRender(bool need_to_render)
 
     if(_full_sprite)
     {
-        _full_sprite->SetNeedToRender(need_to_render);
+        _full_sprite->SetNeedToRender(_need_to_render);
     }
     else
     {

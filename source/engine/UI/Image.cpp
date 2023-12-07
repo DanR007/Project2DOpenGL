@@ -28,3 +28,13 @@ void Image::SetSprite(Renderer::Sprite *sprite)
 {
     _sprite = sprite;
 }
+
+void Image::SetRender(bool need_to_render)
+{
+    UIElement::SetRender(need_to_render);
+    
+    if(_sprite)
+    {
+        _sprite->SetNeedToRender(_need_to_render);
+    }
+}

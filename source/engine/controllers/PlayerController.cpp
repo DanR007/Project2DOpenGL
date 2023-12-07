@@ -12,6 +12,7 @@
 
 #include "../../game/gameobjects/static/buildings/Lumber.h"
 #include "../../game/gameobjects/static/buildings/Quarry.h"
+#include "../../game/gameobjects/static/buildings/Barracks.h"
 
 #include "../UI/Widget.h"
 #include "../UI/Text.h"
@@ -147,6 +148,21 @@ void PlayerController::InputKeyboard(GLFWwindow* currentWindow
 
 				yPos = window_size.y - yPos;
 				CreateBuilding<Quarry>(glm::vec2(xPos, yPos));
+			}
+			break;
+		case GLFW_KEY_B:
+			{
+				if (_building)
+				{
+					_building->Destroy();
+					_building = nullptr;
+				}
+
+				double xPos, yPos;
+				glfwGetCursorPos(currentWindow, &xPos, &yPos);
+
+				yPos = window_size.y - yPos;
+				CreateBuilding<Barracks>(glm::vec2(xPos, yPos));
 			}
 			break;
 		}

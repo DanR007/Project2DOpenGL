@@ -95,6 +95,7 @@ source/game/gameobjects/static/buildings/BuildingTypes.h
 source/game/gameobjects/static/buildings/Building.h
 source/game/gameobjects/static/buildings/Lumber.h
 source/game/gameobjects/static/buildings/Quarry.h
+source/game/gameobjects/static/buildings/Barracks.h
 source/game/gameobjects/units/Unit.h
 source/game/gameobjects/units/Worker.h
 source/game/gameobjects/units/Lumberjack.h
@@ -111,6 +112,7 @@ source/game/gameobjects/static/resources/Wood.cpp
 source/game/gameobjects/static/buildings/Building.cpp
 source/game/gameobjects/static/buildings/Lumber.cpp
 source/game/gameobjects/static/buildings/Quarry.cpp
+source/game/gameobjects/static/buildings/Barracks.cpp
 source/game/gameobjects/units/Unit.cpp
 source/game/gameobjects/units/Worker.cpp
 source/game/gameobjects/units/Lumberjack.cpp

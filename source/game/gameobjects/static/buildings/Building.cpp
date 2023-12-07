@@ -14,6 +14,7 @@
 std::map<EBuildingType, std::string> _building_sprite_name = {
 	{EBuildingType::EBT_Lumber, "lumber"},
 	{EBuildingType::EBT_Quarry, "quarry"},
+	{EBuildingType::EBT_Barracks, "barracks"},
 	{EBuildingType::EBT_None, ""}
 };
 
@@ -75,4 +76,9 @@ void Building::Replace()
 	_replace = true;
 
 	_selected_sprite->SetPosition(GetAnimSprite()->GetPosition());
+
+	if(_worker)
+	{
+		_worker->SetPlayerID(_player_id);
+	}
 }

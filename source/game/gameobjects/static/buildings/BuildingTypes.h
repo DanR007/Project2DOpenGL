@@ -8,6 +8,7 @@ enum class EBuildingType
 {
 	EBT_Lumber,
 	EBT_Quarry,
+	EBT_Barracks,
 	EBT_None
 };
 /// @brief словарь который хранит имена строений и их тип
