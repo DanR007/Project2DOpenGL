@@ -23,7 +23,7 @@ Actor::Actor(const std::string& initSubtextureName,
 
 Actor::~Actor()
 {
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Actor" << std::endl;
 #endif
 }

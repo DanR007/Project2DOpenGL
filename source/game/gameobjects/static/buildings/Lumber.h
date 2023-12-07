@@ -2,7 +2,7 @@
 
 #include "Building.h"
 
-
+/// @brief Лесопилка
 class Lumber : public Building
 {
 public:

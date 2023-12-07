@@ -18,7 +18,7 @@ namespace Renderer
 
 	AnimSprite::~AnimSprite()
 	{
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 		std::cout << "Destroy AnimSprite" << std::endl;
 #endif
 	}

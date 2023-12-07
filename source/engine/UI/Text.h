@@ -21,11 +21,10 @@ public:
 		_text_string = text_string;
 		UpdateText();
 	}
-	inline void SetRenderLayer(const uint8_t& layer) { _layer = layer; }
-
 
 	inline std::string GetText() const { return _text_string; }
 	
+	virtual void SetRender(bool need_to_render) override;
 protected:
 	void ToLower();
 	void UpdateText();
@@ -35,6 +34,4 @@ protected:
 	std::string _text_string;
 
 	glm::vec2 _symbol_size;
-
-	uint8_t _layer = 3;
 };

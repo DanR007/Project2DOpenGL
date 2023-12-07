@@ -8,6 +8,7 @@
 
 class Worker;
 
+/// @brief здание
 class Building : public Pawn
 {
 public:

@@ -91,3 +91,18 @@ void Button::Click()
 #endif
     _on_click_event();
 }
+
+
+void Button::SetRender(bool need_to_render)
+{
+    UIElement::SetRender(need_to_render);
+
+    if(_filling)
+    {
+        _filling->SetRender(_need_to_render);
+    }
+    if(_background)
+    {
+        _background->SetNeedToRender(_need_to_render);
+    }
+}

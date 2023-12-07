@@ -26,7 +26,7 @@ public:
 	bool GetIsSelected() const { return _is_selected; }
 	inline uint8_t GetID() const { return _player_id; }
 
-	void SetSelected(bool is_selected);
+	virtual void SetSelected(bool is_selected);
 	inline void SetMapPosition(const glm::ivec2& map_pos) { _map_position = map_pos; }
 	inline void SetPlayerID(const uint8_t& id) { _player_id = id; }
 

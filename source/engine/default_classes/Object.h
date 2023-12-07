@@ -76,6 +76,10 @@ public:
 
 	inline glm::vec2 GetXAxis() const { return _x_axis; }
 	inline glm::vec2 GetYAxis() const { return _y_axis; }
+
+	/// @brief возвращает все привязанные объекты
+	/// @return массив привязанных объектов
+	std::vector<Object*> GetChildObjects() const { return _attached_objects; }
 protected:
 	glm::vec2 _x_axis = glm::vec2(1.f, 0.f), _y_axis = glm::vec2(0.f, 1.f);
 

@@ -53,3 +53,18 @@ void Text::Clear()
 
 	_symbol_sprites.clear();
 }
+
+
+void Text::SetRender(bool need_to_render)
+{
+    UIElement::SetRender(need_to_render);
+    
+	for(Renderer::Sprite* spr : _symbol_sprites)
+	{
+		if(spr)
+		{
+			spr->SetNeedToRender(_need_to_render);
+		}
+	}
+    
+}

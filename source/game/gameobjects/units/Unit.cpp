@@ -39,7 +39,7 @@ Unit::Unit(Unit&& u) noexcept :
 
 Unit::~Unit()
 {
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Unit" << std::endl;
 #endif
 }
@@ -53,7 +53,7 @@ void Unit::MoveTo(Cell* cell)
 {
 #ifdef DEBUG_PATH_SEARCHING
 	std::cout << "Call MoveTo" << std::endl;
-#endif //DEBUG
+#endif //DEBUG_PATH_SEARCHING
 	if (GetController())
 	{
 		if (GetController()->GetPathComplete())

@@ -66,10 +66,9 @@ void EngineManager::Update(const float& deltaTime)
 	_tick_check_physics += deltaTime;
 
 	{
+		std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
 		_render->Update(deltaTime);
-		_game->Update(deltaTime);
-		/*std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
-		t1.join();*/
+		t1.join();
 	}
 	_memory->Update();
 }

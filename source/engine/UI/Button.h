@@ -58,6 +58,8 @@ public:
 			std::cerr << "Own class by function not valid" << std::endl;
 		}
 	}
+
+    virtual void SetRender(bool need_to_render) override;
 private:
     /// @brief наполнение может быть как текстом, так и просто картинкой
     UIElement* _filling = nullptr;

@@ -16,6 +16,9 @@
 #define DEBUG_PATH_SEARCHING
 //#define DEBUG_MOVEMENT
 #define DEBUG
+//#define DEBUG_DESTRUCTOR
+
+#define MULTITHREADING
 
 class Actor;
 class Pawn;

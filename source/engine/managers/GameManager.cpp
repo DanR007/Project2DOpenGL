@@ -1,6 +1,7 @@
 #include "GameManager.h"
 #include "EngineManager.h"
 #include "HUDManager.h"
+#include "RenderManager.h"
 
 #include "../physics/Collider.h"
 
@@ -14,6 +15,8 @@
 
 #include "../../game/gameobjects/static/resources/Stone.h"
 #include "../../game/gameobjects/static/resources/Wood.h"
+#include "../../game/gameobjects/static/Water.h"
+#include "../../game/gameobjects/static/Ground.h"
 
 #include "../UI/Widget.h"
 #include "../UI/Text.h"
@@ -22,6 +25,7 @@
 #include "../renderer/AnimSprite.h"
 
 #include <numeric>
+#include <thread>
 
 #ifdef __linux__
 #include <algorithm>
@@ -73,6 +77,7 @@ void GameManager::Clear()
 
 void GameManager::MoveAllActors(const glm::vec2& offset)
 {
+#ifndef MULTITHREADING
 	auto it = _all_actors.begin();
 	_offset -= offset;
 	for (; it != _all_actors.end(); ++it)
@@ -87,7 +92,41 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 			}
 			else
 			{
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
+	std::cout << "Controller is nullptr in MoveAllActors" << std::endl;
+#endif
+			}
+		}
+
+		(*it)->SetPosition((*it)->GetPosition() + offset);
+	}
+#else
+	std::thread t1 = std::thread(&GameManager::MoveAllActorsMultithreading, this, std::ref(offset), 0, _all_actors.size() / 2);
+	std::thread t2 = std::thread(&GameManager::MoveAllActorsMultithreading, this, std::ref(offset), _all_actors.size() / 2, _all_actors.size());
+
+	t1.join();
+	t2.join();
+#endif // MULTITHREADING
+}
+
+void GameManager::MoveAllActorsMultithreading(const glm::vec2& offset, size_t begin, size_t end)
+{
+	std::vector<Actor*>::const_iterator it = _all_actors.begin() + begin;
+	std::vector<Actor*>::const_iterator it_end = _all_actors.begin() + end;
+	_offset -= offset;
+	for (; it != it_end; ++it)
+	{
+		Unit* u = dynamic_cast<Unit*>(*it);
+
+		if (u)
+		{
+			if(u->GetController())
+			{
+				u->GetController()->ChangeNodePositionWindow(offset);
+			}
+			else
+			{
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Controller is nullptr in MoveAllActors" << std::endl;
 #endif
 			}
@@ -99,20 +138,40 @@ void GameManager::MoveAllActors(const glm::vec2& offset)
 
 void GameManager::Update(const float& deltaTime)
 {
+
 	if (!_is_game_over)
 	{
 		_player_controller->Move(deltaTime);
 
+#ifndef MULTITHREADING
 		std::vector<Actor*>::const_iterator it = _all_actors.begin();
 		
 		for (; it != _all_actors.end(); ++it)
 		{
 			(*it)->Update(deltaTime);
 		}
+#else
+		std::thread t1 = std::thread(&GameManager::UpdateMultithreading, this, std::ref(deltaTime), 0, _all_actors.size() / 2);
+		std::thread t2 = std::thread(&GameManager::UpdateMultithreading, this, std::ref(deltaTime), _all_actors.size() / 2, _all_actors.size());
+
+		t1.join();
+		t2.join();
+#endif // MULTITHREADING
 	}
 	else
 	{
 		//here add game over menu
+	}
+	
+}
+
+void GameManager::UpdateMultithreading(const float& deltaTime, size_t begin, size_t end)
+{
+	std::vector<Actor*>::const_iterator it = _all_actors.begin() + begin;
+	std::vector<Actor*>::const_iterator it_end = _all_actors.begin() + end;
+	for (; it != it_end; ++it)
+	{
+		(*it)->Update(deltaTime);
 	}
 }
 
@@ -185,16 +244,25 @@ void GameManager::ReadMap()
 	{
 		for (int x = 0; x < _size_map.x; x++)
 		{
-
-			char symbol = _map[y][x]->_symbol;
+			Cell* cell = _map[y][x];
+			char symbol = cell->_symbol;
 			switch (symbol)
 			{
-			case 'W':
-				FillCell<Wood>(_map[y][x], EResourceTypes::ERT_Wood);
+			case 'T':
+				FillCell<Wood>(cell, EResourceTypes::ERT_Wood);
 				break;
 			case 'S':
-				FillCell<Stone>(_map[y][x], EResourceTypes::ERT_Stone);
+				FillCell<Stone>(cell, EResourceTypes::ERT_Stone);
 				break;
+			}
+
+			if(symbol == 'W')
+			{
+				SpawnActor<Water>(cell->_position);
+			}
+			else
+			{
+				SpawnActor<Ground>(cell->_position);
 			}
 		}
 	}

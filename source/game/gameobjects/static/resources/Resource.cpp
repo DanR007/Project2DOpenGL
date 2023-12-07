@@ -31,7 +31,7 @@ Resource::Resource(const std::string& init_sprite_name, const glm::ivec2& positi
 Resource::~Resource()
 {
 	_worker_on_this_resource.clear();
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Resources" << std::endl;
 #endif
 }

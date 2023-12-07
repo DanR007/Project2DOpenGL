@@ -85,6 +85,8 @@ source/engine/parser/XMLParser.cpp
 
 set(GAME_HEADERS
 source/game/gameobjects/Goal.h
+source/game/gameobjects/static/Water.h
+source/game/gameobjects/static/Ground.h
 source/game/gameobjects/static/resources/ResourceTypes.h
 source/game/gameobjects/static/resources/Resource.h
 source/game/gameobjects/static/resources/Stone.h
@@ -93,6 +95,7 @@ source/game/gameobjects/static/buildings/BuildingTypes.h
 source/game/gameobjects/static/buildings/Building.h
 source/game/gameobjects/static/buildings/Lumber.h
 source/game/gameobjects/static/buildings/Quarry.h
+source/game/gameobjects/static/buildings/Barracks.h
 source/game/gameobjects/units/Unit.h
 source/game/gameobjects/units/Worker.h
 source/game/gameobjects/units/Lumberjack.h
@@ -101,12 +104,15 @@ source/game/gameobjects/units/Bricklayer.h
 
 set(GAME_CPP
 source/game/gameobjects/Goal.cpp
+source/game/gameobjects/static/Water.cpp
+source/game/gameobjects/static/Ground.cpp
 source/game/gameobjects/static/resources/Resource.cpp
 source/game/gameobjects/static/resources/Stone.cpp
 source/game/gameobjects/static/resources/Wood.cpp
 source/game/gameobjects/static/buildings/Building.cpp
 source/game/gameobjects/static/buildings/Lumber.cpp
 source/game/gameobjects/static/buildings/Quarry.cpp
+source/game/gameobjects/static/buildings/Barracks.cpp
 source/game/gameobjects/units/Unit.cpp
 source/game/gameobjects/units/Worker.cpp
 source/game/gameobjects/units/Lumberjack.cpp

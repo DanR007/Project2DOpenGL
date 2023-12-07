@@ -21,7 +21,6 @@ Quarry::~Quarry()
 
 void Quarry::Replace()
 {
-	Building::Replace();
 	_worker = GetEngine()->GetWorld()->SpawnActor<Bricklayer>(_map_position);
-	_worker->SetPlayerID(_player_id);
+	Building::Replace();
 }

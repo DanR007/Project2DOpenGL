@@ -20,6 +20,8 @@ public:
     ~Image();
 
     void SetSprite(Renderer::Sprite* sprite);
+
+    virtual void SetRender(bool need_to_render) override;
 private:
     Renderer::Sprite* _sprite;
 };

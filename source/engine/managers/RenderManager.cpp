@@ -33,11 +33,13 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 
 void RenderManager::Update(const float& deltaTime)
 {
-	for (auto it = _all_sprites.begin(); it != _all_sprites.end(); ++it)
+	auto it = _all_sprites.begin();
+	(it->first)->GetTexture()->Bind();
+	for (; it != _all_sprites.end(); ++it)
 	{	
 		(it->first)->GetShader()->Use();
 		(it->first)->GetShader()->SetUInt("diffuse_layer", (it->first)->GetDiffuseLayer());
-		(it->first)->GetTexture()->Bind();
+		//
 
 		Draw(it->first);
 	}
@@ -78,38 +80,27 @@ void RenderManager::Draw(Renderer::RenderImage* img)
 	glBindBuffer(GL_ARRAY_BUFFER, _buffer_matrix);
 	glBufferData(GL_ARRAY_BUFFER, count * sizeof(glm::mat4), &matrixes[0], GL_DYNAMIC_DRAW);
 
-	for (int i = 0; i < count; i++)
-	{
-		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
-		glEnableVertexAttribArray(3);
-		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)0);
-		glEnableVertexAttribArray(4);
-		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)(sizeof(glm::vec4)));
-		glEnableVertexAttribArray(5);
-		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)(2 * sizeof(glm::vec4)));
-		glEnableVertexAttribArray(6);
-		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)(3 * sizeof(glm::vec4)));
+	glBindVertexArray(img->GetVAO());
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)0);
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)(sizeof(glm::vec4)));
+	glEnableVertexAttribArray(5);
+	glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)(2 * sizeof(glm::vec4)));
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::vec4) * 4, (void*)(3 * sizeof(glm::vec4)));
 
-		glVertexAttribDivisor(3, 1);
-		glVertexAttribDivisor(4, 1);
-		glVertexAttribDivisor(5, 1);
-		glVertexAttribDivisor(6, 1);
-
-		glBindVertexArray(0);
-	}
+	glVertexAttribDivisor(3, 1);
+	glVertexAttribDivisor(4, 1);
+	glVertexAttribDivisor(5, 1);
+	glVertexAttribDivisor(6, 1);
+		
+	glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, count);
 	
-	for (int i = 0; i < count; i++)
-	{
-		glBindVertexArray(_sprites[i]->GetRenderImage()->GetVAO());
-		glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, count);
-		glBindVertexArray(0);
-	}
-
 	delete[] matrixes;
 	matrixes = nullptr;
 
-	_sprites.clear();
-
+	glBindVertexArray(0);
 	glActiveTexture(GL_TEXTURE0);
 }
 

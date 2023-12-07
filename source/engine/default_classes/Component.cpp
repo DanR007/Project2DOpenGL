@@ -4,7 +4,7 @@
 
 Component::~Component()
 {
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Component" << std::endl;
 #endif
 }

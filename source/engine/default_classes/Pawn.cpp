@@ -53,7 +53,7 @@
 
 	Pawn::~Pawn()
 	{
-#ifdef DEBUG
+#ifdef DEBUG_DESTRUCTOR
 		std::cout << "Destroy Pawn" << std::endl;
 #endif
 		if (_controller)

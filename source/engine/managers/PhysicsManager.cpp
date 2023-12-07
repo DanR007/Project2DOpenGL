@@ -206,7 +206,7 @@ namespace Physics
 				if(IsIntersection(cursor_pos, glm::vec2(FLT_TRUE_MIN), collider->GetPosition(), collider->GetSize()))
 				{
 					Button* b = static_cast<Button*>(collider->GetOwner());
-					if (b)
+					if (b && b->GetNeedToRender())
 					{
 #ifdef DEBUG
 						std::cout << "Click button" << std::endl;

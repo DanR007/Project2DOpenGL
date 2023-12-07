@@ -9,11 +9,12 @@
 #include <glm/gtc/type_ptr.hpp>
 
 
-#define STATIC 0
-#define DYNAMIC 1
-#define BACKGROUND 2
-#define BUTTON 3
-#define TEXT_IMAGES 4
+#define MAP_CELL 0
+#define STATIC 1
+#define DYNAMIC 2
+#define BACKGROUND 3
+#define BUTTON 4
+#define TEXT_IMAGES 5
 
 
 template< typename T >
@@ -60,6 +61,13 @@ public:
 		_all_sprites[it->second].push_back(new_sprite);
 
 		return new_sprite;
+	}
+	/*render_layer for static game actors is STATIC, for dynamic DYNAMIC, for UI background is BACKGROUND, for button use BUTTON and for text and images TEXT_IMAGES*/
+	template<typename T>
+	T* CreateSprite(Object* owner, const glm::vec2& position, const glm::vec2& size
+	, const std::string& initSpriteName, const uint8_t& render_layer = STATIC, const float& rotation = 0.f)
+	{
+		return CreateSprite<T>(owner, position, size, initSpriteName, "textureAtlas", render_layer, rotation);
 	}
 	/// @brief создание новой картинки (не UI)
 	/// @param texture текстура которая будет использоваться
