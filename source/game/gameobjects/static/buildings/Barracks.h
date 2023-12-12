@@ -13,9 +13,15 @@ public:
     virtual void Replace() override;
 
     virtual void SetSelected(bool is_selected) override;
+
+    template<typename T>
+    void StartTraining();
 private:
-    /// @brief Используется для создания всех кнопок казармы в виджете
-    void ConfigureButtons();
+    bool _is_training = false;
+    float _max_training_time, _current_training_time;
+
+    /// @brief Используется для создания всех кнопок, progress bar, казармы в виджете
+    void ConfigureUI();
 
     /// @brief хранит все кнопки юнитов для казармы
     Widget* _wdg;
