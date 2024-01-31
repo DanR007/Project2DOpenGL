@@ -5,6 +5,7 @@
 #include "../../../../engine/UI/Widget.h"
 #include "../../../../engine/UI/Button.h"
 #include "../../../../engine/UI/Image.h"
+#include "../../../../engine/UI/ProgressBar.h"
 
 #include "../../../../engine/managers/EngineManager.h"
 #include "../../../../engine/managers/HUDManager.h"
@@ -26,12 +27,12 @@ Barracks::~Barracks()
 
 void Barracks::Replace()
 {
-    ConfigureButtons();
+    ConfigureUI();
     Building::Replace();
     SetSelected(_is_selected);
 }
 
-void Barracks::ConfigureButtons()
+void Barracks::ConfigureUI()
 {
     if(_wdg)
     {
@@ -49,6 +50,11 @@ void Barracks::ConfigureButtons()
             img->SetSprite(spr);
             button->SetFilling(img);
         }
+
+        ProgressBar* progress_bar = _wdg->AddElement<ProgressBar>(start_position + glm::vec2((units_buttons_images.size() + 1) * size.x, 0.f), glm::vec2(size.x * 3, size.y));
+        progress_bar->SetEmptySpriteByName("emptyProgressBar");
+	    progress_bar->SetFullSpriteByName("fullProgressBar");
+        progress_bar->SetPercentage(0.1f);
     }
     else
     {
@@ -68,4 +74,10 @@ void Barracks::SetSelected(bool is_selected)
     {
         _wdg->GetElement(i)->SetRender(_is_selected);
     }   
+}
+
+template<typename T>
+void Barracks::StartTraining()
+{
+    
 }

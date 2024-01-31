@@ -17,6 +17,7 @@ Object::Object()
 
 Object::~Object()
 {
+	GetEngine()->ClearFunction(this);
 #ifdef DEBUG_DESTRUCTOR
 	std::cout << "Destroy Object" << std::endl;
 #endif
