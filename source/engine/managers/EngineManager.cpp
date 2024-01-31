@@ -64,9 +64,6 @@ void EngineManager::Begin()
 	{
 		_game->BeginPlay();
 	}
-
-	Invoke((Object*)GetWorld()->GetActors()[0], &Object::Destroy, 5.f);
-	GetWorld()->GetActors()[0]->Destroy();
 }
 
 void EngineManager::Update(const float& deltaTime)
