@@ -20,10 +20,8 @@ public:
 	~Building();
 
 	/// @brief размещение здания на карте (виртуальный метод)
-	virtual void Replace();
-	/// @brief размещено ли здание
-	/// @return 
-	bool GetIsReplaced() const { return _replace; }
+	virtual void Replace() override;
+
 	glm::ivec2 GetBuildingSize() const { return _building_size;	}
 	/// @brief можно ли раместить здание
 	/// @return 
@@ -42,12 +40,17 @@ protected:
 		, const glm::vec2& startSize = glm::vec2(1.f)
 		, const uint8_t& render_layer = 0
 		, const float startRotation = 0.f);
+
+	/// @brief Получаем свободное место вокруг здания
+	/// @return свободное место только вокруг здания, иначе вернет glm::ivec2(-2, -2)
+	glm::ivec2 GetFreePositionAroundBuilding();	
 	/// @brief работник в здании если nullptr то его нет
 	Worker* _worker = nullptr;
 	/// @brief размер здания
 	glm::ivec2 _building_size;
 	/// @brief тип здания
 	EBuildingType _type;
-	/// @brief переменная размещения
-	bool _replace = false;
+
+	/// @brief Используется для появления на этой клетке юнитов
+	glm::ivec2 _free_place_around_building = glm::ivec2(-2);
 };

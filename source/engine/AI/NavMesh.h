@@ -40,7 +40,7 @@ public:
 
 	Resource* GetNearestResource(const glm::ivec2& position, const EResourceTypes& type);
 
-	bool IsFreeCell(const glm::ivec2& pos) { return _map[pos.y][pos.x]->_symbol == _free_cell; }
+	bool IsFreeCell(const glm::ivec2& pos) { return InMap(pos) && _map[pos.y][pos.x]->_symbol == _free_cell; }
 
 	void RefillAllID();
 

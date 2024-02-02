@@ -40,13 +40,16 @@
 
 	void Pawn::Update(const float& deltaTime)
 	{
-		if(_controller)
+		if(_replaced)
 		{
-			_controller->Move(deltaTime);
-		}
-		if(_selected_sprite)
-		{
-			_selected_sprite->SetNeedToRender(GetIsSelected());
+			if(_controller)
+			{
+				_controller->Move(deltaTime);
+			}
+			if(_selected_sprite)
+			{
+				_selected_sprite->SetNeedToRender(GetIsSelected());
+			}
 		}
 		Actor::Update(deltaTime);
 	}

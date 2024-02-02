@@ -73,12 +73,58 @@ void Building::Update(const float& deltaTime)
 
 void Building::Replace()
 {
-	_replace = true;
+	Pawn::Replace();
 
 	_selected_sprite->SetPosition(GetAnimSprite()->GetPosition());
 
 	if(_worker)
 	{
 		_worker->SetPlayerID(_player_id);
+		_worker->Replace();
 	}
+}
+
+glm::ivec2 Building::GetFreePositionAroundBuilding()
+{
+	glm::ivec2 free_position = glm::ivec2(-2);
+
+	//проверка левой стороны
+	for(int y = -1; y < _building_size.y + 1; ++y)
+	{
+		glm::ivec2 cur = glm::ivec2(_map_position.x - 1, _map_position.y + y);
+		if(GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(cur))
+		{
+			return cur;
+		}
+	}
+	//проверка правой стороны
+	for(int y = -1; y < _building_size.y + 1; ++y)
+	{
+		glm::ivec2 cur = glm::ivec2(_map_position.x + _building_size.x + 1, _map_position.y + y);
+		if(GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(cur))
+		{
+			return cur;
+		}
+	}
+
+	//проверка нижней стороны
+	for(int x = 0; x < _building_size.x; ++x)
+	{
+		glm::ivec2 cur = glm::ivec2(_map_position.x + x, _map_position.y - 1);
+		if(GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(cur))
+		{
+			return cur;
+		}
+	}
+	//проверка верхней стороны
+	for(int x = 0; x < _building_size.x; ++x)
+	{
+		glm::ivec2 cur = glm::ivec2(_map_position.x + x, _map_position.y + _building_size.y + 1);
+		if(GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(cur))
+		{
+			return cur;
+		}
+	}
+
+	return free_position;
 }

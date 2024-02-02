@@ -1,5 +1,7 @@
 #include "Barracks.h"
 
+#include "../../units/Unit.h"
+
 #include "../../../../main.h"
 
 #include "../../../../engine/UI/Widget.h"
@@ -7,9 +9,14 @@
 #include "../../../../engine/UI/Image.h"
 #include "../../../../engine/UI/ProgressBar.h"
 
+#include "../../../../engine/managers/GameManager.h"
 #include "../../../../engine/managers/EngineManager.h"
 #include "../../../../engine/managers/HUDManager.h"
 #include "../../../../engine/managers/RenderManager.h"
+
+#include "../../../../engine/AI/NavMesh.h"
+
+#include "../../../../engine/controllers/PlayerController.h"
 
 Barracks::Barracks(const glm::ivec2& position) :
     Building(position, glm::ivec2(3), EBuildingType::EBT_Barracks)
@@ -79,5 +86,50 @@ void Barracks::SetSelected(bool is_selected)
 template<typename T>
 void Barracks::StartTraining()
 {
-    
+    _free_place_around_building = GetFreePositionAroundBuilding();
+
+    if(_free_place_around_building == glm::ivec2(-2))
+    {
+#ifdef DEBUG
+    std::cout << "Нет свободного места вокруг казармы\n";
+#endif
+        return;
+    }
+
+    //выставляем солдата в точку, где его не будет видно
+    glm::ivec2 start_pos = GetWorld()->GetSizeMap() + glm::ivec2(100);
+
+    T* t = GetEngine()->GetWorld()->SpawnActor<T>(start_pos);
+    if(dynamic_cast<Unit*>(t))
+    {
+        _new_unit = dynamic_cast<Unit*>(t);
+    }
+    else
+    {
+#ifdef DEBUG
+        std::cout << "Ты че шиз? Почему то, что появляется в казарме не является Unit?\n";
+#endif
+        dynamic_cast<Object*>(t)->Destroy();
+        return;
+    }
+
+    if(GetEngine()->GetWorld()->GetPlayerController(_player_id)->EnoughResources(_new_unit->GetCost()))
+    {
+        GetEngine()->GetWorld()->GetPlayerController(_player_id)->MinusResources(_new_unit->GetCost());
+    }
+    else
+    {
+        _new_unit->Destroy();
+    }
+}
+
+void Barracks::EndTrainig()
+{
+    if(GetEngine()->GetWorld()->GetNavMesh()->IsFreeCell(_free_place_around_building))
+    {
+        glm::vec2 pos = GetEngine()->GetWorld()->ConvertToWindowSpace(_free_place_around_building);
+        _new_unit->SetMapPosition(_free_place_around_building);
+        _new_unit->SetPosition(pos);
+        _new_unit->Replace();
+    }
 }

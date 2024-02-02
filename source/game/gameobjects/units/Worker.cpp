@@ -26,7 +26,10 @@ Worker::~Worker()
 
 void Worker::Update(const float& deltaTime)
 {
-	Work(deltaTime);
+	if(_replaced)
+	{
+		Work(deltaTime);
+	}
 	Unit::Update(deltaTime);
 }
 
