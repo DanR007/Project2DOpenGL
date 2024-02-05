@@ -46,6 +46,7 @@ void Barracks::ConfigureUI()
         glm::vec2 start_position = glm::vec2(500.f, 10.f);
         glm::vec2 size = glm::vec2(70.f, 70.f);
         std::vector<std::string> units_buttons_images = { "mush1", "mush2", "mush3"};
+        std::vector<void(Barracks::*)()> _button_on_click_events = { &Barracks::TrainMelee, &Barracks::TrainRange, &Barracks::TrainStrongMelee };
         for(int i = 0; i < units_buttons_images.size(); ++i)
         {
             glm::vec2 current_pos = start_position + glm::vec2(size.x * i, 0);
@@ -56,6 +57,7 @@ void Barracks::ConfigureUI()
             Image* img = _wdg->AddElement<Image>(current_pos, size);
             img->SetSprite(spr);
             button->SetFilling(img);
+            button->SetOnClickEvent(this, _button_on_click_events[i]);
         }
 
         ProgressBar* progress_bar = _wdg->AddElement<ProgressBar>(start_position + glm::vec2((units_buttons_images.size() + 1) * size.x, 0.f), glm::vec2(size.x * 3, size.y));
@@ -132,4 +134,17 @@ void Barracks::EndTrainig()
         _new_unit->SetPosition(pos);
         _new_unit->Replace();
     }
+}
+
+void Barracks::TrainMelee()
+{
+    std::cout << "Train Melee\n";
+}
+void Barracks::TrainRange()
+{
+    std::cout << "Train Range\n";
+}
+void Barracks::TrainStrongMelee()
+{
+    std::cout << "Train Strong Melee\n";
 }

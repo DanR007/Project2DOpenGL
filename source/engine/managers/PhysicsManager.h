@@ -30,7 +30,20 @@ namespace Physics
 		bool CanMove(Actor* checkActor, const glm::vec2& delta);
 		void CheckOverlapping(Physics::Collider* first_collider);
 
+		/// @brief используется в основном для создания пресонажей на карте
+		/// @param type 
+		/// @param owner 
+		/// @param position в целочисленных координатах (позиции на карте)
+		/// @param size 
+		/// @return 
 		Collider* CreateCollider(const EObjectTypes& type, Object* owner, const glm::ivec2 position, const glm::vec2& size);
+		/// @brief используется для назначения позиций коллайдеров для кнопок и прочих объектов не из карты
+		/// @param type 
+		/// @param owner 
+		/// @param window_position 
+		/// @param size 
+		/// @return 
+		Collider* CreateCollider(const EObjectTypes& type, Object* owner, const glm::vec2 window_position, const glm::vec2& size);
 
 		void Update();
 

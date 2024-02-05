@@ -71,10 +71,10 @@ void EngineManager::Update(const float& deltaTime)
 	_tick_check_physics += deltaTime;
 
 	{
-		/*std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
+		std::thread t1 = std::thread(&GameManager::Update, _game, std::ref(deltaTime));
 		_render->Update(deltaTime);
 		t1.join();
-*/
+
 		//смотрим вышло ли время на вызов какой-то функции
 		for(auto it = _invoke_functions.begin(); it != _invoke_functions.end(); )
 		{

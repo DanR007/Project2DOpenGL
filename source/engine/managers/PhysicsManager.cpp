@@ -17,6 +17,8 @@
 
 #include "../UI/Button.h"
 
+#include "../renderer/Sprite.h"
+
 #ifdef __linux__
 #include <float.h>
 #include <algorithm>
@@ -24,9 +26,24 @@
 
 namespace Physics
 {
-	Collider* Physics::PhysicsManager::CreateCollider(const EObjectTypes& type, Object* owner, const glm::ivec2 position, const glm::vec2& size)
+	Collider* Physics::PhysicsManager::CreateCollider(const EObjectTypes& type
+	, Object* owner
+	, const glm::ivec2 position
+	, const glm::vec2& size)
 	{
 		Collider* collider = new Collider(type, owner, GetWorld()->ConvertToWindowSpace(position), size);
+
+		_all_colliders.emplace_back(collider);
+
+		return collider;
+	}
+
+	Collider* PhysicsManager::CreateCollider(const EObjectTypes& type
+	, Object* owner
+	, const glm::vec2 window_position
+	, const glm::vec2& size)
+	{
+		Collider* collider = new Collider(type, owner, window_position, size);
 
 		_all_colliders.emplace_back(collider);
 
@@ -216,10 +233,23 @@ namespace Physics
 					}
 					else
 					{
+						if(b)
+						{
 #ifdef DEBUG
-						std::cout << "Click on UI but not on one button" << std::endl;
-#endif //DEBUG						
+							std::cout << "Button doesn't need to render\n";
+#endif //DEBUG		
+						}
+						else
+						{
+							std::cout << "It's not a button\n";
+						}
 					}
+				}
+				else
+				{
+#ifdef DEBUG
+					std::cout << "Click on UI but not on collider" << std::endl;
+#endif //DEBUG	
 				}
 			}
 		}

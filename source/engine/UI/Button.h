@@ -60,6 +60,10 @@ public:
 	}
 
     virtual void SetRender(bool need_to_render) override;
+
+    Renderer::Sprite* GetBackground() { return _background; }
+    UIElement* GetFilling() { return _filling; }
+
 private:
     /// @brief наполнение может быть как текстом, так и просто картинкой
     UIElement* _filling = nullptr;

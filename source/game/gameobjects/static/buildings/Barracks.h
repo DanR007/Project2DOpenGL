@@ -23,7 +23,10 @@ public:
     /// @brief заканчиваем тренировку военной единицы и переносим на пустое место
     void EndTrainig();
 
-    
+    void TrainMelee();
+    void TrainRange();
+    void TrainStrongMelee();
+
 private:
     bool _is_training = false;
     float _max_training_time, _current_training_time;
