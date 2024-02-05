@@ -3,7 +3,7 @@
 #include "Building.h"
 
 class Widget;
-class Unit;
+class Soldier;
 
 class Barracks : public Building
 {
@@ -27,6 +27,7 @@ public:
     void TrainRange();
     void TrainStrongMelee();
 
+    virtual void Update(const float& deltaTime) override;
 private:
     bool _is_training = false;
     float _max_training_time, _current_training_time;
@@ -37,7 +38,7 @@ private:
     /// @brief хранит все кнопки юнитов для казармы
     Widget* _wdg;
 
-    Unit* _new_unit;
+    Soldier* _new_unit;
 
     
 };

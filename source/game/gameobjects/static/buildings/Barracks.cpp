@@ -2,6 +2,9 @@
 
 #include "../../units/Unit.h"
 
+#include "../../units/army/Soldier.h"
+#include "../../units/army/RangeSoldier.h"
+
 #include "../../../../main.h"
 
 #include "../../../../engine/UI/Widget.h"
@@ -30,6 +33,28 @@ Barracks::~Barracks()
     {
         _wdg->Destroy();
     }
+}
+
+void Barracks::Update(const float& deltaTime)
+{
+    if(_is_training)
+    {
+        _current_training_time += deltaTime;
+    }
+
+    if(GetIsSelected())
+    {
+        int progress_bar_index = _wdg->GetUIElementsCount() - 1;
+
+        ProgressBar* progress_bar = static_cast<ProgressBar*>(_wdg->GetElement(progress_bar_index));
+        if(progress_bar)
+        {
+            float percantage = _is_training ? _current_training_time / _max_training_time : 0.f;
+            progress_bar->SetPercentage(percantage);
+        }
+    }
+
+    Pawn::Update(deltaTime);
 }
 
 void Barracks::Replace()
@@ -102,14 +127,14 @@ void Barracks::StartTraining()
     glm::ivec2 start_pos = GetWorld()->GetSizeMap() + glm::ivec2(100);
 
     T* t = GetEngine()->GetWorld()->SpawnActor<T>(start_pos);
-    if(dynamic_cast<Unit*>(t))
+    if(dynamic_cast<Soldier*>(t))
     {
-        _new_unit = dynamic_cast<Unit*>(t);
+        _new_unit = dynamic_cast<Soldier*>(t);
     }
     else
     {
 #ifdef DEBUG
-        std::cout << "Ты че шиз? Почему то, что появляется в казарме не является Unit?\n";
+        std::cout << "Ты че шиз? Почему то, что появляется в казарме не является Soldier?\n";
 #endif
         dynamic_cast<Object*>(t)->Destroy();
         return;
@@ -122,7 +147,14 @@ void Barracks::StartTraining()
     else
     {
         _new_unit->Destroy();
+        return;
     }
+
+    _is_training = true;
+
+    _max_training_time = _new_unit->GetTrainingTime();
+    _current_training_time = 0.f;
+    GetEngine()->Invoke(this, &Barracks::EndTrainig, _max_training_time);
 }
 
 void Barracks::EndTrainig()
@@ -133,6 +165,8 @@ void Barracks::EndTrainig()
         _new_unit->SetMapPosition(_free_place_around_building);
         _new_unit->SetPosition(pos);
         _new_unit->Replace();
+
+        _is_training = false;
     }
 }
 
@@ -143,6 +177,7 @@ void Barracks::TrainMelee()
 void Barracks::TrainRange()
 {
     std::cout << "Train Range\n";
+    StartTraining<RangeSoldier>();
 }
 void Barracks::TrainStrongMelee()
 {

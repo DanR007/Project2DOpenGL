@@ -2,7 +2,7 @@
 
 #include "../../../../main.h"
 
-RangeSoldier::RangeSoldier(const glm::ivec2& position) : Unit(position)
+RangeSoldier::RangeSoldier(const glm::ivec2& position) : Soldier(position)
 {
 #ifdef DEBUG
     std::cout << "Создал солдата дальнего боя\n";

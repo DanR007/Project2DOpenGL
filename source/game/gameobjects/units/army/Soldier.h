@@ -1,0 +1,15 @@
+#pragma once
+
+#include "../Unit.h"
+
+class Soldier : public Unit
+{
+public:
+    Soldier(const glm::ivec2& position);
+
+    ~Soldier();
+
+    float GetTrainingTime() const { return _trainig_time; }
+private:
+    float _trainig_time = 0.f;
+};
