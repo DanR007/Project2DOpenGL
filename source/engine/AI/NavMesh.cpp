@@ -18,7 +18,20 @@
 
 bool CheckEqualsResourceType(const EResourceTypes& type, Cell* cell)
 {
-	if(!cell->_resource)
+	if(!cell->_actor)
+	{
+#ifdef DEBUG
+		std::cout << "In this cell (x, y) no actor: (" 
+		<< cell->_position.x 
+		<< ", "
+		<< cell->_position.y 
+		<< ")"
+		<< std::endl;
+#endif //DEBUG
+		return false;
+	}
+	Resource* resource = dynamic_cast<Resource*>(cell->_actor);
+	if(!resource)
 	{
 #ifdef DEBUG
 		std::cout << "In this cell (x, y) no resource: (" 
@@ -30,8 +43,7 @@ bool CheckEqualsResourceType(const EResourceTypes& type, Cell* cell)
 #endif //DEBUG
 		return false;
 	}
-	
-	return cell->_resource->GetResourceType() == type;
+	return resource->GetResourceType() == type;
 }
 
 NavMeshRTS::NavMeshRTS(std::vector<std::vector<Cell*>> map)
@@ -62,37 +74,30 @@ std::vector<std::vector<Cell*>> NavMeshRTS::GetMap()
 
 void NavMeshRTS::ClearMapCell(const glm::ivec2& position)
 {
-	_map[position.y][position.x]->_symbol = _free_cell;
-	_map[position.y][position.x]->_resource = nullptr;
-
-	RefillAllID();
-#ifdef DEBUG
-	PrintMap();
-#endif //DEBUG
+	SetMapCell(position, _free_cell, nullptr);
 }
 
-void NavMeshRTS::OccupiedMapCell(const glm::ivec2& position)
-{
-	_map[position.y][position.x]->_symbol = 'B';
-}
-
-void NavMeshRTS::SetMapCell(const glm::ivec2& position, const char& symbol)
+void NavMeshRTS::SetMapCell(const glm::ivec2& position, const char& symbol, Actor* actor)
 {
 	_map[position.y][position.x]->_symbol = symbol;
+	_map[position.y][position.x]->_actor = actor;
+	
+	RefillAllID();
+	PrintMap();
 }
 
 void NavMeshRTS::PrintMap()
 {
-	std::cout <<"Print map: " << std::endl;
+	std::cout << "----------------Start map----------------" << std::endl;
 	for (int y = _map.size() - 1; y >= 0; y--)
 	{
 		for (int x = 0; x < _map[y].size(); x++)
 		{
-			std::cout << _map[y][x]->_field_id;
+			std::cout << _map[y][x]->_symbol;
 		}
 		std::cout << std::endl;
 	}
-	std::cout << "End map " << std::endl;
+	std::cout << "-----------------End map-----------------" << std::endl;
 }
 
 bool NavMeshRTS::InMap(const glm::ivec2& pos)
@@ -108,8 +113,9 @@ Resource* NavMeshRTS::GetNearestResource(const glm::ivec2& position, const EReso
 	{
 		return nullptr;
 	}
+	Resource* resource = dynamic_cast<Resource*>(_map[nearest_resource_coordinates.y][nearest_resource_coordinates.x]->_actor);
 
-	return _map[nearest_resource_coordinates.y][nearest_resource_coordinates.x]->_resource;
+	return resource;
 }
 
 void NavMeshRTS::RefillAllID()

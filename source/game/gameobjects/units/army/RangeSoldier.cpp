@@ -14,3 +14,8 @@ RangeSoldier::~RangeSoldier()
 {
     
 }
+
+void RangeSoldier::Update(const float& deltaTime)
+{
+    
+}

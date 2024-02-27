@@ -42,6 +42,16 @@ Building::Building(const std::string& initSubtextureName
 
 Building::~Building()
 {
+	for(int x = 0; x < _building_size.x; ++x)
+	{
+		for(int y = 0; y < _building_size.y; ++y)
+		{
+			glm::ivec2 pos(_map_position + glm::ivec2(x, y));
+
+			GetWorld()->GetNavMesh()->ClearMapCell(pos);
+		}
+	}
+
 	if (_worker)
 	{
 		_worker->Destroy();
@@ -76,6 +86,18 @@ void Building::Replace()
 	Pawn::Replace();
 
 	_selected_sprite->SetPosition(GetAnimSprite()->GetPosition());
+
+	for(int x = 0; x < _building_size.x; ++x)
+	{
+		for(int y = 0; y < _building_size.y; ++y)
+		{
+			glm::ivec2 pos(_map_position);
+
+			pos += glm::ivec2(x, y);
+
+			GetWorld()->GetNavMesh()->SetMapCell(pos, 'r', this);
+		}
+	}
 
 	if(_worker)
 	{

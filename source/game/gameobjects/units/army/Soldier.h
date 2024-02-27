@@ -9,6 +9,8 @@ public:
 
     ~Soldier();
 
+    /// @brief возвращает время требуемое для тренировки солдата
+    /// @return 
     float GetTrainingTime() const { return _trainig_time; }
 private:
     float _trainig_time = 0.f;

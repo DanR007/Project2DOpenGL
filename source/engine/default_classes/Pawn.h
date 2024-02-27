@@ -38,6 +38,8 @@ public:
 	std::vector<std::pair<EResourceTypes, size_t>> GetCost() const;
 
 	virtual void Replace() { _replaced = true; }
+
+	void ChangeMapCellPosition(const glm::ivec2& map_coord);
 protected:
 	uint8_t _player_id;
 

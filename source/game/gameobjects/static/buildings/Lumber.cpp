@@ -21,6 +21,7 @@ Lumber::~Lumber()
 
 void Lumber::Replace()
 {
-	_worker = GetEngine()->GetWorld()->SpawnActor<Lumberjack>(_map_position);
+	glm::ivec2 free_position = GetFreePositionAroundBuilding();
+	_worker = GetEngine()->GetWorld()->SpawnActor<Lumberjack>(free_position);
 	Building::Replace();
 }
