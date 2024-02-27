@@ -3,6 +3,7 @@
 #include "Building.h"
 
 class Widget;
+class Soldier;
 
 class Barracks : public Building
 {
@@ -14,8 +15,19 @@ public:
 
     virtual void SetSelected(bool is_selected) override;
 
+    /// @brief начинаем тренировку боевой единицы
+    /// @tparam T класс военной единицы
     template<typename T>
     void StartTraining();
+
+    /// @brief заканчиваем тренировку военной единицы и переносим на пустое место
+    void EndTrainig();
+
+    void TrainMelee();
+    void TrainRange();
+    void TrainStrongMelee();
+
+    virtual void Update(const float& deltaTime) override;
 private:
     bool _is_training = false;
     float _max_training_time, _current_training_time;
@@ -25,4 +37,8 @@ private:
 
     /// @brief хранит все кнопки юнитов для казармы
     Widget* _wdg;
+
+    Soldier* _new_unit;
+
+    
 };

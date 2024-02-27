@@ -26,7 +26,10 @@ Worker::~Worker()
 
 void Worker::Update(const float& deltaTime)
 {
-	Work(deltaTime);
+	if(_replaced)
+	{
+		Work(deltaTime);
+	}
 	Unit::Update(deltaTime);
 }
 
@@ -37,7 +40,7 @@ void Worker::Work(const float& deltaTime)
 		if (_returning)
 		{
 #ifdef DEBUG
-			std::cout << "Worker is brought 10 resources" << std::endl;
+			std::cout << "Worker have brought 10 resources" << std::endl;
 #endif
 			GetEngine()->GetWorld()->GetPlayerController(_player_id)->AddResource(_collectable_type, _resource_count);
 
@@ -64,7 +67,7 @@ void Worker::Work(const float& deltaTime)
 					_resource_count += _resource->EarnResources();
 
 #ifdef DEBUG
-					std::cout << "Earn one resource" << std::endl;
+					std::cout << "Earn one resource: " << (int)_resource_count << std::endl;
 #endif
 					if (_resource_count >= _max_resource_count)
 					{

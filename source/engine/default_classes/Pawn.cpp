@@ -2,6 +2,8 @@
 
 #include "../../main.h"
 
+#include "../AI/NavMesh.h"
+
 #include "../managers/PhysicsManager.h"
 #include "../managers/GameManager.h"
 #include "../managers/RenderManager.h"
@@ -40,13 +42,16 @@
 
 	void Pawn::Update(const float& deltaTime)
 	{
-		if(_controller)
+		if(_replaced)
 		{
-			_controller->Move(deltaTime);
-		}
-		if(_selected_sprite)
-		{
-			_selected_sprite->SetNeedToRender(GetIsSelected());
+			if(_controller)
+			{
+				_controller->Move(deltaTime);
+			}
+			if(_selected_sprite)
+			{
+				_selected_sprite->SetNeedToRender(GetIsSelected());
+			}
 		}
 		Actor::Update(deltaTime);
 	}
@@ -90,4 +95,11 @@ void Pawn::SetSelected(bool is_selected)
 		std::cout << "progress bar is null" << std::endl;
 #endif // DEBUG
 	}
+}
+
+void Pawn::ChangeMapCellPosition(const glm::ivec2& map_coord)
+{
+	GetWorld()->GetNavMesh()->ClearMapCell(GetMapPosition());
+	SetMapPosition(map_coord);
+	GetWorld()->GetNavMesh()->SetMapCell(GetMapPosition(), 'a', this);
 }

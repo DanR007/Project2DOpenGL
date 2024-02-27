@@ -24,6 +24,9 @@ public:
 	virtual ~Controller();
 	virtual void Move(float deltaTime);
 
+	/// @brief вызывается когда персонаж достиг одного из промежуточных узлов и готов получить 
+	/// очередную цель
+	/// @param map_coord новая цель движения
 	void SetNewNode(const glm::ivec2& map_coord);
 	inline void SetMoveSpeed(const float move_speed) { _move_speed = move_speed; }
 

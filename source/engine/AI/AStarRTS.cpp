@@ -74,11 +74,15 @@ Goal* AStarRTS::DevelopPath(const glm::ivec2& start, Cell* target)
 	PathCell* p_cur = c;
 
 	_close_cells.push_back(c);
+
+	Cell* cur;
+	cur = _close_cells.back()->GetCell();
+
 	//бегаем по циклу пока не достигнем нужной нам цели
-	while (p_cur->GetCell() != trully_target)
+	while (cur != trully_target)
 	{
 		p_cur = _close_cells.back();
-		Cell* cur;
+		
 
 		if (p_cur)
 		{

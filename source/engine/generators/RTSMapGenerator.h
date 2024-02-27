@@ -4,7 +4,7 @@
 #include <vector>
 #include <string>
 
-class Resource;
+class Actor;
 
 struct Cell
 {
@@ -42,7 +42,7 @@ struct Cell
 	unsigned short int _field_id;
 	char _symbol;
 	
-	Resource* _resource = nullptr;
+	Actor* _actor = nullptr;
 };
 
 struct GenSymbol

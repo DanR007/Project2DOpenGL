@@ -24,7 +24,7 @@ class IContainer
 { 
 	public: 
 		virtual void Call(IArguments*) = 0; 
-		virtual void* getObj() = 0;
+		virtual void* getObj() { return nullptr; }
 };
 template< class Obj, class M > class Container : public IContainer {};
 

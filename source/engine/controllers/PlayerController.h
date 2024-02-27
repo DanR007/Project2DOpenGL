@@ -122,13 +122,12 @@ public:
 	/// @brief убирание ресурсов, которые расходует игрок
 	/// @param resources весь список ресурсов
 	void MinusResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
-	
-protected:
+
 	/// @brief достаточно ли ресурсов на действие
 	/// @param resources 
 	/// @return 
 	bool EnoughResources(const std::vector<std::pair<EResourceTypes, size_t>>& resources);
-
+protected:
 	/// @brief создание здания
 	/// @tparam T тип здания
 	/// @param position позиция курсора в окне

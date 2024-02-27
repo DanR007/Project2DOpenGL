@@ -8,6 +8,8 @@ struct Cell;
 
 enum class EResourceTypes;
 
+class Resource;
+
 class NavMeshRTS
 {
 public:
@@ -26,13 +28,11 @@ public:
 	/// @brief очистка клетки и создание там пустой
 	/// @param position позиция очищаемой клетки
 	void ClearMapCell(const glm::ivec2& position);
-	/// @brief занять клетку объектом построенным
-	/// @param position позиция занимаемой клетки
-	void OccupiedMapCell(const glm::ivec2& position);
 	/// @brief выставить в клетку символ
 	/// @param position позиция клетки
 	/// @param symbol какой символ выставить
-	void SetMapCell(const glm::ivec2& position, const char& symbol);
+	/// @param actor тот кто занимает эту клетку
+	void SetMapCell(const glm::ivec2& position, const char& symbol, Actor* actor);
 	/// @brief вывод островов на карте
 	void PrintMap();
 
@@ -40,7 +40,7 @@ public:
 
 	Resource* GetNearestResource(const glm::ivec2& position, const EResourceTypes& type);
 
-	bool IsFreeCell(const glm::ivec2& pos) { return _map[pos.y][pos.x]->_symbol == _free_cell; }
+	bool IsFreeCell(const glm::ivec2& pos) { return InMap(pos) && _map[pos.y][pos.x]->_symbol == _free_cell; }
 
 	void RefillAllID();
 

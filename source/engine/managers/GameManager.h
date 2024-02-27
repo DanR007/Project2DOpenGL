@@ -65,9 +65,13 @@ public:
 	void FillCell(Cell* cell, const EResourceTypes& type)
 	{
 		SpawnActor<T>(cell->_position);
-		cell->_resource = dynamic_cast<T*>(_all_actors.back());
-		cell->_resource->SetCell(cell);
-		cell->_resource->SetResource(type);
+		cell->_actor = dynamic_cast<T*>(_all_actors.back());
+		Resource* res = dynamic_cast<Resource*>(cell->_actor);
+		if(res)
+		{
+			res->SetCell(cell);
+			res->SetResource(type);
+		}
 	}
 
 	/// @brief перемещение всех Actor создавая ощущение перемещения камеры 

@@ -72,7 +72,7 @@ public:
 	}
 private:
 	void LoadResources(char** argv);
-
+	
 	std::vector<std::pair<Delegate, float>> _invoke_functions;
 
 	const float c_tick_before_check_physics = 0.2f;

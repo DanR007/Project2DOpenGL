@@ -141,7 +141,8 @@ void Controller::MakePathForGoal(Cell* goal, const glm::ivec2& move_from)
 		//запоминаем в юните текущую цель нашего пути
 		if (_controlled_pawn)
 		{
-			_controlled_pawn->SetGoal(_a_star->DevelopPath(move_from, goal));
+			Goal* goal_from_a_star = _a_star->DevelopPath(move_from, goal);
+			_controlled_pawn->SetGoal(goal_from_a_star);
 			//привязываем отображение нашего пути к текущему юниту
 			if(_controlled_pawn->GetGoal())
 			{
@@ -170,11 +171,13 @@ void Controller::MakePathForGoal(Cell* goal, const glm::ivec2& move_from)
 }
 
 
-//set map position to unit and choice new map position
-//if path doesn't empty
 void Controller::SetNewNode(const glm::ivec2& map_coord)
 {
-	_controlled_pawn->SetMapPosition(_node_in_map_coord);
+	//set map position to unit and choice new map position
+	//if path doesn't empty
+
+	_controlled_pawn->ChangeMapCellPosition(_node_in_map_coord);
+	//_controlled_pawn->SetMapPosition(_node_in_map_coord);
 
 	//отрицательная позиция показывает что больше в _a_star не хранится узлов для перемещения
 	if (map_coord == glm::ivec2(-1, -1))

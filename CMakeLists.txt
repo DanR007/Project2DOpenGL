@@ -100,6 +100,8 @@ source/game/gameobjects/units/Unit.h
 source/game/gameobjects/units/Worker.h
 source/game/gameobjects/units/Lumberjack.h
 source/game/gameobjects/units/Bricklayer.h
+source/game/gameobjects/units/army/Soldier.h
+source/game/gameobjects/units/army/RangeSoldier.h
 )
 
 set(GAME_CPP
@@ -117,6 +119,8 @@ source/game/gameobjects/units/Unit.cpp
 source/game/gameobjects/units/Worker.cpp
 source/game/gameobjects/units/Lumberjack.cpp
 source/game/gameobjects/units/Bricklayer.cpp
+source/game/gameobjects/units/army/Soldier.cpp
+source/game/gameobjects/units/army/RangeSoldier.cpp
 )
 
 add_executable(${PROJECT_NAME} 

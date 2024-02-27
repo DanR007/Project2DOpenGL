@@ -390,12 +390,6 @@ void PlayerController::ConfigureUI()
 
 	_widget->AddElement<Panel>(glm::vec2(0), glm::vec2(window_size.x, window_size.y / 6.f));
 
-	//Button* button = _widget->AddElement<Button>(glm::vec2(0), glm::vec2(0));
-	//Image* img = _widget->AddElement<Image>(glm::vec2(0), glm::vec2(80, 20));
-	//img->SetSprite(GetEngine()->GetRenderManager()->CreateSprite<Renderer::Sprite>(nullptr, glm::vec2(0), glm::vec2(80, 20), "wall", "textureAtlas", TEXT_IMAGES));
-	//button->SetFilling(img);
-	//button->SetPosition(glm::vec2(10));
-
 	ProgressBar* progress_bar = _widget->AddElement<ProgressBar>(glm::vec2(20.f), glm::vec2(400, 50));
 	progress_bar->SetEmptySpriteByName("emptyProgressBar");
 	progress_bar->SetFullSpriteByName("fullProgressBar");
@@ -431,6 +425,6 @@ void PlayerController::ClickButton(const glm::vec2 &mouse_pos)
 
 void PlayerController::Click(const glm::vec2 &mouse_pos)
 {
-	ChooseUnit(mouse_pos);
 	ClickButton(mouse_pos);
+	ChooseUnit(mouse_pos);
 }
