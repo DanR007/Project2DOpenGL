@@ -136,8 +136,20 @@ void GameManager::MoveAllActorsMultithreading(const glm::vec2& offset, size_t be
 	}
 }
 
+void GameManager::MergeNewActors()
+{
+	auto it = _new_actors.begin();
+
+	while (it != _new_actors.end())
+	{
+		_all_actors.emplace_back((*it));
+		it = _new_actors.erase(it);
+	}
+}
+
 void GameManager::Update(const float& deltaTime)
 {
+	MergeNewActors();
 
 	if (!_is_game_over)
 	{
@@ -169,7 +181,7 @@ void GameManager::UpdateMultithreading(const float& deltaTime, size_t begin, siz
 {
 	std::vector<Actor*>::const_iterator it = _all_actors.begin() + begin;
 	std::vector<Actor*>::const_iterator it_end = _all_actors.begin() + end;
-	for (; it != it_end; ++it)
+	for (; it != _all_actors.end() && it != it_end; ++it)
 	{
 		(*it)->Update(deltaTime);
 	}
@@ -271,6 +283,17 @@ void GameManager::ReadMap()
 void GameManager::Erase(Actor* actor)
 {
 	auto it = std::find(_all_actors.begin(), _all_actors.end(), actor);
-	_all_actors.erase(it);
+	if (it != _all_actors.end())
+	{
+		_all_actors.erase(it);
+	}
+	else
+	{
+		it = std::find(_new_actors.begin(), _new_actors.end(), actor);
+		if (it != _new_actors.end())
+		{
+			_new_actors.erase(it);
+		}
+	}
 }
 

@@ -41,7 +41,7 @@ public:
 		T* new_actor = new T(initSpriteName, actorPosition, actorSize, actorRotation);
 
 		if (dynamic_cast<Actor*>(new_actor))
-			_all_actors.emplace(_all_actors.end(), new_actor);
+			_new_actors.emplace(_new_actors.end(), new_actor);
 
 		return new_actor;
 	}
@@ -51,7 +51,7 @@ public:
 		T* new_actor = new T(position);
 
 		if (dynamic_cast<Actor*>(new_actor))
-			_all_actors.emplace(_all_actors.end(), new_actor);
+			_new_actors.emplace(_new_actors.end(), new_actor);
 
 		return new_actor;
 
@@ -64,8 +64,8 @@ public:
 	template<typename T>
 	void FillCell(Cell* cell, const EResourceTypes& type)
 	{
-		SpawnActor<T>(cell->_position);
-		cell->_actor = dynamic_cast<T*>(_all_actors.back());
+		Actor* actor = SpawnActor<T>(cell->_position);
+		cell->_actor = dynamic_cast<T*>(actor);
 		Resource* res = dynamic_cast<Resource*>(cell->_actor);
 		if(res)
 		{
@@ -110,6 +110,9 @@ public:
 
 	void Erase(Actor* actor);
 private:
+	/// @brief отвечает за объединение новых объектов со старыми
+	void MergeNewActors();
+
 
 	/// @brief Update если включен в main.h многопоток
 	/// @param deltaTime 
@@ -125,6 +128,9 @@ private:
 	/// @brief навигационная "сетка" отвечает за перемещение юнитов по карте
 	NavMeshRTS* _nav_mesh;
 	PlayerController* _player_controller = nullptr;
+
+	/// @brief отвечает за только что созданные объекты
+	std::vector<Actor*> _new_actors;
 
 	std::vector<Actor*> _all_actors;
 	/// @brief карта игры

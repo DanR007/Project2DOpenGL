@@ -71,12 +71,14 @@ namespace Renderer
 		Sprite& operator=(const Sprite&) = delete;
 
 		void SetNewSprite(const std::string& newSubtextureName);
+		inline void SetRenderImage(RenderImage* img) { _image = img; }
 
 		inline RenderImage* GetRenderImage() { return _image; }
 
 		bool InView() const;
 
-		bool GetNeedToRender() {
+		bool GetNeedToRender() 
+		{
 			return InView() && _need_to_render;
 		}
 

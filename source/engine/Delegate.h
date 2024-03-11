@@ -40,7 +40,7 @@ private:
 	M _method;
 
 public: 
-	Obj* getObj() { return _object; }
+	void* getObj() { return _object; }
 	void Call(IArguments* i_args)
 	{
 		(_object->*_method)();

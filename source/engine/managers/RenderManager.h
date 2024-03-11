@@ -8,6 +8,8 @@
 #include <glm/matrix.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <mutex>
+#include <functional>
 
 #define MAP_CELL 0
 #define STATIC 1
@@ -46,19 +48,34 @@ public:
 	{
 		std::map<std::string, Renderer::RenderImage*>::const_iterator it = _map_all_images.find(initSpriteName);
 
-
+		Renderer::RenderImage* img;
 		if (it == _map_all_images.end())
 		{
 			std::cout << "Can't find image with this init sprite name: " + initSpriteName << std::endl;
 			std::cout << "Create new image with sprite: " + initSpriteName << std::endl;
-			Renderer::RenderImage* img = CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
-				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, render_layer);
+			/*Renderer::RenderImage* img = CreateNewImage(GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
+				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, render_layer);*/
 
-			it = _map_all_images.find(initSpriteName);
+			img = nullptr;
+
+			//it = _map_all_images.find(initSpriteName);
 		}
-		
-		T* new_sprite = new T(it->second, owner, position, size, rotation);
-		_all_sprites[it->second].push_back(new_sprite);
+		else
+		{
+			img = it->second;
+		}
+
+		T* new_sprite = new T(img, owner, position, size, rotation);
+		if (img)
+		{
+			_all_sprites[img].push_back(new_sprite);
+		}
+		else
+		{
+			CreateNewImageArgs args = { new_sprite, GetEngine()->GetResourcesManager()->GetTexture(texture_atlas_name),
+				GetEngine()->GetResourcesManager()->GetShaderProgram("spriteShader"), initSpriteName, render_layer };
+			_call_create_render_image.push_back(args);
+		}
 
 		return new_sprite;
 	}
@@ -81,7 +98,15 @@ public:
 	void Update(const float& deltaTime);
 
 	void Erase(Renderer::Sprite* spr);
+
+	
 private:
+	std::mutex _create_mutex, _render_mutex;
+
+	void ClearingCreateNewImageArgs();
+
+	bool NeedCreateImage() { return !_call_create_render_image.empty(); }
+
 	/// @brief заполняем массив видимыми в пределах экрана, и подлежащих отрисовки, спрайтами
 	/// @param in_view массив нужных для рендера спрайтов
 	/// @param img картинка на которой основаны эти спрайты
@@ -97,4 +122,19 @@ private:
 	std::map<std::string, Renderer::RenderImage*> _map_all_images;
 	/// @brief словарь хранящий в порядке убывания по важности рендера (от 0 до N) текстур которые являются ключом к спрайтам
 	std::map<Renderer::RenderImage*, std::vector<Renderer::Sprite*>, pointer_comparator<Renderer::RenderImage*>> _all_sprites;
+
+
+	struct CreateNewImageArgs
+	{
+		/// @brief спрайт, которому нужна новая RenderImage
+		Renderer::Sprite* sprite; 
+
+		/// @brief аргументы для создания RenderImage
+		std::shared_ptr<Renderer::Texture2D> texture;
+		std::shared_ptr<Renderer::ShaderProgram> shader;
+		std::string initSubtexture;
+		uint8_t render_layer = 0;
+	};
+
+	std::vector<CreateNewImageArgs> _call_create_render_image;
 };

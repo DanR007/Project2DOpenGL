@@ -33,10 +33,12 @@ Renderer::RenderImage* RenderManager::CreateNewImage(std::shared_ptr<Renderer::T
 
 void RenderManager::Update(const float& deltaTime)
 {
+	ClearingCreateNewImageArgs();
+
 	auto it = _all_sprites.begin();
 	(it->first)->GetTexture()->Bind();
 	for (; it != _all_sprites.end(); ++it)
-	{	
+	{
 		(it->first)->GetShader()->Use();
 		(it->first)->GetShader()->SetUInt("diffuse_layer", (it->first)->GetDiffuseLayer());
 		//
@@ -49,6 +51,27 @@ void RenderManager::Erase(Renderer::Sprite* spr)
 {
 	auto it = std::find(_all_sprites[spr->GetRenderImage()].begin(), _all_sprites[spr->GetRenderImage()].end(), spr);
 	_all_sprites[spr->GetRenderImage()].erase(it);
+}
+
+void RenderManager::ClearingCreateNewImageArgs()
+{
+	for (CreateNewImageArgs arg : _call_create_render_image)
+	{
+		auto it = _map_all_images.find(arg.initSubtexture);
+		if (it != _map_all_images.end())
+		{
+			arg.sprite->SetRenderImage(it->second);
+		}
+		else
+		{
+			Renderer::RenderImage* img = CreateNewImage(arg.texture, arg.shader, arg.initSubtexture, arg.render_layer);
+			arg.sprite->SetRenderImage(img);
+		}
+
+		_all_sprites[arg.sprite->GetRenderImage()].push_back(arg.sprite);
+	}
+
+	_call_create_render_image.clear();
 }
 
 void RenderManager::Draw(Renderer::RenderImage* img)
